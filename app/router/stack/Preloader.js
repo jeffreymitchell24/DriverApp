@@ -44,20 +44,25 @@ class Preloader extends Component {
 		return (
 			<CardSection style={styles.preloaderBlock}>
         <CardSection style={styles.preloaderBlock__forImage}>
-          <Image source={require("../../files/images/1.jpg")} style={styles.preloaderBlock__img}></Image>
+          <Image source={require("../../files/images/preview1.png")} style={styles.preloaderBlock__img}></Image>
         </CardSection>
         <CardSection style={styles.preloaderForHeader}>
           <Text style={styles.preloaderHeader}>Car Flow puts you in control.</Text>
           <Text style={styles.preloaderText}>Think you're missing out the gig economy because you don't want to own or lease a car? Think again. All you need is Car Flow to start working for Uber, Lyft or any rideshare today.</Text>
         </CardSection>
-        <CardSection style={styles.preloaderBlock__Button} >
-          <TouchableOpacity onPress={() => this._navigateTo('Register')}>
-            <Button>START</Button>
-          </TouchableOpacity>
-        </CardSection>
-        <CardSection style={styles.preloaderBlock__account}>
-          <Text style={styles.preloaderBlock__alreadyAcc}>Already have an account?</Text>
-          <Text style={styles.preloaderBlock__signIn}>Sign in</Text>
+        <CardSection style={styles.register__main}>
+          <View style={{ flex: 1 }}/>
+          <View style={ styles.register__BlockButton}>
+            <CardSection style={ styles.preloaderBlock__Button} >
+              <TouchableOpacity onPress={() => this._navigateTo('Register')}>
+                <Button>START</Button>
+              </TouchableOpacity>
+            </CardSection>
+          </View>
+          <CardSection style={styles.register__account}>
+            <Text style={styles.preloaderBlock__alreadyAcc}>Already have an account?</Text>
+            <Text style={styles.preloaderBlock__signIn}>Sign in</Text>
+          </CardSection>
         </CardSection>
       </CardSection>
 		);

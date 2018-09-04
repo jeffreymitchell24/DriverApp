@@ -6,7 +6,7 @@ import {
   TextInput,
   ScrollView,
   TouchableOpacity, Platform,
-  Dimensions
+  Dimensions,
 } from 'react-native';
 
 import styles from '../../files/styles';
@@ -21,7 +21,7 @@ import { connect } from 'react-redux';
 import Swiper from 'react-native-swiper';
 
 
-class Register extends Component {
+class PersonalInfo extends Component {
 
 	constructor(props) {
 		super(props);
@@ -51,40 +51,50 @@ class Register extends Component {
 			<CardSection style={styles.register}>
         <CardSection style={styles.topNav}>
           <View style={[styles.dash, styles.dash__active]}></View>
-          <View style={styles.dash}></View>
+          <View style={[styles.dash, styles.dash__active]}></View>
           <View style={styles.dash}></View>
         </CardSection>
 
         <CardSection style={styles.register__main}>
-          <TextInputView
-              ref='email'
-              text="EMAIL"
-              placeholder=''
-          />
-          <TextInputView
-              ref='password'
-              text="PASSWORD"
-              placeholder=''
-              secureTextEntry={true}
-          />
-          <TextInputView
-              ref='email'
-              text="CONFIRM PASSWORD"
-              placeholder=''
-              secureTextEntry={true}
-          />
-          <View style={{ flex: 1 }}/>
+          <ScrollView  showsVerticalScrollIndicator={false} >
+            <TextInputView
+                ref='fullname'
+                text="FULL NAME"
+                placeholder=''
+            />
+            <TextInputView
+                ref='street'
+                text="STREET"
+                placeholder=''
+            />
+            <TextInputView
+                ref='city'
+                text="CITY"
+                placeholder=''
+            />
+            <TextInputView
+                ref='zipcode'
+                text="ZIP CODE"
+                placeholder=''
+            />
+            <TextInputView
+                ref='state'
+                text="STATE"
+                placeholder=''
+            />
+            <TextInputView
+                ref='phone'
+                text="PHONE NUMBER"
+                placeholder=''
+            />
+          </ScrollView>
           <View style={ styles.register__BlockButton}>
             <CardSection style={ styles.preloaderBlock__Button} >
-              <TouchableOpacity onPress={() => this._navigateTo('PersonalInfo')}>
-                <Button>NEXT</Button>
+              <TouchableOpacity>
+                <Button>UPLOAD DOCUMENTS</Button>
               </TouchableOpacity>
             </CardSection>
           </View>
-          <CardSection style={styles.register__account}>
-            <Text style={styles.preloaderBlock__alreadyAcc}>Already have an account?</Text>
-            <Text style={styles.preloaderBlock__signIn}>Sign in</Text>
-          </CardSection>
         </CardSection>
 
       </CardSection>
@@ -110,4 +120,4 @@ function mapDispatchToProps (dispatch) {
 export default connect(
   mapStateToProps,
   mapDispatchToProps,
-)(Register);
+)(PersonalInfo);
