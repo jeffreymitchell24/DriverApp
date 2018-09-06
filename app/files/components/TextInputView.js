@@ -64,10 +64,11 @@ var styles = StyleSheet.create({
 	InputWrapp: {
     borderBottomWidth: 2,
 		marginBottom: width * 0.04,
-    borderBottomColor: '#eee',
+    borderBottomColor: 'rgb(241, 243, 245)',
   },
   InputLabel: {
-		fontSize: width * 0.04,
+		fontSize: width * 0.035,
+		color: 'rgb(134, 142, 150)',
   },
   InputInput: {
 		color: '#000',

@@ -14,6 +14,11 @@ module.exports = StyleSheet.create({
   marginBottom16: {
     marginBottom: width * 0.04,
   },
+  slide: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   btnTextStyle: {
     color: '#fff',
     fontSize: width * 0.05,
@@ -21,7 +26,7 @@ module.exports = StyleSheet.create({
   },
   preloaderBlock: {
     flex: 1,
-    backgroundColor: 'rgb(252,244,244)',
+    backgroundColor: 'rgb(254,244,244)',
     alignItems: 'center',
     flexDirection: 'column',
   },
@@ -51,7 +56,7 @@ module.exports = StyleSheet.create({
     marginRight: width * 0.02,
   },
   preloaderBlock__signIn: {
-    color: 'rgb(222,71,71)',
+    color: 'rgb(240,62,62)',
   },
   preloaderForHeader: {
     width: width * 0.9,
@@ -61,20 +66,21 @@ module.exports = StyleSheet.create({
   preloaderHeader: {
     fontSize: width * 0.065,
     fontWeight: 'bold',
-    color: 'rgb(222,71,71)',
+    color: 'rgb(240,62,62)',
     marginBottom: width * 0.03
   },
   preloaderText: {
-    width: width * 0.8,
+    color: 'rgb(73, 80, 87)',
+    fontSize: width * 0.035,
   },
   preloaderBlock__Button: {
-    backgroundColor: 'rgb(222,71,71)',
+    backgroundColor: 'rgb(240,62,62)',
     width: width * 0.9,
     alignItems: 'center',
     justifyContent: 'center',
     height: width * 0.12,
     borderRadius: width * 0.1,
-    shadowColor: 'rgb(222,71,71)',
+    shadowColor: 'rgb(240,62,62)',
     shadowOffset: { width: 0, height: 0 },
     shadowOpacity: 0.5,
     shadowRadius: 10,
@@ -117,13 +123,14 @@ module.exports = StyleSheet.create({
     marginRight: 3,
   },
   dash__active: {
-    backgroundColor: 'rgb(222,71,71)',
+    backgroundColor: 'rgb(240,62,62)',
   },
   register__main: {
     padding: width * 0.04,
     paddingBottom: 0,
     flex: 1,
     flexDirection: 'column',
+    justifyContent: 'flex-start',
   },
   register__BlockButton: {
     justifyContent: 'center',
@@ -135,5 +142,17 @@ module.exports = StyleSheet.create({
     justifyContent: 'center',
     marginBottom: width * 0.04,
   },
+  checkBox: {
+    borderWidth: 1,
+    borderColor: '#000',
+  },
+  wrapForCheckbox: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
+    marginLeft: 0,
+  },
+  forFoursImg: {
 
+  }
 });
