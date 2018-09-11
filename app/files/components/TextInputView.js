@@ -22,7 +22,7 @@ export class TextInputView extends Component {
 
 	static propTypes = {
 		placeholder: PropTypes.string.isRequired,
-		styleContainer: PropTypes.object.isRequired,
+		//styleContainer: PropTypes.object.isRequired,
 		secureTextEntry: PropTypes.bool,
 	}
 
