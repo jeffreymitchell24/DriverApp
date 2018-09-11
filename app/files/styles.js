@@ -26,21 +26,22 @@ module.exports = StyleSheet.create({
   },
   preloaderBlock: {
     flex: 1,
+    backgroundColor: 'rgb(254,244,244)',
     alignItems: 'center',
     flexDirection: 'column',
   },
   preloaderBlock__forImage: {
     width: width,
-    height: height * 0.3,
+    height: height * 0.45,
     marginTop: width * 0.1,
+    padding: width * 0.02,
     paddingTop: 0,
-    flex:1,
-    flexDirection:'row',
-    alignItems:'center',
-    justifyContent:'center'
   },
   preloaderBlock__img: {
-
+    height: "100%",
+    width: "100%",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   preloaderBlock__account: {
     position: 'absolute',
@@ -69,8 +70,8 @@ module.exports = StyleSheet.create({
     marginBottom: width * 0.03
   },
   preloaderText: {
-    color: '#495057',
-    fontSize: 15,
+    color: 'rgb(73, 80, 87)',
+    fontSize: width * 0.035,
   },
   preloaderBlock__Button: {
     backgroundColor: 'rgb(240,62,62)',
