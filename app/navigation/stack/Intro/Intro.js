@@ -3,7 +3,7 @@ import {
   View,
   Image,
   Text,
-  // TouchableOpacity,
+  Keyboard,
   Dimensions
 } from 'react-native'
 import PropTypes from 'prop-types'
@@ -29,10 +29,11 @@ class Intro extends Component {
 
   componentDidMount () {
     SplashScreen.hide()
+    Keyboard.dismiss()
   }
 
   handleStartPress = () => {
-
+    this._navigateTo('Register')
   }
 
   handleSignInPress = () => {

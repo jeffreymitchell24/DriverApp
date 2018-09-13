@@ -1,10 +1,10 @@
-import { createStackNavigator } from 'react-navigation'
+import { createStackNavigator, createSwitchNavigator } from 'react-navigation'
 import React from 'react'
 
 import { Header } from 'components/blocks'
 
 import Intro from './stack/Intro'
-import Register from './stack/Register'
+import SignUpStepOne from './stack/SignUpStepOne'
 import PersonalInfo from './stack/PersonalInfo'
 
 export const Root = createStackNavigator({
@@ -16,7 +16,7 @@ export const Root = createStackNavigator({
     }
   },
   Register: {
-    screen: Register,
+    screen: SignUpStepOne,
     navigationOptions: {
       title: null,
       header: <Header text='Account' />
