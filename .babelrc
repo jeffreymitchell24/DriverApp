@@ -1,3 +1,24 @@
 {
-  "presets": ["react-native"]
+  "presets": ["react-native"],
+  "plugins": [
+    [
+      "module-resolver",
+      {
+        "root": ["./"],
+        "cwd": "babelrc",
+        "alias": {
+          "components": "./app/components",
+          "commonStyles": "./app/commonStyles",
+          "config": "./app/config", 
+          "constants": "./app/constants", 
+          "helpers": "./app/helpers", 
+          "images": "./app/images", 
+          "navigation": "./app/navigation", 
+          "store": "./app/store",
+          "theme": "./app/theme"
+        },
+        "extensions": [".ios.js", ".android.js", ".js", ".json"]
+      }
+    ]
+  ]
 }

@@ -1,8 +1,8 @@
-import React from 'react';
-import { Root } from './router/config';
+import React from 'react'
+import { Root } from 'navigation/config'
 
 const App = () => (
   <Root />
-);
+)
 
-export default App;
+export default App
