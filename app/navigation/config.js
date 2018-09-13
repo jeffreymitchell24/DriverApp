@@ -3,13 +3,13 @@ import React from 'react'
 
 import { Header } from 'components/blocks'
 
-import Preloader from './stack/Preloader'
+import Intro from './stack/Intro'
 import Register from './stack/Register'
 import PersonalInfo from './stack/PersonalInfo'
 
 export const Root = createStackNavigator({
-  Preloader: {
-    screen: Preloader,
+  Intro: {
+    screen: Intro,
     navigationOptions: {
       title: null,
       header: null
@@ -31,7 +31,7 @@ export const Root = createStackNavigator({
   }
 },
 {
-  initialRouteName: 'Preloader',
+  initialRouteName: 'Intro',
   mode: 'modal',
   headerMode: 'screen'
 })

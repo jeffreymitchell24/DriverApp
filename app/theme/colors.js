@@ -1,7 +1,11 @@
 export default {
+  lightPink: '#FEF4F4',
+  red: '#F03E3E',
+
   white: '#ffffff',
   black: '#000000',
-  red: '#b22222',
+  gray100: '#495057',
+
   red100: '#ed8078',
   red200: '#C40D3C',
   red300: '#db6886',
@@ -25,7 +29,6 @@ export default {
   orange400: '#D67928',
   orange400Trans: 'rgba(214, 121, 40, 0.8)',
   orange500: '#cb7d3c',
-  gray100: '#ccc',
   gray700: '#525252',
   gray800: '#696969',
   grayBlue: '#6A7F8D',
@@ -34,5 +37,5 @@ export default {
   bgBlackLight: 'rgba(0, 0, 0, 0.3)',
   blueBG: 'rgba(71, 148, 201, 0.3)',
 
-  blueGradient: ['#196993', '#2B95CE'],
+  blueGradient: ['#196993', '#2B95CE']
 }

@@ -1,11 +1,18 @@
 import { StyleSheet } from 'react-native'
 
-import { metrics } from 'theme'
+import { colors } from 'theme'
 
 export default StyleSheet.create({
-  btnTextStyle: {
+  container: {
+    height: 50,
+    backgroundColor: colors.red,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 23
+  },
+  text: {
     color: '#fff',
-    fontSize: metrics.screenWidth * 0.05,
-    fontWeight: 'bold'
+    fontSize: 17,
+    fontFamily: 'SFProText-Bold'
   }
 })

@@ -35,7 +35,7 @@ module.exports = StyleSheet.create({
     height: height * 0.45,
     marginTop: width * 0.1,
     padding: width * 0.02,
-    paddingTop: 0,
+    paddingTop: 0
   },
   preloaderBlock__img: {
     height: "100%",
