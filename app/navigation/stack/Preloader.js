@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   Dimensions
 } from 'react-native'
-// import SplashScreen from 'react-native-splash-screen';
+import SplashScreen from 'react-native-splash-screen';
 import styles from 'commonStyles/styles'
 import {backgrounds} from 'images'
 import { CardSection } from 'components/blocks'
@@ -30,17 +30,17 @@ class Preloader extends Component {
       index: 0,
       actions: [NavigationActions.navigate({ routeName: routeName })],
     })
-    this.props.navigation.dispatch(resetAction);
+    this.props.navigation.dispatch(resetAction)
   }
 
-  // componentDidMount () {
-  //   SplashScreen.hide()
-  // }
+  componentDidMount () {
+    SplashScreen.hide()
+  }
 
   render () {
     return (
       <Swiper
-        style={{ flex: 1, borderWidth: 1, borderColor: '#000' }}
+        style={{}}
         paginationStyle={{ position: 'absolute', top: -560 }}
         dot={<View style={{ backgroundColor: 'rgb(248, 226, 226)', width: height * 0.0156, height: height * 0.0156, borderRadius: 100, marginLeft: 3, marginRight: 3 }} />}
         activeDot={<View style={{ backgroundColor: 'rgb(222,71,71)', width: height * 0.0156, height: height * 0.0156, borderRadius: 100, marginLeft: 3, marginRight: 3 }} />} >
