@@ -33,11 +33,11 @@ class Intro extends Component {
   }
 
   handleStartPress = () => {
-    this._navigateTo('Register')
+    this.props.navigation.navigate('SignUpStepOne') // Register
   }
 
   handleSignInPress = () => {
-    console.log('Sign In')
+    this.props.navigation.navigate('SignIn') // Register
   }
 
   renderSlides = () => {

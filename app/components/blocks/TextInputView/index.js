@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -7,49 +7,45 @@ import {
 } from 'react-native'
 import styles from './styles'
 
-export class TextInputView extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      value: '',
-      color1: '#dadada',
-      color2: '#dadada'
-    }
-  }
-
+export class TextInputView extends PureComponent {
   static propTypes = {
+    error: PropTypes.string,
+    label: PropTypes.string,
     placeholder: PropTypes.string.isRequired,
     secureTextEntry: PropTypes.bool,
-    text: PropTypes.string
+    text: PropTypes.string,
+    value: PropTypes.string,
+    onBlur: PropTypes.func,
+    onChangeText: PropTypes.func,
+    onFocus: PropTypes.func
     // styleContainer: PropTypes.object.isRequired
   }
-
-  componentDidMount () {
-
+  static defaultProps = {
+    secureTextEntry: false
   }
 
   render () {
+    const {
+      error,
+      label,
+      value,
+      placeholder,
+      secureTextEntry,
+      ...rest
+    } = this.props
     return (
-      <View style={styles.InputWrapp}>
-        <Text style={styles.InputLabel}>{this.props.text}</Text>
+      <View style={styles.container}>
+        <Text style={styles.label}>{label}</Text>
         <TextInput
-          placeholder={this.props.placeholder}
+          placeholder={placeholder}
           placeholderTextColor='#5c5c5c'
-          secureTextEntry={this.props.secureTextEntry || false}
-          style={styles.InputInput}
+          secureTextEntry={secureTextEntry}
+          style={[styles.input, error && styles.inputError]}
           underlineColorAndroid='transparent'
-          value={this.state.value}
-          onBlur={() => this.setState({
-            color1: '#dadada',
-            color2: '#dadada'
-          })}
-          onChangeText={(value) => this.setState({ value })}
-          onFocus={() => this.setState({
-            color1: '#239570',
-            color2: '#72bb5f'
-          })}
+          value={value}
+          {...rest}
         />
+        {error && <Text style={styles.error}>{error}</Text>}
       </View>
     )
   }
