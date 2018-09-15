@@ -9,8 +9,8 @@ import {
 import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
-// import { CardSection } from 'components/blocks'
 import { Button } from 'components/ui'
+import {Account, SignIn} from 'navigation/routeNames'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 import Swiper from 'react-native-swiper'
 import { CONFIG } from './config'
@@ -33,11 +33,11 @@ class Intro extends Component {
   }
 
   handleStartPress = () => {
-    this.props.navigation.navigate('SignUpStepOne') // Register
+    this.props.navigation.navigate(Account) // Register
   }
 
   handleSignInPress = () => {
-    this.props.navigation.navigate('SignIn') // Register
+    this.props.navigation.navigate(SignIn) // Register
   }
 
   renderSlides = () => {

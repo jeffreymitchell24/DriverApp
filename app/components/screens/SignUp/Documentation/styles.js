@@ -7,7 +7,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginMiddle,
     paddingBottom: 32,
-    paddingTop: metrics.contentMargin
+    paddingTop: 0
   },
   screenTitle: {
     fontSize: metrics.fontSize,

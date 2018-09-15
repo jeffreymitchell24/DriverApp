@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
@@ -9,22 +8,42 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginMiddle,
     paddingBottom: 32,
-    paddingTop: metrics.contentMargin,
+    paddingTop: 0,
     justifyContent: 'space-between'
   },
 
   form: {
   },
-  resetButton: {
-    fontFamily: 'SFProText-Regular',
-    fontSize: 12,
-    color: colors.red,
-    marginTop: 5
+  checkboxContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: metrics.contentMargin
   },
+
+  checkBox: {
+    margin: 0,
+    marginRight: -13,
+    marginLeft: 0,
+    padding: 0,
+    paddingRight: 0,
+    backgroundColor: colors.white,
+    borderWidth: 0
+  },
+  checkboxTitle: {
+    color: colors.black,
+    fontSize: metrics.fontSizeBig,
+    fontFamily: 'SFProText-Regular',
+    paddingBottom: 3
+  },
+
+  termsButton: {
+    color: colors.red
+  },
+
   footer: {
     alignItems: 'center'
   },
-  button: {
+  nextButton: {
     marginBottom: metrics.contentMargin,
     alignSelf: 'stretch'
   },
@@ -33,7 +52,7 @@ export default StyleSheet.create({
     fontSize: 12,
     color: colors.gray100
   },
-  registerButtonText: {
+  signInButtonText: {
     color: colors.red
   }
 })

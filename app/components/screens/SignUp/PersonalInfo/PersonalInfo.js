@@ -8,12 +8,12 @@ import styles from './styles'
 
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
-
-class SignUpStepTwo extends Component {
+import {Documentation} from 'navigation/routeNames'
+class PersonalInfo extends Component {
   onSubmit = () => {
     const {onSaveSignUpStepData} = this.props
     onSaveSignUpStepData({stepData: {}, step: 2})
-    this.props.navigation.navigate('SignUpStepThree')
+    this.props.navigation.navigate(Documentation)
   }
 
   render () {
@@ -70,9 +70,9 @@ class SignUpStepTwo extends Component {
   }
 }
 
-SignUpStepTwo.propTypes = {
+PersonalInfo.propTypes = {
   navigation: PropTypes.object,
   onSaveSignUpStepData: PropTypes.func
 }
 
-export default SignUpStepTwo
+export default PersonalInfo

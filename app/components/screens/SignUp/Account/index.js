@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { saveSignUpStepData } from 'store/actions/auth'
-import SignUpStepTwo from './SignUpStepTwo'
+import Account from './Account'
 
 const actions = {
   onSaveSignUpStepData: saveSignUpStepData
@@ -9,4 +9,4 @@ const actions = {
 export default connect(
   null,
   actions
-)(SignUpStepTwo)
+)(Account)

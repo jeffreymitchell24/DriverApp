@@ -9,7 +9,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginMiddle,
     paddingBottom: 32,
-    paddingTop: metrics.contentMargin,
+    paddingTop: 0,
     justifyContent: 'space-between'
   },
 
@@ -19,9 +19,7 @@ export default StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     fontSize: 12,
     color: colors.red,
-    paddingTop: 5,
-    paddingBottom: 10,
-    paddingRight: 10
+    marginTop: 5
   },
   footer: {
     alignItems: 'center'

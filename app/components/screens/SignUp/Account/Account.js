@@ -8,6 +8,7 @@ import {
 } from 'react-native'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
+import {PersonalInfo, SignIn, TermsConditions} from 'navigation/routeNames'
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
@@ -26,7 +27,7 @@ const validationSchema = Yup.object().shape({
   [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.'),
   [formIputs.confirmPassword]: Yup.string().oneOf([Yup.ref('password'), null], "Passwords don't match").required('This field is required.')
 })
-class SignUpStepOne extends Component {
+class Account extends Component {
   _navigateTo = (routeName) => {
     const resetAction = StackActions.reset({
       index: 0,
@@ -44,16 +45,17 @@ class SignUpStepOne extends Component {
     }
     this.props.onSaveSignUpStepData({stepData, step: 1})
     Keyboard.dismiss()
-    this.props.navigation.navigate('SignUpStepTwo')
+    this.props.navigation.navigate(PersonalInfo)
   }
   handleTermsPress = () => {
+    this.props.navigation.navigate(TermsConditions)
   }
 
   handleCheckboxPress = (val) => {
     this.setState((state) => ({termsChecked: !state.termsChecked}))
   }
   handleSignInPress = () => {
-    this.props.navigation.navigate('SignIn')
+    this.props.navigation.navigate(SignIn)
   }
 
   renderForm = ({ setFieldTouched, setFieldValue, handleChange, handleSubmit, errors, values, touched }) => {
@@ -158,9 +160,9 @@ class SignUpStepOne extends Component {
   }
 }
 
-SignUpStepOne.propTypes = {
+Account.propTypes = {
   navigation: PropTypes.object,
   onSaveSignUpStepData: PropTypes.func
 }
 
-export default SignUpStepOne
+export default Account

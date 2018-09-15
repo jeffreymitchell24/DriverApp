@@ -13,7 +13,7 @@ import { colors } from 'theme'
 import { Button } from 'components/ui'
 import { StackActions, NavigationActions } from 'react-navigation'
 
-class StepUpStepThree extends Component {
+class Documentation extends Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -141,9 +141,9 @@ class StepUpStepThree extends Component {
   }
 }
 
-StepUpStepThree.propTypes = {
+Documentation.propTypes = {
   navigation: PropTypes.object,
   onSaveSignUpStepData: PropTypes.func
 }
 
-export default StepUpStepThree
+export default Documentation

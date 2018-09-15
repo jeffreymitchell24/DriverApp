@@ -1,13 +1,15 @@
 import { createStackNavigator } from 'react-navigation'
 import { NavBackImage } from 'components/ui'
 import React from 'react'
-import Intro from './stack/Intro'
+import Intro from 'components/screens/Intro'
 // import { SignUpStack, SignInStack } from './stackNavigation'
-import SignUpStepOne from './stack/SignUpStepOne'
-import SignUpStepTwo from './stack/SignUpStepTwo'
-import SignUpStepThree from './stack/SignUpStepThree'
-import SignIn from './stack/SignIn'
-import ResetPassword from './stack/ResetPassword'
+import Account from 'components/screens/SignUp/Account'
+import PersonalInfo from 'components/screens/SignUp/PersonalInfo'
+import Documentation from 'components/screens/SignUp/Documentation'
+import RegisterReview from 'components/screens/SignUp/RegisterReview'
+import TermsConditions from 'components/screens/TermsConditions'
+import SignIn from 'components/screens/SignIn'
+import ResetPassword from 'components/screens/ResetPassword'
 
 let navigationOptions = {
   headerStyle: {
@@ -16,6 +18,7 @@ let navigationOptions = {
   headerTitleStyle: {
     fontSize: 16,
     fontFamily: 'SFProText-Regular',
+    fontWeight: 'normal',
     color: '#343A40'
   },
   headerBackImage: (<NavBackImage />)
@@ -30,28 +33,28 @@ export const Root = createStackNavigator(
         header: null
       }
     },
-    SignUpStepOne: {
-      screen: SignUpStepOne,
+    Account: {
+      screen: Account,
       navigationOptions: {
-        title: 'Step 1',
+        title: 'Account',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions
       }
     },
-    SignUpStepTwo: {
-      screen: SignUpStepTwo,
+    PersonalInfo: {
+      screen: PersonalInfo,
       navigationOptions: {
-        title: 'Step 2',
+        title: 'Personal Information',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions
       }
     },
-    SignUpStepThree: {
-      screen: SignUpStepThree,
+    Documentation: {
+      screen: Documentation,
       navigationOptions: {
-        title: 'Step 3',
+        title: 'Documentation',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions
@@ -74,10 +77,28 @@ export const Root = createStackNavigator(
         headerBackTitle: null,
         ...navigationOptions
       }
+    },
+    TermsConditions: {
+      screen: TermsConditions,
+      navigationOptions: {
+        title: 'Terms & conditions',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    RegisterReview: {
+      screen: RegisterReview,
+      navigationOptions: {
+        title: null,
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
     }
   },
   {
-    initialRouteName: 'Intro',
+    initialRouteName: 'Documentation',
     headerLayoutPreset: 'center'
   }
 )

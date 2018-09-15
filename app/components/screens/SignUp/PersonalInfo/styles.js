@@ -8,7 +8,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginMiddle,
     paddingBottom: 32,
-    paddingTop: metrics.contentMargin,
+    paddingTop: 0,
     justifyContent: 'space-between'
   },
 
@@ -16,35 +16,12 @@ export default StyleSheet.create({
   },
   checkboxContainer: {
     flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: metrics.contentMargin
+    alignItems: 'center'
   },
-
-  checkBox: {
-    margin: 0,
-    marginRight: -13,
-    marginLeft: 0,
-    padding: 0,
-    paddingRight: 0,
-    backgroundColor: colors.white,
-    borderWidth: 0
-  },
-  checkboxTitle: {
-    color: colors.black,
-    fontSize: metrics.fontSizeBig,
-    fontFamily: 'SFProText-Regular',
-    paddingBottom: 3
-  },
-
-  termsButton: {
-    color: colors.red
-  },
-
   footer: {
     alignItems: 'center'
   },
-  nextButton: {
-    marginBottom: metrics.contentMargin,
+  button: {
     alignSelf: 'stretch'
   },
   mainText: {

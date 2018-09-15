@@ -6,7 +6,7 @@ import { Button } from 'components/ui'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import isEmpty from 'lodash/isEmpty'
-import {ResetPassword, SignUpStepOne} from 'navigation/routeNames'
+import {ResetPassword, Account} from 'navigation/routeNames'
 // import PropTypes from 'prop-types'
 import styles from './styles'
 
@@ -28,7 +28,7 @@ class SignIn extends PureComponent {
   }
 
   handleRegisterPress = () => {
-    this.props.navigation.navigate(SignUpStepOne)
+    this.props.navigation.navigate(Account)
   }
 
   handleResetPassPress = () => {
