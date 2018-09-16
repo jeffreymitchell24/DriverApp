@@ -3,15 +3,16 @@ import {
   View,
   Text,
   Image,
-  ScrollView
+  ScrollView,
+  TouchableOpacity
 } from 'react-native'
 import PropTypes from 'prop-types'
-import styles from './styles'
-import { icons } from 'images'
 import { CheckBox } from 'react-native-elements'
+import {DocumentsCamera} from 'navigation/routeNames'
+import { icons } from 'images'
 import { colors } from 'theme'
+import styles from './styles'
 import { Button } from 'components/ui'
-import { StackActions, NavigationActions } from 'react-navigation'
 
 class Documentation extends Component {
   constructor (props) {
@@ -19,14 +20,6 @@ class Documentation extends Component {
     this.state = {
       ridesharingApproved: null
     }
-  }
-
-  _navigateTo = (routeName) => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: routeName })]
-    })
-    this.props.navigation.dispatch(resetAction)
   }
 
   onSubmit = () => {
@@ -37,7 +30,7 @@ class Documentation extends Component {
   onApprove = () => {
     this.setState({ridesharingApproved: true})
   }
-  onUnapprove = () => {
+  onDisapprove = () => {
     this.setState({ridesharingApproved: false})
   }
 
@@ -45,8 +38,16 @@ class Documentation extends Component {
 
   }
 
+  onPhotoPress = (licenseSide, licenseType) => {
+    this.props.navigation.navigate(DocumentsCamera, {
+      title: licenseSide,
+      licenseType
+    })
+  }
+
   render () {
     const {ridesharingApproved} = this.state
+    const {tlc, driving} = this.props.licences
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <Text style={styles.screenTitle}>Upload following documents to get your account approved</Text>
@@ -55,15 +56,15 @@ class Documentation extends Component {
           <View style={styles.sectionContent}>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
-              <View style={styles.photoContainer}>
+              <TouchableOpacity style={styles.photoContainer} onPress={() => this.onPhotoPress('Front', 'driving')}>
                 <Image source={icons['camera']} style={styles.iconCamera} />
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Back</Text>
-              <View style={styles.photoContainer}>
+              <TouchableOpacity style={styles.photoContainer} onPress={() => this.onPhotoPress('Back', 'driving')}>
                 <Image source={icons['camera']} style={styles.iconCamera} />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -72,15 +73,15 @@ class Documentation extends Component {
           <View style={styles.sectionContent}>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
-              <View style={styles.photoContainer}>
+              <TouchableOpacity style={styles.photoContainer} onPress={() => this.onPhotoPress('Front', 'tlc')}>
                 <Image source={icons['camera']} style={styles.iconCamera} />
-              </View>
+              </TouchableOpacity>
             </View>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Back</Text>
-              <View style={styles.photoContainer}>
+              <TouchableOpacity style={styles.photoContainer} onPress={() => this.onPhotoPress('Back', 'tlc')}>
                 <Image source={icons['camera']} style={styles.iconCamera} />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -123,7 +124,7 @@ class Documentation extends Component {
                 textStyle={styles.checkboxTitle}
                 title=''
                 uncheckedIcon='circle-o'
-                onPress={this.onUnapprove}
+                onPress={this.onDisapprove}
               />
               <Text style={styles.checkboxTitle}>No, I’m not approved</Text>
             </View>
@@ -142,6 +143,7 @@ class Documentation extends Component {
 }
 
 Documentation.propTypes = {
+  licences: PropTypes.object,
   navigation: PropTypes.object,
   onSaveSignUpStepData: PropTypes.func
 }

@@ -6,7 +6,10 @@ import Intro from 'components/screens/Intro'
 import Account from 'components/screens/SignUp/Account'
 import PersonalInfo from 'components/screens/SignUp/PersonalInfo'
 import Documentation from 'components/screens/SignUp/Documentation'
+import DocumentsCamera from 'components/screens/SignUp//DocumentsCamera'
 import RegisterReview from 'components/screens/SignUp/RegisterReview'
+import PicturePreview from 'components/screens/SignUp/PicturePreview'
+import PictureGallery from 'components/screens/SignUp/PictureGallery'
 import TermsConditions from 'components/screens/TermsConditions'
 import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
@@ -60,6 +63,29 @@ export const Root = createStackNavigator(
         ...navigationOptions
       }
     },
+    DocumentsCamera: {
+      screen: DocumentsCamera,
+      navigationOptions: {
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    PicturePreview: {
+      screen: PicturePreview,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PictureGallery: {
+      screen: PictureGallery,
+      navigationOptions: {
+        title: 'Select photo',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
     SignIn: {
       screen: SignIn,
       navigationOptions: {
@@ -98,7 +124,7 @@ export const Root = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'Documentation',
+    initialRouteName: 'Intro',
     headerLayoutPreset: 'center'
   }
 )
