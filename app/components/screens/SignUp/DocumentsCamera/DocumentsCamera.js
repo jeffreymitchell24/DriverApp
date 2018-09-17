@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { View, TouchableOpacity, ActivityIndicator } from 'react-native'
+import { View, TouchableOpacity, ActivityIndicator, CameraRoll, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import { RNCamera } from 'react-native-camera'
-import {PicturePreview} from 'navigation/routeNames'
+import { icons } from 'images'
+import {PicturePreview, PictureGallery} from 'navigation/routeNames'
 import { colors } from 'theme'
 import styles from './styles'
 
@@ -22,12 +23,18 @@ class DocumentsCamera extends Component {
     if (this.camera) {
       const options = { quality: 0.5, base64: true, fixOrientation: true }
       const data = await this.camera.takePictureAsync(options)
+      let cameraRollUri = await CameraRoll.saveToCameraRoll(data.uri, 'photo')
       this.props.navigation.navigate(PicturePreview, {
-        photoUri: data.uri
+        photoUri: cameraRollUri
       })
       this.setState({pictureSaving: false})
     }
   }
+
+  onGalleryPress = () => {
+    this.props.navigation.navigate(PictureGallery)
+  }
+
   render () {
     return (
       <View style={styles.container}>
@@ -46,7 +53,12 @@ class DocumentsCamera extends Component {
                 <ActivityIndicator color={colors.red} size='large' />
               </View>
             ) : (
-              <TouchableOpacity style={styles.captureButton} onPress={this.takePicture} />
+              <React.Fragment>
+                <TouchableOpacity style={styles.captureButton} onPress={this.takePicture} />
+                <TouchableOpacity style={styles.galleryButton} onPress={this.onGalleryPress}>
+                  <Image source={icons['gallery']} style={styles.galleryIcon} />
+                </TouchableOpacity>
+              </React.Fragment>
             )
         }
       </View>

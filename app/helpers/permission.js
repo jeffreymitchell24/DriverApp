@@ -15,3 +15,8 @@ export const requestReadStoragePermission = async () => {
   let result = await requestPermission(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
   return result
 }
+
+export const requestWriteStoragePermission = async () => {
+  let result = await requestPermission(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
+  return result
+}

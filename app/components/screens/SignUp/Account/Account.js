@@ -35,7 +35,7 @@ class Account extends Component {
     })
     this.props.navigation.dispatch(resetAction)
   }
-  onSubmit = (values) => {
+  onSubmit = (values, {setErrors}) => {
     // console.log('onSubmit', values)
     const {email, password, confirmPassword} = values
     let stepData = {
@@ -43,6 +43,7 @@ class Account extends Component {
       confirmPassword,
       email: email.trim()
     }
+    // this.props.onSignUp({email, password, 'password_confirmation': confirmPassword})
     this.props.onSaveSignUpStepData({stepData, step: 1})
     Keyboard.dismiss()
     this.props.navigation.navigate(PersonalInfo)
@@ -163,6 +164,7 @@ class Account extends Component {
 Account.propTypes = {
   navigation: PropTypes.object,
   onSaveSignUpStepData: PropTypes.func
+  // onSignUp: PropTypes.func
 }
 
 export default Account

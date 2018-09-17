@@ -33,7 +33,7 @@ Button.propTypes = {
   containerStyle: ViewPropTypes.style,
   disabled: PropTypes.bool,
   disabledStyle: ViewPropTypes.style,
-  textStyle: ViewPropTypes.style,
+  textStyle: Text.propTypes.style,
   title: PropTypes.string,
   onPress: PropTypes.func
 }

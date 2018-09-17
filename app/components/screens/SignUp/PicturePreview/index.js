@@ -1,12 +1,18 @@
 import { connect } from 'react-redux'
-import { saveSignUpStepData } from 'store/actions/auth'
+import { updateLicense } from 'store/actions/registration'
+import { createStructuredSelector } from 'reselect'
+
+import { getSelectedLicense } from 'store/selectors/registration'
 import PicturePreview from './PicturePreview'
 
+const selector = createStructuredSelector({
+  selectedLicense: getSelectedLicense
+})
 const actions = {
-  onSaveSignUpStepData: saveSignUpStepData
+  onUpdateLicense: updateLicense
 }
 
 export default connect(
-  null,
+  selector,
   actions
 )(PicturePreview)

@@ -2,16 +2,25 @@ import React, { Component } from 'react'
 import { ImageBackground, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import Icon from 'react-native-vector-icons/Feather'
+import {Documentation} from 'navigation/routeNames'
 import { colors } from 'theme'
 import styles from './styles'
 
 class PicturePreview extends Component {
   onCancelPress = () => {
-
+    this.props.navigation.goBack()
   }
 
   onConfirmPress = () => {
-
+    const {onUpdateLicense, selectedLicense, navigation} = this.props
+    const {type, side} = selectedLicense
+    const imageUri = navigation.getParam('photoUri', null)
+    onUpdateLicense({
+      type,
+      side,
+      imageUri
+    })
+    navigation.navigate(Documentation)
   }
 
   render () {
@@ -29,7 +38,9 @@ class PicturePreview extends Component {
   }
 }
 PicturePreview.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  selectedLicense: PropTypes.object,
+  onUpdateLicense: PropTypes.func
 }
 
 export default PicturePreview

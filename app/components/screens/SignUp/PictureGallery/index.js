@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { saveSignUpStepData } from 'store/actions/auth'
+import { saveSignUpStepData } from 'store/actions/registration'
 import PictureGallery from './PictureGallery'
 
 const actions = {

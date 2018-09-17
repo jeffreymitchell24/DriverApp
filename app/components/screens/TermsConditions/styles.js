@@ -5,7 +5,7 @@ import { colors, metrics } from 'theme'
 export default StyleSheet.create({
   container: {
     backgroundColor: colors.white,
-    padding: metrics.contentMarginMiddle,
+    padding: metrics.contentMarginSmall,
     paddingBottom: 32,
     paddingTop: 0,
     justifyContent: 'space-between'

@@ -5,7 +5,7 @@ import { colors, metrics } from 'theme'
 export default StyleSheet.create({
   container: {
     backgroundColor: colors.white,
-    padding: metrics.contentMarginMiddle,
+    padding: metrics.contentMarginSmall,
     paddingBottom: 32,
     paddingTop: 0
   },
@@ -52,8 +52,16 @@ export default StyleSheet.create({
     backgroundColor: colors.gray75,
     position: 'relative',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    overflow: 'hidden'
   },
+
+  licenseImage: {
+    width: 160,
+    height: 200,
+    resizeMode: 'cover'
+  },
+
   iconCamera: {
     width: 16,
     height: 13
@@ -107,5 +115,65 @@ export default StyleSheet.create({
   },
   signInButtonText: {
     color: colors.red
+  },
+
+  modal: {
+    height: metrics.screenHeight
+  },
+
+  modalDialogContainer: {
+    backgroundColor: colors.white,
+    padding: metrics.contentMargin,
+    paddingBottom: metrics.contentMarginSmall,
+    paddingTop: 32,
+    justifyContent: 'space-between'
+  },
+
+  modalTitle: {
+    fontSize: 16,
+    fontFamily: 'SFProText-Regular',
+    fontWeight: 'normal',
+    color: '#343A40',
+    textAlign: 'center',
+    marginBottom: 8
+  },
+
+  footerButtons: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+
+  modalConfirmButton: {
+    marginLeft: 6,
+    flex: 1
+  },
+
+  modalCancelButton: {
+    backgroundColor: colors.white,
+    borderColor: '#E9ECEF',
+    borderWidth: 1,
+    marginRight: 6,
+    flex: 1
+  },
+
+  modalCancelButtonText: {
+    color: colors.gray100
+  },
+
+  appsInput: {
+    height: null,
+    paddingBottom: 10,
+    paddingTop: 8,
+    color: '#000',
+    fontFamily: 'SFProText-Regular',
+    padding: 0,
+    margin: 0,
+    fontSize: 17,
+    lineHeight: 22,
+    textAlignVertical: 'top',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.gray50,
+    marginBottom: 8,
+    marginTop: 5
   }
 })

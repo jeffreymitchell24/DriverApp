@@ -24,11 +24,24 @@ export default StyleSheet.create({
     position: 'absolute',
     height: 68,
     width: 68,
-    bottom: 40,
+    bottom: 23,
     left: (metrics.screenWidth / 2) - 34,
     backgroundColor: colors.white,
     borderWidth: 10,
     borderColor: 'rgba(255, 255, 255, 0.4)',
     borderRadius: 50
+  },
+
+  galleryButton: {
+    position: 'absolute',
+    left: 31,
+    bottom: 31,
+    borderRadius: 2,
+    borderWidth: 2,
+    borderColor: colors.white
+  },
+  galleryIcon: {
+    width: 47,
+    height: 47
   }
 })

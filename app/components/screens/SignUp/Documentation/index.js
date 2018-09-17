@@ -1,5 +1,5 @@
 import { connect } from 'react-redux'
-import { saveSignUpStepData } from 'store/actions/auth'
+import { saveSignUpStepData, selectLicense } from 'store/actions/registration'
 import { createStructuredSelector } from 'reselect'
 import { getLicenses } from 'store/selectors'
 import Documentation from './Documentation'
@@ -9,7 +9,8 @@ const selector = createStructuredSelector({
 })
 
 const actions = {
-  onSaveSignUpStepData: saveSignUpStepData
+  onSaveSignUpStepData: saveSignUpStepData,
+  onSelectLicense: selectLicense
 }
 
 export default connect(

@@ -57,6 +57,6 @@ class PictureGallery extends Component {
 
 PictureGallery.propTypes = {
   navigation: PropTypes.object
-};
+}
 
 export default PictureGallery
