@@ -85,7 +85,6 @@ class RideshareModal extends Component {
     let confirmActive = mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
     return (
       <Modal
-        avoidKeyboard
         backdropOpacity={0.5}
         isVisible={isVisible}
         style={styles.modal}
