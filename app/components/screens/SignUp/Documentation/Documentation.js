@@ -5,10 +5,8 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  TextInput,
-  KeyboardAvoidingView
+  TextInput
 } from 'react-native'
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import isEmpty from 'lodash/isEmpty'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
@@ -59,7 +57,6 @@ class RideshareModal extends Component {
             checkedIcon='ios-checkbox'
             containerStyle={styles.checkbox}
             iconType='ionicon'
-            style={{backgroundColor: 'yellow'}}
             textStyle={styles.checkboxTitle}
             uncheckedIcon='md-square-outline'
             onPress={() => this.checkApp(app.id)}
@@ -69,7 +66,6 @@ class RideshareModal extends Component {
       )
     })
   }
-
   onConfirm = () => {
     let {main, other} = this.state
     let mainArray = []
@@ -86,44 +82,43 @@ class RideshareModal extends Component {
     return (
       <Modal
         avoidKeyboard
+        backdropOpacity={0.5}
         isVisible={isVisible}
         style={styles.modal}
         onBackButtonPress={onCancel}
         onBackdropPress={onCancel}
       >
-        <View style={[styles.modalDialogContainer]}>
-          <KeyboardAvoidingView contentContainerStyle={{justifyContent: 'space-between'}}>
+        <ScrollView contentContainerStyle={[styles.modalDialogContainer]}>
+          <View>
+            <Text style={styles.modalTitle}>Rideshare apps</Text>
+            <Text style={styles.screenTitle}>Select apps you’re{'\n'} approved to work for:</Text>
             <View>
-              <Text style={styles.modalTitle}>Rideshare apps</Text>
-              <Text style={styles.screenTitle}>Select apps you’re{'\n'} approved to work for:</Text>
-              <View>
-                {this.renderApps()}
-              </View>
-              <View>
-                <TextInput
-                  editable={this.state.otherSelected}
-                  style={styles.appsInput}
-                  underlineColorAndroid='transparent'
-                  value={this.state.other}
-                  onChangeText={this.onEditOtherApps}
-                />
-                <Text style={[styles.screenTitle, {alignSelf: 'flex-start'}]}>Separate apps by comma to add more</Text>
-              </View>
+              {this.renderApps()}
             </View>
-            <View style={styles.footerButtons}>
-              <Button
-                containerStyle={styles.modalCancelButton}
-                textStyle={styles.modalCancelButtonText}
-                title='CANCEL'
-                onPress={onCancel} />
-              <Button
-                containerStyle={styles.modalConfirmButton}
-                disabled={confirmDisabled}
-                title='CONFIRM'
-                onPress={this.onConfirm} />
+            <View>
+              <TextInput
+                editable={this.state.otherSelected}
+                style={styles.appsInput}
+                underlineColorAndroid='transparent'
+                value={this.state.other}
+                onChangeText={this.onEditOtherApps}
+              />
+              <Text style={[styles.screenTitle, {alignSelf: 'flex-start'}]}>Separate apps by comma to add more</Text>
             </View>
-          </KeyboardAvoidingView>
-        </View>
+          </View>
+          <View style={styles.footerButtons}>
+            <Button
+              containerStyle={styles.modalCancelButton}
+              textStyle={styles.modalCancelButtonText}
+              title='CANCEL'
+              onPress={onCancel} />
+            <Button
+              containerStyle={styles.modalConfirmButton}
+              disabled={confirmDisabled}
+              title='CONFIRM'
+              onPress={this.onConfirm} />
+          </View>
+        </ScrollView>
       </Modal>
     )
   }
