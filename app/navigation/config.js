@@ -18,7 +18,8 @@ import {HomeTabStack} from './tabNavigation'
 
 let navigationOptions = {
   headerStyle: {
-    elevation: 0
+    elevation: 0,
+    borderBottomWidth: 0
   },
   headerTitleStyle: {
     fontSize: 16,
