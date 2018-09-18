@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   TextInput
 } from 'react-native'
-import isEmpty from 'lodash/isEmpty'
+
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
@@ -50,7 +50,7 @@ class RideshareModal extends Component {
     return APP_CONFIG.map(app => {
       let checked = app.id === 'other' ? this.state.otherSelected : this.state.main[app.id]
       return (
-        <View key={app.id} style={styles.checkboxContainer}>
+        <TouchableOpacity key={app.id} style={styles.checkboxContainer} onPress={() => this.checkApp(app.id)}>
           <CheckBox
             checked={checked}
             checkedColor={colors.red}
@@ -62,7 +62,7 @@ class RideshareModal extends Component {
             onPress={() => this.checkApp(app.id)}
           />
           <Text style={styles.checkboxTitle}>{app.title}</Text>
-        </View>
+        </TouchableOpacity>
       )
     })
   }
@@ -72,13 +72,17 @@ class RideshareModal extends Component {
     forEach(main, (value, key) => {
       if (value === true) mainArray.push(key)
     })
+    // let otherAppArray = other.split(re)
     let re = /\s*,\s*/
-    this.props.onConfirm({main: mainArray, other: other.length > 0 ? other.split(re) : other})
+    this.props.onConfirm({main: mainArray, other: other.length > 0 ? other.split(re).filter(String) : other})
   }
+
   render () {
     const {isVisible, onCancel} = this.props
     const { main, other, otherSelected } = this.state
-    let confirmDisabled = isEmpty(main) && !other.trim() && !otherSelected
+    let mainAppSelected = false
+    forEach(main, (value, key) => { mainAppSelected = value === true })
+    let confirmActive = mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
     return (
       <Modal
         avoidKeyboard
@@ -114,7 +118,7 @@ class RideshareModal extends Component {
               onPress={onCancel} />
             <Button
               containerStyle={styles.modalConfirmButton}
-              disabled={confirmDisabled}
+              disabled={!confirmActive}
               title='CONFIRM'
               onPress={this.onConfirm} />
           </View>
@@ -159,7 +163,7 @@ class Documentation extends Component {
       ridesharingApproved: null,
       showAppsModal: false,
       apps: {
-        main: {},
+        main: [],
         other: []
       }
     }
@@ -196,7 +200,7 @@ class Documentation extends Component {
   }
 
   onSaveApps = ({main, other}) => {
-    console.log(main, other)
+    // console.log(main, other)
     this.setState({apps: {main, other}, showAppsModal: false, ridesharingApproved: true})
   }
 
@@ -213,8 +217,10 @@ class Documentation extends Component {
 
   render () {
     const {ridesharingApproved, apps} = this.state
-    let appsCount = apps.main.length + apps.other.length
     const {tlc, driving} = this.props.licences
+    let appsCount = apps.main.length + apps.other.length
+
+    let submitActive = tlc.front && tlc.back && driving.front && driving.back && appsCount > 0 && ridesharingApproved
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <Text style={styles.screenTitle}>Upload following documents to get your account approved</Text>
@@ -260,7 +266,7 @@ class Documentation extends Component {
           <Text style={styles.sectionHeader}>Rideshare apps</Text>
           <View style={[styles.sectionContent, {flexDirection: 'column'}]}>
             <Text style={styles.bigQuestion}>Are you approved to work for any Ridesharing apps?</Text>
-            <View style={styles.checkboxContainer}>
+            <TouchableOpacity style={styles.checkboxContainer} onPress={this.onApprove}>
               <CheckBox
                 checked={ridesharingApproved}
                 checkedColor={colors.red}
@@ -273,7 +279,7 @@ class Documentation extends Component {
                 onPress={this.onApprove}
               />
               <Text style={styles.checkboxTitle}>Yes, I’m approved</Text>
-            </View>
+            </TouchableOpacity>
             {
               ridesharingApproved && (
                 <Text style={styles.checkboxSubText}>
@@ -286,7 +292,7 @@ class Documentation extends Component {
                 </Text>
               )
             }
-            <View style={styles.checkboxContainer}>
+            <TouchableOpacity style={styles.checkboxContainer} onPress={this.onDisapprove}>
               <CheckBox
                 checked={ridesharingApproved === false}
                 checkedColor={colors.red}
@@ -298,12 +304,13 @@ class Documentation extends Component {
                 onPress={this.onDisapprove}
               />
               <Text style={styles.checkboxTitle}>No, I’m not approved</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
         <View style={styles.footer}>
           <Button
             containerStyle={styles.button}
+            disabled={!submitActive}
             title='SUBMIT DOCUMENTS'
             onPress={this.onSubmit}
           />

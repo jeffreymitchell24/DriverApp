@@ -7,7 +7,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
-    paddingTop: 0,
+    paddingTop: 5,
     justifyContent: 'space-between'
   },
   text: {

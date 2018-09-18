@@ -9,7 +9,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
-    paddingTop: 0
+    paddingTop: 5
   },
   screenTitle: {
     fontSize: metrics.fontSize,
@@ -123,7 +123,8 @@ export default StyleSheet.create({
     height: screenHeight,
     margin: 0,
     marginHorizontal: 8,
-    marginVertical: metrics.contentMarginSmall
+    marginTop: metrics.contentMarginSmall,
+    marginBottom: metrics.contentMarginSmall
   },
 
   modalDialogContainer: {
