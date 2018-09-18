@@ -14,5 +14,9 @@ export default StyleSheet.create({
     color: '#fff',
     fontSize: 17,
     fontFamily: 'SFProText-Bold'
+  },
+
+  disabled: {
+    backgroundColor: colors.redTrans
   }
 })

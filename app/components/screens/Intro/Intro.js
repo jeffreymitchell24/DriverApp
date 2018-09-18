@@ -3,14 +3,14 @@ import {
   View,
   Image,
   Text,
-  // TouchableOpacity,
+  Keyboard,
   Dimensions
 } from 'react-native'
 import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
-// import { CardSection } from 'components/blocks'
 import { Button } from 'components/ui'
+import {Account, Documentation, SignIn, PersonalInfo} from 'navigation/routeNames'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 import Swiper from 'react-native-swiper'
 import { CONFIG } from './config'
@@ -29,14 +29,15 @@ class Intro extends Component {
 
   componentDidMount () {
     SplashScreen.hide()
+    Keyboard.dismiss()
   }
 
   handleStartPress = () => {
-
+    this.props.navigation.navigate(Account) // Account
   }
 
   handleSignInPress = () => {
-    console.log('Sign In')
+    this.props.navigation.navigate(SignIn) // Register
   }
 
   renderSlides = () => {
