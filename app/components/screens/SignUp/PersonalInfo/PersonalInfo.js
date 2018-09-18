@@ -152,7 +152,7 @@ class PersonalInfo extends Component {
           <View style={styles.footer}>
             <Button
               containerStyle={styles.button}
-              title='UPLOAD DOCUMENT'
+              title='UPLOAD DOCUMENTS'
               onPress={this.onSubmit}
             />
           </View>

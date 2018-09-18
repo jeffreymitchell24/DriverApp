@@ -17,3 +17,7 @@ export const RegisterReview = 'RegisterReview'
 export const SignIn = 'SignIn'
 export const ResetPassword = 'ResetPassword'
 export const TermsConditions = 'TermsConditions'
+
+// App
+export const Home = 'Home'
+export const Profile = 'Profile'
