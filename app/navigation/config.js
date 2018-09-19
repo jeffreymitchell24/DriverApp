@@ -14,9 +14,12 @@ import TermsConditions from 'components/screens/TermsConditions'
 import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
 
+import {HomeTabStack} from './tabNavigation'
+
 let navigationOptions = {
   headerStyle: {
-    elevation: 0
+    elevation: 0,
+    borderBottomWidth: 0
   },
   headerTitleStyle: {
     fontSize: 16,
@@ -120,6 +123,18 @@ export const Root = createStackNavigator(
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions
+      }
+    },
+    Home: {
+      screen: HomeTabStack,
+      navigationOptions: {
+        title: 'Car Flow',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 16
+        }
       }
     }
   },

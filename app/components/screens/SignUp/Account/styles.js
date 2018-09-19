@@ -8,7 +8,7 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
-    paddingTop: 0,
+    paddingTop: 5,
     justifyContent: 'space-between'
   },
 
@@ -31,7 +31,7 @@ export default StyleSheet.create({
   },
   checkboxTitle: {
     color: colors.black,
-    fontSize: metrics.fontSizeBig,
+    fontSize: metrics.fontSize,
     fontFamily: 'SFProText-Regular',
     paddingBottom: 3
   },

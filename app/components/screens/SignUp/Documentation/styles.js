@@ -1,15 +1,15 @@
-import { StyleSheet, Platform } from 'react-native'
-import ExtraDimensions from 'react-native-extra-dimensions-android'
+import { StyleSheet, Platform, Dimensions } from 'react-native'
 import { colors, metrics } from 'theme'
 
-let screenHeight = Platform.OS === 'android' ? metrics.screenHeight + ExtraDimensions.get('SOFT_MENU_BAR_HEIGHT') : metrics.screenHeight
+let screenHeight = Platform.OS === 'android' ? Dimensions.get('screen').height : metrics.screenHeight
+let gap = Platform.OS === 'android' ? 24 : 0
 
 export default StyleSheet.create({
   container: {
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
-    paddingTop: 0
+    paddingTop: 5
   },
   screenTitle: {
     fontSize: metrics.fontSize,
@@ -122,8 +122,8 @@ export default StyleSheet.create({
   modal: {
     height: screenHeight,
     margin: 0,
-    marginHorizontal: 8,
-    marginVertical: metrics.contentMarginSmall
+    padding: 16,
+    paddingVertical: 32
   },
 
   modalDialogContainer: {
@@ -132,7 +132,7 @@ export default StyleSheet.create({
     paddingBottom: metrics.contentMarginSmall,
     paddingTop: 32,
     justifyContent: 'space-between',
-    height: screenHeight - (32 * 2)
+    height: metrics.screenHeight - (32 * 2) - gap
   },
 
   modalTitle: {

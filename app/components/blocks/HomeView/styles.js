@@ -1,4 +1,3 @@
-
 import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
@@ -8,32 +7,20 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
-    paddingBottom: 32,
-    paddingTop: 5,
+    paddingBottom: metrics.contentMargin,
     justifyContent: 'space-between'
   },
-
-  form: {
-  },
-  resetButton: {
-    fontFamily: 'SFProText-Regular',
-    fontSize: 12,
-    color: colors.red,
-    marginTop: 5
-  },
-  footer: {
+  emptyListContainer: {
+    flex: 1,
+    justifyContent: 'center',
     alignItems: 'center'
   },
-  button: {
-    marginBottom: metrics.contentMargin,
-    alignSelf: 'stretch'
-  },
-  mainText: {
+  emptyListText: {
+    fontSize: 15,
     fontFamily: 'SFProText-Regular',
-    fontSize: 12,
     color: colors.gray100
   },
-  registerButtonText: {
-    color: colors.red
+  button: {
+    marginTop: metrics.contentMargin
   }
 })

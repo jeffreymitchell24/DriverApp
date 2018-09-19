@@ -10,12 +10,10 @@ import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
 import { Button } from 'components/ui'
-import {Account, Documentation, SignIn, PersonalInfo} from 'navigation/routeNames'
+import {Account, Documentation, SignIn, Home} from 'navigation/routeNames'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 import Swiper from 'react-native-swiper'
 import { CONFIG } from './config'
-import { connect } from 'react-redux'
-import { metrics } from 'theme'
 import styles from './styles'
 
 class Intro extends Component {
@@ -34,6 +32,7 @@ class Intro extends Component {
 
   handleStartPress = () => {
     this.props.navigation.navigate(Account) // Account
+    // this._navigateTo(Home)
   }
 
   handleSignInPress = () => {
@@ -63,9 +62,9 @@ class Intro extends Component {
         <Swiper
           activeDot={<View style={{ backgroundColor: 'rgb(222,71,71)', width: height * 0.0156, height: height * 0.0156, borderRadius: 100, marginLeft: 3, marginRight: 3 }} />}
           autoplay
-          autoplayTimeout={3.5}
+          autoplayTimeout={5}
           dot={<View style={{ backgroundColor: 'rgb(248, 226, 226)', width: height * 0.0156, height: height * 0.0156, borderRadius: 100, marginLeft: 3, marginRight: 3 }} />}
-          paginationStyle={{ position: 'absolute', top: -metrics.screenHeight * 0.75 }}
+          paginationStyle={styles.paginationStyle}
           style={{}}
         >
           {this.renderSlides()}
@@ -96,19 +95,4 @@ Intro.propTypes = {
 
 const height = Dimensions.get('window').height // full height
 
-function mapStateToProps (state) {
-  return {
-
-  }
-}
-
-function mapDispatchToProps (dispatch) {
-  return {
-
-  }
-}
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(Intro)
+export default Intro

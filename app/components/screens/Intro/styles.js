@@ -2,6 +2,7 @@ import { StyleSheet, Platform } from 'react-native'
 
 import { colors, metrics } from 'theme'
 let extraPadding = Platform.OS === 'ios' ? 20 : 0
+let ratio = metrics.screenHeight > 600 ? 0.45 : 40
 
 export default StyleSheet.create({
   container: {
@@ -16,9 +17,15 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center'
   },
+
+  paginationStyle: {
+    position: 'absolute',
+    top: 0,
+    alignItems: 'flex-start'
+  },
   imageContainer: {
     width: metrics.screenWidth,
-    height: metrics.screenHeight * 0.45,
+    height: metrics.screenHeight * ratio,
     marginTop: metrics.screenWidth * 0.1,
     padding: metrics.contentMargin,
     paddingTop: 0
