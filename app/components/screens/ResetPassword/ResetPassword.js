@@ -24,9 +24,10 @@ class ResetPassword extends PureComponent {
 
   }
 
-  renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched }) => {
+  renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched, isValid }) => {
     let buttonDisabled = true
-    if (isEmpty(errors) && touched.email) buttonDisabled = false
+    if (isEmpty(errors) && isValid) buttonDisabled = false
+    console.log(touched, errors)
     return (
       <ScrollView
         contentContainerStyle={styles.container}
@@ -35,7 +36,7 @@ class ResetPassword extends PureComponent {
         style={{flex: 1}}>
         <View style={styles.form}>
           <TextInputView
-            error={touched.email && errors.email}
+            error={errors.email}
             keyboardType='email-address'
             label='EMAIL'
             name='email'
@@ -62,8 +63,7 @@ class ResetPassword extends PureComponent {
         <Formik
           initialValues={{email: '', password: ''}}
           render={this.renderForm}
-          validateOnBlur
-          // validateOnChange
+          validateOnChange
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
