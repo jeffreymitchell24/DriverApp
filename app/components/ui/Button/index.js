@@ -1,12 +1,21 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text, TouchableOpacity, ViewPropTypes } from 'react-native'
+import { Text, TouchableOpacity, ViewPropTypes, View } from 'react-native'
 
 import styles from './styles'
 
-const Button = ({ onPress, children, title, containerStyle, textStyle }) => {
+const Button = ({ onPress, children, disabled, title, containerStyle, disabledStyle, textStyle }) => {
+  let mergedStyles = [
+    styles.container,
+    containerStyle && containerStyle
+  ]
+  if (disabled) {
+    mergedStyles.push(styles.disabled)
+    mergedStyles.push(disabledStyle)
+  }
+  let Wrapper = disabled ? View : TouchableOpacity
   return (
-    <TouchableOpacity style={[styles.container, containerStyle && containerStyle]} onPress={onPress} >
+    <Wrapper style={mergedStyles} onPress={onPress} >
       {
         title
           ? (
@@ -15,14 +24,16 @@ const Button = ({ onPress, children, title, containerStyle, textStyle }) => {
             {children}
           )
       }
-    </TouchableOpacity>
+    </Wrapper>
   )
 }
 
 Button.propTypes = {
   children: PropTypes.node,
   containerStyle: ViewPropTypes.style,
-  textStyle: ViewPropTypes.style,
+  disabled: PropTypes.bool,
+  disabledStyle: ViewPropTypes.style,
+  textStyle: Text.propTypes.style,
   title: PropTypes.string,
   onPress: PropTypes.func
 }

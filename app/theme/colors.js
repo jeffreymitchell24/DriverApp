@@ -1,10 +1,14 @@
 export default {
   lightPink: '#FEF4F4',
   red: '#F03E3E',
-
+  redTrans: 'rgba(240, 62, 62, 0.5)',
   white: '#ffffff',
   black: '#000000',
+  gray50: '#F1F3F5',
+  gray75: '#F8F9FA',
   gray100: '#495057',
+  gray200: '#868E96',
+  gray300: '#343A40',
 
   red100: '#ed8078',
   red200: '#C40D3C',
