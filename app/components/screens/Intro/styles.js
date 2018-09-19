@@ -20,7 +20,8 @@ export default StyleSheet.create({
 
   paginationStyle: {
     position: 'absolute',
-    top: -metrics.screenHeight * 0.75
+    top: 0,
+    alignItems: 'flex-start'
   },
   imageContainer: {
     width: metrics.screenWidth,
