@@ -3,12 +3,14 @@ import PropTypes from 'prop-types'
 import {
   View,
   TextInput,
-  Text
+  Text,
+  ViewPropTypes
 } from 'react-native'
 import styles from './styles'
 
 export class TextInputView extends PureComponent {
   static propTypes = {
+    containerStyle: ViewPropTypes.style,
     error: PropTypes.string,
     label: PropTypes.string,
     placeholder: PropTypes.string.isRequired,
@@ -31,10 +33,11 @@ export class TextInputView extends PureComponent {
       value,
       placeholder,
       secureTextEntry,
+      containerStyle,
       ...rest
     } = this.props
     return (
-      <View style={styles.container}>
+      <View style={[styles.container, containerStyle]}>
         <Text style={styles.label}>{label}</Text>
         <TextInput
           placeholder={placeholder}
