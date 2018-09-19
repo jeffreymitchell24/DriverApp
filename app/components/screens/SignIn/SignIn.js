@@ -37,7 +37,7 @@ class SignIn extends PureComponent {
 
   renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched }) => {
     let buttonDisabled = true
-    if (isEmpty(errors) && touched.email && touched.password) buttonDisabled = false
+    if (isEmpty(errors) && touched.email) buttonDisabled = false
     return (
       <ScrollView
         contentContainerStyle={styles.container}
