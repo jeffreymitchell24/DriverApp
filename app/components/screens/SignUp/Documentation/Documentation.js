@@ -23,18 +23,22 @@ import {APP_CONFIG} from './config'
 class RideshareModal extends Component {
   constructor (props) {
     super(props)
-
+    let other = this.props.other.join(',')
+    let main = {}
+    this.props.main.forEach(app => { main[app] = true })
+    console.log(main, other)
     this.state = {
-      main: {},
-      otherSelected: false,
-      other: ''
+      main,
+      otherSelected: other.length > 0,
+      other
     }
   }
 
   checkApp = (id) => {
     if (id === 'other') {
       this.setState((state) => ({
-        otherSelected: !state.otherSelected
+        otherSelected: !state.otherSelected,
+        other: state.otherSelected ? '' : state.other
       }))
     } else {
       this.setState((state) => ({
@@ -46,6 +50,16 @@ class RideshareModal extends Component {
   onEditOtherApps = (value) => {
     this.setState({other: value})
   }
+  onConfirm = () => {
+    let {main, other} = this.state
+    let mainArray = []
+    forEach(main, (value, key) => {
+      if (value === true) mainArray.push(key)
+    })
+    let re = /\s*,\s*/
+    this.props.onConfirm({main: mainArray, other: other.length > 0 ? other.split(re).filter(String) : []})
+  }
+
   renderApps = () => {
     return APP_CONFIG.map(app => {
       let checked = app.id === 'other' ? this.state.otherSelected : this.state.main[app.id]
@@ -65,16 +79,6 @@ class RideshareModal extends Component {
         </TouchableOpacity>
       )
     })
-  }
-  onConfirm = () => {
-    let {main, other} = this.state
-    let mainArray = []
-    forEach(main, (value, key) => {
-      if (value === true) mainArray.push(key)
-    })
-    // let otherAppArray = other.split(re)
-    let re = /\s*,\s*/
-    this.props.onConfirm({main: mainArray, other: other.length > 0 ? other.split(re).filter(String) : other})
   }
 
   render () {
@@ -98,16 +102,19 @@ class RideshareModal extends Component {
             <View>
               {this.renderApps()}
             </View>
-            <View>
-              <TextInput
-                editable={this.state.otherSelected}
-                style={styles.appsInput}
-                underlineColorAndroid='transparent'
-                value={this.state.other}
-                onChangeText={this.onEditOtherApps}
-              />
-              <Text style={[styles.screenTitle, {alignSelf: 'flex-start'}]}>Separate apps by comma to add more</Text>
-            </View>
+            {
+              otherSelected && <View>
+                <TextInput
+                  editable={this.state.otherSelected}
+                  style={styles.appsInput}
+                  underlineColorAndroid='transparent'
+                  value={this.state.other}
+                  onChangeText={this.onEditOtherApps}
+                />
+                <Text style={[styles.screenTitle, {alignSelf: 'flex-start'}]}>Separate apps by comma to add more</Text>
+              </View>
+
+            }
           </View>
           <View style={styles.footerButtons}>
             <Button
@@ -129,6 +136,8 @@ class RideshareModal extends Component {
 
 RideshareModal.propTypes = {
   isVisible: PropTypes.bool,
+  main: PropTypes.array,
+  other: PropTypes.array,
   onCancel: PropTypes.func,
   onConfirm: PropTypes.func
 }
@@ -166,6 +175,7 @@ class Documentation extends Component {
         other: []
       }
     }
+    this.modalRenderKey = 0
   }
 
   onSubmit = () => {
@@ -195,19 +205,23 @@ class Documentation extends Component {
   }
 
   onHideAppModal = () => {
+    this.modalRenderKey += 1
     this.setState({showAppsModal: false})
   }
 
   onSaveApps = ({main, other}) => {
-    // console.log(main, other)
+    this.modalRenderKey += 1
     this.setState({apps: {main, other}, showAppsModal: false, ridesharingApproved: true})
   }
 
   renderAppsModal = () => {
-    const {showAppsModal} = this.state
+    const {showAppsModal, apps} = this.state
+
     return (
       <RideshareModal
+        {...apps}
         isVisible={showAppsModal}
+        key={this.modalRenderKey}
         onCancel={this.onHideAppModal}
         onConfirm={this.onSaveApps}
       />

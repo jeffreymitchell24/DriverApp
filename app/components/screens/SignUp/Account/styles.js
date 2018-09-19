@@ -31,7 +31,7 @@ export default StyleSheet.create({
   },
   checkboxTitle: {
     color: colors.black,
-    fontSize: metrics.fontSizeBig,
+    fontSize: metrics.fontSize,
     fontFamily: 'SFProText-Regular',
     paddingBottom: 3
   },
