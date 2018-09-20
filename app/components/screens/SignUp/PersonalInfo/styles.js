@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
-console.log(metrics.screenHeight)
+
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
