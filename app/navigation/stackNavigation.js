@@ -1,9 +1,15 @@
 import { createStackNavigator } from 'react-navigation'
-// // import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator'
-
+import React from 'react'
+import { NavBackImage } from 'components/ui'
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
 import BookingDetails from 'components/screens/NewBooking/BookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
+
+import ChangePassword from 'components/screens/Profile/ChangePassword'
+import ChangesReview from 'components/screens/Profile/ChangesReview'
+import ProfileCamera from 'components/screens/Profile/ProfileCamera'
+import ProfileDetails from 'components/screens/Profile/ProfileDetails'
+import ProfileMain from 'components/screens/Profile/ProfileMain'
 
 export const NewBookingStack = createStackNavigator({
   BookingConfirmed: {
@@ -69,3 +75,69 @@ export const NewBookingStack = createStackNavigator({
 //     }
 //   }
 // }
+
+export const ProfileStack = createStackNavigator({
+  ChangePassword: {
+    screen: ChangePassword,
+    navigationOptions: {
+      title: 'Change password',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  ChangesReview: {
+    screen: ChangesReview,
+    navigationOptions: {
+      title: 'Approve changes',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  ProfileCamera: {
+    screen: ProfileCamera,
+    navigationOptions: {
+      title: 'Your Photo',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  ProfileDetails: {
+    screen: ProfileDetails,
+    navigationOptions: {
+      title: 'Personal details',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  ProfileMain: {
+    screen: ProfileMain,
+    navigationOptions: {
+      title: null,
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  }
+},
+{
+  initialRouteName: 'ProfileMain',
+  headerLayoutPreset: 'center',
+  navigationOptions: {
+    headerStyle: {
+      elevation: 0,
+      borderBottomWidth: 0
+    },
+    headerBackImage: (<NavBackImage />),
+    headerTitleStyle: {
+      fontSize: 16,
+      fontFamily: 'SFProText-Regular',
+      fontWeight: 'normal',
+      color: '#343A40'
+    },
+    headerLeftContainerStyle: {
+      paddingLeft: 16
+    },
+    headerRightContainerStyle: {
+      paddingRight: 16
+    }
+  }
+})

@@ -27,3 +27,10 @@ export const NewBooking = 'NewBooking'
 export const BookingConfirmed = 'BookingConfirmed'
 export const BookingDetails = 'BookingDetails'
 export const AvailableBookings = 'AvailableBookings'
+
+// Profile
+export const ProfileMain = 'ProfileMain'
+export const ProfileDetails = 'ProfileDetails'
+export const ProfileCamera = 'ProfileCamera'
+export const ChangesReview = 'ChangesReview'
+export const ChangePassword = 'ChangePassword'
