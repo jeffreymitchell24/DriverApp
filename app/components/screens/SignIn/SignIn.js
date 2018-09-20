@@ -18,7 +18,7 @@ const formIputs = {
 }
 const validationSchema = Yup.object().shape({
   [formIputs.email]: Yup.string().trim().email('Email format is not correct').required('This field is required.'),
-  [formIputs.password]: Yup.string().required('This field is required.')
+  [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.')
 })
 
 class SignIn extends PureComponent {
