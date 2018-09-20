@@ -2,12 +2,10 @@ import React, { Component } from 'react'
 import {
   View,
   ScrollView,
-  Image,
   Text
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
 import {Documentation} from 'navigation/routeNames'
@@ -22,8 +20,17 @@ class PersonalInfo extends Component {
   }
 
   onSubmit = () => {
-    const {onSaveSignUpStepData} = this.props
-    onSaveSignUpStepData({stepData: {}, step: 2})
+    const {onSaveProfileInfo} = this.props
+    let profile = {
+      fullname: 'John Doe',
+      street: 'Park Avenue',
+      zipcode: '',
+      city: 'New York',
+      state: 'New York',
+      phone: '411 555 1234'
+
+    }
+    onSaveProfileInfo(profile)
     this.props.navigation.navigate(Documentation)
   }
 
@@ -54,9 +61,9 @@ class PersonalInfo extends Component {
           placeholder=''
           query={{
             // available options: https://developers.google.com/places/web-service/autocomplete
-            key: GOOGLE_API_KEY, // GOOGLE_API_KEY,
+            key: GOOGLE_API_KEY,
             language: 'en', // language of the results
-            // types: '(regions)', // default: 'geocode',
+            types: 'address', // default: 'geocode',
             'session_token': this.placesAutocompleteToken,
             sesstionToken: this.placesAutocompleteToken,
             location: '40.730610, -73.935242',
@@ -92,12 +99,12 @@ class PersonalInfo extends Component {
               name='fullname'
               placeholder=''
             />
-            {/* {this.renderSearch()} */}
-            <TextInputView
+            {this.renderSearch()}
+            {/* <TextInputView
               label='STREET'
               name='street'
               placeholder=''
-            />
+            /> */}
             <TextInputView
               keyboardType='numeric'
               label='ZIP CODE'
@@ -125,14 +132,14 @@ class PersonalInfo extends Component {
               placeholder=''
             />
           </View>
+          <View style={styles.footer}>
+            <Button
+              containerStyle={styles.button}
+              title='UPLOAD DOCUMENTS'
+              onPress={this.onSubmit}
+            />
+          </View>
         </ScrollView>
-        <View style={styles.footer}>
-          <Button
-            containerStyle={styles.button}
-            title='UPLOAD DOCUMENTS'
-            onPress={this.onSubmit}
-          />
-        </View>
       </View>
     )
   }
@@ -140,7 +147,7 @@ class PersonalInfo extends Component {
 
 PersonalInfo.propTypes = {
   navigation: PropTypes.object,
-  onSaveSignUpStepData: PropTypes.func
+  onSaveProfileInfo: PropTypes.func
 }
 
 export default PersonalInfo

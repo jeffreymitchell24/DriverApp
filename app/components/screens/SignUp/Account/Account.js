@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
@@ -27,7 +27,9 @@ const validationSchema = Yup.object().shape({
   [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.'),
   [formIputs.confirmPassword]: Yup.string().oneOf([Yup.ref('password'), null], "Passwords don't match").required('This field is required.')
 })
-class Account extends Component {
+class Account extends PureComponent {
+  inputRefs = {}
+
   _navigateTo = (routeName) => {
     const resetAction = StackActions.reset({
       index: 0,
@@ -35,6 +37,7 @@ class Account extends Component {
     })
     this.props.navigation.dispatch(resetAction)
   }
+
   onSubmit = (values, {setErrors}) => {
     // console.log('onSubmit', values)
     const {email, password, confirmPassword} = values
@@ -44,7 +47,7 @@ class Account extends Component {
       email: email.trim()
     }
     // this.props.onSignUp({email, password, 'password_confirmation': confirmPassword})
-    this.props.onSaveSignUpStepData({stepData, step: 1})
+    this.props.onSaveCredentials(stepData)
     Keyboard.dismiss()
     this.props.navigation.navigate(PersonalInfo)
   }
@@ -64,81 +67,91 @@ class Account extends Component {
     if (isEmpty(errors) && values.termsChecked) buttonDisabled = false
     // console.log('values', values)
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps='always'
-        ref={this.setListRef}
-        style={{flex: 1}}>
-        <View style={styles.form}>
-          <TextInputView
-            error={touched.email && errors.email}
-            keyboardType='email-address'
-            label='EMAIL'
-            name='email'
-            placeholder=''
-            value={values.email.trim()}
-            onBlur={() => setFieldTouched('email')}
-            onChangeText={handleChange('email')}
-          />
-          <TextInputView
-            error={touched.password && errors.password}
-            label='PASSWORD'
-            name='password'
-            placeholder=''
-            secureTextEntry
-            value={values.password}
-            onBlur={() => setFieldTouched('password')}
-            onChangeText={handleChange('password')}
-          />
-          <TextInputView
-            error={touched.confirmPassword && errors.confirmPassword}
-            label='CONFIRM PASSWORD'
-            name='confirmPassword'
-            placeholder=''
-            secureTextEntry
-            value={values.confirmPassword}
-            onBlur={() => setFieldTouched('confirmPassword')}
-            onChangeText={handleChange('confirmPassword')}
-          />
-          <View style={styles.checkboxContainer}>
-            <CheckBox
-              checked={values.termsChecked}
-              checkedColor='rgb(240,62,62)'
-              checkedIcon='ios-checkbox'
-              containerStyle={styles.checkBox}
-              iconType='ionicon'
-              name='termsChecked'
-              size={30}
-              uncheckedIcon='md-square-outline'
-              onPress={() => setFieldValue('termsChecked', !values.termsChecked)}
+      <View style={styles.container}>
+        <ScrollView
+          contentContainerStyle={styles.formContainer}
+          keyboardShouldPersistTaps='always'
+          ref={this.setListRef}
+          style={{}}>
+          <View style={styles.form}>
+            <TextInputView
+              blurOnSubmit={false}
+              error={touched.email && errors.email}
+              keyboardType='email-address'
+              label='EMAIL'
+              name='email'
+              placeholder=''
+              returnKeyType={'next'}
+              value={values.email.trim()}
+              onBlur={() => setFieldTouched('email')}
+              onChangeText={handleChange('email')}
+              onSubmitEditing={() => this.inputRefs['password'].focus()}
             />
-            <Text style={styles.checkboxTitle}>
-              Accept
+            <TextInputView
+              blurOnSubmit={false}
+              error={touched.password && errors.password}
+              inputRef={(input) => { this.inputRefs['password'] = input }}
+              label='PASSWORD'
+              name='password'
+              placeholder=''
+              returnKeyType={'next'}
+              secureTextEntry
+              value={values.password}
+              onBlur={() => setFieldTouched('password')}
+              onChangeText={handleChange('password')}
+              onSubmitEditing={() => this.inputRefs['confirmPassword'].focus()}
+            />
+            <TextInputView
+              error={touched.confirmPassword && errors.confirmPassword}
+              inputRef={(input) => { this.inputRefs['confirmPassword'] = input }}
+              label='CONFIRM PASSWORD'
+              name='confirmPassword'
+              placeholder=''
+              secureTextEntry
+              value={values.confirmPassword}
+              onBlur={() => setFieldTouched('confirmPassword')}
+              onChangeText={handleChange('confirmPassword')}
+            />
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                checked={values.termsChecked}
+                checkedColor='rgb(240,62,62)'
+                checkedIcon='ios-checkbox'
+                containerStyle={styles.checkBox}
+                iconType='ionicon'
+                name='termsChecked'
+                size={30}
+                uncheckedIcon='md-square-outline'
+                onPress={() => setFieldValue('termsChecked', !values.termsChecked)}
+              />
+              <Text style={styles.checkboxTitle}>
+                Accept
+                <Text
+                  style={styles.termsButton}
+                  onPress={this.handleTermsPress}
+                > Terms and Conditions
+                </Text>
+              </Text>
+            </View>
+          </View>
+          <View style={styles.footer}>
+            <Button
+              containerStyle={styles.nextButton}
+              disabled={buttonDisabled}
+              title='Next'
+              onPress={handleSubmit}
+            />
+            <Text style={styles.mainText}>
+              Already have an account?
               <Text
-                style={styles.termsButton}
-                onPress={this.handleTermsPress}
-              > Terms and Conditions
+                style={styles.signInButtonText}
+                onPress={this.handleSignInPress}
+              > Sign in
               </Text>
             </Text>
           </View>
-        </View>
-        <View style={styles.footer}>
-          <Button
-            containerStyle={styles.nextButton}
-            disabled={buttonDisabled}
-            title='Next'
-            onPress={handleSubmit}
-          />
-          <Text style={styles.mainText}>
-            Already have an account?
-            <Text
-              style={styles.signInButtonText}
-              onPress={this.handleSignInPress}
-            > Sign in
-            </Text>
-          </Text>
-        </View>
-      </ScrollView>
+        </ScrollView>
+      </View>
     )
   }
 
@@ -148,9 +161,6 @@ class Account extends Component {
         <Formik
           initialValues={{email: '', password: '', confirmPassword: '', termsChecked: false}}
           render={this.renderForm}
-          // validate={(values) => {
-          //   console.log('validate', values)
-          // }}
           validateOnBlur
           // validateOnChange
           validationSchema={validationSchema}
@@ -163,7 +173,7 @@ class Account extends Component {
 
 Account.propTypes = {
   navigation: PropTypes.object,
-  onSaveSignUpStepData: PropTypes.func
+  onSaveCredentials: PropTypes.func
   // onSignUp: PropTypes.func
 }
 
