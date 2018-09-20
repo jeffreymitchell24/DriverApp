@@ -1,29 +1,8 @@
 import React, { Component } from 'react'
 import { HomeView } from 'components/blocks'
-
-const BOOKINGS = [
-  {
-    id: '0',
-    carName: 'Toyota Prius',
-    carDetails: 'FBR 1449, White',
-    time: 'Aug 20, 11:00AM –– Aug 20, 11:00PM',
-    address: 'Bronx –– Manhattan'
-  },
-  {
-    id: '1',
-    carName: 'Toyota Prius',
-    carDetails: 'FBR 1449, White',
-    time: 'Aug 20, 11:00AM –– Aug 20, 11:00PM',
-    address: 'Bronx –– Manhattan'
-  },
-  {
-    id: '2',
-    carName: 'Toyota Prius',
-    carDetails: 'FBR 1449, White',
-    time: 'Aug 20, 11:00AM –– Aug 20, 11:00PM',
-    address: 'Bronx –– Manhattan'
-  }
-]
+import {NewBooking} from 'navigation/routeNames'
+import PropTypes from 'prop-types'
+import {BOOKINGS} from 'constants/bookings'
 
 class Upcoming extends Component {
   onBookingPress = (booking) => {
@@ -31,7 +10,7 @@ class Upcoming extends Component {
   }
 
   onNewPress = () => {
-    console.log('New Booking Press')
+    this.props.navigation.navigate(NewBooking)
   }
   render () {
     return (
@@ -45,7 +24,7 @@ class Upcoming extends Component {
 }
 
 Upcoming.propTypes = {
-
+  navigation: PropTypes.object
 }
 
 export default Upcoming

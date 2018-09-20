@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { HomeView } from 'components/blocks'
-// import PropTypes from 'prop-types'
+import {NewBooking} from 'navigation/routeNames'
+import PropTypes from 'prop-types'
 
 class History extends Component {
   onBookingPress = (booking) => {
@@ -8,7 +9,7 @@ class History extends Component {
   }
 
   onNewPress = () => {
-    console.log('New Booking Press')
+    this.props.navigation.navigate(NewBooking)
   }
   render () {
     return (
@@ -22,7 +23,7 @@ class History extends Component {
 }
 
 History.propTypes = {
-
+  navigation: PropTypes.object
 }
 
 export default History

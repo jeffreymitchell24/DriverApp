@@ -31,4 +31,8 @@ BookingCard.propTypes = {
   onPress: PropTypes.func
 }
 
+BookingCard.defaultProps = {
+  onPress: () => {}
+}
+
 export {BookingCard}
