@@ -1,9 +1,9 @@
 import { connect } from 'react-redux'
-import { saveSignUpStepData } from 'store/actions/registration'
+import { saveProfileInfo } from 'store/actions/registration'
 import PersonalInfo from './PersonalInfo'
 
 const actions = {
-  onSaveSignUpStepData: saveSignUpStepData
+  onSaveProfileInfo: saveProfileInfo
 }
 
 export default connect(

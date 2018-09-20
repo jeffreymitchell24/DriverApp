@@ -1,7 +1,7 @@
 import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
-
+console.log(metrics.screenHeight)
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -9,12 +9,13 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
-    paddingTop: 5
+    paddingTop: 5,
+    position: 'relative'
   },
   formContainer: {
-    // flex: 1,
     backgroundColor: colors.white,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    flexGrow: 1
   },
 
   form: {
@@ -24,7 +25,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   footer: {
-    marginTop: 25,
+    // position: 'absolute',
+    // bottom: 32,
+    marginTop: 15,
     alignItems: 'center'
   },
   button: {
@@ -91,10 +94,10 @@ export const googleStyles = StyleSheet.create({
     flexShrink: 0
   },
   listView: {
-    position: 'absolute',
-    top: 60,
-    left: 10,
-    right: 10,
+    // position: 'absolute',
+    // top: 60,
+    // left: 10,
+    // right: 10,
     backgroundColor: 'white',
     borderRadius: 5,
     flex: 1,
