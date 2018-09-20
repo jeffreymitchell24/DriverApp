@@ -15,11 +15,11 @@ export default StyleSheet.create({
 
   form: {
   },
-  resetButton: {
+  mainErrorText: {
+    marginBottom: 5,
     fontFamily: 'SFProText-Regular',
     fontSize: 12,
-    color: colors.red,
-    marginTop: 5
+    color: colors.red
   },
   footer: {
     alignItems: 'center'
