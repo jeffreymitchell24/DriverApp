@@ -55,7 +55,8 @@ export default StyleSheet.create({
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    borderRadius: 3
   },
 
   licenseImage: {

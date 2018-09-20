@@ -5,11 +5,17 @@ import { colors, metrics } from 'theme'
 export default StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'space-between',
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
     paddingTop: 5,
-    justifyContent: 'space-between'
+    position: 'relative'
+  },
+  formContainer: {
+    backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    flexGrow: 1
   },
 
   form: {

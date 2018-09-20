@@ -1,80 +1,71 @@
-// import { createStackNavigator } from 'react-navigation'
-// import React from 'react'
-// import { NavBackImage } from 'components/ui'
+import { createStackNavigator } from 'react-navigation'
 // // import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator'
-// import SignUpStepOne from './stack/SignUpStepOne'
-// import SignUpStepTwo from './stack/SignUpStepTwo'
-// import SignUpStepThree from './stack/SignUpStepThree'
-// import SignIn from './stack/SignIn'
-// import ResetPassword from './stack/ResetPassword'
 
-// export const SignUpStack = createStackNavigator(
-//   {
-//     SignUpStepOne: {
-//       screen: SignUpStepOne,
-//       navigationOptions: {
-//         title: 'Step 1'
-//       }
-//     },
-//     SignUpStepTwo: {
-//       screen: SignUpStepTwo,
-//       navigationOptions: {
-//         title: 'Step 2'
-//       }
-//     },
-//     SignUpStepThree: {
-//       screen: SignUpStepThree,
-//       navigationOptions: {
-//         title: 'Step 3'
-//       }
-//     }
-//   },
-//   {
-//     // transitionConfig: () => {
-//     //   return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
-//     // },
-//     headerLayoutPreset: 'center',
-//     navigationOptions: {
-//       headerStyle: {
-//         elevation: 0
-//       },
-//       headerTitleStyle: {
-//         fontSize: 16,
-//         fontFamily: 'SFProText-Regular',
-//         color: '#343A40'
-//       },
-//       headerBackImage: (<NavBackImage />)
-//     }
-//   }
-// )
+import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
+import BookingDetails from 'components/screens/NewBooking/BookingDetails'
+import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
 
-// export const SignInStack = createStackNavigator({
-//   SignIn: {
-//     screen: SignIn,
-//     navigationOptions: {
-//       title: 'Sign In'
-//     }
-//   },
-//   ResetPassword: {
-//     screen: ResetPassword,
-//     navigationOptions: {
-//       title: 'Reset your password',
-//       headerTitle: null
-//     }
-//   }
-// },
-// {
-//   headerLayoutPreset: 'center',
-//   navigationOptions: {
+export const NewBookingStack = createStackNavigator({
+  BookingConfirmed: {
+    screen: BookingConfirmed,
+    navigationOptions: {
+      title: null,
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  BookingDetails: {
+    screen: BookingDetails,
+    navigationOptions: {
+      title: 'New booking',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  AvailableBookings: {
+    screen: AvailableBookings,
+    navigationOptions: {
+      title: 'New booking',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  }
+},
+{
+  initialRouteName: 'AvailableBookings',
+  headerLayoutPreset: 'center',
+  navigationOptions: {
+    headerStyle: {
+      elevation: 0,
+      borderBottomWidth: 0
+    },
+    headerTitleStyle: {
+      fontSize: 16,
+      fontFamily: 'SFProText-Regular',
+      fontWeight: 'normal',
+      color: '#343A40'
+    },
+    headerLeftContainerStyle: {
+      paddingLeft: 16
+    },
+    headerRightContainerStyle: {
+      paddingRight: 16
+    }
+  }
+}
+)
+// NewBookingStack.navigationOptions = ({ navigation }) => {
+//   return {
+//     headerLeft: <NavButton icon='cancel' onPress={() => navigation.navigate(Home)} />,
 //     headerStyle: {
-//       elevation: 0
+//       elevation: 0,
+//       borderBottomWidth: 0
 //     },
 //     headerTitleStyle: {
 //       fontSize: 16,
 //       fontFamily: 'SFProText-Regular',
+//       fontWeight: 'normal',
 //       color: '#343A40'
-//     },
-//     headerBackImage: (<NavBackImage />)
+//     }
 //   }
 // }
-// )

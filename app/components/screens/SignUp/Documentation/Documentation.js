@@ -5,9 +5,11 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native'
 
+import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
@@ -84,8 +86,7 @@ class RideshareModal extends Component {
   render () {
     const {isVisible, onCancel} = this.props
     const { main, other, otherSelected } = this.state
-    let mainAppSelected = false
-    forEach(main, (value, key) => { mainAppSelected = value === true })
+    let mainAppSelected = find(main, (value, key) => value === true)
     let confirmActive = mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
     return (
       <Modal
@@ -214,6 +215,13 @@ class Documentation extends Component {
     this.setState({apps: {main, other}, showAppsModal: false, ridesharingApproved: true})
   }
 
+  onDisabledPress = () => {
+    const {ridesharingApproved} = this.state
+    if (ridesharingApproved === false) {
+      Alert.alert('', 'You have to be approved to work for Ridesharing apps.')
+    }
+  }
+
   renderAppsModal = () => {
     const {showAppsModal, apps} = this.state
 
@@ -325,6 +333,7 @@ class Documentation extends Component {
             containerStyle={styles.button}
             disabled={!submitActive}
             title='SUBMIT DOCUMENTS'
+            onDisabledPress={this.onDisabledPress}
             onPress={this.onSubmit}
           />
         </View>
