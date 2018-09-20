@@ -1,12 +1,13 @@
 import React, {PureComponent} from 'react'
-import { View, ScrollView } from 'react-native'
-// import PropTypes from 'prop-types'
+import { View, ScrollView, Text, Alert } from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay'
+import PropTypes from 'prop-types'
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import isEmpty from 'lodash/isEmpty'
-// import PropTypes from 'prop-types'
+import { colors } from 'theme'
 import styles from './styles'
 
 const formIputs = {
@@ -18,16 +19,27 @@ const validationSchema = Yup.object().shape({
 
 class ResetPassword extends PureComponent {
   static propTypes = {
-    // navigation: PropTypes.object
+    error: PropTypes.string,
+    // navigation: PropTypes.object,
+    isRequestPending: PropTypes.bool,
+    isResetLinkSent: PropTypes.bool,
+    onResetPasword: PropTypes.func
   }
-  onSubmit = () => {
-
+  componentDidUpdate (prevProps) {
+    if (this.props.isResetLinkSent && !prevProps.isResetLinkSent) {
+      setTimeout(() => {
+        Alert.alert('', 'Reset password link has been sent')
+      }, 1)
+    }
+  }
+  onSubmit = (values) => {
+    this.props.onResetPasword(values.email)
   }
 
   renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched, isValid }) => {
+    const {error, isRequestPending} = this.props
     let buttonDisabled = true
     if (isEmpty(errors) && isValid) buttonDisabled = false
-    console.log(touched, errors)
     return (
       <ScrollView
         contentContainerStyle={styles.container}
@@ -45,6 +57,11 @@ class ResetPassword extends PureComponent {
             onBlur={() => setFieldTouched('email')}
             onChangeText={handleChange('email')}
           />
+          {error && !isRequestPending &&
+            <Text style={styles.mainErrorText}>
+              {error}
+            </Text>
+          }
         </View>
         <View style={styles.footer}>
           <Button
@@ -67,6 +84,7 @@ class ResetPassword extends PureComponent {
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
+        <Spinner color={colors.red} visible={this.props.isRequestPending} />
       </View>
     )
   }

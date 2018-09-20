@@ -10,6 +10,22 @@ export const saveSignUpStepData = ({stepData, step}) => {
   }
 }
 
+export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
+export const saveCredentials = (credentials) => {
+  return {
+    type: SAVE_CREDENTIALS,
+    payload: credentials
+  }
+}
+
+export const SAVE_PROFILE_INFO = 'SAVE_PROFILE_INFO'
+export const saveProfileInfo = (profile) => {
+  return {
+    type: SAVE_PROFILE_INFO,
+    payload: profile
+  }
+}
+
 export const UPDATE_LICENSE = 'UPDATE_LICENSE'
 export const updateLicense = (licenseData) => {
   return {
