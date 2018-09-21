@@ -5,6 +5,7 @@ import {
   SIGN_OUT,
   RESET_PASSWORD
 } from 'store/actions/auth'
+import {SIGN_UP} from 'store/actions/registration'
 
 const initialState = {
   pending: false,
@@ -37,6 +38,15 @@ const handlers = {
     return {
       ...state,
       authError: payload,
+      pending: false
+    }
+  },
+  [SIGN_UP.SUCCESS]: (state, { payload }) => {
+    const {user = null, token} = payload
+    return {
+      ...state,
+      user,
+      token,
       pending: false
     }
   },

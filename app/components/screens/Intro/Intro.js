@@ -45,7 +45,7 @@ class Intro extends Component {
       return (
         <View key={index} style={styles.slide}>
           <View style={styles.imageContainer}>
-            <Image resizeMode='center' source={backgrounds[image]} style={styles.previewImage} />
+            <Image resizeMode='contain' source={backgrounds[image]} style={styles.previewImage} />
           </View>
           <View style={styles.slideTextContainer}>
             <Text style={styles.slideTitle}>{title}</Text>

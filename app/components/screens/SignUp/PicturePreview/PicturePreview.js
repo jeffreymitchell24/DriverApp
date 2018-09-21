@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ImageBackground, TouchableOpacity } from 'react-native'
+import { ImageBackground, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import Icon from 'react-native-vector-icons/Feather'
 import {Documentation} from 'navigation/routeNames'
@@ -7,6 +7,9 @@ import { colors } from 'theme'
 import styles from './styles'
 
 class PicturePreview extends Component {
+  state = {
+    key: 0
+  }
   onCancelPress = () => {
     this.props.navigation.goBack()
   }
@@ -15,6 +18,7 @@ class PicturePreview extends Component {
     const {onUpdateLicense, selectedLicense, navigation} = this.props
     const {type, side} = selectedLicense
     const imageUri = navigation.getParam('photoUri', null)
+    // Alert.alert('photoUri', imageUri)
     onUpdateLicense({
       type,
       side,
@@ -22,11 +26,35 @@ class PicturePreview extends Component {
     })
     navigation.navigate(Documentation)
   }
+  onError = () => {
+    console.log('onError')
+    const {key} = this.state
+    if (key === 0) {
+      this.setState({key: 1})
+      Alert.alert('onError', 'onError')
+    }
+  }
+  onLoadEnd = (e) => {
+    console.log('onLoadEnd', e)
+    const {key} = this.state
+    if (key === 0) {
+      this.setState({key: 1})
+      Alert.alert('onLoadEnd', 'onLoadEnd')
+    }
+  }
 
   render () {
     const photoUri = this.props.navigation.getParam('photoUri', null)
+    console.log(this.state.key)
     return (
-      <ImageBackground source={{uri: photoUri}} style={styles.preview}>
+      <ImageBackground
+        imageStyle={[styles.preview, !photoUri && {backgroundColor: 'yellow'}]}
+        key={this.state.key}
+        source={{uri: photoUri}} style={{width: '100%', height: '100%'}}
+        // onError={this.onError}
+        // onLoad={() => console.log('loaded!')}
+        // onLoadEnd={this.onLoadEnd}
+      >
         <TouchableOpacity style={styles.cancel} onPress={this.onCancelPress}>
           <Icon color={colors.white} name='x' size={30} />
         </TouchableOpacity>

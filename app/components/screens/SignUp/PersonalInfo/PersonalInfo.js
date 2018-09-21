@@ -18,12 +18,12 @@ const uuidv4 = require('uuid/v4')
 
 class PersonalInfo extends Component {
   state = {
-    fullname: '',
-    zipcode: '',
+    fullname: '', // 'Kot M',
+    zipcode: '', // '19011',
     city: 'New York',
     state: 'New York',
-    street: '',
-    phone: ''
+    street: '', // 'wgkrewgwg',
+    phone: '' // '12345676789'
   }
   componentDidMount () {
     this.placesAutocompleteToken = uuidv4()
@@ -88,9 +88,9 @@ class PersonalInfo extends Component {
             'session_token': this.placesAutocompleteToken,
             sesstionToken: this.placesAutocompleteToken,
             location: '40.730610, -73.935242',
-            radius: '15000', // 15 km
+            radius: '30000', // 30 km
             components: 'country:us',
-            strictbounds: true
+            // strictbounds: true
           }}
           renderDescription={row => row.description} // custom description render
           returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
@@ -110,8 +110,6 @@ class PersonalInfo extends Component {
   render () {
     let { fullname, zipcode, phone, street } = this.state
     let buttonActive = fullname.length > 0 && zipcode.length > 0 && phone.length > 0 && street.length > 0
-    console.log(this.state)
-    console.log(buttonActive)
     return (
       <View style={styles.container}>
         <ScrollView
@@ -124,6 +122,7 @@ class PersonalInfo extends Component {
               label='FULL NAME'
               name='fullname'
               placeholder=''
+              value={fullname}
               onChangeText={(value) => this.onEditField(value, 'fullname')}
             />
             {/* {this.renderSearch()} */}
@@ -131,6 +130,7 @@ class PersonalInfo extends Component {
               label='STREET'
               name='street'
               placeholder=''
+              value={street}
               onChangeText={(value) => this.onEditField(value, 'street')}
             />
             <TextInputView
@@ -138,6 +138,7 @@ class PersonalInfo extends Component {
               label='ZIP CODE'
               name='zipcode'
               placeholder=''
+              value={zipcode}
               onChangeText={(value) => this.onEditField(value, 'zipcode')}
             />
             <TouchableWithoutFeedback onPress={this.onCityPress}>
@@ -163,6 +164,7 @@ class PersonalInfo extends Component {
               label='PHONE NUMBER'
               name='phone'
               placeholder=''
+              value={phone}
               onChangeText={(value) => this.onEditField(value, 'phone')}
             />
           </View>

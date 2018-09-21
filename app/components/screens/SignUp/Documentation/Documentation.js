@@ -21,7 +21,20 @@ import { colors } from 'theme'
 import { Button } from 'components/ui'
 import styles from './styles'
 import {APP_CONFIG} from './config'
+// import ImagePicker from 'react-native-image-picker'
 
+// var options = {
+//   cancelButtonTitle: 'Cancel',
+//   title: 'License Photo',
+//   // customButtons: [
+//   //   {name: 'fb', title: 'Choose Photo from Facebook'}
+//   // ],
+//   storageOptions: {
+//     skipBackup: true,
+//     path: 'images'
+//   },
+//   noData: true
+// }
 class RideshareModal extends Component {
   constructor (props) {
     super(props)
@@ -180,8 +193,8 @@ class Documentation extends Component {
   }
 
   onSubmit = () => {
-    const {onSaveSignUpStepData} = this.props
-    onSaveSignUpStepData({stepData: {}, step: 2})
+    // const {onSignUp, apps, licences, credentials, personalInfo} = this.props
+    // onSignUp({licences, apps, credentials, personalInfo})
   }
 
   onApprove = () => {
@@ -196,6 +209,22 @@ class Documentation extends Component {
     if (granted) {
       const {onSelectLicense, navigation} = this.props
       onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})
+      // ImagePicker.showImagePicker(options, (response) => {
+      //   console.log('Response = ', response)
+      //   this.pickerIsOpened = false
+      //   if (response.didCancel) {
+      //     // this.props.navigation.goBack()
+      //   } else {
+      //     this.props.onUpdateLicense({
+      //       type: licenseType,
+      //       side: licenseSide.toLowerCase(),
+      //       imageUri: response.uri
+      //     })
+      //     // this.props.navigation.navigate(PicturePreview, {
+      //     //   photoUri: response.uri
+      //     // })
+      //   }
+      // })
       navigation.navigate(DocumentsCamera, {
         title: licenseSide
       })
@@ -212,7 +241,8 @@ class Documentation extends Component {
 
   onSaveApps = ({main, other}) => {
     this.modalRenderKey += 1
-    this.setState({apps: {main, other}, showAppsModal: false, ridesharingApproved: true})
+    this.setState({showAppsModal: false, ridesharingApproved: true})
+    this.props.onUpdatedRideshareApps({main, other})
   }
 
   onDisabledPress = () => {
@@ -237,7 +267,8 @@ class Documentation extends Component {
   }
 
   render () {
-    const {ridesharingApproved, apps} = this.state
+    const {ridesharingApproved} = this.state
+    const {apps} = this.props
     const {tlc, driving} = this.props.licences
     let appsCount = apps.main.length + apps.other.length
 
@@ -344,10 +375,15 @@ class Documentation extends Component {
 }
 
 Documentation.propTypes = {
+  apps: PropTypes.object,
+  credentials: PropTypes.object,
   licences: PropTypes.object,
   navigation: PropTypes.object,
-  onSaveSignUpStepData: PropTypes.func,
-  onSelectLicense: PropTypes.func
+  personalInfo: PropTypes.object,
+  onSelectLicense: PropTypes.func,
+  onSignUp: PropTypes.func,
+  onUpdateLicense: PropTypes.func,
+  onUpdatedRideshareApps: PropTypes.func
 }
 
 export default Documentation

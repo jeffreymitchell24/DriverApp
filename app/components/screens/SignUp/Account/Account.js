@@ -14,7 +14,9 @@ import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
 import { StackActions, NavigationActions } from 'react-navigation'
 import styles from './styles'
+import Spinner from 'react-native-loading-spinner-overlay'
 import * as Yup from 'yup'
+import { colors } from 'theme'
 import { CheckBox } from 'react-native-elements'
 
 const formIputs = {
@@ -138,7 +140,7 @@ class Account extends PureComponent {
             <Button
               containerStyle={styles.nextButton}
               disabled={buttonDisabled}
-              title='Next'
+              title='NEXT'
               onPress={handleSubmit}
             />
             <Text style={styles.mainText}>
@@ -166,12 +168,14 @@ class Account extends PureComponent {
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
+        <Spinner color={colors.red} visible={this.props.isEmailValidating} />
       </View>
     )
   }
 }
 
 Account.propTypes = {
+  isEmailValidating: PropTypes.bool,
   navigation: PropTypes.object,
   onSaveCredentials: PropTypes.func
   // onSignUp: PropTypes.func
