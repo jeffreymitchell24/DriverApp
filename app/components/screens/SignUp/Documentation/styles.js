@@ -2,7 +2,6 @@ import { StyleSheet, Platform, Dimensions } from 'react-native'
 import { colors, metrics } from 'theme'
 
 let screenHeight = Platform.OS === 'android' ? Dimensions.get('screen').height : metrics.screenHeight
-let gap = Platform.OS === 'android' ? 24 : 0
 
 export default StyleSheet.create({
   container: {
@@ -128,12 +127,13 @@ export default StyleSheet.create({
   },
 
   modalDialogContainer: {
+    flexGrow: 1,
     backgroundColor: colors.white,
     padding: metrics.contentMargin,
     paddingBottom: metrics.contentMarginSmall,
     paddingTop: 32,
-    justifyContent: 'space-between',
-    height: metrics.screenHeight - (32 * 2) - gap
+    justifyContent: 'space-between'
+    // height: metrics.screenHeight - (32 * 2) - gap
   },
 
   modalTitle: {

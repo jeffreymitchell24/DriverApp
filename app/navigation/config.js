@@ -83,6 +83,7 @@ export const Root = createStackNavigator(
     PictureGallery: {
       screen: PictureGallery,
       navigationOptions: {
+        header: null,
         title: 'Select photo',
         headerTitle: null,
         headerBackTitle: null,
