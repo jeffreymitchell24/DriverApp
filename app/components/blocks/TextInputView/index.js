@@ -46,7 +46,6 @@ export class TextInputView extends PureComponent {
     let showErrorLine = false
     if (error || error === '') showErrorLine = true
 
-    console.log(showErrorLine)
     return (
       <View style={[styles.container, containerStyle]}>
         <Text style={styles.label}>{label}</Text>
