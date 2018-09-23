@@ -76,13 +76,34 @@ export const NewBookingStack = createStackNavigator({
 //   }
 // }
 
+let navigationOptions = {
+  headerStyle: {
+    elevation: 0,
+    borderBottomWidth: 0
+  },
+  headerBackImage: (<NavBackImage />),
+  headerTitleStyle: {
+    fontSize: 16,
+    fontFamily: 'SFProText-Regular',
+    fontWeight: 'normal',
+    color: '#343A40'
+  },
+  headerLeftContainerStyle: {
+    // paddingLeft: 16
+  },
+  headerRightContainerStyle: {
+    paddingRight: 16
+  }
+}
+
 export const ProfileStack = createStackNavigator({
   ChangePassword: {
     screen: ChangePassword,
     navigationOptions: {
       title: 'Change password',
       headerTitle: null,
-      headerBackTitle: null
+      headerBackTitle: null,
+      ...navigationOptions
     }
   },
   ChangesReview: {
@@ -90,7 +111,8 @@ export const ProfileStack = createStackNavigator({
     navigationOptions: {
       title: 'Approve changes',
       headerTitle: null,
-      headerBackTitle: null
+      headerBackTitle: null,
+      ...navigationOptions
     }
   },
   ProfileCamera: {
@@ -98,7 +120,8 @@ export const ProfileStack = createStackNavigator({
     navigationOptions: {
       title: 'Your Photo',
       headerTitle: null,
-      headerBackTitle: null
+      headerBackTitle: null,
+      ...navigationOptions
     }
   },
   ProfileDetails: {
@@ -106,7 +129,8 @@ export const ProfileStack = createStackNavigator({
     navigationOptions: {
       title: 'Personal details',
       headerTitle: null,
-      headerBackTitle: null
+      headerBackTitle: null,
+      ...navigationOptions
     }
   },
   ProfileMain: {
@@ -114,30 +138,12 @@ export const ProfileStack = createStackNavigator({
     navigationOptions: {
       title: null,
       headerTitle: null,
-      headerBackTitle: null
+      headerBackTitle: null,
+      ...navigationOptions
     }
   }
 },
 {
   initialRouteName: 'ProfileMain',
-  headerLayoutPreset: 'center',
-  navigationOptions: {
-    headerStyle: {
-      elevation: 0,
-      borderBottomWidth: 0
-    },
-    headerBackImage: (<NavBackImage />),
-    headerTitleStyle: {
-      fontSize: 16,
-      fontFamily: 'SFProText-Regular',
-      fontWeight: 'normal',
-      color: '#343A40'
-    },
-    headerLeftContainerStyle: {
-      paddingLeft: 16
-    },
-    headerRightContainerStyle: {
-      paddingRight: 16
-    }
-  }
+  headerLayoutPreset: 'center'
 })

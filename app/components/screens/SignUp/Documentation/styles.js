@@ -19,24 +19,6 @@ export default StyleSheet.create({
     textAlign: 'center',
     marginBottom: 24
   },
-  section: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.gray50,
-    paddingTop: 10,
-    paddingBottom: 16,
-    marginBottom: metrics.contentMarginSmall
-  },
-
-  sectionHeader: {
-    fontSize: metrics.fontSize,
-    fontFamily: 'SFProText-Regular',
-    color: colors.gray200
-  },
-
-  sectionContent: {
-    marginTop: 10,
-    flexDirection: 'row'
-  },
   licensePhotoBlock: {
     marginRight: 12
   },
@@ -105,6 +87,7 @@ export default StyleSheet.create({
     color: colors.red
   },
   footer: {
+    marginTop: metrics.contentMarginSmall,
     alignItems: 'center'
   },
   button: {

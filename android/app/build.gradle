@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-version-number')
     implementation project(':react-native-camera')
     implementation project(':react-native-splash-screen')
     implementation project(':react-native-vector-icons')

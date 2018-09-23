@@ -2,7 +2,7 @@ import { createStackNavigator } from 'react-navigation'
 import { NavBackImage } from 'components/ui'
 import React from 'react'
 import Intro from 'components/screens/Intro'
-import { NewBookingStack } from './stackNavigation'
+import { NewBookingStack, ProfileStack } from './stackNavigation'
 import Account from 'components/screens/SignUp/Account'
 import PersonalInfo from 'components/screens/SignUp/PersonalInfo'
 import Documentation from 'components/screens/SignUp/Documentation'
@@ -144,6 +144,12 @@ export const Root = createStackNavigator(
         header: null,
         headerTitle: null,
         headerBackTitle: null
+      }
+    },
+    Profile: {
+      screen: ProfileStack,
+      navigationOptions: {
+        header: null
       }
     }
   },
