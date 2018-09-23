@@ -1,5 +1,4 @@
 import { createStackNavigator } from 'react-navigation'
-// // import CardStackStyleInterpolator from 'react-navigation/src/views/StackView/StackViewStyleInterpolator'
 
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
 import BookingDetails from 'components/screens/NewBooking/BookingDetails'
