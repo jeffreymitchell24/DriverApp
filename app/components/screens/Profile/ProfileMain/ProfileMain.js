@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
 import {icons} from 'images'
-import {ProfileDetails, ChangePassword} from 'navigation/routeNames'
+import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera} from 'navigation/routeNames'
 import { Section, SectionHeader, SectionContent } from 'components/ui'
 import styles from './styles'
 
@@ -34,7 +34,11 @@ class ProfileMain extends Component {
   }
 
   onPhotoPress = () => {
-    // this.props.navigation.navigate(ProfileCamera)
+    this.props.navigation.navigate(ProfileCamera)
+  }
+
+  onNavigateTo = (route) => {
+    this.props.navigation.navigate(route)
   }
 
   render () {
@@ -58,13 +62,13 @@ class ProfileMain extends Component {
         <Section>
           <SectionHeader title='PROFILE' />
           <SectionContent>
-            <ListItem icon='user' text='Personal Details' onPress={() => this.props.navigation.navigate(ProfileDetails)} />
+            <ListItem icon='user' text='Personal Details' onPress={() => this.onNavigateTo(ProfileDetails)} />
           </SectionContent>
         </Section>
         <Section>
           <SectionHeader title='SECURITY' />
           <SectionContent>
-            <ListItem icon='lock' text='Change Password' onPress={() => this.props.navigation.navigate(ChangePassword)} />
+            <ListItem icon='lock' text='Change Password' onPress={() => this.onNavigateTo(ChangePassword)} />
           </SectionContent>
         </Section>
         <Section>
@@ -74,8 +78,8 @@ class ProfileMain extends Component {
             <ListItem icon='instagram' text='Follow us on Instagram' />
             <ListItem icon='facebook' text='Like us on Facebook' />
             <ListItem icon='twitter' text='Follow us on Twitter' />
-            <ListItem icon='book' text='Privacy policy' />
-            <ListItem icon='document' text={`Terms & conditions`} />
+            <ListItem icon='book' text='Privacy policy' onPress={() => this.onNavigateTo(PrivacyPolicy)} />
+            <ListItem icon='document' text={`Terms & conditions`} onPress={() => this.onNavigateTo(TermsConditions)} />
           </SectionContent>
         </Section>
         <View style={styles.footer}>

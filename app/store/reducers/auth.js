@@ -6,13 +6,38 @@ import {
   RESET_PASSWORD
 } from 'store/actions/auth'
 
+let user = {
+  'id': 0,
+  'full_name': 'Kyle Freedman',
+  'email': 'kyle@freedman.com',
+  'admin': true,
+  'street': '100 West 33rd Street',
+  'city': 'New York',
+  'zip_code': '10001',
+  'state': 'NY',
+  'phone': '+1 212-695-4260',
+  'photo': 'string',
+  'status': 'rejected',
+  'ridesharing_approved': true,
+  'documents_uploaded': true,
+  'ridesharing_apps': 'uber, lyft',
+  'tlcLicense': {
+    'front': 'string',
+    'back': 'string'
+  },
+  'drivingLicense': {
+    'front': 'string',
+    'back': 'strin'
+  }
+}
+
 const initialState = {
   pending: false,
   authError: null,
   resetPasswordSent: false,
   resetError: null,
   resetPending: false,
-  user: null,
+  user: user, // null,
   token: null
 }
 

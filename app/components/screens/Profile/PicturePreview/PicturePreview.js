@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {PicturePreviewView} from 'components/blocks'
-import {Documentation} from 'navigation/routeNames'
+import {ProfileMain} from 'navigation/routeNames'
 
 class PicturePreview extends Component {
   onCancelPress = () => {
@@ -9,15 +9,8 @@ class PicturePreview extends Component {
   }
 
   onConfirmPress = () => {
-    const {onUpdateLicense, selectedLicense, navigation} = this.props
-    const {type, side} = selectedLicense
-    const imageUri = navigation.getParam('photoUri', null)
-    onUpdateLicense({
-      type,
-      side,
-      imageUri
-    })
-    navigation.navigate(Documentation)
+    const {navigation} = this.props
+    navigation.navigate(ProfileMain)
   }
 
   render () {
@@ -32,9 +25,7 @@ class PicturePreview extends Component {
   }
 }
 PicturePreview.propTypes = {
-  navigation: PropTypes.object,
-  selectedLicense: PropTypes.object,
-  onUpdateLicense: PropTypes.func
+  navigation: PropTypes.object
 }
 
 export default PicturePreview

@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { View, Text, FlatList } from 'react-native'
+import PropTypes from 'prop-types'
+import {ProfileMain} from 'navigation/routeNames'
 import { Button } from 'components/ui'
 import styles from './styles'
 
@@ -32,7 +34,7 @@ let CHANGES = [
 ]
 class ChangesReview extends Component {
   onSaveChanges = () => {
-
+    this.props.navigation.navigate(ProfileMain)
   }
 
   renderSeparator = () => {
@@ -75,6 +77,10 @@ class ChangesReview extends Component {
       </View>
     )
   }
+}
+
+ChangesReview.propTypes = {
+  navigation: PropTypes.object
 }
 
 export default ChangesReview

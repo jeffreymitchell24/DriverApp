@@ -1,15 +1,20 @@
 import { createStackNavigator } from 'react-navigation'
 import React from 'react'
+import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'
+
 import { NavBackImage } from 'components/ui'
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
 import BookingDetails from 'components/screens/NewBooking/BookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
-
+import TermsConditions from 'components/screens/TermsConditions'
 import ChangePassword from 'components/screens/Profile/ChangePassword'
 import ChangesReview from 'components/screens/Profile/ChangesReview'
-import ProfileCamera from 'components/screens/Profile/ProfileCamera'
 import ProfileDetails from 'components/screens/Profile/ProfileDetails'
 import ProfileMain from 'components/screens/Profile/ProfileMain'
+import PrivacyPolicy from 'components/screens/Profile/PrivacyPolicy'
+import ProfileCamera from 'components/screens/Profile/ProfileCamera'
+import PicturePreview from 'components/screens/Profile/PicturePreview'
+import PictureGallery from 'components/screens/SignUp/PictureGallery'
 
 export const NewBookingStack = createStackNavigator({
   BookingConfirmed: {
@@ -118,7 +123,22 @@ export const ProfileStack = createStackNavigator({
   ProfileCamera: {
     screen: ProfileCamera,
     navigationOptions: {
-      title: 'Your Photo',
+      title: 'Profile Photo',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  PicturePreview: {
+    screen: PicturePreview,
+    navigationOptions: {
+      header: null
+    }
+  },
+  PictureGallery: {
+    screen: PictureGallery,
+    navigationOptions: {
+      title: 'Select photo',
       headerTitle: null,
       headerBackTitle: null,
       ...navigationOptions
@@ -141,9 +161,35 @@ export const ProfileStack = createStackNavigator({
       headerBackTitle: null,
       ...navigationOptions
     }
+  },
+  TermsConditions: {
+    screen: TermsConditions,
+    navigationOptions: {
+      title: 'Terms & conditions',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  PrivacyPolicy: {
+    screen: PrivacyPolicy,
+    navigationOptions: {
+      title: 'Privacy policy',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
   }
 },
 {
   initialRouteName: 'ProfileMain',
-  headerLayoutPreset: 'center'
+  headerLayoutPreset: 'center',
+  transitionConfig: (prop) => {
+    const routeName = prop.scene.route.routeName
+    if (routeName === 'ChangesReview') {
+      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+    } else {
+      return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+    }
+  }
 })

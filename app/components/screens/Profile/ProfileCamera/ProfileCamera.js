@@ -1,20 +1,33 @@
 import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import { CameraView } from 'components/blocks'
+import PropTypes from 'prop-types'
+import {PicturePreview, PictureGallery} from 'navigation/routeNames'
 
 class ProfileCamera extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
+  getCamRef = (ref) => (this.camera = ref)
+  onTakePicture = ({photoUri}) => {
+    this.props.navigation.navigate(PicturePreview, {
+      photoUri
+    })
+  }
+
+  onGalleryPress = () => {
+    this.props.navigation.navigate(PictureGallery)
   }
 
   render () {
     return (
-      <View>
-        <Text> ProfileCamera </Text>
-      </View>
+      <CameraView
+        switchable
+        onGalleryPress={this.onGalleryPress}
+        onTakePicture={this.onTakePicture}
+      />
     )
   }
+}
+
+ProfileCamera.propTypes = {
+  navigation: PropTypes.object
 }
 
 export default ProfileCamera
