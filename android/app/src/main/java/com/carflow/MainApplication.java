@@ -3,6 +3,9 @@ package com.carflow;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.oblador.vectoricons.VectorIconsPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import org.reactnative.camera.RNCameraPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
@@ -29,12 +32,12 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new VectorIconsPackage(),
+            new SplashScreenReactPackage(),
+            new RNCameraPackage(),
             new ImageResizerPackage(),
             new RNFetchBlobPackage(),
-            new RNVersionNumberPackage(),
-            new RNCameraPackage(),
-            new SplashScreenReactPackage(),
-            new VectorIconsPackage()
+            new RNVersionNumberPackage()
       );
     }
 

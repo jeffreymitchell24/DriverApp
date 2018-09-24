@@ -253,8 +253,8 @@ class Documentation extends Component {
   }
 
   renderAppsModal = () => {
-    const {showAppsModal, apps} = this.state
-
+    const {showAppsModal} = this.state
+    const {apps} = this.props
     return (
       <RideshareModal
         {...apps}

@@ -74,6 +74,7 @@
 		<string>SFProText-Bold.otf</string>
 		<string>SFProText-Regular.otf</string>
 		<string>SF-Pro-Text-Medium.otf</string>
+		<string>SFProDisplay-Medium.otf</string>
 	</array>
 	<key>NSCameraUsageDescription</key>
 	<string>Your message to user when the camera is accessed for the first time</string>
