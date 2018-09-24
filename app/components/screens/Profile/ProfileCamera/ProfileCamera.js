@@ -3,13 +3,7 @@ import { CameraView } from 'components/blocks'
 import PropTypes from 'prop-types'
 import {PicturePreview, PictureGallery} from 'navigation/routeNames'
 
-class DocumentsCamera extends Component {
-  static navigationOptions = ({ navigation }) => {
-    return {
-      title: navigation.getParam('title', '')
-    }
-  };
-
+class ProfileCamera extends Component {
   getCamRef = (ref) => (this.camera = ref)
   onTakePicture = ({photoUri}) => {
     this.props.navigation.navigate(PicturePreview, {
@@ -24,6 +18,7 @@ class DocumentsCamera extends Component {
   render () {
     return (
       <CameraView
+        switchable
         onGalleryPress={this.onGalleryPress}
         onTakePicture={this.onTakePicture}
       />
@@ -31,8 +26,8 @@ class DocumentsCamera extends Component {
   }
 }
 
-DocumentsCamera.propTypes = {
+ProfileCamera.propTypes = {
   navigation: PropTypes.object
 }
 
-export default DocumentsCamera
+export default ProfileCamera

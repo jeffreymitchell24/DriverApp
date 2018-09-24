@@ -18,7 +18,7 @@ import {DocumentsCamera} from 'navigation/routeNames'
 import { requestWriteStoragePermission } from 'helpers/permission'
 import { icons } from 'images'
 import { colors } from 'theme'
-import { Button } from 'components/ui'
+import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
 import styles from './styles'
 import {APP_CONFIG} from './config'
 // import ImagePicker from 'react-native-image-picker'
@@ -276,9 +276,9 @@ class Documentation extends Component {
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <Text style={styles.screenTitle}>Upload following documents to get your account approved</Text>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>DRIVING LICENSE</Text>
-          <View style={styles.sectionContent}>
+        <Section>
+          <SectionHeader title='DRIVING LICENSE' />
+          <SectionContent>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
               <LicenseImage
@@ -293,11 +293,11 @@ class Documentation extends Component {
                 onPress={() => this.onPhotoPress('Back', 'driving')}
               />
             </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>TLC LICENSE</Text>
-          <View style={styles.sectionContent}>
+          </SectionContent>
+        </Section>
+        <Section>
+          <SectionHeader title='TLC LICENSE' />
+          <SectionContent>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
               <LicenseImage
@@ -312,11 +312,11 @@ class Documentation extends Component {
                 onPress={() => this.onPhotoPress('Back', 'tlc')}
               />
             </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>Rideshare apps</Text>
-          <View style={[styles.sectionContent, {flexDirection: 'column'}]}>
+          </SectionContent>
+        </Section>
+        <Section>
+          <SectionHeader title='RIDESHARE APPS' />
+          <SectionContent style={{flexDirection: 'column'}}>
             <Text style={styles.bigQuestion}>Are you approved to work for any Ridesharing apps?</Text>
             <TouchableOpacity style={styles.checkboxContainer} onPress={this.onApprove}>
               <CheckBox
@@ -357,8 +357,8 @@ class Documentation extends Component {
               />
               <Text style={styles.checkboxTitle}>No, I’m not approved</Text>
             </TouchableOpacity>
-          </View>
-        </View>
+          </SectionContent>
+        </Section>
         <View style={styles.footer}>
           <Button
             containerStyle={styles.button}

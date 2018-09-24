@@ -1,8 +1,9 @@
 import { createStackNavigator } from 'react-navigation'
 import { NavBackImage } from 'components/ui'
 import React from 'react'
+import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'
 import Intro from 'components/screens/Intro'
-import { NewBookingStack } from './stackNavigation'
+import { NewBookingStack, ProfileStack } from './stackNavigation'
 import Account from 'components/screens/SignUp/Account'
 import PersonalInfo from 'components/screens/SignUp/PersonalInfo'
 import Documentation from 'components/screens/SignUp/Documentation'
@@ -146,10 +147,19 @@ export const Root = createStackNavigator(
         headerTitle: null,
         headerBackTitle: null
       }
+    },
+    Profile: {
+      screen: ProfileStack,
+      navigationOptions: {
+        header: null
+      }
     }
   },
   {
     initialRouteName: 'Intro',
-    headerLayoutPreset: 'center'
+    headerLayoutPreset: 'center',
+    transitionConfig: () => {
+      return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+    }
   }
 )

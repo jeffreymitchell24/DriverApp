@@ -31,7 +31,7 @@ class Intro extends Component {
   }
 
   handleStartPress = () => {
-    this.props.navigation.navigate(Account) // Account
+    this.props.navigation.navigate('Home') // Account
     // this._navigateTo(Home)
   }
 
