@@ -1,55 +1,66 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
   TextInput,
-  Text
+  Text,
+  ViewPropTypes
 } from 'react-native'
+import { colors } from 'theme'
 import styles from './styles'
 
-export class TextInputView extends Component {
-  constructor (props) {
-    super(props)
-
-    this.state = {
-      value: '',
-      color1: '#dadada',
-      color2: '#dadada'
-    }
-  }
-
+export class TextInputView extends PureComponent {
   static propTypes = {
+    containerStyle: ViewPropTypes.style,
+    error: PropTypes.string,
+    inputRef: PropTypes.func,
+    label: PropTypes.string,
     placeholder: PropTypes.string.isRequired,
     secureTextEntry: PropTypes.bool,
-    text: PropTypes.string
+    text: PropTypes.string,
+    value: PropTypes.string,
+    onBlur: PropTypes.func,
+    onChangeText: PropTypes.func,
+    onFocus: PropTypes.func
     // styleContainer: PropTypes.object.isRequired
   }
+  static defaultProps = {
+    inputRef: () => {},
+    secureTextEntry: false
+  }
 
-  componentDidMount () {
-
+  getRef = (input) => {
+    this.props.inputRef && this.props.inputRef(input)
   }
 
   render () {
+    const {
+      error,
+      label,
+      value,
+      placeholder,
+      secureTextEntry,
+      containerStyle,
+      ...rest
+    } = this.props
+
+    let showErrorLine = false
+    if (error || error === '') showErrorLine = true
+
     return (
-      <View style={styles.InputWrapp}>
-        <Text style={styles.InputLabel}>{this.props.text}</Text>
+      <View style={[styles.container, containerStyle]}>
+        <Text style={styles.label}>{label}</Text>
         <TextInput
-          placeholder={this.props.placeholder}
-          placeholderTextColor='#5c5c5c'
-          secureTextEntry={this.props.secureTextEntry || false}
-          style={styles.InputInput}
+          placeholder={placeholder}
+          placeholderTextColor={colors.grey50}
+          ref={this.getRef}
+          secureTextEntry={secureTextEntry}
+          style={[styles.input, showErrorLine && styles.inputError]}
           underlineColorAndroid='transparent'
-          value={this.state.value}
-          onBlur={() => this.setState({
-            color1: '#dadada',
-            color2: '#dadada'
-          })}
-          onChangeText={(value) => this.setState({ value })}
-          onFocus={() => this.setState({
-            color1: '#239570',
-            color2: '#72bb5f'
-          })}
+          value={value}
+          {...rest}
         />
+        {!!error && <Text style={styles.error}>{error}</Text>}
       </View>
     )
   }
