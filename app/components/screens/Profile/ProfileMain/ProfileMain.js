@@ -3,8 +3,8 @@ import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
 import {icons} from 'images'
-import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera} from 'navigation/routeNames'
-import { Section, SectionHeader, SectionContent } from 'components/ui'
+import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera, Home} from 'navigation/routeNames'
+import { Section, SectionHeader, SectionContent, NavButton } from 'components/ui'
 import styles from './styles'
 
 const ListItem = ({text, icon, onPress}) => (
@@ -23,9 +23,9 @@ ListItem.propTypes = {
 }
 
 class ProfileMain extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(Home)} />
     }
   }
 

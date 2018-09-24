@@ -159,7 +159,14 @@ export const ProfileStack = createStackNavigator({
       title: null,
       headerTitle: null,
       headerBackTitle: null,
-      ...navigationOptions
+      ...navigationOptions,
+      headerLeftContainerStyle: {
+        paddingLeft: 22
+      },
+      headerStyle: {
+        elevation: 0,
+        borderBottomWidth: 0
+      }
     }
   },
   TermsConditions: {
