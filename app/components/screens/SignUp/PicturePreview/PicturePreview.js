@@ -4,6 +4,9 @@ import {PicturePreviewView} from 'components/blocks'
 import {Documentation} from 'navigation/routeNames'
 
 class PicturePreview extends Component {
+  state = {
+    key: 0
+  }
   onCancelPress = () => {
     this.props.navigation.goBack()
   }
@@ -12,6 +15,7 @@ class PicturePreview extends Component {
     const {onUpdateLicense, selectedLicense, navigation} = this.props
     const {type, side} = selectedLicense
     const imageUri = navigation.getParam('photoUri', null)
+    // Alert.alert('photoUri', imageUri)
     onUpdateLicense({
       type,
       side,
@@ -19,9 +23,26 @@ class PicturePreview extends Component {
     })
     navigation.navigate(Documentation)
   }
+  onError = () => {
+    console.log('onError')
+    const {key} = this.state
+    if (key === 0) {
+      this.setState({key: 1})
+      Alert.alert('onError', 'onError')
+    }
+  }
+  onLoadEnd = (e) => {
+    console.log('onLoadEnd', e)
+    const {key} = this.state
+    if (key === 0) {
+      this.setState({key: 1})
+      Alert.alert('onLoadEnd', 'onLoadEnd')
+    }
+  }
 
   render () {
     const photoUri = this.props.navigation.getParam('photoUri', null)
+    console.log(this.state.key)
     return (
       <PicturePreviewView
         photoUri={photoUri}

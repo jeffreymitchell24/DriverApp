@@ -45,7 +45,7 @@ class Intro extends Component {
       return (
         <View key={index} style={styles.slide}>
           <View style={styles.imageContainer}>
-            <Image resizeMode='center' source={backgrounds[image]} style={styles.previewImage} />
+            <Image resizeMode='contain' source={backgrounds[image]} style={styles.previewImage} />
           </View>
           <View style={styles.slideTextContainer}>
             <Text style={styles.slideTitle}>{title}</Text>
@@ -65,6 +65,7 @@ class Intro extends Component {
           autoplayTimeout={5}
           dot={<View style={{ backgroundColor: 'rgb(248, 226, 226)', width: height * 0.0156, height: height * 0.0156, borderRadius: 100, marginLeft: 3, marginRight: 3 }} />}
           paginationStyle={styles.paginationStyle}
+          removeClippedSubviews={false}
           style={{}}
         >
           {this.renderSlides()}

@@ -5,7 +5,9 @@ import {
   SAVE_CREDENTIALS,
   SAVE_PROFILE_INFO,
   UPDATE_LICENSE,
-  SELECT_LICENSE
+  SELECT_LICENSE,
+  UPDATE_RIDESHARE_APPS,
+  SIGN_UP
 } from 'store/actions/registration'
 
 const initialState = {
@@ -17,10 +19,16 @@ const initialState = {
       driving: {}
     }
   },
+  apps: {
+    main: [],
+    other: []
+  },
   selectedLicense: {
     side: null,
     type: null
-  }
+  },
+  pending: false,
+  error: null
 }
 
 const handlers = {
@@ -34,7 +42,7 @@ const handlers = {
       }
     }
   },
-  [SAVE_CREDENTIALS]: (state, { payload }) => {
+  [SAVE_CREDENTIALS.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
       credentials: {
@@ -72,6 +80,32 @@ const handlers = {
     return {
       ...state,
       selectedLicense: payload
+    }
+  },
+  [UPDATE_RIDESHARE_APPS]: (state, { payload }) => {
+    return {
+      ...state,
+      apps: payload
+    }
+  },
+  [SIGN_UP.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      error: null,
+      pending: true
+    }
+  },
+  [SIGN_UP.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: false
+    }
+  },
+  [SIGN_UP.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      error: payload,
+      pending: false
     }
   }
 }

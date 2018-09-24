@@ -2,8 +2,11 @@ import React, { Component } from 'react'
 import {
   View,
   ScrollView,
-  Text
+  Text,
+  TouchableWithoutFeedback,
+  Alert
 } from 'react-native'
+import find from 'lodash/find'
 import PropTypes from 'prop-types'
 import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { TextInputView } from 'components/blocks'
@@ -14,6 +17,14 @@ import {styles, googleStyles} from './styles'
 const uuidv4 = require('uuid/v4')
 
 class PersonalInfo extends Component {
+  state = {
+    fullname: '', // 'Kot M',
+    zipcode: '', // '19011',
+    city: 'New York',
+    state: 'New York',
+    street: '', // 'wgkrewgwg',
+    phone: '' // '12345676789'
+  }
   componentDidMount () {
     this.placesAutocompleteToken = uuidv4()
     console.log('token', this.placesAutocompleteToken)
@@ -34,6 +45,19 @@ class PersonalInfo extends Component {
     this.props.navigation.navigate(Documentation)
   }
 
+  onStreetChange = (street) => {
+    console.log(street)
+    this.setState({street})
+  }
+
+  onCityPress = () => {
+    Alert.alert('', 'Car Flow is currently available only in New York City.')
+  }
+
+  onEditField = (value, type) => {
+    this.setState({[type]: value})
+  }
+
   renderSearch = () => {
     return (
       <View style={styles.inputContainer}>
@@ -48,16 +72,13 @@ class PersonalInfo extends Component {
           //   // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
           // }}
           autoFocus={false}
-          // currentLocation // Will add a 'Current location' button at the top of the predefined places list
-          // currentLocationLabel='Current location'
           debounce={500} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+          enablePoweredByContainer={false}
           fetchDetails
-          // filterReverseGeocodingByTypes={['locality', 'administrative_area_level_3']} // filter the reverse geocoding results by types - ['locality', 'administrative_area_level_3'] if you want to display only cities
+          
           getDefaultValue={() => ''}
           listViewDisplayed='auto' // true/false/undefined
           minLength={2} // minimum length of text to search
-          // nearbyPlacesAPI='GooglePlacesSearch' // Which API to use: GoogleReverseGeocoding or GooglePlacesSearch
-          // predefinedPlaces={[homePlace, workPlace]}
           placeholder=''
           query={{
             // available options: https://developers.google.com/places/web-service/autocomplete
@@ -67,15 +88,17 @@ class PersonalInfo extends Component {
             'session_token': this.placesAutocompleteToken,
             sesstionToken: this.placesAutocompleteToken,
             location: '40.730610, -73.935242',
-            radius: '15000', // 15 km
+            radius: '30000', // 30 km
             components: 'country:us',
-            strictbounds: true
+            // strictbounds: true
           }}
           renderDescription={row => row.description} // custom description render
-          // renderLeftButton={() => <Image source={require('path/custom/left-icon')} />}
-          // renderRightButton={() => <Text>Custom text after the input</Text>}
           returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
           styles={googleStyles}
+          text={this.state.street}
+          textInputProps={{
+            onChangeText: this.onStreetChange
+          }}
           onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
             console.log(data, details)
           }}
@@ -85,7 +108,8 @@ class PersonalInfo extends Component {
   }
 
   render () {
-    // let { email, password, confirmPassword } = this.state
+    let { fullname, zipcode, phone, street } = this.state
+    let buttonActive = fullname.length > 0 && zipcode.length > 0 && phone.length > 0 && street.length > 0
     return (
       <View style={styles.container}>
         <ScrollView
@@ -98,43 +122,56 @@ class PersonalInfo extends Component {
               label='FULL NAME'
               name='fullname'
               placeholder=''
+              value={fullname}
+              onChangeText={(value) => this.onEditField(value, 'fullname')}
             />
-            {this.renderSearch()}
-            {/* <TextInputView
+            {/* {this.renderSearch()} */}
+            <TextInputView
               label='STREET'
               name='street'
               placeholder=''
-            /> */}
+              value={street}
+              onChangeText={(value) => this.onEditField(value, 'street')}
+            />
             <TextInputView
               keyboardType='numeric'
               label='ZIP CODE'
               name='zipcode'
               placeholder=''
+              value={zipcode}
+              onChangeText={(value) => this.onEditField(value, 'zipcode')}
             />
+            <TouchableWithoutFeedback onPress={this.onCityPress}>
+              <View pointerEvents='box-only'>
+                <TextInputView
+                  editable={false}
+                  label='CITY'
+                  name='city'
+                  placeholder=''
+                  value='New York'
+                />
+                <TextInputView
+                  editable={false}
+                  label='STATE'
+                  name='state'
+                  placeholder=''
+                  value='New York'
+                />
+              </View>
+            </TouchableWithoutFeedback>
             <TextInputView
-              editable={false}
-              label='CITY'
-              name='city'
-              placeholder=''
-              value='New York'
-            />
-            <TextInputView
-              editable={false}
-              label='STATE'
-              name='state'
-              placeholder=''
-              value='New York'
-            />
-            <TextInputView
-              keyboardType='numeric'
+              keyboardType='phone-pad'
               label='PHONE NUMBER'
               name='phone'
               placeholder=''
+              value={phone}
+              onChangeText={(value) => this.onEditField(value, 'phone')}
             />
           </View>
           <View style={styles.footer}>
             <Button
               containerStyle={styles.button}
+              disabled={!buttonActive}
               title='UPLOAD DOCUMENTS'
               onPress={this.onSubmit}
             />

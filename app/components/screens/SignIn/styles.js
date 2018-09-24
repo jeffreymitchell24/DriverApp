@@ -49,7 +49,6 @@ export default StyleSheet.create({
     color: colors.gray100
   },
   registerButtonText: {
-    color: colors.red,
-    textDecorationLine: 'underline'
+    color: colors.red
   }
 })

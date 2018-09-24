@@ -2,8 +2,7 @@ import { StyleSheet, Platform } from 'react-native'
 
 import { colors, metrics } from 'theme'
 let extraPadding = Platform.OS === 'ios' ? 20 : 0
-let ratio = metrics.screenHeight > 600 ? 0.45 : 40
-
+let flexSize = metrics.screenHeight < 600 ? 0.7 : 0.8
 export default StyleSheet.create({
   container: {
     flex: 1,
@@ -25,7 +24,7 @@ export default StyleSheet.create({
   },
   imageContainer: {
     width: metrics.screenWidth,
-    height: metrics.screenHeight * ratio,
+    flex: flexSize, // metrics.screenHeight * ratio,
     marginTop: metrics.screenWidth * 0.1,
     padding: metrics.contentMargin,
     paddingTop: 0
