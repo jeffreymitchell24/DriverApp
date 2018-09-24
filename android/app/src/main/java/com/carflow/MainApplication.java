@@ -5,6 +5,7 @@ import android.app.Application;
 import com.facebook.react.ReactApplication;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
+import com.apsl.versionnumber.RNVersionNumberPackage;
 import org.reactnative.camera.RNCameraPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
           new MainReactPackage(),
             new ImageResizerPackage(),
             new RNFetchBlobPackage(),
+            new RNVersionNumberPackage(),
             new RNCameraPackage(),
             new SplashScreenReactPackage(),
             new VectorIconsPackage()

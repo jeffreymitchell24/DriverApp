@@ -1,10 +1,7 @@
 import React, { Component } from 'react'
-import { ImageBackground, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
-import Icon from 'react-native-vector-icons/Feather'
+import {PicturePreviewView} from 'components/blocks'
 import {Documentation} from 'navigation/routeNames'
-import { colors } from 'theme'
-import styles from './styles'
 
 class PicturePreview extends Component {
   state = {
@@ -47,21 +44,11 @@ class PicturePreview extends Component {
     const photoUri = this.props.navigation.getParam('photoUri', null)
     console.log(this.state.key)
     return (
-      <ImageBackground
-        imageStyle={[styles.preview, !photoUri && {backgroundColor: 'yellow'}]}
-        key={this.state.key}
-        source={{uri: photoUri}} style={{width: '100%', height: '100%'}}
-        // onError={this.onError}
-        // onLoad={() => console.log('loaded!')}
-        // onLoadEnd={this.onLoadEnd}
-      >
-        <TouchableOpacity style={styles.cancel} onPress={this.onCancelPress}>
-          <Icon color={colors.white} name='x' size={30} />
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.confirm} onPress={this.onConfirmPress} >
-          <Icon color={colors.white} name='check' size={30} />
-        </TouchableOpacity>
-      </ImageBackground>
+      <PicturePreviewView
+        photoUri={photoUri}
+        onCancelPress={this.onCancelPress}
+        onConfirmPress={this.onConfirmPress}
+      />
     )
   }
 }
