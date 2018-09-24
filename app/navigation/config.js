@@ -158,8 +158,15 @@ export const Root = createStackNavigator(
   {
     initialRouteName: 'Intro',
     headerLayoutPreset: 'center',
-    transitionConfig: () => {
+    transitionConfig: (prop) => {
+      // const routeName = prop.scene.route.routeName
+      // console.log('props', prop)
       return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+      // if (routeName === 'SignIn') {
+      //   return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+      // } else {
+      //   return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+      // }
     }
   }
 )

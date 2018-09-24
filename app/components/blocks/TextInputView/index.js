@@ -6,6 +6,7 @@ import {
   Text,
   ViewPropTypes
 } from 'react-native'
+import { colors } from 'theme'
 import styles from './styles'
 
 export class TextInputView extends PureComponent {
@@ -51,7 +52,7 @@ export class TextInputView extends PureComponent {
         <Text style={styles.label}>{label}</Text>
         <TextInput
           placeholder={placeholder}
-          placeholderTextColor='#5c5c5c'
+          placeholderTextColor={colors.grey50}
           ref={this.getRef}
           secureTextEntry={secureTextEntry}
           style={[styles.input, showErrorLine && styles.inputError]}

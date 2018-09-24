@@ -14,7 +14,7 @@ export default StyleSheet.create({
   },
   input: {
     height: null,
-    paddingBottom: 10,
+    paddingBottom: 0,
     paddingTop: 8,
     color: '#000',
     fontFamily: 'SFProText-Regular',

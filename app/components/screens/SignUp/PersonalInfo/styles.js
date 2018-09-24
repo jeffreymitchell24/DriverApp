@@ -56,7 +56,7 @@ export const styles = StyleSheet.create({
 export const googleStyles = StyleSheet.create({
   textInputContainer: {
     borderTopWidth: 0,
-    // height: 50,
+    height: null,
     // overflow: 'visible',
     backgroundColor: 'yellow',
     // borderBottomWidth: 2,
@@ -67,7 +67,7 @@ export const googleStyles = StyleSheet.create({
 
   textInput: {
     height: null,
-    paddingBottom: 10,
+    paddingBottom: 0,
     paddingTop: 8,
     paddingLeft: 0,
     paddingRight: 0,
