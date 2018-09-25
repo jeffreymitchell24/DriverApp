@@ -3,7 +3,7 @@ import {
   View,
   ScrollView,
   Text,
-  TouchableWithoutFeedback,
+  Keyboard,
   Alert
 } from 'react-native'
 import find from 'lodash/find'
@@ -31,6 +31,7 @@ class PersonalInfo extends Component {
   }
 
   onSubmit = () => {
+    Keyboard.dismiss()
     const {onSaveProfileInfo} = this.props
     let profile = {
       fullname: 'John Doe',
@@ -39,7 +40,6 @@ class PersonalInfo extends Component {
       city: 'New York',
       state: 'New York',
       phone: '411 555 1234'
-
     }
     onSaveProfileInfo(profile)
     this.props.navigation.navigate(Documentation)
@@ -159,18 +159,18 @@ class PersonalInfo extends Component {
               onChangeText={(value) => this.onEditField(value, 'fullname')}
               onSubmitEditing={() => this.inputRefs['address'].focus()}
             />
-            {this.renderSearch()}
-            {/* <TextInputView
+            {/* {this.renderSearch()} */}
+            <TextInputView
               blurOnSubmit={false}
               inputRef={(input) => { this.inputRefs['address'] = input }}
               label='CURRENT ADDRESS'
               name='address'
               placeholder=''
               returnKeyType={'next'}
-              value={street}
-              onChangeText={(value) => this.onEditField(value, 'street')}
+              value={address}
+              onChangeText={(value) => this.onEditField(value, 'address')}
               onSubmitEditing={() => this.inputRefs['phone'].focus()}
-            /> */}
+            />
             {/* <TextInputView
               blurOnSubmit={false}
               inputRef={(input) => { this.inputRefs['zipcode'] = input }}

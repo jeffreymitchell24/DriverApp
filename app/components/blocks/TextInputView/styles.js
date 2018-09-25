@@ -12,6 +12,10 @@ export default StyleSheet.create({
     color: colors.gray200,
     fontSize: 12
   },
+  placeholder: {
+    fontSize: 12,
+    fontFamily: 'SFProText-Regular'
+  },
   input: {
     height: null,
     paddingBottom: 0,

@@ -8,11 +8,10 @@ import {
 } from 'react-native'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
-import {PersonalInfo, SignIn, TermsConditions} from 'navigation/routeNames'
+import {PersonalInfo, SignIn, TermsConditions, Intro} from 'navigation/routeNames'
 // import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TextInputView } from 'components/blocks'
-import { Button } from 'components/ui'
-import { StackActions, NavigationActions } from 'react-navigation'
+import { Button, NavButton } from 'components/ui'
 import styles from './styles'
 import Spinner from 'react-native-loading-spinner-overlay'
 import * as Yup from 'yup'
@@ -31,15 +30,11 @@ const validationSchema = Yup.object().shape({
 })
 class Account extends PureComponent {
   inputRefs = {}
-
-  _navigateTo = (routeName) => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: routeName })]
-    })
-    this.props.navigation.dispatch(resetAction)
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(Intro)} />
+    }
   }
-
   onSubmit = (values, {setErrors}) => {
     // console.log('onSubmit', values)
     const {email, password, confirmPassword} = values
@@ -61,7 +56,7 @@ class Account extends PureComponent {
     this.setState((state) => ({termsChecked: !state.termsChecked}))
   }
   handleSignInPress = () => {
-    this.props.navigation.navigate(SignIn)
+    this.props.navigation.navigate(SignIn, {showFromBottom: true})
   }
 
   renderForm = ({ setFieldTouched, setFieldValue, handleChange, handleSubmit, errors, values, touched }) => {
