@@ -45,7 +45,8 @@ class RideshareModal extends Component {
     this.state = {
       main,
       otherSelected: other.length > 0,
-      other
+      other,
+      wasChanged: false
     }
   }
 
@@ -53,17 +54,19 @@ class RideshareModal extends Component {
     if (id === 'other') {
       this.setState((state) => ({
         otherSelected: !state.otherSelected,
-        other: state.otherSelected ? '' : state.other
+        other: state.otherSelected ? '' : state.other,
+        wasChanged: true
       }))
     } else {
       this.setState((state) => ({
-        main: {...state.main, [id]: !state.main[id]}
+        main: {...state.main, [id]: !state.main[id]},
+        wasChanged: true
       }))
     }
   }
 
   onEditOtherApps = (value) => {
-    this.setState({other: value})
+    this.setState({other: value, wasChanged: true})
   }
   onConfirm = () => {
     let {main, other} = this.state
@@ -98,9 +101,9 @@ class RideshareModal extends Component {
 
   render () {
     const {isVisible, onCancel} = this.props
-    const { main, other, otherSelected } = this.state
+    const { main, other, otherSelected, wasChanged } = this.state
     let mainAppSelected = find(main, (value, key) => value === true)
-    let confirmActive = mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
+    let confirmActive = wasChanged // mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
     return (
       <Modal
         backdropOpacity={0.5}
@@ -241,7 +244,9 @@ class Documentation extends Component {
 
   onSaveApps = ({main, other}) => {
     this.modalRenderKey += 1
-    this.setState({showAppsModal: false, ridesharingApproved: true})
+    let ridesharingApproved = null
+    if (main.length > 0 || other.length > 0) ridesharingApproved = true
+    this.setState({showAppsModal: false, ridesharingApproved})
     this.props.onUpdatedRideshareApps({main, other})
   }
 
