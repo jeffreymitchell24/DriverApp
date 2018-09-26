@@ -12,6 +12,14 @@ export default StyleSheet.create({
     paddingTop: 5,
     justifyContent: 'space-between'
   },
+  textInputContainer: {
+    position: 'relative'
+  },
+  editIcon: {
+    position: 'absolute',
+    right: 8,
+    bottom: 26
+  },
   footer: {
     alignItems: 'center'
   },
