@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, Text, FlatList } from 'react-native'
 import { NavButton } from 'components/ui'
-import {Home} from 'navigation/routeNames'
+import {Home, NewBookingDetails} from 'navigation/routeNames'
 import { BookingCard } from 'components/blocks'
 import PropTypes from 'prop-types'
 import styles from './styles'
@@ -15,13 +15,17 @@ class AvailableBookings extends PureComponent {
     }
   }
 
+  onBookingPress = () => {
+    this.props.navigation.navigate(NewBookingDetails)
+  }
+
   keyExtractor = (item, index) => item.id
 
   renderItem = ({item, index}) => {
     return (
       <BookingCard
         booking={item}
-        // onPress={onBookingPress}
+        onPress={this.onBookingPress}
       />
     )
   }
@@ -33,6 +37,7 @@ class AvailableBookings extends PureComponent {
           extraData={BOOKINGS}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
+          showsVerticalScrollIndicator={false}
         />
       </View>
     )

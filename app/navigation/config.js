@@ -16,6 +16,8 @@ import TermsConditions from 'components/screens/TermsConditions'
 import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
 
+import BookingDetail from 'components/screens/Booking/BookingDetail'
+
 import {HomeTabStack} from './tabNavigation'
 
 let navigationOptions = {
@@ -135,6 +137,18 @@ export const Root = createStackNavigator(
       screen: HomeTabStack,
       navigationOptions: {
         title: 'Car Flow',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 16
+        }
+      }
+    },
+    BookingDetail: {
+      screen: BookingDetail,
+      navigationOptions: {
+        title: 'Regular Car',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions,

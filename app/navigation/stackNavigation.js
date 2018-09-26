@@ -4,7 +4,7 @@ import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackV
 
 import { NavBackImage } from 'components/ui'
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
-import BookingDetails from 'components/screens/NewBooking/BookingDetails'
+import NewBookingDetails from 'components/screens/NewBooking/NewBookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
 import TermsConditions from 'components/screens/TermsConditions'
 import ChangePassword from 'components/screens/Profile/ChangePassword'
@@ -21,12 +21,13 @@ export const NewBookingStack = createStackNavigator({
     screen: BookingConfirmed,
     navigationOptions: {
       title: null,
+      header: null,
       headerTitle: null,
       headerBackTitle: null
     }
   },
-  BookingDetails: {
-    screen: BookingDetails,
+  NewBookingDetails: {
+    screen: NewBookingDetails,
     navigationOptions: {
       title: 'New booking',
       headerTitle: null,

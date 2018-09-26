@@ -1,18 +1,31 @@
-import React, { PureComponent } from 'react'
-import { View, Text } from 'react-native'
-import PropTypes from 'prop-types'
+import React from 'react'
+import { View, Text, Image } from 'react-native'
+import {backgrounds} from 'images'
+import { Button } from 'components/ui'
+import styles from './styles'
 
-class BookingConfirmed extends PureComponent {
-  render () {
-    return (
-      <View>
-        <Text> BookingConfirmed </Text>
-      </View>
-    )
+const BookingConfirmed = () => {
+  const onPress = () => {
+
   }
-}
-BookingConfirmed.propTypes = {
-  navigation: PropTypes.object 
+  return (
+    <View style={styles.container}>
+      <View>
+        <Text style={styles.title}>Booking Confirmed!</Text>
+        <View style={styles.imageContainer}>
+          <Image resizeMode='contain' source={backgrounds['highFive']} style={styles.image} />
+        </View>
+        <Text style={styles.mainText}>You have successfully booked a ride from August 30, 11:00 AM to August 31, 08:00 PM on Toyota Prius.</Text>
+      </View>
+      <Button
+        containerStyle={styles.button}
+        inverted
+        textStyle={styles.buttonText}
+        title='CONTINUE'
+        onPress={onPress}
+      />
+    </View>
+  )
 }
 
 export default BookingConfirmed
