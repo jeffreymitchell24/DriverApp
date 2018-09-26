@@ -9,12 +9,13 @@ export const styles = StyleSheet.create({
     backgroundColor: '#fff',
     padding: metrics.contentMarginSmall,
     paddingBottom: 32,
-    paddingTop: 5
+    paddingTop: 5,
+    position: 'relative'
   },
   formContainer: {
-    // flex: 1,
     backgroundColor: colors.white,
-    justifyContent: 'space-between'
+    justifyContent: 'space-between',
+    flexGrow: 1
   },
 
   form: {
@@ -24,7 +25,9 @@ export const styles = StyleSheet.create({
     alignItems: 'center'
   },
   footer: {
-    marginTop: 25,
+    // position: 'absolute',
+    // bottom: 32,
+    marginTop: 15,
     alignItems: 'center'
   },
   button: {
@@ -53,7 +56,7 @@ export const styles = StyleSheet.create({
 export const googleStyles = StyleSheet.create({
   textInputContainer: {
     borderTopWidth: 0,
-    // height: 50,
+    height: null,
     // overflow: 'visible',
     backgroundColor: 'yellow',
     // borderBottomWidth: 2,
@@ -64,7 +67,7 @@ export const googleStyles = StyleSheet.create({
 
   textInput: {
     height: null,
-    paddingBottom: 10,
+    paddingBottom: 0,
     paddingTop: 8,
     paddingLeft: 0,
     paddingRight: 0,
@@ -91,10 +94,10 @@ export const googleStyles = StyleSheet.create({
     flexShrink: 0
   },
   listView: {
-    position: 'absolute',
-    top: 60,
-    left: 10,
-    right: 10,
+    // position: 'absolute',
+    // top: 60,
+    // left: 10,
+    // right: 10,
     backgroundColor: 'white',
     borderRadius: 5,
     flex: 1,

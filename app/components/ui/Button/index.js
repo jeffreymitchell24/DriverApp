@@ -1,10 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Text, TouchableOpacity, ViewPropTypes, View } from 'react-native'
+import { Text, TouchableOpacity, TouchableWithoutFeedback, ViewPropTypes, View } from 'react-native'
 
 import styles from './styles'
 
-const Button = ({ onPress, children, disabled, title, containerStyle, disabledStyle, textStyle }) => {
+const Button = ({ onPress, children, disabled, title, containerStyle, disabledStyle, textStyle, onDisabledPress }) => {
+  const renderChildren = () => {
+    return title
+      ? (
+        <Text style={[styles.text, textStyle && textStyle]}>{title}</Text>
+      ) : (
+        {children}
+      )
+  }
   let mergedStyles = [
     styles.container,
     containerStyle && containerStyle
@@ -13,19 +21,23 @@ const Button = ({ onPress, children, disabled, title, containerStyle, disabledSt
     mergedStyles.push(styles.disabled)
     mergedStyles.push(disabledStyle)
   }
-  let Wrapper = disabled ? View : TouchableOpacity
-  return (
-    <Wrapper style={mergedStyles} onPress={onPress} >
-      {
-        title
-          ? (
-            <Text style={[styles.text, textStyle && textStyle]}>{title}</Text>
-          ) : (
-            {children}
-          )
-      }
-    </Wrapper>
-  )
+
+  if (disabled && onDisabledPress) {
+    return (
+      <TouchableWithoutFeedback onPress={disabled ? onDisabledPress : onPress} >
+        <View style={mergedStyles}>
+          {renderChildren()}
+        </View>
+      </TouchableWithoutFeedback>
+    )
+  } else {
+    let Wrapper = disabled ? View : TouchableOpacity
+    return (
+      <Wrapper style={mergedStyles} onPress={disabled ? onDisabledPress : onPress} >
+        {renderChildren()}
+      </Wrapper>
+    )
+  }
 }
 
 Button.propTypes = {
@@ -35,6 +47,7 @@ Button.propTypes = {
   disabledStyle: ViewPropTypes.style,
   textStyle: Text.propTypes.style,
   title: PropTypes.string,
+  onDisabledPress: PropTypes.func,
   onPress: PropTypes.func
 }
 

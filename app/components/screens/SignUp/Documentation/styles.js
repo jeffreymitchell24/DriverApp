@@ -2,7 +2,6 @@ import { StyleSheet, Platform, Dimensions } from 'react-native'
 import { colors, metrics } from 'theme'
 
 let screenHeight = Platform.OS === 'android' ? Dimensions.get('screen').height : metrics.screenHeight
-let gap = Platform.OS === 'android' ? 24 : 0
 
 export default StyleSheet.create({
   container: {
@@ -18,24 +17,6 @@ export default StyleSheet.create({
     alignSelf: 'center',
     textAlign: 'center',
     marginBottom: 24
-  },
-  section: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.gray50,
-    paddingTop: 10,
-    paddingBottom: 16,
-    marginBottom: metrics.contentMarginSmall
-  },
-
-  sectionHeader: {
-    fontSize: metrics.fontSize,
-    fontFamily: 'SFProText-Regular',
-    color: colors.gray200
-  },
-
-  sectionContent: {
-    marginTop: 10,
-    flexDirection: 'row'
   },
   licensePhotoBlock: {
     marginRight: 12
@@ -55,7 +36,8 @@ export default StyleSheet.create({
     position: 'relative',
     justifyContent: 'center',
     alignItems: 'center',
-    overflow: 'hidden'
+    overflow: 'hidden',
+    borderRadius: 3
   },
 
   licenseImage: {
@@ -105,6 +87,7 @@ export default StyleSheet.create({
     color: colors.red
   },
   footer: {
+    marginTop: metrics.contentMarginSmall,
     alignItems: 'center'
   },
   button: {
@@ -127,12 +110,13 @@ export default StyleSheet.create({
   },
 
   modalDialogContainer: {
+    flexGrow: 1,
     backgroundColor: colors.white,
     padding: metrics.contentMargin,
     paddingBottom: metrics.contentMarginSmall,
     paddingTop: 32,
-    justifyContent: 'space-between',
-    height: metrics.screenHeight - (32 * 2) - gap
+    justifyContent: 'space-between'
+    // height: metrics.screenHeight - (32 * 2) - gap
   },
 
   modalTitle: {

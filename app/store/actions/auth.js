@@ -1,10 +1,25 @@
 
-export const SAVE_SIGNUP_STEP_DATA = 'SAVE_SIGNUP_STEP_DATA'
-export const saveSignUpStepData = ({stepData, step}) => {
+import { createAsyncAction } from 'helpers/redux'
+export const SIGN_IN = createAsyncAction('SIGN_IN')
+export const signIn = (credentials) => {
   return {
-    type: SAVE_SIGNUP_STEP_DATA,
-    payload: {
-      step, stepData
-    }
+    type: SIGN_IN.REQUEST,
+    payload: credentials
+
+  }
+}
+
+export const SIGN_OUT = 'SIGN_OUT'
+export const signOut = () => {
+  return {
+    type: SIGN_OUT
+  }
+}
+
+export const RESET_PASSWORD = createAsyncAction('RESET_PASSWORD')
+export const resetPasword = (email) => {
+  return {
+    type: RESET_PASSWORD.REQUEST,
+    payload: email
   }
 }

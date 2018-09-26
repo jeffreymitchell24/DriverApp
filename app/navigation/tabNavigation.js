@@ -34,7 +34,9 @@ const HomeTabStack = createMaterialTopTabNavigator(
 )
 HomeTabStack.navigationOptions = ({ navigation }) => {
   return {
-    headerLeft: <ProfileButton onPress={() => navigation.navigate(Profile)} />
+    headerLeft: <ProfileButton onPress={() => navigation.navigate(Profile, {
+      backKey: HomeTabStack
+    })} />
   }
 }
 

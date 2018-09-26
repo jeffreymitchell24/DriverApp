@@ -5,9 +5,11 @@ import {
   Image,
   ScrollView,
   TouchableOpacity,
-  TextInput
+  TextInput,
+  Alert
 } from 'react-native'
 
+import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
@@ -16,10 +18,23 @@ import {DocumentsCamera} from 'navigation/routeNames'
 import { requestWriteStoragePermission } from 'helpers/permission'
 import { icons } from 'images'
 import { colors } from 'theme'
-import { Button } from 'components/ui'
+import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
 import styles from './styles'
 import {APP_CONFIG} from './config'
+// import ImagePicker from 'react-native-image-picker'
 
+// var options = {
+//   cancelButtonTitle: 'Cancel',
+//   title: 'License Photo',
+//   // customButtons: [
+//   //   {name: 'fb', title: 'Choose Photo from Facebook'}
+//   // ],
+//   storageOptions: {
+//     skipBackup: true,
+//     path: 'images'
+//   },
+//   noData: true
+// }
 class RideshareModal extends Component {
   constructor (props) {
     super(props)
@@ -30,7 +45,8 @@ class RideshareModal extends Component {
     this.state = {
       main,
       otherSelected: other.length > 0,
-      other
+      other,
+      wasChanged: false
     }
   }
 
@@ -38,17 +54,19 @@ class RideshareModal extends Component {
     if (id === 'other') {
       this.setState((state) => ({
         otherSelected: !state.otherSelected,
-        other: state.otherSelected ? '' : state.other
+        other: state.otherSelected ? '' : state.other,
+        wasChanged: true
       }))
     } else {
       this.setState((state) => ({
-        main: {...state.main, [id]: !state.main[id]}
+        main: {...state.main, [id]: !state.main[id]},
+        wasChanged: true
       }))
     }
   }
 
   onEditOtherApps = (value) => {
-    this.setState({other: value})
+    this.setState({other: value, wasChanged: true})
   }
   onConfirm = () => {
     let {main, other} = this.state
@@ -83,10 +101,9 @@ class RideshareModal extends Component {
 
   render () {
     const {isVisible, onCancel} = this.props
-    const { main, other, otherSelected } = this.state
-    let mainAppSelected = false
-    forEach(main, (value, key) => { mainAppSelected = value === true })
-    let confirmActive = mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
+    const { main, other, otherSelected, wasChanged } = this.state
+    let mainAppSelected = find(main, (value, key) => value === true)
+    let confirmActive = wasChanged // mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
     return (
       <Modal
         backdropOpacity={0.5}
@@ -179,8 +196,8 @@ class Documentation extends Component {
   }
 
   onSubmit = () => {
-    const {onSaveSignUpStepData} = this.props
-    onSaveSignUpStepData({stepData: {}, step: 2})
+    // const {onSignUp, apps, licences, credentials, personalInfo} = this.props
+    // onSignUp({licences, apps, credentials, personalInfo})
   }
 
   onApprove = () => {
@@ -195,6 +212,22 @@ class Documentation extends Component {
     if (granted) {
       const {onSelectLicense, navigation} = this.props
       onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})
+      // ImagePicker.showImagePicker(options, (response) => {
+      //   console.log('Response = ', response)
+      //   this.pickerIsOpened = false
+      //   if (response.didCancel) {
+      //     // this.props.navigation.goBack()
+      //   } else {
+      //     this.props.onUpdateLicense({
+      //       type: licenseType,
+      //       side: licenseSide.toLowerCase(),
+      //       imageUri: response.uri
+      //     })
+      //     // this.props.navigation.navigate(PicturePreview, {
+      //     //   photoUri: response.uri
+      //     // })
+      //   }
+      // })
       navigation.navigate(DocumentsCamera, {
         title: licenseSide
       })
@@ -211,12 +244,22 @@ class Documentation extends Component {
 
   onSaveApps = ({main, other}) => {
     this.modalRenderKey += 1
-    this.setState({apps: {main, other}, showAppsModal: false, ridesharingApproved: true})
+    let ridesharingApproved = null
+    if (main.length > 0 || other.length > 0) ridesharingApproved = true
+    this.setState({showAppsModal: false, ridesharingApproved})
+    this.props.onUpdatedRideshareApps({main, other})
+  }
+
+  onDisabledPress = () => {
+    const {ridesharingApproved} = this.state
+    if (ridesharingApproved === false) {
+      Alert.alert('', 'You have to be approved to work for Ridesharing apps.')
+    }
   }
 
   renderAppsModal = () => {
-    const {showAppsModal, apps} = this.state
-
+    const {showAppsModal} = this.state
+    const {apps} = this.props
     return (
       <RideshareModal
         {...apps}
@@ -229,7 +272,8 @@ class Documentation extends Component {
   }
 
   render () {
-    const {ridesharingApproved, apps} = this.state
+    const {ridesharingApproved} = this.state
+    const {apps} = this.props
     const {tlc, driving} = this.props.licences
     let appsCount = apps.main.length + apps.other.length
 
@@ -237,9 +281,9 @@ class Documentation extends Component {
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <Text style={styles.screenTitle}>Upload following documents to get your account approved</Text>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>DRIVING LICENSE</Text>
-          <View style={styles.sectionContent}>
+        <Section>
+          <SectionHeader title='DRIVING LICENSE' />
+          <SectionContent>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
               <LicenseImage
@@ -254,11 +298,11 @@ class Documentation extends Component {
                 onPress={() => this.onPhotoPress('Back', 'driving')}
               />
             </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>TLC LICENSE</Text>
-          <View style={styles.sectionContent}>
+          </SectionContent>
+        </Section>
+        <Section>
+          <SectionHeader title='TLC LICENSE' />
+          <SectionContent>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
               <LicenseImage
@@ -273,11 +317,11 @@ class Documentation extends Component {
                 onPress={() => this.onPhotoPress('Back', 'tlc')}
               />
             </View>
-          </View>
-        </View>
-        <View style={styles.section}>
-          <Text style={styles.sectionHeader}>Rideshare apps</Text>
-          <View style={[styles.sectionContent, {flexDirection: 'column'}]}>
+          </SectionContent>
+        </Section>
+        <Section>
+          <SectionHeader title='RIDESHARE APPS' />
+          <SectionContent style={{flexDirection: 'column'}}>
             <Text style={styles.bigQuestion}>Are you approved to work for any Ridesharing apps?</Text>
             <TouchableOpacity style={styles.checkboxContainer} onPress={this.onApprove}>
               <CheckBox
@@ -318,13 +362,14 @@ class Documentation extends Component {
               />
               <Text style={styles.checkboxTitle}>No, I’m not approved</Text>
             </TouchableOpacity>
-          </View>
-        </View>
+          </SectionContent>
+        </Section>
         <View style={styles.footer}>
           <Button
             containerStyle={styles.button}
             disabled={!submitActive}
             title='SUBMIT DOCUMENTS'
+            onDisabledPress={this.onDisabledPress}
             onPress={this.onSubmit}
           />
         </View>
@@ -335,10 +380,15 @@ class Documentation extends Component {
 }
 
 Documentation.propTypes = {
+  apps: PropTypes.object,
+  credentials: PropTypes.object,
   licences: PropTypes.object,
   navigation: PropTypes.object,
-  onSaveSignUpStepData: PropTypes.func,
-  onSelectLicense: PropTypes.func
+  personalInfo: PropTypes.object,
+  onSelectLicense: PropTypes.func,
+  onSignUp: PropTypes.func,
+  onUpdateLicense: PropTypes.func,
+  onUpdatedRideshareApps: PropTypes.func
 }
 
 export default Documentation

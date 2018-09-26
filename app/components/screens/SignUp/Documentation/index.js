@@ -1,16 +1,21 @@
 import { connect } from 'react-redux'
-import { saveSignUpStepData, selectLicense } from 'store/actions/registration'
+import { selectLicense, updatedRideshareApps, updateLicense, signUp } from 'store/actions/registration'
 import { createStructuredSelector } from 'reselect'
-import { getLicenses } from 'store/selectors'
+import { getLicenses, getRideshareApps, getPersonalInfo, getCredentials } from 'store/selectors'
 import Documentation from './Documentation'
 
 const selector = createStructuredSelector({
-  licences: getLicenses
+  personalInfo: getPersonalInfo,
+  credentials: getCredentials,
+  licences: getLicenses,
+  apps: getRideshareApps
 })
 
 const actions = {
-  onSaveSignUpStepData: saveSignUpStepData,
-  onSelectLicense: selectLicense
+  onSignUp: signUp,
+  onSelectLicense: selectLicense,
+  onUpdatedRideshareApps: updatedRideshareApps,
+  onUpdateLicense: updateLicense
 }
 
 export default connect(

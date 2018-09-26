@@ -12,9 +12,22 @@ export default StyleSheet.create({
     paddingTop: 5,
     justifyContent: 'space-between'
   },
+  formContainer: {
+    backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    flexGrow: 1
+  },
 
   form: {
   },
+
+  mainErrorText: {
+    marginBottom: 5,
+    fontFamily: 'SFProText-Regular',
+    fontSize: 12,
+    color: colors.red
+  },
+
   resetButton: {
     fontFamily: 'SFProText-Regular',
     fontSize: 12,

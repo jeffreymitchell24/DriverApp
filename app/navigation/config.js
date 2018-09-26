@@ -1,8 +1,10 @@
 import { createStackNavigator } from 'react-navigation'
 import { NavBackImage } from 'components/ui'
 import React from 'react'
+import { fromTop } from 'react-navigation-transitions'
+import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'
 import Intro from 'components/screens/Intro'
-import { NewBookingStack } from './stackNavigation'
+import { NewBookingStack, ProfileStack } from './stackNavigation'
 import Account from 'components/screens/SignUp/Account'
 import PersonalInfo from 'components/screens/SignUp/PersonalInfo'
 import Documentation from 'components/screens/SignUp/Documentation'
@@ -45,7 +47,10 @@ export const Root = createStackNavigator(
         title: 'Account',
         headerTitle: null,
         headerBackTitle: null,
-        ...navigationOptions
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 22
+        }
       }
     },
     PersonalInfo: {
@@ -83,6 +88,7 @@ export const Root = createStackNavigator(
     PictureGallery: {
       screen: PictureGallery,
       navigationOptions: {
+        header: null,
         title: 'Select photo',
         headerTitle: null,
         headerBackTitle: null,
@@ -145,10 +151,33 @@ export const Root = createStackNavigator(
         headerTitle: null,
         headerBackTitle: null
       }
+    },
+    Profile: {
+      screen: ProfileStack,
+      navigationOptions: {
+        header: null
+      }
     }
   },
   {
     initialRouteName: 'Intro',
-    headerLayoutPreset: 'center'
+    headerLayoutPreset: 'center',
+    transitionConfig: (toTransitionProps, fromTransitionProps) => {
+      let isBack = false
+      let backRoute = null
+      if (fromTransitionProps) {
+        isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
+        backRoute = fromTransitionProps.scene.route.routeName
+      }
+      const route = toTransitionProps.scene.route
+      if ((route.routeName === 'Intro' || route.routeName === 'Account') && backRoute === 'SignIn') {
+        if (route.routeName === 'Account' && !isBack) {
+          return fromTop(500)
+        }
+        return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+      } else if (route.routeName === 'SignIn' && route.params && route.params.showFromBottom && !isBack) {
+        return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+      } else return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+    }
   }
 )
