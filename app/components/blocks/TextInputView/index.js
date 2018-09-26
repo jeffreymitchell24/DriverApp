@@ -45,16 +45,15 @@ export class TextInputView extends PureComponent {
 
     let showErrorLine = false
     if (error || error === '') showErrorLine = true
-
+    let inputStyle = [styles.input]
     return (
       <View style={[styles.container, containerStyle]}>
         <Text style={styles.label}>{label}</Text>
         <TextInput
           placeholder={placeholder}
-          placeholderTextColor='#5c5c5c'
           ref={this.getRef}
           secureTextEntry={secureTextEntry}
-          style={[styles.input, showErrorLine && styles.inputError]}
+          style={[...inputStyle, showErrorLine && styles.inputError]}
           underlineColorAndroid='transparent'
           value={value}
           {...rest}

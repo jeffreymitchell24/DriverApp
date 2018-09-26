@@ -1,13 +1,14 @@
 import React, {PureComponent} from 'react'
 import { View, Text, ScrollView, Keyboard } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
 import { TextInputView } from 'components/blocks'
-import { Button } from 'components/ui'
+import { Button, NavButton } from 'components/ui'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import isEmpty from 'lodash/isEmpty'
-import {ResetPassword, Account, RegisterReview} from 'navigation/routeNames'
+import {ResetPassword, Account, RegisterReview, Intro} from 'navigation/routeNames'
 import { colors } from 'theme'
 // import PropTypes from 'prop-types'
 import styles from './styles'
@@ -28,6 +29,11 @@ class SignIn extends PureComponent {
     isUserAuthed: PropTypes.bool,
     navigation: PropTypes.object,
     onSignIn: PropTypes.func
+  }
+  static navigationOptions = ({ navigation }) => {
+    return {
+      // headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(Intro)} />
+    }
   }
   inputRefs = {}
 
@@ -50,7 +56,7 @@ class SignIn extends PureComponent {
   }
 
   handleRegisterPress = () => {
-    this.props.navigation.navigate(Account)
+    this.props.navigation.navigate(Account, {showFromTop: true})
   }
 
   handleResetPassPress = () => {

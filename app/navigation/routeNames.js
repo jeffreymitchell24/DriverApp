@@ -2,7 +2,6 @@ export const Intro = 'Intro'
 
 // Nav flow
 export const App = 'App'
-export const Auth = 'Auth'
 
 // Sign Up
 export const Account = 'Account'
@@ -14,6 +13,7 @@ export const PictureGallery = 'PictureGallery'
 export const RegisterReview = 'RegisterReview'
 
 // Sign In
+export const Auth = 'Auth'
 export const SignIn = 'SignIn'
 export const ResetPassword = 'ResetPassword'
 export const TermsConditions = 'TermsConditions'
@@ -22,10 +22,13 @@ export const TermsConditions = 'TermsConditions'
 export const Home = 'Home'
 export const Profile = 'Profile'
 
+// Booking Detail
+export const BookingDetail = 'BookingDetail'
+
 // New Booking
 export const NewBooking = 'NewBooking'
 export const BookingConfirmed = 'BookingConfirmed'
-export const BookingDetails = 'BookingDetails'
+export const NewBookingDetails = 'NewBookingDetails'
 export const AvailableBookings = 'AvailableBookings'
 
 // Profile

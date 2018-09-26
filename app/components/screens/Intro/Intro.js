@@ -17,14 +17,6 @@ import { CONFIG } from './config'
 import styles from './styles'
 
 class Intro extends Component {
-  _navigateTo = (routeName) => {
-    const resetAction = StackActions.reset({
-      index: 0,
-      actions: [NavigationActions.navigate({ routeName: routeName })]
-    })
-    this.props.navigation.dispatch(resetAction)
-  }
-
   componentDidMount () {
     SplashScreen.hide()
     Keyboard.dismiss()
@@ -32,11 +24,12 @@ class Intro extends Component {
 
   handleStartPress = () => {
     this.props.navigation.navigate('Home') // Account
-    // this._navigateTo(Home)
   }
 
   handleSignInPress = () => {
-    this.props.navigation.navigate(SignIn) // Register
+    this.props.navigation.navigate(SignIn, {
+      showFromBottom: true
+    }) // Register
   }
 
   renderSlides = () => {
