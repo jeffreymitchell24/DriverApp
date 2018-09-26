@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 
 class History extends Component {
   onBookingPress = (booking) => {
-    console.log('selected booking', booking)
+    // this.props.navigation.navigate(BookingDetail)
   }
 
   onNewPress = () => {

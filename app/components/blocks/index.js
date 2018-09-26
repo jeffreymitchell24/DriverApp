@@ -1,6 +1,6 @@
 export * from './TextInputView'
 export * from './Header'
-export * from './BookingCard'
+export * from './Booking'
 export * from './HomeView'
 export * from './PolicyView'
 export * from './CameraView'

@@ -22,10 +22,13 @@ export const TermsConditions = 'TermsConditions'
 export const Home = 'Home'
 export const Profile = 'Profile'
 
+// Booking Detail
+export const BookingDetail = 'BookingDetail'
+
 // New Booking
 export const NewBooking = 'NewBooking'
 export const BookingConfirmed = 'BookingConfirmed'
-export const BookingDetails = 'BookingDetails'
+export const NewBookingDetails = 'NewBookingDetails'
 export const AvailableBookings = 'AvailableBookings'
 
 // Profile

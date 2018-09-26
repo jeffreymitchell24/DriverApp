@@ -17,7 +17,7 @@ export default StyleSheet.create({
   },
 
   sectionContent: {
-    marginTop: 10,
+    marginTop: 16,
     flexDirection: 'row'
   }
 })
