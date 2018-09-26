@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Platform } from 'react-native'
 
 import { colors, metrics } from 'theme'
 
@@ -58,8 +58,7 @@ export const googleStyles = StyleSheet.create({
     borderTopWidth: 0,
     height: null,
     // overflow: 'visible',
-    backgroundColor: 'yellow',
-    // borderBottomWidth: 2,
+    borderBottomWidth: 0,
     // borderBottomColor: colors.gray50,
     padding: 0,
     margin: 0
@@ -67,7 +66,7 @@ export const googleStyles = StyleSheet.create({
 
   textInput: {
     height: null,
-    paddingBottom: 0,
+    paddingBottom: Platform.OS === 'android' ? 0 : 4,
     paddingTop: 8,
     paddingLeft: 0,
     paddingRight: 0,
@@ -83,15 +82,7 @@ export const googleStyles = StyleSheet.create({
     textAlignVertical: 'top',
     borderRadius: 0,
     borderBottomWidth: 2,
-    borderBottomColor: colors.gray50,
-    backgroundColor: 'pink'
-  },
-  container: {
-    // zIndex: 10,
-    // overflow: 'visible',
-    // height: 50,
-    flexGrow: 0,
-    flexShrink: 0
+    borderBottomColor: colors.gray50
   },
   listView: {
     // position: 'absolute',
@@ -104,10 +95,30 @@ export const googleStyles = StyleSheet.create({
     elevation: 3,
     zIndex: 10
   },
-  description: {
-    color: '#1faadb'
-  },
   predefinedPlacesDescription: {
-    color: '#1faadb'
+    // color: '#1faadb'
+  },
+
+  locationItem: {
+    marginBottom: 12
+  },
+  container: {
+    // maxHeight: 100,
+    elevation: 3,
+    backgroundColor: colors.white,
+    marginHorizontal: 2,
+    paddingTop: 12,
+    paddingHorizontal: 16,
+    marginBottom: 16
+    // borderWidth: 2,
+    // borderColor: colors.red
+  },
+  contentContainerStyle: {
+    backgroundColor: colors.white
+  },
+  description: {
+    fontFamily: 'SFProText-Regular',
+    fontSize: 17,
+    color: '#000'
   }
 })

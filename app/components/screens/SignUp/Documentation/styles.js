@@ -152,7 +152,7 @@ export default StyleSheet.create({
 
   appsInput: {
     height: null,
-    paddingBottom: 10,
+    paddingBottom: Platform.OS === 'android' ? 0 : 4,
     paddingTop: 8,
     color: '#000',
     fontFamily: 'SFProText-Regular',
