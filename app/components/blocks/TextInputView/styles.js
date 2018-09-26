@@ -1,5 +1,5 @@
 
-import {StyleSheet} from 'react-native'
+import {StyleSheet, Platform} from 'react-native'
 import { colors } from 'theme'
 
 export default StyleSheet.create({
@@ -18,7 +18,7 @@ export default StyleSheet.create({
   },
   input: {
     height: null,
-    paddingBottom: 0,
+    paddingBottom: Platform.OS === 'android' ? 0 : 4,
     paddingTop: 8,
     color: '#000',
     fontFamily: 'SFProText-Regular',
