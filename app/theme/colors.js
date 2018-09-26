@@ -1,5 +1,6 @@
 export default {
   lightPink: '#FEF4F4',
+  pink: '#FF8787',
   red: '#F03E3E',
   redTrans: 'rgba(240, 62, 62, 0.5)',
   white: '#ffffff',

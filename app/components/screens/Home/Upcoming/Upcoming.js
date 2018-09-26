@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
 import { HomeView } from 'components/blocks'
-import {NewBooking} from 'navigation/routeNames'
+import {NewBooking, BookingDetail} from 'navigation/routeNames'
 import PropTypes from 'prop-types'
 import {BOOKINGS} from 'constants/bookings'
 
 class Upcoming extends Component {
   onBookingPress = (booking) => {
-    console.log('selected booking', booking)
+    this.props.navigation.navigate(BookingDetail)
   }
 
   onNewPress = () => {

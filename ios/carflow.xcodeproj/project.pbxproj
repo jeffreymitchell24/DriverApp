@@ -65,6 +65,8 @@
 		9C7260F19E3342FA80C7F6D7 /* libRNVersionNumber.a in Frameworks */ = {isa = PBXBuildFile; fileRef = A6772CC54EB44F3693C92400 /* libRNVersionNumber.a */; };
 		F6C35D428E65422EAA5D5A77 /* libRNVersionNumber-tvOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = FA94240CBDE84B0EA56F2F70 /* libRNVersionNumber-tvOS.a */; };
 		712A8FBE51864003966A6BA4 /* SFProDisplay-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 295CD521DAE0409AB8DB2DDE /* SFProDisplay-Medium.otf */; };
+		7F6F207FC94449F6BCC0102D /* SFProDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 551F667836144746B0B92825 /* SFProDisplay-Regular.otf */; };
+		D70EE41515574F9C8C0CC3B2 /* SFProText-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 51926AA32F2A443BA0DFFE1D /* SFProText-Medium.otf */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -436,6 +438,8 @@
 		A6772CC54EB44F3693C92400 /* libRNVersionNumber.a */ = {isa = PBXFileReference; name = "libRNVersionNumber.a"; path = "libRNVersionNumber.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		FA94240CBDE84B0EA56F2F70 /* libRNVersionNumber-tvOS.a */ = {isa = PBXFileReference; name = "libRNVersionNumber-tvOS.a"; path = "libRNVersionNumber-tvOS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 		295CD521DAE0409AB8DB2DDE /* SFProDisplay-Medium.otf */ = {isa = PBXFileReference; name = "SFProDisplay-Medium.otf"; path = "../app/fonts/SFProDisplay-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		551F667836144746B0B92825 /* SFProDisplay-Regular.otf */ = {isa = PBXFileReference; name = "SFProDisplay-Regular.otf"; path = "../app/fonts/SFProDisplay-Regular.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
+		51926AA32F2A443BA0DFFE1D /* SFProText-Medium.otf */ = {isa = PBXFileReference; name = "SFProText-Medium.otf"; path = "../app/fonts/SFProText-Medium.otf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -782,6 +786,8 @@
 				D8A3B74764864A8DAADF37B5 /* SFProText-Regular.otf */,
 				47B8ECC391FD484C91C0F86B /* SF-Pro-Text-Medium.otf */,
 				295CD521DAE0409AB8DB2DDE /* SFProDisplay-Medium.otf */,
+				551F667836144746B0B92825 /* SFProDisplay-Regular.otf */,
+				51926AA32F2A443BA0DFFE1D /* SFProText-Medium.otf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1296,6 +1302,8 @@
 				32C1936995A94CEC87F55B5D /* SFProText-Regular.otf in Resources */,
 				7B2C35E415134E8FA3CF448F /* SF-Pro-Text-Medium.otf in Resources */,
 				712A8FBE51864003966A6BA4 /* SFProDisplay-Medium.otf in Resources */,
+				7F6F207FC94449F6BCC0102D /* SFProDisplay-Regular.otf in Resources */,
+				D70EE41515574F9C8C0CC3B2 /* SFProText-Medium.otf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
