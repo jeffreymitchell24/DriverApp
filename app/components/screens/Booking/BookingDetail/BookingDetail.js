@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
 import { CarLocation } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
-import MapView, {Marker} from 'react-native-maps'
+// import MapView, {Marker} from 'react-native-maps'
 import {styles, mapStyles} from './styles'
 
 class BookingDetail extends Component {
@@ -99,7 +99,7 @@ class BookingDetail extends Component {
             <SectionHeader title='PICKUP' />
             <SectionContent style={{flexDirection: 'column'}}>
               <View style={styles.map}>
-                <MapView
+                {/* <MapView
                   initialRegion={{
                     latitude: 37.782189,
                     longitude: -122.451182,
@@ -117,7 +117,7 @@ class BookingDetail extends Component {
                       longitude: -122.451182
                     }}
                   />
-                </MapView>
+                </MapView> */}
               </View>
               <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
               <Text style={styles.address}>34th Street 25</Text>
@@ -130,7 +130,7 @@ class BookingDetail extends Component {
             <SectionHeader title='RETURN' />
             <SectionContent style={{flexDirection: 'column'}}>
               <View style={styles.map}>
-                <MapView
+                {/* <MapView
                   initialRegion={{
                     latitude: 37.782189,
                     longitude: -122.451182,
@@ -148,7 +148,7 @@ class BookingDetail extends Component {
                       longitude: -122.451182
                     }}
                   />
-                </MapView>
+                </MapView> */}
               </View>
               <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
               <Text style={styles.address}>34th Street 25</Text>
