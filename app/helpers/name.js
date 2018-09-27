@@ -1,3 +1,4 @@
+
 export const capitalize = (text) => {
   return text.toLowerCase()
     .split(' ')

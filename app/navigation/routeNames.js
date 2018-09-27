@@ -24,6 +24,7 @@ export const Profile = 'Profile'
 
 // Booking Detail
 export const BookingDetail = 'BookingDetail'
+export const CarLocation = 'CarLocation'
 
 // New Booking
 export const NewBooking = 'NewBooking'

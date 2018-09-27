@@ -17,6 +17,7 @@ import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
 
 import BookingDetail from 'components/screens/Booking/BookingDetail'
+import CarLocation from 'components/screens/Booking/CarLocation'
 
 import {HomeTabStack} from './tabNavigation'
 
@@ -149,6 +150,18 @@ export const Root = createStackNavigator(
       screen: BookingDetail,
       navigationOptions: {
         title: 'Regular Car',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 16
+        }
+      }
+    },
+    CarLocation: {
+      screen: CarLocation,
+      navigationOptions: {
+        title: 'Car Location',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions,
