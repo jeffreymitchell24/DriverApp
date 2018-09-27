@@ -12,6 +12,7 @@ let user = {
   'full_name': 'Kyle Freedman',
   'email': 'kyle@freedman.com',
   'admin': true,
+  'address': '100 West 33rd Street, New York, NY, 10001',
   'street': '100 West 33rd Street',
   'city': 'New York',
   'zip_code': '10001',

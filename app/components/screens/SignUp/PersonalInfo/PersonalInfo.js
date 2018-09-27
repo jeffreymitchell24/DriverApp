@@ -1,25 +1,49 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import {
   View,
   ScrollView,
   Text,
   Keyboard,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native'
-import find from 'lodash/find'
 import PropTypes from 'prop-types'
-import { GoogleAutoComplete } from 'react-native-google-autocomplete'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
+import { GoogleAutoComplete } from 'react-native-google-autocomplete' 
+// import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
 import {Documentation} from 'navigation/routeNames'
 import {GOOGLE_API_KEY} from 'config/apiKeys'
+import {capitalize} from 'helpers/name'
 import {styles, googleStyles} from './styles'
 import { colors } from 'theme'
 const uuidv4 = require('uuid/v4')
 
+class LocationItem extends PureComponent {
+  _handlePress = async () => {
+    const res = await this.props.fetchDetails(this.props.place_id)
+    this.props.onPress(res)
+  }
+
+  render () {
+    return (
+      <TouchableOpacity style={googleStyles.locationItem} onPress={this._handlePress}>
+        <Text style={googleStyles.description}>{this.props.description}</Text>
+      </TouchableOpacity>
+    )
+  }
+}
+
+LocationItem.propTypes = {
+  description: PropTypes.string,
+  fetchDetails: PropTypes.func,
+  place_id: PropTypes.string,
+  onPress: PropTypes.func
+}
+
 class PersonalInfo extends Component {
   state = {
+    showAddressResults: true,
     fullname: '', // 'Kot M',
     address: '', // '19011',
     phone: '' // '12345676789'
@@ -46,8 +70,13 @@ class PersonalInfo extends Component {
   }
 
   onAddressChange = (address) => {
-    console.log(address)
-    this.setState({address})
+    // console.log(address)
+    this.setState({address, showAddressResults: true})
+  }
+
+  onLocationPress = (address) => {
+    console.log('address', address)
+    this.setState({address: address.formatted_address, showAddressResults: false})
   }
 
   onCityPress = () => {
@@ -55,7 +84,7 @@ class PersonalInfo extends Component {
   }
 
   onEditField = (value, type) => {
-    this.setState({[type]: value})
+    this.setState({[type]: type === 'fullname' ? capitalize(value) : value})
   }
 
   componentWillMount () {
@@ -63,78 +92,99 @@ class PersonalInfo extends Component {
   }
 
   renderSearch = () => {
-    // return (
-    //   <GoogleAutoComplete
-    //     apiKey={GOOGLE_API_KEY}
-    //     components='country:us'
-    //     debounce={700}
-    //     queryTypes='(regions)'
-    //   >
-    //     {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
-    //       console.log('locationResults', locationResults)
-    //       return (
-    //         <TextInputView
-    //           // editable={false}
-    //           label='STATE'
-    //           name='state'
-    //           placeholder=''
-    //           value={this.state.state}
-    //           onChangeText={(value) => {
-    //             this.onEditField(value, 'state')
-    //             handleTextChange(value)
-    //           }}
-    //         />
-    //       )
-    //     }}
-    //   </GoogleAutoComplete>
-    // )
     return (
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>CURRENT ADDRESS</Text>
-        <GooglePlacesAutocomplete
-          // GooglePlacesSearchQuery={{
-          //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-          //   rankby: 'distance',
-          //   types: 'food'
-          // }}
-          // GoogleReverseGeocodingQuery={{
-          //   // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-          // }}
-          autoFocus={false}
-          debounce={600} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-          enablePoweredByContainer={false}
-          fetchDetails
-          getDefaultValue={() => ''}
-          listViewDisplayed='auto' // true/false/undefined
-          minLength={2} // minimum length of text to search
-          placeholder='e.g. 816 Alabama St, San Francisco, CA, USA'
-          query={{
-            // available options: https://developers.google.com/places/web-service/autocomplete
-            key: GOOGLE_API_KEY,
-            language: 'en', // language of the results
-            types: 'address', // default: 'geocode',
-            'session_token': this.placesAutocompleteToken,
-            sesstionToken: this.placesAutocompleteToken,
-            // location: '40.730610, -73.935242',
-            // radius: '30000', // 30 km
-            components: 'country:us'
-            // strictbounds: true
-          }}
-          renderDescription={row => row.description} // custom description render
-          returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-          styles={googleStyles}
-          text={this.state.address}
-          textInputProps={{
-            placeholderTextColor: colors.grey50,
-            onChangeText: this.onAddressChange,
-            ref: (input) => { this.inputRefs['address'] = input }
-          }}
-          onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-            console.log(data, details)
-          }}
-        />
-      </View>
+      <GoogleAutoComplete
+        apiKey={GOOGLE_API_KEY}
+        components='country:us'
+        debounce={700}
+        queryTypes='address'
+      >
+        {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
+          console.log('locationResults', locationResults)
+          return (
+            <View style={{marginBottom: 16}}>
+              <TextInputView
+                // editable={false}
+                containerStyle={{marginBottom: 0}}
+                inputRef={(input) => { this.inputRefs['address'] = input }}
+                label='CURRENT ADDRESS'
+                name='address'
+                placeholder=''
+                value={this.state.address}
+                onChangeText={(value) => {
+                  this.onAddressChange(value)
+                  handleTextChange(value)
+                }}
+              />
+              {
+                this.state.showAddressResults && locationResults.length > 0 && (
+                  <View contentContainerStyle={googleStyles.contentContainerStyle} style={googleStyles.container}>
+                    {locationResults.map((el, i) => (
+                      <LocationItem
+                        {...el}
+                        fetchDetails={fetchDetails}
+                        key={String(i)}
+                        onPress={this.onLocationPress}
+                      />
+                    ))}
+                  </View>
+                )
+              }
+            </View>
+          )
+        }}
+      </GoogleAutoComplete>
     )
+    // return (
+    //   <View style={styles.inputContainer}>
+    //     <Text style={styles.label}>CURRENT ADDRESS</Text>
+    //     <GooglePlacesAutocomplete
+    //       // GooglePlacesSearchQuery={{
+    //       //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
+    //       //   rankby: 'distance',
+    //       //   types: 'food'
+    //       // }}
+    //       // GoogleReverseGeocodingQuery={{
+    //       //   // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
+    //       // }}
+    //       autoFocus={false}
+    //       debounce={600} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
+    //       editable={this.state.addressEditable}
+    //       enablePoweredByContainer={false}
+    //       fetchDetails
+    //       getDefaultValue={() => ''}
+    //       listViewDisplayed='auto' // true/false/undefined
+    //       minLength={2} // minimum length of text to search
+    //       placeholder='' // 'e.g. 816 Alabama St, San Francisco, CA, USA'
+    //       query={{
+    //         // available options: https://developers.google.com/places/web-service/autocomplete
+    //         key: GOOGLE_API_KEY,
+    //         language: 'en', // language of the results
+    //         types: 'address', // default: 'geocode',
+    //         'session_token': this.placesAutocompleteToken,
+    //         sesstionToken: this.placesAutocompleteToken,
+    //         // location: '40.730610, -73.935242',
+    //         // radius: '30000', // 30 km
+    //         components: 'country:us'
+    //         // strictbounds: true
+    //       }}
+    //       renderDescription={row => row.description} // custom description render
+    //       returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
+    //       styles={googleStyles}
+    //       text={this.state.address}
+    //       textInputProps={{
+    //         placeholderTextColor: colors.grey50,
+    //         onChangeText: this.onAddressChange,
+    //         ref: (input) => { this.inputRefs['address'] = input }
+    //       }}
+    //       onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
+    //         console.log(data, details)
+    //         this.onAddressChange(details.formatted_address, false)
+    //         // this.onEditField(details.formatted_address, 'address')
+    //       }}
+    //     />
+    //   </View>
+    // )
   }
 
   render () {
@@ -159,8 +209,8 @@ class PersonalInfo extends Component {
               onChangeText={(value) => this.onEditField(value, 'fullname')}
               onSubmitEditing={() => this.inputRefs['address'].focus()}
             />
-            {/* {this.renderSearch()} */}
-            <TextInputView
+            {this.renderSearch()}
+            {/* <TextInputView
               blurOnSubmit={false}
               inputRef={(input) => { this.inputRefs['address'] = input }}
               label='CURRENT ADDRESS'
@@ -170,7 +220,7 @@ class PersonalInfo extends Component {
               value={address}
               onChangeText={(value) => this.onEditField(value, 'address')}
               onSubmitEditing={() => this.inputRefs['phone'].focus()}
-            />
+            /> */}
             {/* <TextInputView
               blurOnSubmit={false}
               inputRef={(input) => { this.inputRefs['zipcode'] = input }}
