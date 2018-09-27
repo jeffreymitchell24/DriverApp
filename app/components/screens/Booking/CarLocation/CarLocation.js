@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { View, Text } from 'react-native'
-import MapView from 'react-native-maps'
+// import MapView from 'react-native-maps'
 import styles from './styles'
 class CarLocation extends Component {
   constructor (props) {
@@ -12,7 +12,7 @@ class CarLocation extends Component {
   render () {
     return (
       <View style={styles.container}>
-        <MapView
+        {/* <MapView
           initialRegion={{
             latitude: 37.782189,
             longitude: -122.451182,
@@ -28,7 +28,7 @@ class CarLocation extends Component {
               longitude: -122.451182
             }}
           />
-        </MapView>
+        </MapView> */}
       </View>
     )
   }
