@@ -98,11 +98,11 @@ android {
     buildToolsVersion rootProject.ext.buildToolsVersion
 
     defaultConfig {
-        applicationId "com.carflow"
+        applicationId "com.carflo.carflow"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
-        versionName "0.0.9"
+        versionName "0.0.11"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    implementation project(':react-native-maps')
     compile project(':react-native-image-resizer')
     compile project(':rn-fetch-blob')
     compile project(':react-native-version-number')

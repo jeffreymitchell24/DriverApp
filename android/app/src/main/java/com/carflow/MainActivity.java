@@ -1,4 +1,4 @@
-package com.carflow;
+package com.carflo.carflow;
 import android.os.Bundle;
 import com.facebook.react.ReactActivity;
 import org.devio.rn.splashscreen.SplashScreen;
