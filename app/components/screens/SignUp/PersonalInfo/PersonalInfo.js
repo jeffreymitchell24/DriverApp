@@ -19,15 +19,25 @@ import {GOOGLE_API_KEY} from 'config/apiKeys'
 import {capitalize} from 'helpers/name'
 import {formatPhoneNumber} from 'helpers/phone'
 import {styles, googleStyles} from './styles'
-import * as Yup from 'yup'
+// import * as Yup from 'yup'
 
 const uuidv4 = require('uuid/v4')
 
-const validationSchema = Yup.object().shape({
-  fullname: Yup.string().trim().required('This field is required.'),
-  address: Yup.string().required('This field is required.'),
-  phone: Yup.string().min(15, 'Incorrect phone number, e.g. +1 212 1234-567').required('This field is required.')
-})
+const customValidate = (values) => {
+  const {fullname, address, phone} = values
+  let errors = {}
+  if (!fullname) errors.fullname = 'This field is required.'
+  if (!address) errors.address = 'This field is required.'
+  if (!phone) errors.phone = 'This field is required.'
+  else if (phone.length < 15) errors.phone = 'Incorrect phone number, e.g. +1 212 1234-567'
+  return errors
+}
+
+// const validationSchema = Yup.object().shape({
+//   fullname: Yup.string().trim().required('This field is required.'),
+//   address: Yup.string().required('This field is required.'),
+//   phone: Yup.string().min(15, 'Incorrect phone number, e.g. +1 212 1234-567').required('This field is required.')
+// })
 class LocationItem extends PureComponent {
   _handlePress = async () => {
     const res = await this.props.fetchDetails(this.props.place_id)
@@ -109,23 +119,16 @@ class PersonalInfo extends Component {
     if (this.state.phone.length === 0) this.setState({phone: '+1 '})
   }
 
-  validateForm = async (values, props) => {
+  validateForm = (values, props) => {
     let errors = {}
-    console.log('addressSelected', this.addressSelected)
+    // console.log('addressSelected', this.addressSelected)
     if (!this.addressSelected) {
       errors.address = 'Select address from location list'
     }
-    try {
-      await validationSchema.validate(values, {abortEarly: false})
-      console.log('errors', errors)
-      throw errors
-    } catch (yupErrors) {
-      console.log('yupErrors', yupErrors)
-      yupErrors.inner && yupErrors.inner.forEach(error => {
-        errors[error.path] = error.message
-      })
-      throw errors
-    }
+    let fieldErrors = customValidate(values)
+    errors = {...errors, ...fieldErrors}
+
+    return errors
   }
 
   renderSearchResults = (locationResults, fetchDetails) => {
@@ -189,7 +192,6 @@ class PersonalInfo extends Component {
 
   renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
     let {fullname, phone} = values
-    // console.log('this.addressSelected', this.addressSelected)
     let buttonActive = isEmpty(errors) && this.addressSelected
     return (
       <ScrollView
@@ -222,10 +224,12 @@ class PersonalInfo extends Component {
             maxLength={15}
             name='phone'
             placeholder='e.g. +1 212 1234-567'
+            returnKeyType='done'
             value={phone}
             onBlur={() => setFieldTouched('phone')}
             onChangeText={(value) => {
               let formattedPhone = formatPhoneNumber(value)
+              console.log('formattedPhone', formattedPhone)
               setFieldValue('phone', formattedPhone)
             }}
             onFocus={() => {

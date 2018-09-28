@@ -99,7 +99,7 @@ class BookingDetail extends Component {
             <SectionHeader title='PICKUP' />
             <SectionContent style={{flexDirection: 'column'}}>
               <View style={styles.map}>
-                {/* <MapView
+                <MapView
                   initialRegion={{
                     latitude: 37.782189,
                     longitude: -122.451182,
@@ -117,7 +117,7 @@ class BookingDetail extends Component {
                       longitude: -122.451182
                     }}
                   />
-                </MapView> */}
+                </MapView>
               </View>
               <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
               <Text style={styles.address}>34th Street 25</Text>
