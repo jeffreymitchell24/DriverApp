@@ -1,4 +1,4 @@
-package com.carflow; // make sure this is your package name
+package com.carflo.carflow; // make sure this is your package name
 
 import android.content.Intent;
 import android.os.Bundle;

@@ -23,7 +23,7 @@ class Intro extends Component {
   }
 
   handleStartPress = () => {
-    this.props.navigation.navigate('Home') // Account
+    this.props.navigation.navigate('Account') // Account
   }
 
   handleSignInPress = () => {
