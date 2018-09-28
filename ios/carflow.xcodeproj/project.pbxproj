@@ -51,6 +51,7 @@
 		712A8FBE51864003966A6BA4 /* SFProDisplay-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 295CD521DAE0409AB8DB2DDE /* SFProDisplay-Medium.otf */; };
 		72AAFFE8EE994247ACCEE63D /* FontAwesome5_Brands.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 215E984563CE403E86EE0972 /* FontAwesome5_Brands.ttf */; };
 		74C3C4A670314FE29E55AE9F /* SFProText-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 15E6F8EE5B0F4A4897EAE77E /* SFProText-Bold.otf */; };
+		7AAB8144D85582FED7FE07C4 /* libPods-carflow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF79BEAF0C3C3A42AEDFACF6 /* libPods-carflow.a */; };
 		7B2C35E415134E8FA3CF448F /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 47B8ECC391FD484C91C0F86B /* SF-Pro-Text-Medium.otf */; };
 		7F6F207FC94449F6BCC0102D /* SFProDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 551F667836144746B0B92825 /* SFProDisplay-Regular.otf */; };
 		80408AF99AB347BA90B95FD9 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29C54AB7E47D4BADA5F17423 /* Ionicons.ttf */; };
@@ -441,12 +442,14 @@
 		383954CF80AB47068A6A6144 /* Foundation.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Foundation.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Foundation.ttf"; sourceTree = "<group>"; };
 		3F528DCCF6AF44FB942957B8 /* FontAwesome.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome.ttf"; sourceTree = "<group>"; };
 		47B8ECC391FD484C91C0F86B /* SF-Pro-Text-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SF-Pro-Text-Medium.otf"; path = "../app/fonts/SF-Pro-Text-Medium.otf"; sourceTree = "<group>"; };
+		4B063FAAF786FC165A9DEF44 /* Pods-carflow.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-carflow.release.xcconfig"; path = "Pods/Target Support Files/Pods-carflow/Pods-carflow.release.xcconfig"; sourceTree = "<group>"; };
 		51926AA32F2A443BA0DFFE1D /* SFProText-Medium.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFProText-Medium.otf"; path = "../app/fonts/SFProText-Medium.otf"; sourceTree = "<group>"; };
 		551F667836144746B0B92825 /* SFProDisplay-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFProDisplay-Regular.otf"; path = "../app/fonts/SFProDisplay-Regular.otf"; sourceTree = "<group>"; };
 		5E91572D1DD0AC6500FF2AA8 /* RCTAnimation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTAnimation.xcodeproj; path = "../node_modules/react-native/Libraries/NativeAnimation/RCTAnimation.xcodeproj"; sourceTree = "<group>"; };
 		60D07EBC1E4A4686BD3A55A7 /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/react-native-vector-icons/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
 		65C00E7F72874BF78E3D8847 /* RNVectorIcons.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNVectorIcons.xcodeproj; path = "../node_modules/react-native-vector-icons/RNVectorIcons.xcodeproj"; sourceTree = "<group>"; };
 		6F590E51F7354547A1DA9AD7 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
+		73E1F1266F15BA90659CFB4C /* Pods-carflow.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-carflow.debug.xcconfig"; path = "Pods/Target Support Files/Pods-carflow/Pods-carflow.debug.xcconfig"; sourceTree = "<group>"; };
 		78C398B01ACF4ADC00677621 /* RCTLinking.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTLinking.xcodeproj; path = "../node_modules/react-native/Libraries/LinkingIOS/RCTLinking.xcodeproj"; sourceTree = "<group>"; };
 		832341B01AAA6A8300B99B32 /* RCTText.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = RCTText.xcodeproj; path = "../node_modules/react-native/Libraries/Text/RCTText.xcodeproj"; sourceTree = "<group>"; };
 		8D66D1C86EBE41678CE0F67B /* FontAwesome5_Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = FontAwesome5_Regular.ttf; path = "../node_modules/react-native-vector-icons/Fonts/FontAwesome5_Regular.ttf"; sourceTree = "<group>"; };
@@ -467,6 +470,7 @@
 		CA386BA7EE4A4AC29A5A3192 /* RCTImageResizer.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RCTImageResizer.xcodeproj; path = "../node_modules/react-native-image-resizer/ios/RCTImageResizer.xcodeproj"; sourceTree = "<group>"; };
 		CC61331B33F645C4A9D456D5 /* SFMono-Bold.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFMono-Bold.otf"; path = "../app/fonts/SFMono-Bold.otf"; sourceTree = "<group>"; };
 		D8A3B74764864A8DAADF37B5 /* SFProText-Regular.otf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "SFProText-Regular.otf"; path = "../app/fonts/SFProText-Regular.otf"; sourceTree = "<group>"; };
+		DF79BEAF0C3C3A42AEDFACF6 /* libPods-carflow.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-carflow.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E540965087224A1E820C07F5 /* RNCamera.xcodeproj */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = "wrapper.pb-project"; name = RNCamera.xcodeproj; path = "../node_modules/react-native-camera/ios/RNCamera.xcodeproj"; sourceTree = "<group>"; };
 		FA6634F1996144D9B69C1350 /* libRCTImageResizer.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRCTImageResizer.a; sourceTree = "<group>"; };
 		FA94240CBDE84B0EA56F2F70 /* libRNVersionNumber-tvOS.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = "libRNVersionNumber-tvOS.a"; sourceTree = "<group>"; };
@@ -504,6 +508,7 @@
 				B37743868B8C4DAEB70D639F /* libRNFetchBlob.a in Frameworks */,
 				6187009194624B10B55CE976 /* libRCTImageResizer.a in Frameworks */,
 				9C7260F19E3342FA80C7F6D7 /* libRNVersionNumber.a in Frameworks */,
+				7AAB8144D85582FED7FE07C4 /* libPods-carflow.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -593,6 +598,15 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		01D9E87C93065600DEECE0E6 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				73E1F1266F15BA90659CFB4C /* Pods-carflow.debug.xcconfig */,
+				4B063FAAF786FC165A9DEF44 /* Pods-carflow.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
 		139105B71AF99BAD00B5F7CC /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -654,6 +668,7 @@
 			isa = PBXGroup;
 			children = (
 				2D16E6891FA4F8E400B85C8A /* libReact.a */,
+				DF79BEAF0C3C3A42AEDFACF6 /* libPods-carflow.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -721,6 +736,7 @@
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				B7C1E8346AE540C3BB29CC0C /* Resources */,
 				965653E1214A5A8B00DD7C31 /* Recovered References */,
+				01D9E87C93065600DEECE0E6 /* Pods */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -877,10 +893,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "carflow" */;
 			buildPhases = (
+				676026977A674D6A3B9B39F7 /* [CP] Check Pods Manifest.lock */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
+				5802D223DA7F1FFFBFCD7054 /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -1453,6 +1471,50 @@
 			shellPath = /bin/sh;
 			shellScript = "export NODE_BINARY=node\n../node_modules/react-native/scripts/react-native-xcode.sh";
 		};
+		5802D223DA7F1FFFBFCD7054 /* [CP] Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-carflow/Pods-carflow-resources.sh",
+				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
+			);
+			name = "[CP] Copy Pods Resources";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/GoogleMaps.bundle",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-carflow/Pods-carflow-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		676026977A674D6A3B9B39F7 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-carflow-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
@@ -1587,6 +1649,7 @@
 		};
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 73E1F1266F15BA90659CFB4C /* Pods-carflow.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
@@ -1616,6 +1679,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 4B063FAAF786FC165A9DEF44 /* Pods-carflow.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CURRENT_PROJECT_VERSION = 1;
