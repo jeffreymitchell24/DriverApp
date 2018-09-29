@@ -35,6 +35,18 @@ let navigationOptions = {
   headerBackImage: (<NavBackImage />)
 }
 
+const RegisterReviewStack = createStackNavigator({
+  Review: {
+    screen: RegisterReview,
+    navigationOptions: {
+      title: null,
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  }
+})
+
 export const Root = createStackNavigator(
   {
     Intro: {
@@ -126,12 +138,9 @@ export const Root = createStackNavigator(
       }
     },
     RegisterReview: {
-      screen: RegisterReview,
+      screen: RegisterReviewStack,
       navigationOptions: {
-        title: null,
-        headerTitle: null,
-        headerBackTitle: null,
-        ...navigationOptions
+        header: null
       }
     },
     Home: {
