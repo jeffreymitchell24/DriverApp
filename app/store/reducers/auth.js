@@ -19,7 +19,7 @@ let user = {
   'state': 'NY',
   'phone': '+1 212-695-4260',
   'photo': 'string',
-  'status': 'rejected',
+  'status': 'approved',
   'ridesharing_approved': true,
   'documents_uploaded': true,
   'ridesharing_apps': 'uber, lyft',
@@ -40,7 +40,7 @@ const initialState = {
   resetError: null,
   resetPending: false,
   isAuthed: false,
-  user: user, // null,
+  user: null,
   token: null
 }
 

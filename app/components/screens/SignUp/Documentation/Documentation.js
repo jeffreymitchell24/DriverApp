@@ -2,14 +2,13 @@ import React, { Component } from 'react'
 import {
   View,
   Text,
-  Image,
   ScrollView,
   TouchableOpacity,
   TextInput,
   Alert
 } from 'react-native'
 
-import find from 'lodash/find'
+// import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
@@ -17,9 +16,8 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import { CheckBox } from 'react-native-elements'
 import {DocumentsCamera, RegisterReview} from 'navigation/routeNames'
 import { requestWriteStoragePermission } from 'helpers/permission'
-import { icons } from 'images'
 import { colors } from 'theme'
-import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
+import { Button, Section, SectionHeader, SectionContent, Photo, RadioButton } from 'components/ui'
 import styles from './styles'
 import {APP_CONFIG} from './config'
 
@@ -89,8 +87,8 @@ class RideshareModal extends Component {
 
   render () {
     const {isVisible, onCancel} = this.props
-    const { main, other, otherSelected, wasChanged } = this.state
-    let mainAppSelected = find(main, (value, key) => value === true)
+    const { otherSelected, wasChanged } = this.state // main, other
+    // let mainAppSelected = find(main, (value, key) => value === true)
     let confirmActive = wasChanged // mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
     return (
       <Modal
@@ -145,28 +143,6 @@ RideshareModal.propTypes = {
   other: PropTypes.array,
   onCancel: PropTypes.func,
   onConfirm: PropTypes.func
-}
-
-const LicenseImage = ({onPress, licenseImageUri}) => {
-  let image = ''
-  if (licenseImageUri) image = {uri: licenseImageUri}
-  return (
-    <TouchableOpacity style={styles.photoContainer} onPress={onPress}>
-      {
-        licenseImageUri
-          ? (
-            <Image source={image} style={styles.licenseImage} />
-          ) : (
-            <Image source={icons['camera']} style={styles.iconCamera} />
-          )
-      }
-    </TouchableOpacity>
-  )
-}
-
-LicenseImage.propTypes = {
-  licenseImageUri: PropTypes.string,
-  onPress: PropTypes.func
 }
 
 class Documentation extends Component {
@@ -265,15 +241,15 @@ class Documentation extends Component {
           <SectionContent>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
-              <LicenseImage
-                licenseImageUri={driving.front}
+              <Photo
+                imageUri={driving.front}
                 onPress={() => this.onPhotoPress('Front', 'driving')}
               />
             </View>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Back</Text>
-              <LicenseImage
-                licenseImageUri={driving.back}
+              <Photo
+                imageUri={driving.back}
                 onPress={() => this.onPhotoPress('Back', 'driving')}
               />
             </View>
@@ -284,15 +260,15 @@ class Documentation extends Component {
           <SectionContent>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
-              <LicenseImage
-                licenseImageUri={tlc.front}
+              <Photo
+                imageUri={tlc.front}
                 onPress={() => this.onPhotoPress('Front', 'tlc')}
               />
             </View>
             <View style={styles.licensePhotoBlock}>
               <Text style={styles.photoLabel}>Back</Text>
-              <LicenseImage
-                licenseImageUri={tlc.back}
+              <Photo
+                imageUri={tlc.back}
                 onPress={() => this.onPhotoPress('Back', 'tlc')}
               />
             </View>
@@ -303,15 +279,8 @@ class Documentation extends Component {
           <SectionContent style={{flexDirection: 'column'}}>
             <Text style={styles.bigQuestion}>Are you approved to work for any Ridesharing apps?</Text>
             <TouchableOpacity style={styles.checkboxContainer} onPress={this.onApprove}>
-              <CheckBox
+              <RadioButton
                 checked={ridesharingApproved}
-                checkedColor={colors.red}
-                checkedIcon='check-circle'
-                containerStyle={styles.checkbox}
-                style={{backgroundColor: 'yellow'}}
-                textStyle={styles.checkboxTitle}
-                title=''
-                uncheckedIcon='circle-o'
                 onPress={this.onApprove}
               />
               <Text style={styles.checkboxTitle}>Yes, I’m approved</Text>
@@ -329,14 +298,8 @@ class Documentation extends Component {
               )
             }
             <TouchableOpacity style={styles.checkboxContainer} onPress={this.onDisapprove}>
-              <CheckBox
+              <RadioButton
                 checked={ridesharingApproved === false}
-                checkedColor={colors.red}
-                checkedIcon='check-circle'
-                containerStyle={styles.checkbox}
-                textStyle={styles.checkboxTitle}
-                title=''
-                uncheckedIcon='circle-o'
                 onPress={this.onDisapprove}
               />
               <Text style={styles.checkboxTitle}>No, I’m not approved</Text>

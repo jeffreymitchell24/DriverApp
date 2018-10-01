@@ -75,7 +75,6 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     borderWidth: 0
   },
-
   checkboxSubText: {
     marginTop: 8,
     marginLeft: 37,

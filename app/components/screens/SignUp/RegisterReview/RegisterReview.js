@@ -1,5 +1,6 @@
 import React, {PureComponent} from 'react'
 import { View, Text, Image, BackHandler } from 'react-native'
+import SplashScreen from 'react-native-splash-screen'
 import PropTypes from 'prop-types'
 import {backgrounds} from 'images'
 import styles from './styles'
@@ -15,6 +16,9 @@ class RegisterReview extends PureComponent {
     )
   }
   componentDidMount () {
+    const hideSplash = this.props.navigation.getParam('hideSplash', false)
+    console.log('hideSplash RegisterReview', hideSplash)
+    if (hideSplash) SplashScreen.hide()
     this._willBlurSubscription = this.props.navigation.addListener('willBlur', payload =>
       BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
     )
