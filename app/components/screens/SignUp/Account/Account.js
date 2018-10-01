@@ -9,7 +9,6 @@ import {
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
 import {PersonalInfo, SignIn, TermsConditions, Intro} from 'navigation/routeNames'
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TextInputView } from 'components/blocks'
 import { Button, NavButton } from 'components/ui'
 import styles from './styles'

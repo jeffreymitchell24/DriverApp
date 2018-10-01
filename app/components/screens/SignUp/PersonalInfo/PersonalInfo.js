@@ -75,16 +75,14 @@ class PersonalInfo extends Component {
     console.log('token', this.placesAutocompleteToken)
   }
 
-  onSubmit = () => {
+  onSubmit = (values) => {
+    const {fullname, address, phone} = values
     Keyboard.dismiss()
     const {onSaveProfileInfo} = this.props
     let profile = {
-      fullname: 'John Doe',
-      street: 'Park Avenue',
-      zipcode: '',
-      city: 'New York',
-      state: 'New York',
-      phone: '411 555 1234'
+      fullname,
+      address,
+      phone
     }
     onSaveProfileInfo(profile)
     this.props.navigation.navigate(Documentation)
@@ -242,7 +240,7 @@ class PersonalInfo extends Component {
             containerStyle={styles.button}
             disabled={!buttonActive}
             title='NEXT'
-            onPress={this.onSubmit}
+            onPress={handleSubmit}
           />
         </View>
       </ScrollView>

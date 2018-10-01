@@ -148,6 +148,7 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-sensitive-info')
     implementation project(':react-native-maps')
     compile project(':react-native-image-resizer')
     compile project(':rn-fetch-blob')

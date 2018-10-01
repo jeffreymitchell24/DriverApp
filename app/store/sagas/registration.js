@@ -20,15 +20,16 @@ function * registrationFlow () {
   while (true) {
     let {payload} = yield take(SIGN_UP.REQUEST)
     let {licences, user: userData} = payload
+    console.log(licences, userData)
     try {
-      // let uploadedLicences = yield uploadLicenses(licences)
-      // let query = {
-      //   ...userData,
-      //   ...uploadedLicences
-      // }
-      // console.log('query', query)
-      // const {user, auth_token: token} = yield call(Api.register, query)
-      // yield put({type: SIGN_UP.SUCCESS, payload: {user, token}})
+      let uploadedLicences = yield uploadLicenses(licences)
+      let query = {
+        ...userData,
+        ...uploadedLicences
+      }
+      console.log('query', query)
+      const {user, auth_token: token} = yield call(Api.register, query)
+      yield put({type: SIGN_UP.SUCCESS, payload: {user, token}})
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)

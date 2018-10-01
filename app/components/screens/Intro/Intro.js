@@ -10,7 +10,7 @@ import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
 import { Button } from 'components/ui'
-import {Account, Documentation, SignIn, PersonalInfo} from 'navigation/routeNames'
+import {Account, Documentation, SignIn, PersonalInfo, Home, RegisterReview} from 'navigation/routeNames'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 import Swiper from 'react-native-swiper'
 import { CONFIG } from './config'
@@ -18,8 +18,24 @@ import styles from './styles'
 
 class Intro extends Component {
   componentDidMount () {
-    SplashScreen.hide()
-    Keyboard.dismiss()
+    const {user} = this.props
+    console.log('user', user)
+    if (!user) {
+      SplashScreen.hide()
+      Keyboard.dismiss()
+    } else if (user.status === 'approved') {
+      this.onResetTo(Home)
+    } else if (user.status === 'pending') {
+      this.onResetTo(RegisterReview)
+    }
+  }
+
+  onResetTo = (route) => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: route, params: {hideSplash: true} })]
+    })
+    this.props.navigation.dispatch(resetAction)
   }
 
   handleStartPress = () => {
@@ -84,7 +100,8 @@ class Intro extends Component {
 }
 
 Intro.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  user: PropTypes.object
 }
 
 const height = Dimensions.get('window').height // full height

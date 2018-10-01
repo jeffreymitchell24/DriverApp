@@ -19,7 +19,7 @@ let user = {
   'state': 'NY',
   'phone': '+1 212-695-4260',
   'photo': 'string',
-  'status': 'rejected',
+  'status': 'approved',
   'ridesharing_approved': true,
   'documents_uploaded': true,
   'ridesharing_apps': 'uber, lyft',
@@ -39,7 +39,8 @@ const initialState = {
   resetPasswordSent: false,
   resetError: null,
   resetPending: false,
-  user: user, // null,
+  isAuthed: false,
+  user: null,
   token: null
 }
 
@@ -47,6 +48,7 @@ const handlers = {
   [SIGN_IN.REQUEST]: (state, { payload }) => {
     return {
       ...state,
+      user: null,
       authError: null,
       pending: true
     }
@@ -67,12 +69,19 @@ const handlers = {
       pending: false
     }
   },
+  [SIGN_UP.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      isAuthed: false
+    }
+  },
   [SIGN_UP.SUCCESS]: (state, { payload }) => {
     const {user = null, token} = payload
     return {
       ...state,
       user,
       token,
+      isAuthed: true,
       pending: false
     }
   },

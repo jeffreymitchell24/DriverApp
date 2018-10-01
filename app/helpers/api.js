@@ -21,7 +21,11 @@ export const resetPassword = async (email) => {
 }
 
 export const register = async (user) => {
-  let response = await axios.post(`${URL}/api/register/create`, user)
+  console.log('user', user)
+  let config = {
+    headers: {'Content-Type': 'multipart/form-data'}
+  }
+  let response = await axios.post(`${URL}/api/register/create`, user, config)
   console.log('register response', response)
   return response
 }
