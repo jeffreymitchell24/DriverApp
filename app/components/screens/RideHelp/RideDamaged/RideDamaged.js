@@ -42,6 +42,7 @@ export default class RideDamaged extends PureComponent {
               multiline
               name='Description'
               placeholder='What’s wrong with the car?'
+              showLimit
             />
           </View>
           <Button
