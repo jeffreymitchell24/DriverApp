@@ -17,6 +17,7 @@ export class TextInputView extends PureComponent {
     maxLength: PropTypes.number,
     placeholder: PropTypes.string.isRequired,
     secureTextEntry: PropTypes.bool,
+    showLimit: PropTypes.bool,
     text: PropTypes.string,
     value: PropTypes.string,
     onBlur: PropTypes.func,
@@ -26,7 +27,8 @@ export class TextInputView extends PureComponent {
   }
   static defaultProps = {
     inputRef: () => {},
-    secureTextEntry: false
+    secureTextEntry: false,
+    showLimit: false
   }
 
   getRef = (input) => {
@@ -42,6 +44,7 @@ export class TextInputView extends PureComponent {
       secureTextEntry,
       containerStyle,
       maxLength,
+      showLimit,
       ...rest
     } = this.props
 
@@ -53,7 +56,7 @@ export class TextInputView extends PureComponent {
       <View style={[styles.container, containerStyle]}>
         <View style={styles.labelContainer}>
           <Text style={styles.label}>{label}</Text>
-          {maxLength && <Text style={styles.limit}>{`${maxLength - valueLength} characters left `}</Text>}
+          {maxLength && showLimit && <Text style={styles.limit}>{`${maxLength - valueLength} characters left `}</Text>}
         </View>
         <TextInput
           maxLength={maxLength}

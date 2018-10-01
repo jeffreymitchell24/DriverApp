@@ -72,6 +72,7 @@ export default class RideLateDescription extends PureComponent {
               multiline
               name='reason'
               placeholder='Why are you late?'
+              showLimit
             />
           </View>
           <Button

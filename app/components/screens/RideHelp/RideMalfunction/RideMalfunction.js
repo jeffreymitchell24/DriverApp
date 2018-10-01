@@ -60,6 +60,7 @@ class RideMalfunction extends Component {
               multiline
               name='description'
               placeholder='What’s wrong with the car?'
+              showLimit
             />
           </View>
           <Button
