@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
-import { CarLocation } from 'navigation/routeNames'
+import { CarLocation, RideHelp } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
 import MapView, {Marker} from 'react-native-maps'
 import {styles, mapStyles} from './styles'
@@ -16,6 +16,10 @@ class BookingDetail extends Component {
 
   onUnlockPress = () => {
 
+  }
+
+  onHelpPress = () => {
+    this.props.navigation.navigate(RideHelp)
   }
   onMapPress = () => {
     this.props.navigation.navigate(CarLocation)
@@ -159,7 +163,7 @@ class BookingDetail extends Component {
           </Section>
           <Section>
             <SectionHeader title='DO YOU NEED HELP?' />
-            <TouchableOpacity style={styles.linkButton}>
+            <TouchableOpacity style={styles.linkButton} onPress={this.onHelpPress}>
               <Text style={styles.linkButtonText}>Open help center</Text>
             </TouchableOpacity>
           </Section>

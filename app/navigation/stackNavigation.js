@@ -16,6 +16,13 @@ import ProfileCamera from 'components/screens/Profile/ProfileCamera'
 import PicturePreview from 'components/screens/Profile/PicturePreview'
 import PictureGallery from 'components/screens/SignUp/PictureGallery'
 
+import HelpCenter from 'components/screens/RideHelp/HelpCenter'
+import RideMalfunction from 'components/screens/RideHelp/RideMalfunction'
+import RideDamaged from 'components/screens/RideHelp/RideDamaged'
+import RideAccident from 'components/screens/RideHelp/RideAccident'
+import RideCancel from 'components/screens/RideHelp/RideCancel'
+import RideLateDescription from 'components/screens/RideHelp/RideLateDescription'
+
 export const NewBookingStack = createStackNavigator({
   BookingConfirmed: {
     screen: BookingConfirmed,
@@ -199,5 +206,81 @@ export const ProfileStack = createStackNavigator({
     } else {
       return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
     }
+  }
+})
+
+export const HelpCenterStack = createStackNavigator({
+  HelpCenter: {
+    screen: HelpCenter,
+    navigationOptions: {
+      title: 'Help Center',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  RideMalfunction: {
+    screen: RideMalfunction,
+    navigationOptions: {
+      title: 'Car malfunctioned',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  RideDamaged: {
+    screen: RideDamaged,
+    navigationOptions: {
+      title: 'Car damaged',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  RideAccident: {
+    screen: RideAccident,
+    navigationOptions: {
+      title: 'I had an accident',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  RideCancel: {
+    screen: RideCancel,
+    navigationOptions: {
+      title: 'Cancel booking',
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions,
+      headerLeftContainerStyle: {
+        paddingLeft: 16
+      }
+    }
+  },
+  RideLateDescription: {
+    screen: RideLateDescription,
+    navigationOptions: {
+      title: "I'm late",
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  }
+},
+{
+  initialRouteName: 'HelpCenter',
+  headerLayoutPreset: 'center',
+  transitionConfig: (toTransitionProps, fromTransitionProps) => {
+    // let isBack = false
+    let backRoute = null
+    if (fromTransitionProps) {
+      // isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
+      backRoute = fromTransitionProps.scene.route.routeName
+    }
+    const route = toTransitionProps.scene.route
+    if (route.routeName === 'RideCancel' || backRoute === 'RideCancel') {
+      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+    } else return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
   }
 })

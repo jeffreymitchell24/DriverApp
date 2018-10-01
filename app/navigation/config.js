@@ -4,7 +4,6 @@ import React from 'react'
 import { fromTop } from 'react-navigation-transitions'
 import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'
 import Intro from 'components/screens/Intro'
-import { NewBookingStack, ProfileStack } from './stackNavigation'
 import Account from 'components/screens/SignUp/Account'
 import PersonalInfo from 'components/screens/SignUp/PersonalInfo'
 import Documentation from 'components/screens/SignUp/Documentation'
@@ -19,6 +18,7 @@ import ResetPassword from 'components/screens/ResetPassword'
 import BookingDetail from 'components/screens/Booking/BookingDetail'
 import CarLocation from 'components/screens/Booking/CarLocation'
 
+import { NewBookingStack, ProfileStack, HelpCenterStack } from './stackNavigation'
 import {HomeTabStack} from './tabNavigation'
 
 let navigationOptions = {
@@ -177,6 +177,12 @@ export const Root = createStackNavigator(
         headerLeftContainerStyle: {
           paddingLeft: 16
         }
+      }
+    },
+    RideHelp: {
+      screen: HelpCenterStack,
+      navigationOptions: {
+        header: null
       }
     },
     NewBooking: {
