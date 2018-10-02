@@ -31,6 +31,10 @@ export const AvailableBookings = 'AvailableBookings'
 // Booking Detail
 export const BookingDetail = 'BookingDetail'
 export const CarLocation = 'CarLocation'
+export const ReceiptSubmit = 'ReceiptSubmit'
+export const ReceiptCamera = 'ReceiptCamera'
+export const ReceiptGallery = 'ReceiptGallery'
+export const ReceiptPreview = 'ReceiptPreview'
 
 // Help Center
 export const RideHelp = 'RideHelp'
