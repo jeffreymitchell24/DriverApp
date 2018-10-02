@@ -9,3 +9,4 @@ export const getIsResetSent = R.path(['auth', 'resetPasswordSent'])
 
 export const getUserData = R.path(['auth', 'user'])
 export const getIsAuthed = R.path(['auth', 'isAuthed'])
+export const getIsCheckingUserStatus = R.path(['auth', 'checkingUserStatus'])

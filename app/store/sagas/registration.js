@@ -28,7 +28,7 @@ function * registrationFlow () {
         ...uploadedLicences
       }
       console.log('query', query)
-      const {user, auth_token: token} = yield call(Api.register, query)
+      const {data: {user, auth_token: token}} = yield call(Api.register, query)
       yield put({type: SIGN_UP.SUCCESS, payload: {user, token}})
     } catch (error) {
       console.log('error response', error.response)

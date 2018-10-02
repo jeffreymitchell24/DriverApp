@@ -23,3 +23,11 @@ export const resetPasword = (email) => {
     payload: email
   }
 }
+
+export const CHECK_STATUS = createAsyncAction('CHECK_STATUS')
+export const checkStatus = (id) => {
+  return {
+    type: CHECK_STATUS.REQUEST,
+    payload: {id}
+  }
+}

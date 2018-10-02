@@ -1,32 +1,47 @@
-import React, {PureComponent} from 'react'
-import { View, Text, Image, BackHandler } from 'react-native'
+import React, {Component} from 'react'
+import { View, Text, Image, BackHandler, AppState } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
+import { AndroidBackHandler } from 'react-navigation-backhandler'
 import PropTypes from 'prop-types'
+import {Home} from 'navigation/routeNames'
 import {backgrounds} from 'images'
 import styles from './styles'
 
-class RegisterReview extends PureComponent {
-  didFocusSubscription;
-  _willBlurSubscription;
+class RegisterReview extends Component {
   backPressCount = 0
-  constructor (props) {
-    super(props)
-    this._didFocusSubscription = props.navigation.addListener('didFocus', payload =>
-      BackHandler.addEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
-    )
+  state = {
+    appState: AppState.currentState
   }
+
   componentDidMount () {
     const hideSplash = this.props.navigation.getParam('hideSplash', false)
-    console.log('hideSplash RegisterReview', hideSplash)
     if (hideSplash) SplashScreen.hide()
-    this._willBlurSubscription = this.props.navigation.addListener('willBlur', payload =>
-      BackHandler.removeEventListener('hardwareBackPress', this.onBackButtonPressAndroid)
-    )
+
+    AppState.addEventListener('change', this.onAppStateChange)
   }
+
+  componentDidUpdate (prevProps) {
+    if (prevProps.user && prevProps.user.status !== 'approved' && this.props.user.status === 'approved') {
+      this.props.navigation.navigate(Home)
+    }
+  }
+
   componentWillUnmount () {
-    this._didFocusSubscription && this._didFocusSubscription.remove()
-    this._willBlurSubscription && this._willBlurSubscription.remove()
+    AppState.removeEventListener('change', this.onAppStateChange)
   }
+
+  checkUserStatus = () => {
+    const {onCheckStatus, user} = this.props
+    onCheckStatus(user.id)
+  }
+
+  onAppStateChange = (nextAppState) => {
+    if (this.state.appState.match(/inactive|background/) && nextAppState === 'active') {
+      this.checkUserStatus()
+    }
+    this.setState({appState: nextAppState})
+  }
+
   onBackButtonPressAndroid = () => {
     if (this.backPressCount === 1) BackHandler.exitApp()
     this.backPressCount += 1
@@ -35,20 +50,24 @@ class RegisterReview extends PureComponent {
 
   render () {
     return (
-      <View style={styles.container}>
-        <Text style={styles.title}>Documents submitted!</Text>
-        <View style={styles.imageContainer}>
-          <Image resizeMode='contain' source={backgrounds['highFive']} style={styles.image} />
+      <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>
+        <View style={styles.container}>
+          <Text style={styles.title}>Documents submitted!</Text>
+          <View style={styles.imageContainer}>
+            <Image resizeMode='contain' source={backgrounds['highFive']} style={styles.image} />
+          </View>
+          <Text style={styles.mainText}>We are reviewing your documents and will send you push notification and email once it’s ready! </Text>
+          <Text style={styles.subText}>It usually takes less than 4 hours.</Text>
         </View>
-        <Text style={styles.mainText}>We are reviewing your documents and will send you push notification and email once it’s ready! </Text>
-        <Text style={styles.subText}>It usually takes less than 4 hours.</Text>
-      </View>
+      </AndroidBackHandler>
     )
   }
 }
 
 RegisterReview.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  user: PropTypes.object,
+  onCheckStatus: PropTypes.func
 }
 
 export default RegisterReview
