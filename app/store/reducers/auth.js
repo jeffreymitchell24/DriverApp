@@ -3,35 +3,36 @@ import { createReducer } from '../../helpers/redux'
 import {
   SIGN_IN,
   SIGN_OUT,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  CHECK_STATUS
 } from 'store/actions/auth'
 import {SIGN_UP} from 'store/actions/registration'
 
-let user = {
-  'id': 0,
-  'full_name': 'Kyle Freedman',
-  'email': 'kyle@freedman.com',
-  'admin': true,
-  'address': '100 West 33rd Street, New York, NY, 10001',
-  'street': '100 West 33rd Street',
-  'city': 'New York',
-  'zip_code': '10001',
-  'state': 'NY',
-  'phone': '+1 212-695-4260',
-  'photo': 'string',
-  'status': 'approved',
-  'ridesharing_approved': true,
-  'documents_uploaded': true,
-  'ridesharing_apps': 'uber, lyft',
-  'tlcLicense': {
-    'front': 'string',
-    'back': 'string'
-  },
-  'drivingLicense': {
-    'front': 'string',
-    'back': 'strin'
-  }
-}
+// let user = {
+//   'id': 0,
+//   'full_name': 'Kyle Freedman',
+//   'email': 'kyle@freedman.com',
+//   'admin': true,
+//   'address': '100 West 33rd Street, New York, NY, 10001',
+//   'street': '100 West 33rd Street',
+//   'city': 'New York',
+//   'zip_code': '10001',
+//   'state': 'NY',
+//   'phone': '+1 212-695-4260',
+//   'photo': 'string',
+//   'status': 'pending',
+//   'ridesharing_approved': true,
+//   'documents_uploaded': true,
+//   'ridesharing_apps': 'uber, lyft',
+//   'tlcLicense': {
+//     'front': 'string',
+//     'back': 'string'
+//   },
+//   'drivingLicense': {
+//     'front': 'string',
+//     'back': 'strin'
+//   }
+// }
 
 const initialState = {
   pending: false,
@@ -40,6 +41,7 @@ const initialState = {
   resetError: null,
   resetPending: false,
   isAuthed: false,
+  checkingUserStatus: false,
   user: null,
   token: null
 }
@@ -49,6 +51,7 @@ const handlers = {
     return {
       ...state,
       user: null,
+      isAuthed: false,
       authError: null,
       pending: true
     }
@@ -59,6 +62,7 @@ const handlers = {
       ...state,
       user,
       token,
+      isAuthed: true,
       pending: false
     }
   },
@@ -109,6 +113,28 @@ const handlers = {
       resetPasswordSent: true,
       resetError: payload,
       resetPending: false
+    }
+  },
+  [CHECK_STATUS.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      checkingUserStatus: true
+    }
+  },
+  [CHECK_STATUS.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        status: payload.status
+      },
+      checkingUserStatus: false
+    }
+  },
+  [CHECK_STATUS.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      checkingUserStatus: false
     }
   }
 }

@@ -8,7 +8,7 @@ import { Button, NavButton } from 'components/ui'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import isEmpty from 'lodash/isEmpty'
-import {ResetPassword, Account, RegisterReview, Intro} from 'navigation/routeNames'
+import {ResetPassword, Account, RegisterReview, Intro, Home} from 'navigation/routeNames'
 import { colors } from 'theme'
 // import PropTypes from 'prop-types'
 import styles from './styles'
@@ -28,6 +28,7 @@ class SignIn extends PureComponent {
     isSigninPending: PropTypes.bool,
     isUserAuthed: PropTypes.bool,
     navigation: PropTypes.object,
+    user: PropTypes.object,
     onSignIn: PropTypes.func
   }
   static navigationOptions = ({ navigation }) => {
@@ -38,8 +39,13 @@ class SignIn extends PureComponent {
   inputRefs = {}
 
   componentDidUpdate (prevProps) {
-    if (this.props.isUserAuthed !== prevProps.isUserAuthed) {
-      this.props.navigation.navigate(RegisterReview)
+    const {isUserAuthed, user} = this.props
+    if (isUserAuthed !== prevProps.isUserAuthed) {
+      if (user.status === 'approved') {
+        this.props.navigation.navigate(Home)
+      } else if (user.status === 'pending') {
+        this.onResetTo(RegisterReview)
+      }
     }
     // if (this.props.error && !prevProps.error) {
     //   this.formik.setErrors({
@@ -47,6 +53,14 @@ class SignIn extends PureComponent {
     //     password: ''
     //   })
     // }
+  }
+
+  onResetTo = (route) => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: route })]
+    })
+    this.props.navigation.dispatch(resetAction)
   }
 
   onSubmit = (values, {setErrors}) => {

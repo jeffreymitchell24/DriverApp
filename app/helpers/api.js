@@ -8,10 +8,11 @@ const AWS_SECRET_ACCESS_KEY = 'OKQhN+FvPVpoW3AKY1XGy5l996cbDY8wevG/Ff51'
 const AWS_DEFAULT_REGION = 'us-west-1'
 const AWS_BUCKET = 'carflow'
 
-export const authorize = async (credentials) => {
-  let response = await axios.post(`${URL}/api/login`, credentials)
+export const authorize = async (email, password) => {
+  console.log('credentials', {email, password})
+  let response = await axios.post(`${URL}/api/login`, {email, password})
   console.log('authorize response', response)
-  return response
+  return response.data
 }
 
 export const resetPassword = async (email) => {
@@ -23,11 +24,17 @@ export const resetPassword = async (email) => {
 export const register = async (user) => {
   console.log('user', user)
   let config = {
-    headers: {'Content-Type': 'multipart/form-data'}
+    // headers: {'Content-Type': 'multipart/form-data'}
   }
   let response = await axios.post(`${URL}/api/register/create`, user, config)
   console.log('register response', response)
   return response
+}
+
+export const checkStatus = async (id) => {
+  let response = await axios.post(`${URL}/api/users/${id}/check-status`)
+  console.log('register response', response)
+  return response.data
 }
 
 export const validateEmail = async (email) => {

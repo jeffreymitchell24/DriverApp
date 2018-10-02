@@ -20,12 +20,20 @@ class Intro extends Component {
   componentDidMount () {
     const {user} = this.props
     console.log('user', user)
+    // Alert.alert(user.email, user.status)
     if (!user) {
       SplashScreen.hide()
       Keyboard.dismiss()
     } else if (user.status === 'approved') {
-      this.onResetTo(Home)
+      this.props.navigation.navigate(Home, {hideSplash: true})
     } else if (user.status === 'pending') {
+      this.props.onCheckStatus(user.id)
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    const {isCheckingStatus, user} = this.props
+    if (prevProps.isCheckingStatus && !isCheckingStatus && user.status === 'pending') {
       this.onResetTo(RegisterReview)
     }
   }
@@ -100,8 +108,10 @@ class Intro extends Component {
 }
 
 Intro.propTypes = {
+  isCheckingStatus: PropTypes.bool,
   navigation: PropTypes.object,
-  user: PropTypes.object
+  user: PropTypes.object,
+  onCheckStatus: PropTypes.func
 }
 
 const height = Dimensions.get('window').height // full height
