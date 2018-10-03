@@ -23,11 +23,23 @@ export const resetPasword = (email) => {
     payload: email
   }
 }
+export const DISCARD_RESET_ERROR = 'DISCARD_RESET_ERROR'
+export const discardResetError = () => ({
+  type: DISCARD_RESET_ERROR
+})
 
 export const CHECK_STATUS = createAsyncAction('CHECK_STATUS')
 export const checkStatus = (id) => {
   return {
     type: CHECK_STATUS.REQUEST,
+    payload: {id}
+  }
+}
+
+export const SAVE_REJECTED_ID = 'SAVE_REJECTED_ID'
+export const saveRejectedId = (id) => {
+  return {
+    type: SAVE_REJECTED_ID,
     payload: {id}
   }
 }

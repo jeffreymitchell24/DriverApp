@@ -10,10 +10,18 @@ export const saveSignUpStepData = ({stepData, step}) => {
   }
 }
 
-export const SAVE_CREDENTIALS = createAsyncAction('SAVE_CREDENTIALS')
+export const VALIDATE_EMAIL = createAsyncAction('VALIDATE_EMAIL')
+export const validateEmail = ({email}) => {
+  return {
+    type: VALIDATE_EMAIL.REQUEST,
+    payload: {email}
+  }
+}
+
+export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const saveCredentials = (credentials) => {
   return {
-    type: SAVE_CREDENTIALS.REQUEST,
+    type: SAVE_CREDENTIALS,
     payload: credentials
   }
 }
@@ -69,5 +77,13 @@ export const signUp = ({licences, apps, credentials, personalInfo}) => {
   return {
     type: SIGN_UP.REQUEST,
     payload: { user, licences }
+  }
+}
+
+export const SAVE_RESUBMIT_STATUS = 'SAVE_RESUBMIT_STATUS'
+export const saveResubmitStatus = (isResubmitting) => {
+  return {
+    type: SAVE_RESUBMIT_STATUS,
+    payload: isResubmitting
   }
 }

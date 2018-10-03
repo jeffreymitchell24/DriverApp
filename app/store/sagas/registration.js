@@ -1,10 +1,10 @@
-import { take, put, call, fork, cancel, cancelled } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
+import { take, put, call, select } from 'redux-saga/effects'
+
 import * as Api from 'helpers/api'
 import {resizeAndUpload} from 'helpers/image'
 import {
   SIGN_UP,
-  SAVE_CREDENTIALS
+  VALIDATE_EMAIL
 } from 'store/actions/registration'
 
 async function uploadLicenses ({tlc, driving}) {
@@ -16,9 +16,25 @@ async function uploadLicenses ({tlc, driving}) {
   return compressed
 }
 
+function * register (query) {
+  let response = yield call(Api.register, query)
+  return response
+}
+
+function * resubmit (query, token) {
+  delete query.password
+  delete query.password_confirmation
+  delete query.email
+  let response = yield call(Api.resubmit, query, token)
+  return response
+}
+
 function * registrationFlow () {
   while (true) {
     let {payload} = yield take(SIGN_UP.REQUEST)
+    let state = yield select()
+    let {isResubmitting} = state.registration
+    let {auth} = state
     let {licences, user: userData} = payload
     console.log(licences, userData)
     try {
@@ -27,27 +43,37 @@ function * registrationFlow () {
         ...userData,
         ...uploadedLicences
       }
+      let response = {}
+
       console.log('query', query)
-      const {data: {user, auth_token: token}} = yield call(Api.register, query)
-      yield put({type: SIGN_UP.SUCCESS, payload: {user, token}})
+      if (isResubmitting) {
+        response = yield call(resubmit, query, auth.token)
+      } else {
+        response = yield call(register, query)
+      }
+
+      const {data: {user, auth_token: token}} = response
+      yield put({type: SIGN_UP.SUCCESS, payload: {user, token: token || auth.token}})
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)
-      yield put({type: SIGN_UP.FAILURE, payload: error.response.data.message})
+      let payload = {}
+      if (error.response) payload = error.response.data.message
+      yield put({type: SIGN_UP.FAILURE, payload})
     }
   }
 }
 
 function * validateEmailFlow () {
   while (true) {
-    let {payload} = yield take(SAVE_CREDENTIALS.REQUEST)
+    let {payload} = yield take(VALIDATE_EMAIL.REQUEST)
     try {
-      // yield call(Api.validateEmail, payload.email)
-      yield put({type: SAVE_CREDENTIALS.SUCCESS, payload})
+      yield call(Api.validateEmail, payload.email)
+      yield put({type: VALIDATE_EMAIL.SUCCESS, payload})
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)
-      yield put({type: SAVE_CREDENTIALS.FAILURE, payload: error.response.data.message})
+      yield put({type: VALIDATE_EMAIL.FAILURE, payload: error.response.data.email})
     }
   }
 }

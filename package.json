@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
     "test": "jest",
+    "release-android": "cd android && ./gradlew assembleRelease",
     "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i"
   },
   "dependencies": {
@@ -28,6 +29,7 @@
     "react-native-loading-spinner-overlay": "^0.5.2",
     "react-native-maps": "^0.21.0",
     "react-native-modal": "^6.5.0",
+    "react-native-modal-datetime-picker": "^6.0.0",
     "react-native-phone-call": "^1.0.9",
     "react-native-sensitive-info": "git+https://github.com/mCodex/react-native-sensitive-info.git#keystore",
     "react-native-splash-screen": "^3.1.1",

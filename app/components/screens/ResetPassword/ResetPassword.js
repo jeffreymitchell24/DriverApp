@@ -23,14 +23,19 @@ class ResetPassword extends PureComponent {
     // navigation: PropTypes.object,
     isRequestPending: PropTypes.bool,
     isResetLinkSent: PropTypes.bool,
+    onDiscardResetError: PropTypes.func,
     onResetPasword: PropTypes.func
   }
   componentDidUpdate (prevProps) {
-    if (this.props.isResetLinkSent && !prevProps.isResetLinkSent) {
+    if (this.props.isResetLinkSent && !prevProps.isResetLinkSent && !this.props.error) {
       setTimeout(() => {
         Alert.alert('', 'Reset password link has been sent')
       }, 1)
     }
+  }
+
+  componentWillUnmount () {
+    this.props.onDiscardResetError()
   }
   onSubmit = (values) => {
     this.props.onResetPasword(values.email)

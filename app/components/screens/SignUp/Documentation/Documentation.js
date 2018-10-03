@@ -174,6 +174,8 @@ class Documentation extends Component {
     this.setState({showAppsModal: true})
   }
   onDisapprove = () => {
+    this.props.onUpdatedRideshareApps({main: [], other: []})
+    this.modalRenderKey += 1
     this.setState({ridesharingApproved: false})
   }
 

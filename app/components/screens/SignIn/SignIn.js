@@ -1,14 +1,14 @@
-import React, {PureComponent} from 'react'
-import { View, Text, ScrollView, Keyboard } from 'react-native'
+import React, {Component} from 'react'
+import { View, Text, ScrollView, Keyboard, Alert } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
 import { TextInputView } from 'components/blocks'
-import { Button, NavButton } from 'components/ui'
+import { Button } from 'components/ui'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import isEmpty from 'lodash/isEmpty'
-import {ResetPassword, Account, RegisterReview, Intro, Home} from 'navigation/routeNames'
+import {ResetPassword, Account, RegisterReview, PersonalInfo, Home} from 'navigation/routeNames'
 import { colors } from 'theme'
 // import PropTypes from 'prop-types'
 import styles from './styles'
@@ -22,13 +22,15 @@ const validationSchema = Yup.object().shape({
   [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.')
 })
 
-class SignIn extends PureComponent {
+class SignIn extends Component {
   static propTypes = {
     error: PropTypes.string,
     isSigninPending: PropTypes.bool,
-    isUserAuthed: PropTypes.bool,
+    // isUserAuthed: PropTypes.bool,
     navigation: PropTypes.object,
+    prevRejected: PropTypes.number,
     user: PropTypes.object,
+    onSaveResubmitStatus: PropTypes.func,
     onSignIn: PropTypes.func
   }
   static navigationOptions = ({ navigation }) => {
@@ -39,12 +41,16 @@ class SignIn extends PureComponent {
   inputRefs = {}
 
   componentDidUpdate (prevProps) {
-    const {isUserAuthed, user} = this.props
-    if (isUserAuthed !== prevProps.isUserAuthed) {
+    const {user, prevRejected} = this.props
+    if (user && !prevProps.user) {
       if (user.status === 'approved') {
         this.props.navigation.navigate(Home)
       } else if (user.status === 'pending') {
         this.onResetTo(RegisterReview)
+      } else if (user.status === 'rejected') {
+        if (prevRejected !== user.id) Alert.alert('Account was rejected', 'Please sign in and re-submit your documents')
+        this.props.onSaveResubmitStatus(true)
+        this.props.navigation.navigate(PersonalInfo)
       }
     }
     // if (this.props.error && !prevProps.error) {
