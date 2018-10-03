@@ -1,6 +1,8 @@
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
+import { persistStore, persistCombineReducers } from 'redux-persist'
+import storage from 'redux-persist/lib/storage'
 import { composeWithDevTools } from 'redux-devtools-extension'
 
 export default (rootReducer, rootSaga) => {
@@ -8,6 +10,12 @@ export default (rootReducer, rootSaga) => {
     thunk
   ]
   const enhancers = []
+
+  const persistConfig = {
+    key: 'root',
+    storage,
+    whitelist: ['auth']
+  }
 
   // const sagaMonitor = __DEV__ ? console.tron.createSagaMonitor() : null
   const sagaMonitor = null
@@ -18,10 +26,18 @@ export default (rootReducer, rootSaga) => {
 
   enhancers.push(composeEnhancers(applyMiddleware(...middlewares)))
 
+  const persistedReducer = persistCombineReducers(persistConfig, rootReducer)
+
   const createAppropriateStore = createStore
-  const store = createAppropriateStore(rootReducer, compose(...enhancers))
+  const store = createAppropriateStore(persistedReducer, compose(...enhancers))
 
   sagaMiddleware.run(rootSaga)
 
-  return store
+  // store = createStore(persistedReducer, composeEnhancers(
+  //   applyMiddleware(thunk)
+  // ))
+  let persistor = persistStore(store)
+  // persistor.purge()
+
+  return { persistor, store }
 }

@@ -10,10 +10,18 @@ export const saveSignUpStepData = ({stepData, step}) => {
   }
 }
 
-export const SAVE_CREDENTIALS = createAsyncAction('SAVE_CREDENTIALS')
+export const VALIDATE_EMAIL = createAsyncAction('VALIDATE_EMAIL')
+export const validateEmail = ({email}) => {
+  return {
+    type: VALIDATE_EMAIL.REQUEST,
+    payload: {email}
+  }
+}
+
+export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const saveCredentials = (credentials) => {
   return {
-    type: SAVE_CREDENTIALS.REQUEST,
+    type: SAVE_CREDENTIALS,
     payload: credentials
   }
 }
@@ -53,7 +61,7 @@ export const selectLicense = (license) => {
 export const SIGN_UP = createAsyncAction('SIGN_UP')
 export const signUp = ({licences, apps, credentials, personalInfo}) => {
   let {email, password, confirmPassword} = credentials
-  let {fullname, street, zipcode, city, state, phone} = personalInfo
+  let {fullname, address, phone} = personalInfo
   let {main, other} = apps
   let appsString = [...main, ...other].join(',')
   let user = {
@@ -61,16 +69,21 @@ export const signUp = ({licences, apps, credentials, personalInfo}) => {
     password,
     'password_confirmation': confirmPassword,
     'full_name': fullname,
-    street,
-    city,
-    state,
+    address,
     phone,
-    'zip_code': zipcode,
     'ridesharing_approved': true,
     'ridesharing_apps': appsString
   }
   return {
     type: SIGN_UP.REQUEST,
     payload: { user, licences }
+  }
+}
+
+export const SAVE_RESUBMIT_STATUS = 'SAVE_RESUBMIT_STATUS'
+export const saveResubmitStatus = (isResubmitting) => {
+  return {
+    type: SAVE_RESUBMIT_STATUS,
+    payload: isResubmitting
   }
 }

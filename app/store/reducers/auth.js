@@ -3,34 +3,38 @@ import { createReducer } from '../../helpers/redux'
 import {
   SIGN_IN,
   SIGN_OUT,
-  RESET_PASSWORD
+  RESET_PASSWORD,
+  CHECK_STATUS,
+  SAVE_REJECTED_ID,
+  DISCARD_RESET_ERROR
 } from 'store/actions/auth'
 import {SIGN_UP} from 'store/actions/registration'
 
-let user = {
-  'id': 0,
-  'full_name': 'Kyle Freedman',
-  'email': 'kyle@freedman.com',
-  'admin': true,
-  'street': '100 West 33rd Street',
-  'city': 'New York',
-  'zip_code': '10001',
-  'state': 'NY',
-  'phone': '+1 212-695-4260',
-  'photo': 'string',
-  'status': 'rejected',
-  'ridesharing_approved': true,
-  'documents_uploaded': true,
-  'ridesharing_apps': 'uber, lyft',
-  'tlcLicense': {
-    'front': 'string',
-    'back': 'string'
-  },
-  'drivingLicense': {
-    'front': 'string',
-    'back': 'strin'
-  }
-}
+// let user = {
+//   'id': 0,
+//   'full_name': 'Kyle Freedman',
+//   'email': 'kyle@freedman.com',
+//   'admin': true,
+//   'address': '100 West 33rd Street, New York, NY, 10001',
+//   'street': '100 West 33rd Street',
+//   'city': 'New York',
+//   'zip_code': '10001',
+//   'state': 'NY',
+//   'phone': '+1 212-695-4260',
+//   'photo': 'string',
+//   'status': 'pending',
+//   'ridesharing_approved': true,
+//   'documents_uploaded': true,
+//   'ridesharing_apps': 'uber, lyft',
+//   'tlcLicense': {
+//     'front': 'string',
+//     'back': 'string'
+//   },
+//   'drivingLicense': {
+//     'front': 'string',
+//     'back': 'strin'
+//   }
+// }
 
 const initialState = {
   pending: false,
@@ -38,14 +42,19 @@ const initialState = {
   resetPasswordSent: false,
   resetError: null,
   resetPending: false,
-  user: user, // null,
-  token: null
+  isAuthed: false,
+  checkingUserStatus: false,
+  user: null,
+  token: null,
+  prevRejected: null
 }
 
 const handlers = {
   [SIGN_IN.REQUEST]: (state, { payload }) => {
     return {
       ...state,
+      user: null,
+      isAuthed: false,
       authError: null,
       pending: true
     }
@@ -56,6 +65,7 @@ const handlers = {
       ...state,
       user,
       token,
+      isAuthed: true,
       pending: false
     }
   },
@@ -66,17 +76,27 @@ const handlers = {
       pending: false
     }
   },
+  [SIGN_UP.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      isAuthed: false
+    }
+  },
   [SIGN_UP.SUCCESS]: (state, { payload }) => {
     const {user = null, token} = payload
     return {
       ...state,
       user,
       token,
+      isAuthed: true,
       pending: false
     }
   },
   [SIGN_OUT]: (state, { payload }) => {
-    return initialState
+    return {
+      ...initialState,
+      prevRejected: state.prevRejected
+    }
   },
   [RESET_PASSWORD.REQUEST]: (state, { payload }) => {
     return {
@@ -96,9 +116,44 @@ const handlers = {
   [RESET_PASSWORD.FAILURE]: (state, { payload }) => {
     return {
       ...state,
-      resetPasswordSent: true,
+      resetPasswordSent: false,
       resetError: payload,
       resetPending: false
+    }
+  },
+  [DISCARD_RESET_ERROR]: (state, { payload }) => {
+    return {
+      ...state,
+      resetError: null,
+      resetPasswordSent: false
+    }
+  },
+  [CHECK_STATUS.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      checkingUserStatus: true
+    }
+  },
+  [CHECK_STATUS.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      user: {
+        ...state.user,
+        status: payload.status
+      },
+      checkingUserStatus: false
+    }
+  },
+  [CHECK_STATUS.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      checkingUserStatus: false
+    }
+  },
+  [SAVE_REJECTED_ID]: (state, { payload }) => {
+    return {
+      ...state,
+      prevRejected: payload.id
     }
   }
 }

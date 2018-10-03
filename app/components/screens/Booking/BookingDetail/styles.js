@@ -2,7 +2,7 @@
 import {StyleSheet} from 'react-native'
 import { colors, metrics } from 'theme'
 
-export default StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flexGrow: 1,
     backgroundColor: colors.white,
@@ -56,5 +56,17 @@ export default StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     color: colors.gray200
   }
+})
 
+export const mapStyles = StyleSheet.create({
+  container: {
+    ...StyleSheet.absoluteFillObject,
+    height: 400,
+    width: 400,
+    justifyContent: 'flex-end',
+    alignItems: 'center'
+  },
+  map: {
+    ...StyleSheet.absoluteFillObject
+  }
 })

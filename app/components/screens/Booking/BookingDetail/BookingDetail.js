@@ -1,18 +1,32 @@
 import React, { Component } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
+import PropTypes from 'prop-types'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
+import { CarLocation, RideHelp, ReceiptSubmit } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
-import styles from './styles'
+import MapView from 'react-native-maps'
+import {styles, mapStyles} from './styles'
 
-export default class BookingDetail extends Component {
+class BookingDetail extends Component {
   constructor (props) {
     super(props)
     this.state = {
     }
   }
 
+  onSubmitReceiptPress = () => {
+    this.props.navigation.navigate(ReceiptSubmit)
+  }
+
   onUnlockPress = () => {
 
+  }
+
+  onHelpPress = () => {
+    this.props.navigation.navigate(RideHelp)
+  }
+  onMapPress = () => {
+    this.props.navigation.navigate(CarLocation)
   }
 
   render () {
@@ -92,10 +106,30 @@ export default class BookingDetail extends Component {
           <Section>
             <SectionHeader title='PICKUP' />
             <SectionContent style={{flexDirection: 'column'}}>
-              <View style={styles.map} />
+              <View style={styles.map}>
+                <MapView
+                  initialRegion={{
+                    latitude: 37.782189,
+                    longitude: -122.451182,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001
+                  }}
+                  liteMode
+                  showsScale={false}
+                  style={mapStyles.map}
+                  zoomEnabled={false}
+                >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: 37.782189,
+                      longitude: -122.451182
+                    }}
+                  />
+                </MapView>
+              </View>
               <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
               <Text style={styles.address}>34th Street 25</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.onMapPress}>
                 <Text style={styles.mapButtonText}>Open in Maps</Text>
               </TouchableOpacity>
             </SectionContent>
@@ -103,23 +137,43 @@ export default class BookingDetail extends Component {
           <Section>
             <SectionHeader title='RETURN' />
             <SectionContent style={{flexDirection: 'column'}}>
-              <View style={styles.map} />
+              <View style={styles.map}>
+                <MapView
+                  initialRegion={{
+                    latitude: 37.782189,
+                    longitude: -122.451182,
+                    latitudeDelta: 0.001,
+                    longitudeDelta: 0.001
+                  }}
+                  liteMode
+                  showsScale={false}
+                  style={mapStyles.map}
+                  zoomEnabled={false}
+                >
+                  <MapView.Marker
+                    coordinate={{
+                      latitude: 37.782189,
+                      longitude: -122.451182
+                    }}
+                  />
+                </MapView>
+              </View>
               <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
               <Text style={styles.address}>34th Street 25</Text>
-              <TouchableOpacity>
+              <TouchableOpacity onPress={this.onMapPress}>
                 <Text style={styles.mapButtonText}>Open in Maps</Text>
               </TouchableOpacity>
             </SectionContent>
           </Section>
           <Section>
             <SectionHeader title='DO YOU NEED HELP?' />
-            <TouchableOpacity style={styles.linkButton}>
+            <TouchableOpacity style={styles.linkButton} onPress={this.onHelpPress}>
               <Text style={styles.linkButtonText}>Open help center</Text>
             </TouchableOpacity>
           </Section>
           <Section style={{borderBottomWidth: 0}}>
             <SectionHeader title='RECEIPT' />
-            <TouchableOpacity style={styles.linkButton}>
+            <TouchableOpacity style={styles.linkButton} onPress={this.onSubmitReceiptPress}>
               <Text style={styles.linkButtonText}>Submit expense receipt</Text>
             </TouchableOpacity>
           </Section>
@@ -135,3 +189,9 @@ export default class BookingDetail extends Component {
     )
   }
 }
+
+BookingDetail.propTypes = {
+  navigation: PropTypes.object
+}
+
+export default BookingDetail

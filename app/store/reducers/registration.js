@@ -7,10 +7,17 @@ import {
   UPDATE_LICENSE,
   SELECT_LICENSE,
   UPDATE_RIDESHARE_APPS,
-  SIGN_UP
+  SIGN_UP,
+  VALIDATE_EMAIL,
+  SAVE_RESUBMIT_STATUS
 } from 'store/actions/registration'
 
 const initialState = {
+  emailValidation: {
+    isEmailValidating: false,
+    isEmailValid: false,
+    emailError: null
+  },
   credentials: {},
   profileInfo: {},
   documents: {
@@ -28,7 +35,8 @@ const initialState = {
     type: null
   },
   pending: false,
-  error: null
+  error: null,
+  isResubmitting: false
 }
 
 const handlers = {
@@ -42,7 +50,37 @@ const handlers = {
       }
     }
   },
-  [SAVE_CREDENTIALS.SUCCESS]: (state, { payload }) => {
+  [VALIDATE_EMAIL.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      emailValidation: {
+        isEmailValid: false,
+        isEmailValidating: true,
+        emailError: null
+      }
+    }
+  },
+  [VALIDATE_EMAIL.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      emailValidation: {
+        isEmailValidating: false,
+        isEmailValid: true,
+        emailError: null
+      }
+    }
+  },
+  [VALIDATE_EMAIL.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      emailValidation: {
+        isEmailValid: false,
+        isEmailValidating: false,
+        emailError: payload
+      }
+    }
+  },
+  [SAVE_CREDENTIALS]: (state, { payload }) => {
     return {
       ...state,
       credentials: {
@@ -96,16 +134,19 @@ const handlers = {
     }
   },
   [SIGN_UP.SUCCESS]: (state, { payload }) => {
-    return {
-      ...state,
-      pending: false
-    }
+    return initialState
   },
   [SIGN_UP.FAILURE]: (state, { payload }) => {
     return {
       ...state,
       error: payload,
       pending: false
+    }
+  },
+  [SAVE_RESUBMIT_STATUS]: (state, { payload }) => {
+    return {
+      ...state,
+      isResubmitting: payload
     }
   }
 }

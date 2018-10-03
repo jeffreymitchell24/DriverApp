@@ -1,15 +1,15 @@
-import React, { PureComponent } from 'react'
+import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {
   View,
   Text,
   ScrollView,
-  Keyboard
+  Keyboard,
+  Alert
 } from 'react-native'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
 import {PersonalInfo, SignIn, TermsConditions, Intro} from 'navigation/routeNames'
-// import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import { TextInputView } from 'components/blocks'
 import { Button, NavButton } from 'components/ui'
 import styles from './styles'
@@ -28,26 +28,37 @@ const validationSchema = Yup.object().shape({
   [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.'),
   [formIputs.confirmPassword]: Yup.string().oneOf([Yup.ref('password'), null], "Passwords don't match").required('This field is required.')
 })
-class Account extends PureComponent {
+class Account extends Component {
   inputRefs = {}
+  values = {}
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(Intro)} />
     }
   }
+
+  componentDidUpdate (prevProps) {
+    const {isEmailValidating, emailError} = this.props.emailValidation
+    if (!isEmailValidating && prevProps.emailValidation.isEmailValidating) {
+      if (emailError) Alert.alert('Email already exists', 'If you already registered, try logging in with your email and password.')
+      else {
+        this.props.onSaveCredentials(this.values)
+        this.props.navigation.navigate(PersonalInfo)
+      }
+    }
+  }
   onSubmit = (values, {setErrors}) => {
-    // console.log('onSubmit', values)
     const {email, password, confirmPassword} = values
     let stepData = {
       password,
       confirmPassword,
       email: email.trim()
     }
-    // this.props.onSignUp({email, password, 'password_confirmation': confirmPassword})
-    this.props.onSaveCredentials(stepData)
+    this.values = stepData
+    this.props.onValidateEmail({email: email.trim()})
     Keyboard.dismiss()
-    this.props.navigation.navigate(PersonalInfo)
   }
+
   handleTermsPress = () => {
     this.props.navigation.navigate(TermsConditions)
   }
@@ -153,6 +164,7 @@ class Account extends PureComponent {
   }
 
   render () {
+    const {isEmailValidating} = this.props.emailValidation
     return (
       <View style={{flex: 1}}>
         <Formik
@@ -163,16 +175,17 @@ class Account extends PureComponent {
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
-        <Spinner color={colors.red} visible={this.props.isEmailValidating} />
+        <Spinner color={colors.red} visible={isEmailValidating} />
       </View>
     )
   }
 }
 
 Account.propTypes = {
-  isEmailValidating: PropTypes.bool,
+  emailValidation: PropTypes.object,
   navigation: PropTypes.object,
-  onSaveCredentials: PropTypes.func
+  onSaveCredentials: PropTypes.func,
+  onValidateEmail: PropTypes.func
   // onSignUp: PropTypes.func
 }
 

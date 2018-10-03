@@ -1,53 +1,109 @@
-import React, { Component } from 'react'
+import React, { Component, PureComponent } from 'react'
 import {
   View,
   ScrollView,
   Text,
   Keyboard,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native'
-import find from 'lodash/find'
 import PropTypes from 'prop-types'
+import isEmpty from 'lodash/isEmpty'
+import { Formik } from 'formik'
 import { GoogleAutoComplete } from 'react-native-google-autocomplete'
-import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
+// import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'
 import {Documentation} from 'navigation/routeNames'
 import {GOOGLE_API_KEY} from 'config/apiKeys'
+import {capitalize} from 'helpers/name'
+import {formatPhoneNumber} from 'helpers/phone'
 import {styles, googleStyles} from './styles'
-import { colors } from 'theme'
+// import * as Yup from 'yup'
+
 const uuidv4 = require('uuid/v4')
+
+const customValidate = (values) => {
+  const {fullname, address, phone} = values
+  let errors = {}
+  if (!fullname) errors.fullname = 'This field is required.'
+  if (!address) errors.address = 'This field is required.'
+  if (!phone) errors.phone = 'This field is required.'
+  else if (phone.length < 15) errors.phone = 'Incorrect phone number, e.g. +1 212 1234-567'
+  return errors
+}
+
+// const validationSchema = Yup.object().shape({
+//   fullname: Yup.string().trim().required('This field is required.'),
+//   address: Yup.string().required('This field is required.'),
+//   phone: Yup.string().min(15, 'Incorrect phone number, e.g. +1 212 1234-567').required('This field is required.')
+// })
+class LocationItem extends PureComponent {
+  _handlePress = async () => {
+    const res = await this.props.fetchDetails(this.props.place_id)
+    this.props.onPress(res)
+  }
+
+  render () {
+    return (
+      <TouchableOpacity style={googleStyles.locationItem} onPress={this._handlePress}>
+        <Text style={googleStyles.description}>{this.props.description}</Text>
+      </TouchableOpacity>
+    )
+  }
+}
+
+LocationItem.propTypes = {
+  description: PropTypes.string,
+  fetchDetails: PropTypes.func,
+  place_id: PropTypes.string,
+  onPress: PropTypes.func
+}
 
 class PersonalInfo extends Component {
   state = {
+    showAddressResults: true,
     fullname: '', // 'Kot M',
     address: '', // '19011',
     phone: '' // '12345676789'
   }
+  addressSelected = false
+  showAddressResults = true
   inputRefs = {}
   componentDidMount () {
     this.placesAutocompleteToken = uuidv4()
     console.log('token', this.placesAutocompleteToken)
   }
 
-  onSubmit = () => {
+  onSubmit = (values) => {
+    const {fullname, address, phone} = values
     Keyboard.dismiss()
     const {onSaveProfileInfo} = this.props
     let profile = {
-      fullname: 'John Doe',
-      street: 'Park Avenue',
-      zipcode: '',
-      city: 'New York',
-      state: 'New York',
-      phone: '411 555 1234'
+      fullname,
+      address,
+      phone
     }
     onSaveProfileInfo(profile)
     this.props.navigation.navigate(Documentation)
   }
 
+  onEditPhone = (phone) => {
+    let formattedPhone = formatPhoneNumber(phone)
+    console.log('formattedPhone', formattedPhone)
+    this.setState({phone: formattedPhone})
+  }
+
   onAddressChange = (address) => {
-    console.log(address)
-    this.setState({address})
+    this.setState({address, showAddressResults: true})
+  }
+
+  onLocationPress = (address) => {
+    console.log('address', address)
+    this.addressSelected = true
+    this.showAddressResults = false
+    this.formik.setFieldValue('address', address.formatted_address)
+    // this.setState({address: address.formatted_address, showAddressResults: false})
   }
 
   onCityPress = () => {
@@ -55,179 +111,157 @@ class PersonalInfo extends Component {
   }
 
   onEditField = (value, type) => {
-    this.setState({[type]: value})
+    this.setState({[type]: type === 'fullname' ? capitalize(value) : value})
   }
 
-  componentWillMount () {
-    console.log('inputRefs', this.inputRefs)
+  onFocusPhone = () => {
+    if (this.state.phone.length === 0) this.setState({phone: '+1 '})
   }
 
-  renderSearch = () => {
-    // return (
-    //   <GoogleAutoComplete
-    //     apiKey={GOOGLE_API_KEY}
-    //     components='country:us'
-    //     debounce={700}
-    //     queryTypes='(regions)'
-    //   >
-    //     {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
-    //       console.log('locationResults', locationResults)
-    //       return (
-    //         <TextInputView
-    //           // editable={false}
-    //           label='STATE'
-    //           name='state'
-    //           placeholder=''
-    //           value={this.state.state}
-    //           onChangeText={(value) => {
-    //             this.onEditField(value, 'state')
-    //             handleTextChange(value)
-    //           }}
-    //         />
-    //       )
-    //     }}
-    //   </GoogleAutoComplete>
-    // )
+  validateForm = (values, props) => {
+    let errors = {}
+    // console.log('addressSelected', this.addressSelected)
+    if (!this.addressSelected) {
+      errors.address = 'Select address from location list'
+    }
+    let fieldErrors = customValidate(values)
+    errors = {...errors, ...fieldErrors}
+
+    return errors
+  }
+
+  renderSearchResults = (locationResults, fetchDetails) => {
     return (
-      <View style={styles.inputContainer}>
-        <Text style={styles.label}>CURRENT ADDRESS</Text>
-        <GooglePlacesAutocomplete
-          // GooglePlacesSearchQuery={{
-          //   // available options for GooglePlacesSearch API : https://developers.google.com/places/web-service/search
-          //   rankby: 'distance',
-          //   types: 'food'
-          // }}
-          // GoogleReverseGeocodingQuery={{
-          //   // available options for GoogleReverseGeocoding API : https://developers.google.com/maps/documentation/geocoding/intro
-          // }}
-          autoFocus={false}
-          debounce={600} // debounce the requests in ms. Set to 0 to remove debounce. By default 0ms.
-          enablePoweredByContainer={false}
-          fetchDetails
-          getDefaultValue={() => ''}
-          listViewDisplayed='auto' // true/false/undefined
-          minLength={2} // minimum length of text to search
-          placeholder='e.g. 816 Alabama St, San Francisco, CA, USA'
-          query={{
-            // available options: https://developers.google.com/places/web-service/autocomplete
-            key: GOOGLE_API_KEY,
-            language: 'en', // language of the results
-            types: 'address', // default: 'geocode',
-            'session_token': this.placesAutocompleteToken,
-            sesstionToken: this.placesAutocompleteToken,
-            // location: '40.730610, -73.935242',
-            // radius: '30000', // 30 km
-            components: 'country:us'
-            // strictbounds: true
-          }}
-          renderDescription={row => row.description} // custom description render
-          returnKeyType={'search'} // Can be left out for default return key https://facebook.github.io/react-native/docs/textinput.html#returnkeytype
-          styles={googleStyles}
-          text={this.state.address}
-          textInputProps={{
-            placeholderTextColor: colors.grey50,
-            onChangeText: this.onAddressChange,
-            ref: (input) => { this.inputRefs['address'] = input }
-          }}
-          onPress={(data, details = null) => { // 'details' is provided when fetchDetails = true
-            console.log(data, details)
-          }}
-        />
+      <View contentContainerStyle={googleStyles.contentContainerStyle} style={googleStyles.container}>
+        {locationResults.map((el, i) => (
+          <LocationItem
+            {...el}
+            fetchDetails={fetchDetails}
+            key={String(i)}
+            onPress={this.onLocationPress}
+          />
+        ))}
       </View>
     )
   }
 
+  renderSearch = ({values, errors, touched, setFieldTouched, setValues, setFieldValue}) => {
+    let {address} = values
+    return (
+      <GoogleAutoComplete
+        apiKey={GOOGLE_API_KEY}
+        components='country:us'
+        debounce={500}
+        queryTypes='address'
+      >
+        {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
+          // console.log('locationResults', locationResults)
+          return (
+            <View style={{marginBottom: 16}}>
+              <TextInputView
+                blurOnSubmit={false}
+                containerStyle={{marginBottom: 0}}
+                error={touched.address && errors.address}
+                inputRef={(input) => { this.inputRefs['address'] = input }}
+                label='CURRENT ADDRESS'
+                name='address'
+                placeholder=''
+                returnKeyType={'next'}
+                value={address}
+                onBlur={() => setFieldTouched('address')}
+                onChangeText={(value) => {
+                  this.addressSelected = false
+                  this.showAddressResults = true
+                  setFieldValue('address', value)
+                  handleTextChange(value)
+                }}
+                onSubmitEditing={() => this.inputRefs['phone'].focus()}
+              />
+              {
+                this.showAddressResults &&
+                locationResults.length > 0 &&
+                this.renderSearchResults(locationResults, fetchDetails)
+              }
+            </View>
+          )
+        }}
+      </GoogleAutoComplete>
+    )
+  }
+
+  renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
+    let {fullname, phone} = values
+    let buttonActive = isEmpty(errors) && this.addressSelected
+    return (
+      <ScrollView
+        contentContainerStyle={styles.formContainer}
+        keyboardShouldPersistTaps='always'
+        style={{}}
+      >
+        <View style={styles.form}>
+          <TextInputView
+            blurOnSubmit={false}
+            error={touched.fullname && errors.fullname}
+            inputRef={(input) => { this.inputRefs['fullname'] = input }}
+            label='FULL NAME'
+            name='fullname'
+            placeholder=''
+            returnKeyType={'next'}
+            value={fullname}
+            onBlur={() => setFieldTouched('fullname')}
+            onChangeText={(value) => {
+              setFieldValue('fullname', capitalize(value))
+            }}
+            onSubmitEditing={() => this.inputRefs['address'].focus()}
+          />
+          {this.renderSearch({values, errors, touched, setFieldTouched, setFieldValue, setValues})}
+          <TextInputView
+            error={touched.phone && errors.phone}
+            inputRef={(input) => { this.inputRefs['phone'] = input }}
+            keyboardType='phone-pad'
+            label='PHONE NUMBER'
+            maxLength={15}
+            name='phone'
+            placeholder='e.g. +1 212 1234-567'
+            returnKeyType='done'
+            value={phone}
+            onBlur={() => setFieldTouched('phone')}
+            onChangeText={(value) => {
+              // let formattedPhone = formatPhoneNumber(value)
+              // console.log('formattedPhone', formattedPhone)
+              // setFieldValue('phone', formattedPhone)
+            }}
+            onFocus={() => {
+              if (phone.length === 0) setFieldValue('phone', '+1 ', false)
+            }}
+          />
+        </View>
+        <View style={styles.footer}>
+          <Button
+            containerStyle={styles.button}
+            disabled={!buttonActive}
+            title='NEXT'
+            onPress={handleSubmit}
+          />
+        </View>
+      </ScrollView>
+    )
+  }
+
   render () {
-    let { fullname, phone, address } = this.state
-    let buttonActive = fullname.length > 0 && address.length > 0 && phone.length > 0
+    // let { fullname, phone, address } = this.state
     return (
       <View style={styles.container}>
-        <ScrollView
-          contentContainerStyle={styles.formContainer}
-          keyboardShouldPersistTaps='always'
-          style={{}}
-        >
-          <View style={styles.form}>
-            <TextInputView
-              blurOnSubmit={false}
-              inputRef={(input) => { this.inputRefs['fullname'] = input }}
-              label='FULL NAME'
-              name='fullname'
-              placeholder=''
-              returnKeyType={'next'}
-              value={fullname}
-              onChangeText={(value) => this.onEditField(value, 'fullname')}
-              onSubmitEditing={() => this.inputRefs['address'].focus()}
-            />
-            {/* {this.renderSearch()} */}
-            <TextInputView
-              blurOnSubmit={false}
-              inputRef={(input) => { this.inputRefs['address'] = input }}
-              label='CURRENT ADDRESS'
-              name='address'
-              placeholder=''
-              returnKeyType={'next'}
-              value={address}
-              onChangeText={(value) => this.onEditField(value, 'address')}
-              onSubmitEditing={() => this.inputRefs['phone'].focus()}
-            />
-            {/* <TextInputView
-              blurOnSubmit={false}
-              inputRef={(input) => { this.inputRefs['zipcode'] = input }}
-              keyboardType='numeric'
-              label='ZIP CODE'
-              name='zipcode'
-              placeholder=''
-              returnKeyType={'next'}
-              value={zipcode}
-              onChangeText={(value) => this.onEditField(value, 'zipcode')}
-              onSubmitEditing={() => this.inputRefs['city'].focus()}
-            /> */}
-            {/* <TouchableWithoutFeedback onPress={this.onCityPress}> */}
-            {/* <View pointerEvents='box-only'> */}
-            {/* <TextInputView
-              blurOnSubmit={false}
-              editable// ={false}
-              inputRef={(input) => { this.inputRefs['city'] = input }}
-              label='CITY'
-              name='city'
-              placeholder=''
-              returnKeyType={'next'}
-              value='New York'
-              onSubmitEditing={() => this.inputRefs['state'].focus()}
-            />
-            <TextInputView
-              blurOnSubmit={false}
-              editable// ={false}
-              inputRef={(input) => { this.inputRefs['state'] = input }}
-              label='STATE'
-              name='state'
-              placeholder=''
-              returnKeyType={'next'}
-              value='New York'
-              onSubmitEditing={() => this.inputRefs['phone'].focus()}
-            /> */}
-            {/* </View> */}
-            {/* </TouchableWithoutFeedback> */}
-            <TextInputView
-              inputRef={(input) => { this.inputRefs['phone'] = input }}
-              keyboardType='phone-pad'
-              label='PHONE NUMBER'
-              name='phone'
-              placeholder='e.g. +1 212 1234-567'
-              value={phone}
-              onChangeText={(value) => this.onEditField(value, 'phone')}
-            />
-          </View>
-          <View style={styles.footer}>
-            <Button
-              containerStyle={styles.button}
-              disabled={!buttonActive}
-              title='NEXT'
-              onPress={this.onSubmit}
-            />
-          </View>
-        </ScrollView>
+        <Formik
+          initialValues={{fullname: '', address: '', phone: '', addressSelected: false}}
+          ref={node => (this.formik = node)}
+          render={this.renderForm}
+          validate={this.validateForm}
+          validateOnBlur
+          // validateOnChange
+          // validationSchema={validationSchema}
+          onSubmit={this.onSubmit}
+        />
       </View>
     )
   }

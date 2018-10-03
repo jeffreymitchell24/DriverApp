@@ -6,12 +6,15 @@ import { colors } from 'theme'
 import styles from './styles'
 
 const PicturePreviewView = ({photoUri, onCancelPress, onConfirmPress}) => {
+  const _onConfirmPress = () => {
+    onConfirmPress(photoUri)
+  }
   return (
     <ImageBackground source={{uri: photoUri}} style={styles.preview}>
       <TouchableOpacity style={styles.cancel} onPress={onCancelPress}>
         <Icon color={colors.white} name='x' size={30} />
       </TouchableOpacity>
-      <TouchableOpacity style={styles.confirm} onPress={onConfirmPress} >
+      <TouchableOpacity style={styles.confirm} onPress={_onConfirmPress} >
         <Icon color={colors.white} name='check' size={30} />
       </TouchableOpacity>
     </ImageBackground>

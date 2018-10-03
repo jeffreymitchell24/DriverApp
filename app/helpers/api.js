@@ -8,10 +8,11 @@ const AWS_SECRET_ACCESS_KEY = 'OKQhN+FvPVpoW3AKY1XGy5l996cbDY8wevG/Ff51'
 const AWS_DEFAULT_REGION = 'us-west-1'
 const AWS_BUCKET = 'carflow'
 
-export const authorize = async (credentials) => {
-  let response = await axios.post(`${URL}/api/login`, credentials)
+export const authorize = async (email, password) => {
+  console.log('credentials', {email, password})
+  let response = await axios.post(`${URL}/api/login`, {email, password})
   console.log('authorize response', response)
-  return response
+  return response.data
 }
 
 export const resetPassword = async (email) => {
@@ -20,14 +21,39 @@ export const resetPassword = async (email) => {
   return response
 }
 
-export const register = async (user) => {
-  let response = await axios.post(`${URL}/api/register/create`, user)
+export const resubmit = async (userData, token) => {
+  console.log('user', userData)
+  console.log('token', token)
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/users/resubmit`, userData, config)
   console.log('register response', response)
   return response
 }
 
-export const validateEmail = async (email) => {
+export const register = async (user) => {
+  console.log('user', user)
+  let config = {
+  }
+  let response = await axios.post(`${URL}/api/register/create`, user, config)
+  console.log('register response', response)
+  return response
+}
 
+export const checkStatus = async (token) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.get(`${URL}/api/users/status`, config)
+  console.log('checkStatus response', response)
+  return response.data
+}
+
+export const validateEmail = async (email) => {
+  let response = await axios.post(`${URL}/api/validate-email`, {email})
+  console.log('validateEmail response', response)
+  return response.data
 }
 
 const options = {
@@ -40,11 +66,15 @@ const options = {
 }
 
 export const uploadImageToAws = async (imageFile) => {
-  let response = await RNS3.put(imageFile, options)
-
-  console.log(response)
-  if (response.status !== 201) throw new Error('Failed to upload image to S3')
-  return response.body.postResponse.location
+  try {
+    let response = await RNS3.put(imageFile, options)
+    console.log(response)
+    if (response.status !== 201) throw new Error('Failed to upload image to S3')
+    return response.body.postResponse.location
+  } catch (error) {
+    console.log('Upload error', error)
+    throw error
+  }
   /**
    * {
    *   postResponse: {

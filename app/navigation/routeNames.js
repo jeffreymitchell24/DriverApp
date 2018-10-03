@@ -22,14 +22,28 @@ export const TermsConditions = 'TermsConditions'
 export const Home = 'Home'
 export const Profile = 'Profile'
 
-// Booking Detail
-export const BookingDetail = 'BookingDetail'
-
 // New Booking
 export const NewBooking = 'NewBooking'
 export const BookingConfirmed = 'BookingConfirmed'
 export const NewBookingDetails = 'NewBookingDetails'
 export const AvailableBookings = 'AvailableBookings'
+
+// Booking Detail
+export const BookingDetail = 'BookingDetail'
+export const CarLocation = 'CarLocation'
+export const ReceiptSubmit = 'ReceiptSubmit'
+export const ReceiptCamera = 'ReceiptCamera'
+export const ReceiptGallery = 'ReceiptGallery'
+export const ReceiptPreview = 'ReceiptPreview'
+
+// Help Center
+export const RideHelp = 'RideHelp'
+export const HelpCenter = 'HelpCenter'
+export const RideMalfunction = 'RideMalfunction'
+export const RideDamaged = 'RideDamaged'
+export const RideAccident = 'RideAccident'
+export const RideLateDescription = 'RideLateDescription'
+export const RideCancel = 'RideCancel'
 
 // Profile
 export const ProfileMain = 'ProfileMain'
