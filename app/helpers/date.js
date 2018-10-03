@@ -26,3 +26,19 @@ export const isBetweenLimits = (start, end, time) => {
   console.log('isBetween', isBetween)
   return isBetween
 }
+
+export const getCurrentDateAndTime = () => {
+  let currentDate = moment()
+  let time = currentDate.format('HH:mm')
+  let date = currentDate.format('MM/DD/YYYY')
+  return {time, date}
+}
+
+export const formatDate = date => {
+  let currentDate = moment(date)
+  return currentDate.format('MM/DD/YYYY')
+}
+export const formatTime = (date) => {
+  let currentDate = moment(date)
+  return currentDate.format('HH:mm')
+}

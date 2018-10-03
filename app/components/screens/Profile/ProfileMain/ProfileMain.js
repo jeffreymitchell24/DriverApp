@@ -1,9 +1,10 @@
 import React, { Component } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native'
+import { StackActions, NavigationActions } from 'react-navigation'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
 import {icons} from 'images'
-import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera, Home} from 'navigation/routeNames'
+import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera, Home, Auth} from 'navigation/routeNames'
 import { Section, SectionHeader, SectionContent, NavButton } from 'components/ui'
 import styles from './styles'
 
@@ -29,8 +30,18 @@ class ProfileMain extends Component {
     }
   }
 
-  onLogOut = () => {
+  onResetTo = (route) => {
+    const resetAction = StackActions.reset({
+      key: null,
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: route })]
+    })
+    this.props.navigation.dispatch(resetAction)
+  }
 
+  onLogOut = () => {
+    this.props.onSignOut()
+    this.onResetTo(Auth)
   }
 
   onPhotoPress = () => {
@@ -42,22 +53,22 @@ class ProfileMain extends Component {
   }
 
   render () {
-    let userImage = null
-    let userName = 'Your Name'
+    const {full_name: fullname, photo} = this.props.user
+
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <View style={styles.profileInfo}>
           <TouchableOpacity style={styles.photoContainer} onPress={this.onPhotoPress}>
             {
-              userImage
+              photo
                 ? (
-                  <Image source={{uri: userImage}} style={styles.profileImage} />
+                  <Image source={{uri: photo}} style={styles.profileImage} />
                 ) : (
                   <Image source={icons['camera']} style={styles.iconCamera} />
                 )
             }
           </TouchableOpacity>
-          <Text style={styles.userName}>{userName}</Text>
+          <Text style={styles.userName}>{fullname}</Text>
         </View>
         <Section>
           <SectionHeader title='PROFILE' />
@@ -94,7 +105,9 @@ class ProfileMain extends Component {
 }
 
 ProfileMain.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  user: PropTypes.object,
+  onSignOut: PropTypes.func
 }
 
 export default ProfileMain
