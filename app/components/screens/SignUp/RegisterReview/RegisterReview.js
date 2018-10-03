@@ -1,14 +1,14 @@
 import React, {Component} from 'react'
-import { View, Text, Image, BackHandler, AppState } from 'react-native'
+import { View, Text, Image, BackHandler, AppState, Alert } from 'react-native'
 import SplashScreen from 'react-native-splash-screen'
 import { AndroidBackHandler } from 'react-navigation-backhandler'
+import { StackActions, NavigationActions } from 'react-navigation'
 import PropTypes from 'prop-types'
-import {Home} from 'navigation/routeNames'
+import {Home, Intro} from 'navigation/routeNames'
 import {backgrounds} from 'images'
 import styles from './styles'
 
 class RegisterReview extends Component {
-  backPressCount = 0
   state = {
     appState: AppState.currentState
   }
@@ -23,6 +23,11 @@ class RegisterReview extends Component {
   componentDidUpdate (prevProps) {
     if (prevProps.user && prevProps.user.status !== 'approved' && this.props.user.status === 'approved') {
       this.props.navigation.navigate(Home)
+    } else if (prevProps.user && prevProps.user.status !== 'rejected' && this.props.user.status === 'rejected') {
+      Alert.alert('Account was rejected', 'Please sign in and re-submit your documents')
+      this.props.onSaveRejectedId(this.props.user.id)
+      this.props.onSignOut()
+      this.onResetTo(Intro)
     }
   }
 
@@ -30,9 +35,17 @@ class RegisterReview extends Component {
     AppState.removeEventListener('change', this.onAppStateChange)
   }
 
+  onResetTo = (route) => {
+    const resetAction = StackActions.reset({
+      index: 0,
+      actions: [NavigationActions.navigate({ routeName: route })]
+    })
+    this.props.navigation.dispatch(resetAction)
+  }
+
   checkUserStatus = () => {
     const {onCheckStatus, user} = this.props
-    onCheckStatus(user.id)
+    user && onCheckStatus(user.id)
   }
 
   onAppStateChange = (nextAppState) => {
@@ -43,8 +56,7 @@ class RegisterReview extends Component {
   }
 
   onBackButtonPressAndroid = () => {
-    if (this.backPressCount === 1) BackHandler.exitApp()
-    this.backPressCount += 1
+    BackHandler.exitApp()
     return true
   }
 
@@ -67,7 +79,9 @@ class RegisterReview extends Component {
 RegisterReview.propTypes = {
   navigation: PropTypes.object,
   user: PropTypes.object,
-  onCheckStatus: PropTypes.func
+  onCheckStatus: PropTypes.func,
+  onSaveRejectedId: PropTypes.func,
+  onSignOut: PropTypes.func
 }
 
 export default RegisterReview

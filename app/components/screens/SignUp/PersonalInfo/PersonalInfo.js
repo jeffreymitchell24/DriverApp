@@ -90,6 +90,7 @@ class PersonalInfo extends Component {
 
   onEditPhone = (phone) => {
     let formattedPhone = formatPhoneNumber(phone)
+    console.log('formattedPhone', formattedPhone)
     this.setState({phone: formattedPhone})
   }
 
@@ -226,9 +227,9 @@ class PersonalInfo extends Component {
             value={phone}
             onBlur={() => setFieldTouched('phone')}
             onChangeText={(value) => {
-              let formattedPhone = formatPhoneNumber(value)
-              console.log('formattedPhone', formattedPhone)
-              setFieldValue('phone', formattedPhone)
+              // let formattedPhone = formatPhoneNumber(value)
+              // console.log('formattedPhone', formattedPhone)
+              // setFieldValue('phone', formattedPhone)
             }}
             onFocus={() => {
               if (phone.length === 0) setFieldValue('phone', '+1 ', false)

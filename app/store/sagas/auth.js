@@ -1,4 +1,4 @@
-import { take, put, call, fork, cancel, cancelled } from 'redux-saga/effects'
+import { take, put, call, fork, cancel, cancelled, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import * as Api from 'helpers/api'
 import {takeLatest} from 'helpers/saga'
@@ -54,10 +54,10 @@ function * resetPasswordFlow () {
 }
 
 function * checkStatus (action) {
-  const { payload } = action
-  const { id } = payload
+  let state = yield select()
+  let {token} = state.auth
   try {
-    let response = yield call(Api.checkStatus, id)
+    let response = yield call(Api.checkStatus, token)
     const {status} = response
     yield put({type: CHECK_STATUS.SUCCESS, payload: {status}})
   } catch (error) {

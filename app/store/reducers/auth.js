@@ -4,7 +4,9 @@ import {
   SIGN_IN,
   SIGN_OUT,
   RESET_PASSWORD,
-  CHECK_STATUS
+  CHECK_STATUS,
+  SAVE_REJECTED_ID,
+  DISCARD_RESET_ERROR
 } from 'store/actions/auth'
 import {SIGN_UP} from 'store/actions/registration'
 
@@ -43,7 +45,8 @@ const initialState = {
   isAuthed: false,
   checkingUserStatus: false,
   user: null,
-  token: null
+  token: null,
+  prevRejected: null
 }
 
 const handlers = {
@@ -90,7 +93,10 @@ const handlers = {
     }
   },
   [SIGN_OUT]: (state, { payload }) => {
-    return initialState
+    return {
+      ...initialState,
+      prevRejected: state.prevRejected
+    }
   },
   [RESET_PASSWORD.REQUEST]: (state, { payload }) => {
     return {
@@ -110,9 +116,16 @@ const handlers = {
   [RESET_PASSWORD.FAILURE]: (state, { payload }) => {
     return {
       ...state,
-      resetPasswordSent: true,
+      resetPasswordSent: false,
       resetError: payload,
       resetPending: false
+    }
+  },
+  [DISCARD_RESET_ERROR]: (state, { payload }) => {
+    return {
+      ...state,
+      resetError: null,
+      resetPasswordSent: false
     }
   },
   [CHECK_STATUS.REQUEST]: (state, { payload }) => {
@@ -135,6 +148,12 @@ const handlers = {
     return {
       ...state,
       checkingUserStatus: false
+    }
+  },
+  [SAVE_REJECTED_ID]: (state, { payload }) => {
+    return {
+      ...state,
+      prevRejected: payload.id
     }
   }
 }

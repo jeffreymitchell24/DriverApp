@@ -1,7 +1,7 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {getUserData, getIsCheckingUserStatus} from 'store/selectors'
-import {checkStatus} from 'store/actions/auth'
+import {checkStatus, saveRejectedId, signOut} from 'store/actions/auth'
 import Intro from './Intro'
 
 const selector = createStructuredSelector({
@@ -10,7 +10,9 @@ const selector = createStructuredSelector({
 })
 
 const actions = {
-  onCheckStatus: checkStatus
+  onCheckStatus: checkStatus,
+  onSaveRejectedId: saveRejectedId,
+  onSignOut: signOut
 }
 
 export default connect(

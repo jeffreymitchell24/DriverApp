@@ -1,12 +1,19 @@
 import { connect } from 'react-redux'
-import { saveCredentials } from 'store/actions/registration'
+import { saveCredentials, validateEmail } from 'store/actions/registration'
+import {getEmailValidationData} from 'store/selectors'
+import { createStructuredSelector } from 'reselect'
 import Account from './Account'
 
+const selector = createStructuredSelector({
+  emailValidation: getEmailValidationData
+})
+
 const actions = {
-  onSaveCredentials: saveCredentials
+  onSaveCredentials: saveCredentials,
+  onValidateEmail: validateEmail
 }
 
 export default connect(
-  null,
+  selector,
   actions
 )(Account)
