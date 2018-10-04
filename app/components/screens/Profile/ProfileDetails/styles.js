@@ -18,7 +18,7 @@ export default StyleSheet.create({
   editIcon: {
     position: 'absolute',
     right: 8,
-    bottom: 26
+    top: 26
   },
   footer: {
     alignItems: 'center'
