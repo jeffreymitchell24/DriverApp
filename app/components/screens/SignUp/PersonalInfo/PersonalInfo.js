@@ -22,7 +22,6 @@ import {styles, googleStyles} from './styles'
 // import * as Yup from 'yup'
 
 const uuidv4 = require('uuid/v4')
-
 const customValidate = (values) => {
   const {fullname, address, phone} = values
   let errors = {}
@@ -191,6 +190,7 @@ class PersonalInfo extends Component {
 
   renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
     let {fullname, phone} = values
+    console.log('phone', phone)
     let buttonActive = isEmpty(errors) && this.addressSelected
     return (
       <ScrollView
@@ -220,20 +220,14 @@ class PersonalInfo extends Component {
             inputRef={(input) => { this.inputRefs['phone'] = input }}
             keyboardType='phone-pad'
             label='PHONE NUMBER'
+            mask={'+1 [000]-[000]-[0000]'}
             maxLength={15}
             name='phone'
             placeholder='e.g. +1 212 1234-567'
             returnKeyType='done'
             value={phone}
             onBlur={() => setFieldTouched('phone')}
-            onChangeText={(value) => {
-              // let formattedPhone = formatPhoneNumber(value)
-              // console.log('formattedPhone', formattedPhone)
-              // setFieldValue('phone', formattedPhone)
-            }}
-            onFocus={() => {
-              if (phone.length === 0) setFieldValue('phone', '+1 ', false)
-            }}
+            onChangeText={(value) => setFieldValue('phone', value)}
           />
         </View>
         <View style={styles.footer}>
