@@ -6,7 +6,8 @@ import {
   SIGN_IN,
   SIGN_OUT,
   RESET_PASSWORD,
-  CHECK_STATUS
+  CHECK_STATUS,
+  UPDATE_USER_IMAGE
 } from 'store/actions/auth'
 
 function * authorize (userData, password) {
@@ -71,8 +72,26 @@ function * checkStatusFlow () {
   yield takeLatest(CHECK_STATUS.REQUEST, checkStatus)
 }
 
+function * updateProfileImage () {
+  while (true) {
+    yield take(UPDATE_USER_IMAGE.REQUEST)
+    let state = yield select()
+    let {token, user} = state.auth
+    try {
+      let response = yield call(Api.updateUser, {token, id: user.id})
+      console.log('response', response)
+      yield put({type: UPDATE_USER_IMAGE.SUCCESS, payload: {}})
+    } catch (error) {
+      console.log('error response', error.response)
+      console.log('error message', error.message)
+      yield put({type: UPDATE_USER_IMAGE.FAILURE, payload: error.response.data.message})
+    }
+  }
+}
+
 export default [
   loginFlow,
   resetPasswordFlow,
-  checkStatusFlow
+  checkStatusFlow,
+  updateProfileImage
 ]

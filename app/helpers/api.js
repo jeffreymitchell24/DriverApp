@@ -56,6 +56,15 @@ export const validateEmail = async (email) => {
   return response.data
 }
 
+export const updateUser = async ({id, token, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/users/${id}`, data, config)
+  console.log('updateUser response', response)
+  return response.data
+}
+
 const options = {
   keyPrefix: 'uploads/',
   bucket: AWS_BUCKET,
@@ -85,4 +94,22 @@ export const uploadImageToAws = async (imageFile) => {
    *   }
    * }
    */
+}
+
+export const fetchUpcomingBookings = async (token) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.get(`${URL}/api/bookings/upcoming`, config)
+  console.log('fetchUpcomingBookings response', response)
+  return response.data
+}
+
+export const fetchBookingsHistory = async (token) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.get(`${URL}/api/bookings/history`, config)
+  console.log('fetchBookingsHistory response', response)
+  return response.data
 }
