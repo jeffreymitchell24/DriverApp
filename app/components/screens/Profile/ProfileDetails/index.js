@@ -1,15 +1,16 @@
 import ProfileDetails from './ProfileDetails'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-// import {resetPasword} from 'store/actions/auth'
-import {getUserData} from 'store/selectors'
+import {validateEmail} from 'store/actions/email'
+import {getUserData, getEmailValidationData} from 'store/selectors'
 
 const selector = createStructuredSelector({
-  user: getUserData
+  user: getUserData,
+  emailValidation: getEmailValidationData
 })
 
 const actions = {
-
+  onValidateEmail: validateEmail
 }
 
 export default connect(

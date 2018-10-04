@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react'
-import { View, ScrollView, Text, Alert } from 'react-native'
+import { View, ScrollView, Text, Alert, Keyboard } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
 import { TextInputView } from 'components/blocks'
@@ -37,6 +37,7 @@ class ChangePassword extends PureComponent {
     this.props.onDiscardResetError()
   }
   onSubmit = (values) => {
+    Keyboard.dismiss()
     this.props.onResetPasword(values.email)
   }
 
