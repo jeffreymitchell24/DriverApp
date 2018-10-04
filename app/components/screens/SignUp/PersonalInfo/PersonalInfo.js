@@ -217,13 +217,13 @@ class PersonalInfo extends Component {
           {this.renderSearch({values, errors, touched, setFieldTouched, setFieldValue, setValues})}
           <TextInputView
             error={touched.phone && errors.phone}
-            inputRef={(input) => { this.inputRefs['phone'] = input }}
             keyboardType='phone-pad'
             label='PHONE NUMBER'
             mask={'+1 [000]-[000]-[0000]'}
             maxLength={15}
             name='phone'
             placeholder='e.g. +1 212 1234-567'
+            refInput={(input) => { this.inputRefs['phone'] = input }}
             returnKeyType='done'
             value={phone}
             onBlur={() => setFieldTouched('phone')}

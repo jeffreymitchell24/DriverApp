@@ -1,5 +1,6 @@
 import { connect } from 'react-redux'
-import { saveCredentials, validateEmail } from 'store/actions/registration'
+import { saveCredentials } from 'store/actions/registration'
+import { validateEmail } from 'store/actions/email'
 import {getEmailValidationData} from 'store/selectors'
 import { createStructuredSelector } from 'reselect'
 import Account from './Account'

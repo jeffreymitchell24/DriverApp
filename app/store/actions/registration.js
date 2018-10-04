@@ -9,15 +9,6 @@ export const saveSignUpStepData = ({stepData, step}) => {
     }
   }
 }
-
-export const VALIDATE_EMAIL = createAsyncAction('VALIDATE_EMAIL')
-export const validateEmail = ({email}) => {
-  return {
-    type: VALIDATE_EMAIL.REQUEST,
-    payload: {email}
-  }
-}
-
 export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const saveCredentials = (credentials) => {
   return {

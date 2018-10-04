@@ -30,6 +30,7 @@ class SignIn extends Component {
     navigation: PropTypes.object,
     prevRejected: PropTypes.number,
     user: PropTypes.object,
+    onDiscardSigninError: PropTypes.func,
     onSaveResubmitStatus: PropTypes.func,
     onSignIn: PropTypes.func
   }
@@ -39,7 +40,9 @@ class SignIn extends Component {
     }
   }
   inputRefs = {}
-
+  componentWillUnmount () {
+    this.props.onDiscardSigninError()
+  }
   componentDidUpdate (prevProps) {
     const {user, prevRejected} = this.props
     if (user && !prevProps.user) {

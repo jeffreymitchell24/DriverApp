@@ -60,7 +60,7 @@ class Intro extends Component {
   handleSignInPress = () => {
     this.props.navigation.navigate(SignIn, {
       showFromBottom: true
-    }) // Register
+    })
   }
 
   renderSlides = () => {
