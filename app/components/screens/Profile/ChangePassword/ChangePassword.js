@@ -23,6 +23,7 @@ class ChangePassword extends PureComponent {
     // navigation: PropTypes.object,
     isRequestPending: PropTypes.bool,
     isResetLinkSent: PropTypes.bool,
+    onDiscardResetError: PropTypes.func,
     onResetPasword: PropTypes.func
   }
   componentDidUpdate (prevProps) {
@@ -31,6 +32,9 @@ class ChangePassword extends PureComponent {
         Alert.alert('', 'Reset password link has been sent')
       }, 1)
     }
+  }
+  componentWillUnmount () {
+    this.props.onDiscardResetError()
   }
   onSubmit = (values) => {
     this.props.onResetPasword(values.email)

@@ -71,7 +71,7 @@ class ChangesReview extends Component {
         />
         <Button
           containerStyle={styles.button}
-          title='RESEND PASSWORD'
+          title='SAVE CHANGES'
           onPress={this.onSaveChanges}
         />
       </View>
