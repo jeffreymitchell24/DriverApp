@@ -3,6 +3,8 @@ import createSensitiveStorage from 'redux-persist-sensitive-storage'
 import auth from './auth'
 import registration from './registration'
 import receipt from './receipt'
+import email from './email'
+import bookings from './bookings'
 
 const sensitiveStorage = createSensitiveStorage({
   keychainService: 'CarflowKeychain',
@@ -17,7 +19,9 @@ const config = {
 const rootReducer = {
   auth: persistReducer(config, auth),
   registration,
-  receipt
+  receipt,
+  email,
+  bookings
 }
 
 export default rootReducer

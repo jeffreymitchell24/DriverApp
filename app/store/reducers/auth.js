@@ -6,7 +6,9 @@ import {
   RESET_PASSWORD,
   CHECK_STATUS,
   SAVE_REJECTED_ID,
-  DISCARD_RESET_ERROR
+  DISCARD_RESET_ERROR,
+  DISCARD_SIGNIN_ERROR,
+  UPDATE_USER_IMAGE
 } from 'store/actions/auth'
 import {SIGN_UP} from 'store/actions/registration'
 
@@ -46,7 +48,8 @@ const initialState = {
   checkingUserStatus: false,
   user: null,
   token: null,
-  prevRejected: null
+  prevRejected: null,
+  updateError: null
 }
 
 const handlers = {
@@ -96,6 +99,12 @@ const handlers = {
     return {
       ...initialState,
       prevRejected: state.prevRejected
+    }
+  },
+  [DISCARD_SIGNIN_ERROR]: (state, { payload }) => {
+    return {
+      ...state,
+      authError: null
     }
   },
   [RESET_PASSWORD.REQUEST]: (state, { payload }) => {
@@ -154,6 +163,30 @@ const handlers = {
     return {
       ...state,
       prevRejected: payload.id
+    }
+  },
+  [UPDATE_USER_IMAGE.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: true,
+      updateError: null
+    }
+  },
+  [UPDATE_USER_IMAGE.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: false,
+      user: {
+        ...state.user,
+        photo: payload
+      }
+    }
+  },
+  [UPDATE_USER_IMAGE.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: false,
+      updateError: payload
     }
   }
 }

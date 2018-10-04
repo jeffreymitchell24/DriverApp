@@ -8,16 +8,10 @@ import {
   SELECT_LICENSE,
   UPDATE_RIDESHARE_APPS,
   SIGN_UP,
-  VALIDATE_EMAIL,
   SAVE_RESUBMIT_STATUS
 } from 'store/actions/registration'
 
 const initialState = {
-  emailValidation: {
-    isEmailValidating: false,
-    isEmailValid: false,
-    emailError: null
-  },
   credentials: {},
   profileInfo: {},
   documents: {
@@ -50,36 +44,7 @@ const handlers = {
       }
     }
   },
-  [VALIDATE_EMAIL.REQUEST]: (state, { payload }) => {
-    return {
-      ...state,
-      emailValidation: {
-        isEmailValid: false,
-        isEmailValidating: true,
-        emailError: null
-      }
-    }
-  },
-  [VALIDATE_EMAIL.SUCCESS]: (state, { payload }) => {
-    return {
-      ...state,
-      emailValidation: {
-        isEmailValidating: false,
-        isEmailValid: true,
-        emailError: null
-      }
-    }
-  },
-  [VALIDATE_EMAIL.FAILURE]: (state, { payload }) => {
-    return {
-      ...state,
-      emailValidation: {
-        isEmailValid: false,
-        isEmailValidating: false,
-        emailError: payload
-      }
-    }
-  },
+
   [SAVE_CREDENTIALS]: (state, { payload }) => {
     return {
       ...state,

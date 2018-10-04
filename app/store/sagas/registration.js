@@ -3,9 +3,11 @@ import { take, put, call, select } from 'redux-saga/effects'
 import * as Api from 'helpers/api'
 import {resizeAndUpload} from 'helpers/image'
 import {
-  SIGN_UP,
-  VALIDATE_EMAIL
+  SIGN_UP
 } from 'store/actions/registration'
+import {
+  VALIDATE_EMAIL
+} from 'store/actions/email'
 
 async function uploadLicenses ({tlc, driving}) {
   let compressed = {}
@@ -73,7 +75,9 @@ function * validateEmailFlow () {
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)
-      yield put({type: VALIDATE_EMAIL.FAILURE, payload: error.response.data.email})
+      let responseError = error.response.data.email
+      let errorMsg = responseError === 'taken' ? 'Email already exists' : responseError
+      yield put({type: VALIDATE_EMAIL.FAILURE, payload: errorMsg})
     }
   }
 }
