@@ -26,5 +26,11 @@ export default StyleSheet.create({
     color: colors.gray200,
     fontFamily: 'SFProText-Regular',
     fontSize: metrics.fontSize
+  },
+
+  extraDetailText: {
+    color: colors.teal,
+    fontFamily: 'SFProText-Regular',
+    fontSize: metrics.fontSize
   }
 })

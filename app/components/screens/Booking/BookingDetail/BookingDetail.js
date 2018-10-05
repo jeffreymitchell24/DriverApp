@@ -46,7 +46,7 @@ class BookingDetail extends Component {
                 <View style={styles.row}>
                   <View style={{flex: 1}}>
                     <Detail
-                      label='Car Make'
+                      label='Car Maker'
                       text='Toyota'
                     />
                   </View>
