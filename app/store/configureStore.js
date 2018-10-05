@@ -1,19 +1,22 @@
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
-import { persistStore, persistCombineReducers } from 'redux-persist'
+import { persistStore, persistReducer } from 'redux-persist'
 import storage from 'redux-persist/lib/storage'
 import { composeWithDevTools } from 'redux-devtools-extension'
-
+import createSensitiveStorage from 'redux-persist-sensitive-storage'
 export default (rootReducer, rootSaga) => {
   const middlewares = [
     thunk
   ]
   const enhancers = []
-
+  const sensitiveStorage = createSensitiveStorage({
+    keychainService: 'CarflowKeychain',
+    sharedPreferencesName: 'CarflowPrefs'
+  })
   const persistConfig = {
     key: 'root',
-    storage,
+    storage: sensitiveStorage,
     whitelist: ['auth']
   }
 
@@ -26,7 +29,7 @@ export default (rootReducer, rootSaga) => {
 
   enhancers.push(composeEnhancers(applyMiddleware(...middlewares)))
 
-  const persistedReducer = persistCombineReducers(persistConfig, rootReducer)
+  const persistedReducer = persistReducer(persistConfig, rootReducer)
 
   const createAppropriateStore = createStore
   const store = createAppropriateStore(persistedReducer, compose(...enhancers))

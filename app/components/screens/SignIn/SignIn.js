@@ -53,7 +53,7 @@ class SignIn extends Component {
       } else if (user.status === 'rejected') {
         if (prevRejected !== user.id) Alert.alert('Account was rejected', 'Please sign in and re-submit your documents')
         this.props.onSaveResubmitStatus(true)
-        this.props.navigation.navigate(PersonalInfo)
+        this.props.navigation.navigate(PersonalInfo, {signoutOnBack: true})
       }
     }
     // if (this.props.error && !prevProps.error) {
