@@ -4,23 +4,23 @@ import * as Api from 'helpers/api'
 import {takeLatest} from 'helpers/saga'
 import {
   SIGN_IN,
-  SIGN_OUT,
   RESET_PASSWORD,
   CHECK_STATUS,
   UPDATE_USER_IMAGE
 } from 'store/actions/auth'
 
-function * authorize (userData, password) {
+function * authorize ({payload}) {
+  const {email, password} = payload
   try {
-    console.log(userData, password)
+    console.log(email, password)
     yield call(delay, 3000)
-    const {user, auth_token: token} = yield call(Api.authorize, userData, password)
+    const {user, auth_token: token} = yield call(Api.authorize, email, password)
     yield put({type: SIGN_IN.SUCCESS, payload: {user, token}})
     // yield call(Api.storeItem, {token})
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: SIGN_IN.FAILURE, payload: error.response.data.message})
+    yield put({type: SIGN_IN.FAILURE, payload: error.response.data.error.message})
   } finally {
     if (yield cancelled()) {
       // ... put special cancellation handling code here
@@ -29,14 +29,15 @@ function * authorize (userData, password) {
 }
 
 function * loginFlow () {
-  while (true) {
-    const {payload: {email, password}} = yield take(SIGN_IN.REQUEST)
-    // fork return a Task object
-    const task = yield fork(authorize, email, password)
-    const action = yield take([SIGN_OUT, SIGN_IN.FAILURE])
-    if (action.type === SIGN_OUT) yield cancel(task)
-    // yield call(Api.clearItem, 'token')
-  }
+  yield takeLatest(SIGN_IN.REQUEST, authorize)
+  // while (true) {
+  //   const {payload: {email, password}} = yield take(SIGN_IN.REQUEST)
+  //   // fork return a Task object
+  //   const task = yield fork(authorize, email, password)
+  //   const action = yield take([SIGN_OUT, SIGN_IN.FAILURE])
+  //   if (action.type === SIGN_OUT) yield cancel(task)
+  //   // yield call(Api.clearItem, 'token')
+  // }
 }
 
 function * resetPasswordFlow () {
@@ -64,7 +65,7 @@ function * checkStatus (action) {
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: CHECK_STATUS.FAILURE, payload: error.response.data.message})
+    yield put({type: CHECK_STATUS.FAILURE, payload: error.response.data.error.message})
   }
 }
 
@@ -84,7 +85,7 @@ function * updateProfileImage () {
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)
-      yield put({type: UPDATE_USER_IMAGE.FAILURE, payload: error.response.data.message})
+      yield put({type: UPDATE_USER_IMAGE.FAILURE, payload: error.response.data.error.message})
     }
   }
 }

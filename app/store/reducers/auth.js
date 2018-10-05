@@ -11,6 +11,7 @@ import {
   UPDATE_USER_IMAGE
 } from 'store/actions/auth'
 import {SIGN_UP} from 'store/actions/registration'
+const REHYDRATE = 'persist/REHYDRATE'
 
 // let user = {
 //   'id': 0,
@@ -53,6 +54,15 @@ const initialState = {
 }
 
 const handlers = {
+  [REHYDRATE]: (state, { payload, key }) => {
+    const rehydrate = (payload && payload.auth) || state // payload && key === 'auth' ? payload : state
+    return {
+      ...rehydrate,
+      resetError: null,
+      updateError: null,
+      authError: null
+    }
+  },
   [SIGN_IN.REQUEST]: (state, { payload }) => {
     return {
       ...state,

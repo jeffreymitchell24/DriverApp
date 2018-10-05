@@ -1,7 +1,7 @@
 import { take, put, call, select } from 'redux-saga/effects'
 
 import * as Api from 'helpers/api'
-import {resizeAndUpload} from 'helpers/image'
+import {toImageFile} from 'helpers/image'
 import {
   SIGN_UP
 } from 'store/actions/registration'
@@ -9,12 +9,12 @@ import {
   VALIDATE_EMAIL
 } from 'store/actions/email'
 
-async function uploadLicenses ({tlc, driving}) {
+async function transformLicenses ({tlc, driving}) {
   let compressed = {}
-  compressed['tlc_license_front'] = await resizeAndUpload(tlc.front)
-  compressed['tlc_license_back'] = await resizeAndUpload(tlc.back)
-  compressed['driving_license_front'] = await resizeAndUpload(driving.front)
-  compressed['driving_license_back'] = await resizeAndUpload(driving.back)
+  compressed['tlc_license_front'] = await toImageFile(tlc.front)
+  compressed['tlc_license_back'] = await toImageFile(tlc.back)
+  compressed['driving_license_front'] = await toImageFile(driving.front)
+  compressed['driving_license_back'] = await toImageFile(driving.back)
   return compressed
 }
 
@@ -40,27 +40,29 @@ function * registrationFlow () {
     let {licences, user: userData} = payload
     console.log(licences, userData)
     try {
-      let uploadedLicences = yield uploadLicenses(licences)
+      let uploadedLicences = yield transformLicenses(licences)
       let query = {
         ...userData,
         ...uploadedLicences
       }
+      let formattedQuery = Api.toFormData(query)
       let response = {}
 
-      console.log('query', query)
+      console.log('formattedQuery', formattedQuery)
       if (isResubmitting) {
-        response = yield call(resubmit, query, auth.token)
+        response = yield call(resubmit, formattedQuery, auth.token)
       } else {
-        response = yield call(register, query)
+        response = yield call(register, formattedQuery)
       }
 
-      const {data: {user, auth_token: token}} = response
+      const {user, auth_token: token} = response
+      console.log(user, token)
       yield put({type: SIGN_UP.SUCCESS, payload: {user, token: token || auth.token}})
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)
       let payload = {}
-      if (error.response) payload = error.response.data.message
+      if (error.response) payload = error.response.data.error.message
       yield put({type: SIGN_UP.FAILURE, payload})
     }
   }
@@ -75,8 +77,8 @@ function * validateEmailFlow () {
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)
-      let responseError = error.response.data.email
-      let errorMsg = responseError === 'taken' ? 'Email already exists' : responseError
+      let responseError = error.response.data.error.message
+      let errorMsg = responseError === 'Email is taken' ? 'Email already exists' : responseError
       yield put({type: VALIDATE_EMAIL.FAILURE, payload: errorMsg})
     }
   }

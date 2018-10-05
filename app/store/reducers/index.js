@@ -1,4 +1,5 @@
 import { persistReducer } from 'redux-persist'
+import { combineReducers } from 'redux'
 import createSensitiveStorage from 'redux-persist-sensitive-storage'
 import auth from './auth'
 import registration from './registration'
@@ -16,12 +17,12 @@ const config = {
   storage: sensitiveStorage
 }
 
-const rootReducer = {
-  auth: persistReducer(config, auth),
+const rootReducer = combineReducers({
+  auth, // : persistReducer(config, auth),
   registration,
   receipt,
   email,
   bookings
-}
+})
 
 export default rootReducer

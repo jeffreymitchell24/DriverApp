@@ -74,6 +74,11 @@ class PersonalInfo extends Component {
     console.log('token', this.placesAutocompleteToken)
   }
 
+  componentWillUnmount () {
+    const signoutOnBack = this.props.navigation.getParam('signoutOnBack', false)
+    if (signoutOnBack) this.props.onSignOut()
+  }
+
   onSubmit = (values) => {
     const {fullname, address, phone} = values
     Keyboard.dismiss()
@@ -200,6 +205,7 @@ class PersonalInfo extends Component {
       >
         <View style={styles.form}>
           <TextInputView
+            autoCapitalize='words'
             blurOnSubmit={false}
             error={touched.fullname && errors.fullname}
             inputRef={(input) => { this.inputRefs['fullname'] = input }}
@@ -210,7 +216,7 @@ class PersonalInfo extends Component {
             value={fullname}
             onBlur={() => setFieldTouched('fullname')}
             onChangeText={(value) => {
-              setFieldValue('fullname', capitalize(value))
+              setFieldValue('fullname', value)
             }}
             onSubmitEditing={() => this.inputRefs['address'].focus()}
           />
@@ -263,7 +269,8 @@ class PersonalInfo extends Component {
 
 PersonalInfo.propTypes = {
   navigation: PropTypes.object,
-  onSaveProfileInfo: PropTypes.func
+  onSaveProfileInfo: PropTypes.func,
+  onSignOut: PropTypes.func
 }
 
 export default PersonalInfo
