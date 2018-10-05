@@ -22,5 +22,12 @@ export default StyleSheet.create({
   },
   button: {
     marginTop: metrics.contentMargin
+  },
+
+  spinnerContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })
