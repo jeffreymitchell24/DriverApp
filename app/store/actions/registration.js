@@ -62,7 +62,7 @@ export const signUp = ({licences, apps, credentials, personalInfo}) => {
     'full_name': fullname,
     address,
     phone,
-    'ridesharing_approved': true,
+    'ridesharing_approved': 1,
     'ridesharing_apps': appsString
   }
   return {
