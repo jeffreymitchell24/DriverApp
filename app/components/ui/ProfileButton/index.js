@@ -1,12 +1,14 @@
 import React from 'react'
-import { View, TouchableOpacity } from 'react-native'
+import { Image, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
+import {icons} from 'images'
+
 import styles from './styles'
 
 const ProfileButton = ({onPress}) => {
   return (
     <TouchableOpacity onPress={onPress}>
-      <View style={styles.image} />
+      <Image source={icons['user']} style={styles.image} />
     </TouchableOpacity>
   )
 }

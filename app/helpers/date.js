@@ -42,3 +42,18 @@ export const formatTime = (date) => {
   let currentDate = moment(date)
   return currentDate.format('HH:mm')
 }
+
+export const tempDates = () => {
+  let tempStart = moment().set({'hours': 9, 'minutes': 0})
+  let tempEnd = moment().set({'hours': 17, 'minutes': 0})
+  let startTime = {
+    timestamp: tempStart.unix(),
+    label: tempStart.format('hh:mm A')
+  }
+  let endTime = {
+    timestamp: tempEnd.unix(),
+    label: tempEnd.format('hh:mm A')
+  }
+
+  return {startTime, endTime}
+}
