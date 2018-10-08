@@ -44,6 +44,9 @@ export const RideDamaged = 'RideDamaged'
 export const RideAccident = 'RideAccident'
 export const RideLateDescription = 'RideLateDescription'
 export const RideCancel = 'RideCancel'
+export const HelpCamera = 'HelpCamera'
+export const HelpPhotoPreview = 'HelpPhotoPreview'
+export const HelpPhotoGallery = 'HelpPhotoGallery'
 
 // Profile
 export const ProfileMain = 'ProfileMain'

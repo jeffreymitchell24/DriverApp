@@ -3,7 +3,9 @@ import {takeLatest} from 'helpers/saga'
 import * as Api from 'helpers/api'
 
 import {
-  FETCH_USER_BOOKINGS
+  FETCH_USER_BOOKINGS,
+  FETCH_AVAILABLE_CARS,
+  BOOK_CAR
 } from 'store/actions/bookings'
 
 function * fetchUserBookings (action) {
@@ -27,6 +29,42 @@ function * fetchUserBookingsFlow () {
   yield takeLatest(FETCH_USER_BOOKINGS.REQUEST, fetchUserBookings)
 }
 
+function * fetchAvailableCars () {
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let response = yield call(Api.fetchAvailableCars, token)
+    yield put({type: FETCH_AVAILABLE_CARS.SUCCESS, payload: response})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: FETCH_AVAILABLE_CARS.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function * fetchAvailableCarsFlow () {
+  yield takeLatest(FETCH_AVAILABLE_CARS.REQUEST, fetchAvailableCars)
+}
+
+function * bookCarFlow () {
+  while (true) {
+    let {payload: {id, timeStamps}} = yield take(BOOK_CAR.REQUEST)
+    let state = yield select()
+    let {token} = state.auth
+    try {
+      let response = yield call(Api.bookCar, {token, id, timeStamps})
+      console.log('response', response)
+      yield put({type: BOOK_CAR.SUCCESS, payload: {}})
+    } catch (error) {
+      console.log('error response', error.response)
+      console.log('error message', error.message)
+      yield put({type: BOOK_CAR.FAILURE, payload: error.response.data.error.message})
+    }
+  }
+}
+
 export default [
-  fetchUserBookingsFlow
+  fetchUserBookingsFlow,
+  fetchAvailableCarsFlow,
+  bookCarFlow
 ]

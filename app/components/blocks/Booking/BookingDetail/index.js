@@ -1,5 +1,5 @@
-import React, { PureComponent } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import React from 'react'
+import { View, Text, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import styles from './styles'
 
@@ -15,8 +15,12 @@ BookingDetail.propTypes = {
   text: PropTypes.string
 }
 
-let CarImage = () => {
-  return <View style={styles.carPhoto} />
+let CarImage = ({imageUri}) => {
+  return <Image source={{uri: imageUri}} style={styles.carPhoto} />
+}
+
+CarImage.propTypes = {
+  imageUri: PropTypes.string
 }
 
 let SectionTitle = ({title}) => {
