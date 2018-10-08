@@ -3,7 +3,7 @@ import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
 
-export default StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
@@ -31,5 +31,25 @@ export default StyleSheet.create({
   button: {
     marginTop: 10,
     alignSelf: 'stretch'
+  }
+})
+
+export const googleStyles = StyleSheet.create({
+  locationItem: {
+    marginBottom: 12
+  },
+  container: {
+    // maxHeight: 100,
+    elevation: 3,
+    backgroundColor: colors.white,
+    marginHorizontal: 2,
+    paddingTop: 12,
+    paddingHorizontal: 16,
+    marginBottom: 16
+    // borderWidth: 2,
+    // borderColor: colors.red
+  },
+  contentContainerStyle: {
+    backgroundColor: colors.white
   }
 })

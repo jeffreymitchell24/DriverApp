@@ -5,13 +5,14 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import forEach from 'lodash/forEach'
 import isEmpty from 'lodash/isEmpty'
 import PropTypes from 'prop-types'
+import { GoogleAutoComplete } from 'react-native-google-autocomplete'
 import { Formik } from 'formik'
 import { Button } from 'components/ui'
+import {GOOGLE_API_KEY} from 'config/apiKeys'
 import {ChangesReview} from 'navigation/routeNames'
-import { TextInputView } from 'components/blocks'
+import { TextInputView, LocationItem } from 'components/blocks'
 import { colors } from 'theme'
-import CONFIG from './config'
-import styles from './styles'
+import {styles, googleStyles} from './styles'
 
 // eslint-disable-next-line
 let rEmail = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i
@@ -23,12 +24,13 @@ const customValidate = (values) => {
   if (!address) errors.address = 'This field is required.'
   if (!phone) errors.phone = 'This field is required.'
   if (!email) errors.email = 'This field is required.'
-  if (!rEmail.test(email)) errors.email = 'Email format is not correct'
-  else if (phone.length < 15) errors.phone = 'Incorrect phone number, e.g. +1 212 1234-567'
+  if (!rEmail.test(email)) errors.email = 'Email format is not correct.'
+  else if (phone.length < 15) errors.phone = 'Phone number is not correct.'
   return errors
 }
 class ProfileDetails extends Component {
   inputRefs = {}
+  showAddressResults = true
   constructor (props) {
     super(props)
     const {user} = this.props
@@ -46,12 +48,27 @@ class ProfileDetails extends Component {
       editableField: ''
     }
   }
+  componentDidMount () {
+    this.placesAutocompleteToken = uuidv4()
+  }
+
   componentDidUpdate (prevProps) {
     const {isEmailValidating, emailError} = this.props.emailValidation
     if (!isEmailValidating && prevProps.emailValidation.isEmailValidating) {
       if (!emailError) this.reviewChanges(this.submitVales)
       else this.formik.setErrors({email: emailError})
     }
+  }
+
+  onLocationPress = (address) => {
+    console.log('address', address)
+    this.addressSelected = true
+    this.showAddressResults = false
+    this.data.address = {
+      value: address.formatted_address,
+      changed: address.formatted_address !== this.originalData['address']
+    }
+    this.formik.setFieldValue('address', address.formatted_address)
   }
 
   onSaveChanges = (values) => {
@@ -125,10 +142,24 @@ class ProfileDetails extends Component {
     return errors
   }
 
+  renderSearchResults = (locationResults, fetchDetails) => {
+    return (
+      <View contentContainerStyle={googleStyles.contentContainerStyle} style={googleStyles.container}>
+        {locationResults.map((el, i) => (
+          <LocationItem
+            {...el}
+            fetchDetails={fetchDetails}
+            key={String(i)}
+            onPress={this.onLocationPress}
+          />
+        ))}
+      </View>
+    )
+  }
+
   renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
     const {phone, address, email, fullname} = values
     let buttonActive = this.isSubmitActive() && isEmpty(errors) && this.addressSelected
-    console.log(errors)
     return (
       <ScrollView
         contentContainerStyle={styles.formContainer}
@@ -161,32 +192,54 @@ class ProfileDetails extends Component {
               {this.renderEditIcon({editable: this.state.editableField === 'fullname'})}
             </TouchableOpacity>
           </View>
-          <View style={styles.textInputContainer}>
-            <TextInputView
-              containerStyle={{paddingRight: 40}}
-              editable={this.state.editableField === 'address'}
-              error={touched.address && errors.address}
-              inputRef={(input) => { this.inputRefs['address'] = input }}
-              label='CURRENT ADDRESS'
-              placeholder=''
-              value={address}
-              onBlur={() => setFieldTouched('address')}
-              onChangeText={(value => {
-                this.data.address = {
-                  value,
-                  changed: value !== this.originalData['address']
-                }
-                setFieldValue('address', value)
-              })}
-            />
-            <TouchableOpacity
-              hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-              style={styles.editIcon}
-              onPress={() => this.onPenPress('address')}
-            >
-              {this.renderEditIcon({editable: this.state.editableField === 'address'})}
-            </TouchableOpacity>
-          </View>
+          <GoogleAutoComplete
+            apiKey={GOOGLE_API_KEY}
+            components='country:us'
+            debounce={500}
+            queryTypes='address'
+          >
+            {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
+              // console.log('locationResults', locationResults)
+              return (
+                <View style={styles.textInputContainer}>
+                  <View>
+                    <TextInputView
+                      containerStyle={{paddingRight: 40}}
+                      editable={this.state.editableField === 'address'}
+                      error={touched.address && errors.address}
+                      inputRef={(input) => { this.inputRefs['address'] = input }}
+                      label='CURRENT ADDRESS'
+                      placeholder=''
+                      value={address}
+                      onBlur={() => setFieldTouched('address')}
+                      onChangeText={(value => {
+                        this.data.address = {
+                          value,
+                          changed: value !== this.originalData['address']
+                        }
+                        this.addressSelected = false
+                        this.showAddressResults = true
+                        handleTextChange(value)
+                        setFieldValue('address', value)
+                      })}
+                    />
+                    {
+                      this.showAddressResults &&
+                      locationResults.length > 0 &&
+                      this.renderSearchResults(locationResults, fetchDetails)
+                    }
+                  </View>
+                  <TouchableOpacity
+                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                    style={styles.editIcon}
+                    onPress={() => this.onPenPress('address')}
+                  >
+                    {this.renderEditIcon({editable: this.state.editableField === 'address'})}
+                  </TouchableOpacity>
+                </View>
+              )
+            }}
+          </GoogleAutoComplete>
           <View style={styles.textInputContainer}>
             <TextInputView
               containerStyle={{paddingRight: 40}}

@@ -25,8 +25,10 @@
       </activity>
       <activity
         android:name=".MainActivity"
+        android:launchMode="singleTask"
         android:label="@string/app_name"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+        android:screenOrientation="portrait"
         android:windowSoftInputMode="adjustResize"
         android:exported="true">
       </activity>
