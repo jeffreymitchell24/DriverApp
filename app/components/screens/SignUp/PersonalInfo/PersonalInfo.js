@@ -1,18 +1,16 @@
-import React, { Component, PureComponent } from 'react'
+import React, { Component } from 'react'
 import {
   View,
   ScrollView,
-  Text,
   Keyboard,
-  Alert,
-  TouchableOpacity
+  Alert
 } from 'react-native'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
 import { GoogleAutoComplete } from 'react-native-google-autocomplete'
 // import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
-import { TextInputView } from 'components/blocks'
+import { TextInputView, LocationItem } from 'components/blocks'
 import { Button } from 'components/ui'
 import {Documentation} from 'navigation/routeNames'
 import {GOOGLE_API_KEY} from 'config/apiKeys'
@@ -28,7 +26,7 @@ const customValidate = (values) => {
   if (!fullname) errors.fullname = 'This field is required.'
   if (!address) errors.address = 'This field is required.'
   if (!phone) errors.phone = 'This field is required.'
-  else if (phone.length < 15) errors.phone = 'Incorrect phone number, e.g. +1 212 1234-567'
+  else if (phone.length < 15) errors.phone = 'Phone number is not correct.'
   return errors
 }
 
@@ -37,31 +35,9 @@ const customValidate = (values) => {
 //   address: Yup.string().required('This field is required.'),
 //   phone: Yup.string().min(15, 'Incorrect phone number, e.g. +1 212 1234-567').required('This field is required.')
 // })
-class LocationItem extends PureComponent {
-  _handlePress = async () => {
-    const res = await this.props.fetchDetails(this.props.place_id)
-    this.props.onPress(res)
-  }
-
-  render () {
-    return (
-      <TouchableOpacity style={googleStyles.locationItem} onPress={this._handlePress}>
-        <Text style={googleStyles.description}>{this.props.description}</Text>
-      </TouchableOpacity>
-    )
-  }
-}
-
-LocationItem.propTypes = {
-  description: PropTypes.string,
-  fetchDetails: PropTypes.func,
-  place_id: PropTypes.string,
-  onPress: PropTypes.func
-}
 
 class PersonalInfo extends Component {
   state = {
-    showAddressResults: true,
     fullname: '', // 'Kot M',
     address: '', // '19011',
     phone: '' // '12345676789'
@@ -96,10 +72,6 @@ class PersonalInfo extends Component {
     let formattedPhone = formatPhoneNumber(phone)
     console.log('formattedPhone', formattedPhone)
     this.setState({phone: formattedPhone})
-  }
-
-  onAddressChange = (address) => {
-    this.setState({address, showAddressResults: true})
   }
 
   onLocationPress = (address) => {

@@ -1,4 +1,4 @@
-import { StyleSheet, Platform } from 'react-native'
+import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
 
@@ -54,51 +54,6 @@ export const styles = StyleSheet.create({
 })
 
 export const googleStyles = StyleSheet.create({
-  textInputContainer: {
-    borderTopWidth: 0,
-    height: null,
-    // overflow: 'visible',
-    borderBottomWidth: 0,
-    // borderBottomColor: colors.gray50,
-    padding: 0,
-    margin: 0
-  },
-
-  textInput: {
-    height: null,
-    paddingBottom: Platform.OS === 'android' ? 0 : 4,
-    paddingTop: 8,
-    paddingLeft: 0,
-    paddingRight: 0,
-    color: '#000',
-    fontFamily: 'SFProText-Regular',
-    padding: 0,
-    margin: 0,
-    marginTop: 0,
-    marginLeft: 0,
-    marginRight: 0,
-    fontSize: 17,
-    lineHeight: 22,
-    textAlignVertical: 'top',
-    borderRadius: 0,
-    borderBottomWidth: 2,
-    borderBottomColor: colors.gray50
-  },
-  listView: {
-    // position: 'absolute',
-    // top: 60,
-    // left: 10,
-    // right: 10,
-    backgroundColor: 'white',
-    borderRadius: 5,
-    flex: 1,
-    elevation: 3,
-    zIndex: 10
-  },
-  predefinedPlacesDescription: {
-    // color: '#1faadb'
-  },
-
   locationItem: {
     marginBottom: 12
   },
@@ -115,10 +70,5 @@ export const googleStyles = StyleSheet.create({
   },
   contentContainerStyle: {
     backgroundColor: colors.white
-  },
-  description: {
-    fontFamily: 'SFProText-Regular',
-    fontSize: 17,
-    color: '#000'
   }
 })

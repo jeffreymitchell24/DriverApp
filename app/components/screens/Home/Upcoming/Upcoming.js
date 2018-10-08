@@ -16,7 +16,8 @@ class Upcoming extends Component {
   }
   onBackButtonPressAndroid = () => true
   onNewPress = () => {
-    this.props.navigation.navigate(NewBooking)
+    // this.props.navigation.navigate(NewBooking)
+    this.props.navigation.navigate(BookingDetail)
   }
   render () {
     return (
