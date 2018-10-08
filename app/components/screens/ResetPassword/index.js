@@ -1,6 +1,6 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import {resetPasword} from 'store/actions/auth'
+import {resetPasword, discardResetError} from 'store/actions/auth'
 import {getResetStatus, getResetPassError, getIsResetSent} from 'store/selectors'
 import ResetPassword from './ResetPassword'
 
@@ -11,6 +11,7 @@ const selector = createStructuredSelector({
 })
 
 const actions = {
+  onDiscardResetError: discardResetError,
   onResetPasword: resetPasword
 }
 

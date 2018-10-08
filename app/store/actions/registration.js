@@ -9,11 +9,10 @@ export const saveSignUpStepData = ({stepData, step}) => {
     }
   }
 }
-
-export const SAVE_CREDENTIALS = createAsyncAction('SAVE_CREDENTIALS')
+export const SAVE_CREDENTIALS = 'SAVE_CREDENTIALS'
 export const saveCredentials = (credentials) => {
   return {
-    type: SAVE_CREDENTIALS.REQUEST,
+    type: SAVE_CREDENTIALS,
     payload: credentials
   }
 }
@@ -63,11 +62,19 @@ export const signUp = ({licences, apps, credentials, personalInfo}) => {
     'full_name': fullname,
     address,
     phone,
-    'ridesharing_approved': true,
+    'ridesharing_approved': 1,
     'ridesharing_apps': appsString
   }
   return {
     type: SIGN_UP.REQUEST,
     payload: { user, licences }
+  }
+}
+
+export const SAVE_RESUBMIT_STATUS = 'SAVE_RESUBMIT_STATUS'
+export const saveResubmitStatus = (isResubmitting) => {
+  return {
+    type: SAVE_RESUBMIT_STATUS,
+    payload: isResubmitting
   }
 }

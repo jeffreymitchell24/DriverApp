@@ -9,5 +9,12 @@ export default StyleSheet.create({
     padding: metrics.contentMarginSmall,
     paddingBottom: metrics.contentMargin,
     justifyContent: 'space-between'
+  },
+
+  spinnerContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

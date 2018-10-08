@@ -2,13 +2,18 @@ import React, { PureComponent } from 'react'
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {RideLateDescription, BookingDetail} from 'navigation/routeNames'
-import { HelpCenterSection } from 'components/ui'
+import { HelpCenterSection, NavButton } from 'components/ui'
 import PropTypes from 'prop-types'
 import CONFIG from './config'
 import { colors } from 'theme'
 import styles from './styles'
 
 class HelpCenter extends PureComponent {
+  static navigationOptions = ({ navigation }) => {
+    return {
+      headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(BookingDetail)} />
+    }
+  }
   onOkPress = () => {
     this.props.navigation.navigate(BookingDetail)
   }

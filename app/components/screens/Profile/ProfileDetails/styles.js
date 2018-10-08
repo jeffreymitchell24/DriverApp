@@ -9,8 +9,13 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 24,
-    paddingTop: 5,
-    justifyContent: 'space-between'
+    paddingTop: 5
+  },
+
+  formContainer: {
+    backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    flexGrow: 1
   },
   textInputContainer: {
     position: 'relative'
@@ -18,7 +23,7 @@ export default StyleSheet.create({
   editIcon: {
     position: 'absolute',
     right: 8,
-    bottom: 26
+    top: 26
   },
   footer: {
     alignItems: 'center'

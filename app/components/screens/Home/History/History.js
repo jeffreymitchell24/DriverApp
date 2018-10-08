@@ -14,7 +14,8 @@ class History extends Component {
   render () {
     return (
       <HomeView
-        bookings={[]}
+        bookings={this.props.bookings}
+        isFetching={this.props.isFetchingPending}
         onBookingPress={this.onBookingPress}
         onNewPress={this.onNewPress}
       />
@@ -23,6 +24,9 @@ class History extends Component {
 }
 
 History.propTypes = {
+  bookings: PropTypes.array,
+  fetchError: PropTypes.string,
+  isFetchingPending: PropTypes.bool,
   navigation: PropTypes.object
 }
 

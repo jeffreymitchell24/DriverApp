@@ -2,7 +2,6 @@
 import { Image } from 'react-native'
 import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
-import {uploadImageToAws} from 'helpers/api'
 const uuidv4 = require('uuid/v4')
 
 function getImageSize (uri) {
@@ -21,7 +20,7 @@ function getImageSize (uri) {
   })
 }
 
-export const resizeAndUpload = async (imageUri, maxSize = 100000) => {
+export const toImageFile = async (imageUri, maxSize = 100000) => {
   let details = await RNFetchBlob.fs.stat(imageUri)
   let uriToUpload = imageUri
   console.log('details', details)
@@ -34,23 +33,17 @@ export const resizeAndUpload = async (imageUri, maxSize = 100000) => {
     console.log('details2', details2)
     uriToUpload = uri
   }
+  // let imageFile = new FormData()
+  // imageFile.append('image', {
+  //   uri: uriToUpload,
+  //   name: `${uuidv4()}.jpg`,
+  //   type: 'image/jpeg'
+  // })
   let imageFile = {
-    type: 'image/jpeg',
+    uri: uriToUpload,
     name: `${uuidv4()}.jpg`,
-    uri: uriToUpload
+    type: 'image/jpeg'
   }
   console.log('imageFIle', imageFile)
-  let uploadedUrl = await uploadImageToAws(imageFile)
-  console.log('uploadedUrl', uploadedUrl)
-  return uploadedUrl
+  return imageFile
 }
-// export const convertLicences = async ({tlc, driving}) => {
-//   let converted = {}
-//   converted['tlc_license_front'] = await convertToBase64(tlc.front)
-//   converted['tlc_license_back'] = await convertToBase64(tlc.back)
-//   converted['driving_license_front'] = await convertToBase64(driving.front)
-//   converted['driving_license_back'] = await convertToBase64(driving.back)
-
-//   console.log('converted', converted)
-//   return converted
-// }
