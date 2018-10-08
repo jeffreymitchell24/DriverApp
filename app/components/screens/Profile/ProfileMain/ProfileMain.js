@@ -62,7 +62,7 @@ class ProfileMain extends Component {
 
   render () {
     const {full_name: fullname, photo} = this.props.user
-
+    console.log(photo)
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <View style={styles.profileInfo}>
@@ -70,7 +70,7 @@ class ProfileMain extends Component {
             {
               photo
                 ? (
-                  <Image source={{uri: photo}} style={styles.profileImage} />
+                  <Image source={{uri: `${photo}`}} style={styles.profileImage} />
                 ) : (
                   <Image source={icons['camera']} style={styles.iconCamera} />
                 )

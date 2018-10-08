@@ -1,6 +1,7 @@
-import { take, put, call, fork, cancel, cancelled, select } from 'redux-saga/effects'
+import { take, put, call, cancelled, select } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import * as Api from 'helpers/api'
+import {toImageFile} from 'helpers/image'
 import {takeLatest} from 'helpers/saga'
 import {
   SIGN_IN,
@@ -75,13 +76,16 @@ function * checkStatusFlow () {
 
 function * updateProfileImage () {
   while (true) {
-    yield take(UPDATE_USER_IMAGE.REQUEST)
+    const {payload: photoUri} = yield take(UPDATE_USER_IMAGE.REQUEST)
+    let imageFile = yield toImageFile(photoUri)
+    let query = {photo: imageFile}
+    let data = Api.toFormData(query)
     let state = yield select()
-    let {token, user} = state.auth
+    let {token} = state.auth
     try {
-      let response = yield call(Api.updateUser, {token, id: user.id})
-      console.log('response', response)
-      yield put({type: UPDATE_USER_IMAGE.SUCCESS, payload: {}})
+      let {user} = yield call(Api.updateUser, {token, data})
+      console.log('user', user)
+      yield put({type: UPDATE_USER_IMAGE.SUCCESS, payload: user})
     } catch (error) {
       console.log('error response', error.response)
       console.log('error message', error.message)

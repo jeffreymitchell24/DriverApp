@@ -186,10 +186,7 @@ const handlers = {
     return {
       ...state,
       pending: false,
-      user: {
-        ...state.user,
-        photo: payload
-      }
+      user: payload
     }
   },
   [UPDATE_USER_IMAGE.FAILURE]: (state, { payload }) => {
