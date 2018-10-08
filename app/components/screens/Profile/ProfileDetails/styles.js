@@ -9,8 +9,13 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 24,
-    paddingTop: 5,
-    justifyContent: 'space-between'
+    paddingTop: 5
+  },
+
+  formContainer: {
+    backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    flexGrow: 1
   },
   textInputContainer: {
     position: 'relative'
