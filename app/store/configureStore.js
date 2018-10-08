@@ -2,7 +2,6 @@ import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
 import { persistStore, persistReducer } from 'redux-persist'
-import storage from 'redux-persist/lib/storage'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import createSensitiveStorage from 'redux-persist-sensitive-storage'
 export default (rootReducer, rootSaga) => {

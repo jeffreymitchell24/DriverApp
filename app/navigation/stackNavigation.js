@@ -35,6 +35,9 @@ import RideDamaged from 'components/screens/RideHelp/RideDamaged'
 import RideAccident from 'components/screens/RideHelp/RideAccident'
 import RideCancel from 'components/screens/RideHelp/RideCancel'
 import RideLateDescription from 'components/screens/RideHelp/RideLateDescription'
+import HelpPhotoPreview from 'components/screens/RideHelp/Camera/HelpPhotoPreview'
+import HelpPhotoGallery from 'components/screens/RideHelp/Camera/HelpPhotoGallery'
+import HelpCamera from 'components/screens/RideHelp/Camera/HelpCamera'
 
 let navigationOptions = {
   headerStyle: {
@@ -394,6 +397,30 @@ export const HelpCenterStack = createStackNavigator({
     screen: RideLateDescription,
     navigationOptions: {
       title: "I'm late",
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  HelpCamera: {
+    screen: HelpCamera,
+    navigationOptions: {
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  HelpPhotoPreview: {
+    screen: HelpPhotoPreview,
+    navigationOptions: {
+      header: null
+    }
+  },
+  HelpPhotoGallery: {
+    screen: HelpPhotoGallery,
+    navigationOptions: {
+      header: null,
+      title: 'Select photo',
       headerTitle: null,
       headerBackTitle: null,
       ...navigationOptions
