@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, FlatList, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native'
 import PropTypes from 'prop-types'
 import { BookingCard } from 'components/blocks'
 import { Button } from 'components/ui'
@@ -30,8 +30,14 @@ class HomeView extends PureComponent {
     )
   }
   render () {
-    const {bookings, onNewPress} = this.props
-
+    const {bookings, onNewPress, isFetching} = this.props
+    if (isFetching) {
+      return (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator color={colors.red} size='large' />
+        </View>
+      )
+    }
     return (
       <View style={styles.container}>
         {
@@ -59,8 +65,14 @@ class HomeView extends PureComponent {
 
 HomeView.propTypes = {
   bookings: PropTypes.array,
+  isFetching: PropTypes.bool,
   onBookingPress: PropTypes.func,
   onNewPress: PropTypes.func
+}
+
+HomeView.defaultProps = {
+  isFetching: false,
+  bookings: []
 }
 
 export {HomeView}

@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
+import TextInputMask from 'react-native-text-input-mask'
 import {
   View,
   TextInput,
@@ -14,8 +15,11 @@ export class TextInputView extends PureComponent {
     error: PropTypes.string,
     inputRef: PropTypes.func,
     label: PropTypes.string,
+    mask: PropTypes.string,
+    maxLength: PropTypes.number,
     placeholder: PropTypes.string.isRequired,
     secureTextEntry: PropTypes.bool,
+    showLimit: PropTypes.bool,
     text: PropTypes.string,
     value: PropTypes.string,
     onBlur: PropTypes.func,
@@ -25,7 +29,8 @@ export class TextInputView extends PureComponent {
   }
   static defaultProps = {
     inputRef: () => {},
-    secureTextEntry: false
+    secureTextEntry: false,
+    showLimit: false
   }
 
   getRef = (input) => {
@@ -40,16 +45,24 @@ export class TextInputView extends PureComponent {
       placeholder,
       secureTextEntry,
       containerStyle,
+      maxLength,
+      showLimit,
       ...rest
     } = this.props
 
     let showErrorLine = false
     if (error || error === '') showErrorLine = true
     let inputStyle = [styles.input]
+    let valueLength = (value && value.length) || 0
+    let Component = rest.mask ? TextInputMask : TextInput
     return (
       <View style={[styles.container, containerStyle]}>
-        <Text style={styles.label}>{label}</Text>
-        <TextInput
+        <View style={styles.labelContainer}>
+          <Text style={styles.label}>{label}</Text>
+          {maxLength && showLimit && <Text style={styles.limit}>{`${maxLength - valueLength} characters left `}</Text>}
+        </View>
+        <Component
+          maxLength={maxLength}
           placeholder={placeholder}
           ref={this.getRef}
           secureTextEntry={secureTextEntry}

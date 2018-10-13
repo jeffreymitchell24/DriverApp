@@ -32,7 +32,9 @@ class CameraView extends PureComponent {
       let quality = this.state.type === BACK ? 0.5 : 0.8
       const options = { quality, base64: true, fixOrientation: true }
       const data = await this.camera.takePictureAsync(options)
+      console.log('picture taken')
       let cameraRollUri = await CameraRoll.saveToCameraRoll(data.uri, 'photo')
+      console.log('picture saved')
       this.props.onTakePicture({
         photoUri: cameraRollUri
       })

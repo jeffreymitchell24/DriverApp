@@ -7,7 +7,19 @@ export default StyleSheet.create({
     marginBottom: 16
   },
 
+  labelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
   label: {
+    fontFamily: 'SFProText-Regular',
+    color: colors.gray200,
+    fontSize: 12
+  },
+
+  limit: {
     fontFamily: 'SFProText-Regular',
     color: colors.gray200,
     fontSize: 12

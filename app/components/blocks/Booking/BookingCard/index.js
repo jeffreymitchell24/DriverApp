@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, Image } from 'react-native'
 import PropTypes from 'prop-types'
 import styles from './styles'
 
@@ -9,19 +9,30 @@ class BookingCard extends PureComponent {
     onPress(booking)
   }
   render () {
-    const {booking} = this.props
-    const {carName, carDetails, time, address} = booking
+    const {booking, extraDetail} = this.props
+    const {
+      image_s3_url: image,
+      pickup_location: pickupLocation,
+      return_location: returnLocation,
+      booking_starting_at: bookingStart,
+      manufacturer = '',
+      model = '',
+      plate = '',
+      color = ''
+    } = booking
     return (
       <View style={styles.cardContainer}>
-        {/* <Image source={} style={styles.cardImage} /> */}
-        <TouchableOpacity style={styles.cardImage} onPress={this.onPress} />
+        <TouchableOpacity onPress={this.onPress}>
+          <Image source={{uri: image}} style={styles.cardImage} />
+        </TouchableOpacity>
         <View style={styles.cardContent}>
           <TouchableOpacity onPress={this.onPress}>
-            <Text style={styles.cardTitle}>{carName}</Text>
+            <Text style={styles.cardTitle}>{`${manufacturer} ${model}`}</Text>
           </TouchableOpacity>
-          <Text style={styles.detailText}>{carDetails}</Text>
-          <Text style={styles.detailText}>{time}</Text>
-          <Text style={styles.detailText}>{address}</Text>
+          <Text style={styles.detailText}>{`${plate}, ${color}`}</Text>
+          <Text style={styles.detailText}>{`${bookingStart.formatted} –– `}</Text>
+          <Text style={styles.detailText}>{`${pickupLocation} –– ${returnLocation}`}</Text>
+          <Text style={styles.extraDetailText}>{extraDetail}</Text>
         </View>
       </View>
     )
@@ -30,6 +41,7 @@ class BookingCard extends PureComponent {
 
 BookingCard.propTypes = {
   booking: PropTypes.object,
+  extraDetail: PropTypes.string,
   onPress: PropTypes.func
 }
 

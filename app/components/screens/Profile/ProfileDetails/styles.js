@@ -3,14 +3,19 @@ import { StyleSheet } from 'react-native'
 
 import { colors, metrics } from 'theme'
 
-export default StyleSheet.create({
+export const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
     paddingBottom: 24,
-    paddingTop: 5,
-    justifyContent: 'space-between'
+    paddingTop: 5
+  },
+
+  formContainer: {
+    backgroundColor: colors.white,
+    justifyContent: 'space-between',
+    flexGrow: 1
   },
   textInputContainer: {
     position: 'relative'
@@ -18,7 +23,7 @@ export default StyleSheet.create({
   editIcon: {
     position: 'absolute',
     right: 8,
-    bottom: 26
+    top: 26
   },
   footer: {
     alignItems: 'center'
@@ -26,5 +31,25 @@ export default StyleSheet.create({
   button: {
     marginTop: 10,
     alignSelf: 'stretch'
+  }
+})
+
+export const googleStyles = StyleSheet.create({
+  locationItem: {
+    marginBottom: 12
+  },
+  container: {
+    // maxHeight: 100,
+    elevation: 3,
+    backgroundColor: colors.white,
+    marginHorizontal: 2,
+    paddingTop: 12,
+    paddingHorizontal: 16,
+    marginBottom: 16
+    // borderWidth: 2,
+    // borderColor: colors.red
+  },
+  contentContainerStyle: {
+    backgroundColor: colors.white
   }
 })

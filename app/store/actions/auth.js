@@ -9,6 +9,11 @@ export const signIn = (credentials) => {
   }
 }
 
+export const DISCARD_SIGNIN_ERROR = 'DISCARD_SIGNIN_ERROR'
+export const discardSigninError = () => ({
+  type: DISCARD_SIGNIN_ERROR
+})
+
 export const SIGN_OUT = 'SIGN_OUT'
 export const signOut = () => {
   return {
@@ -21,5 +26,33 @@ export const resetPasword = (email) => {
   return {
     type: RESET_PASSWORD.REQUEST,
     payload: email
+  }
+}
+export const DISCARD_RESET_ERROR = 'DISCARD_RESET_ERROR'
+export const discardResetError = () => ({
+  type: DISCARD_RESET_ERROR
+})
+
+export const CHECK_STATUS = createAsyncAction('CHECK_STATUS')
+export const checkStatus = (id) => {
+  return {
+    type: CHECK_STATUS.REQUEST,
+    payload: {id}
+  }
+}
+
+export const SAVE_REJECTED_ID = 'SAVE_REJECTED_ID'
+export const saveRejectedId = (id) => {
+  return {
+    type: SAVE_REJECTED_ID,
+    payload: {id}
+  }
+}
+
+export const UPDATE_USER_IMAGE = createAsyncAction('UPDATE_USER_IMAGE')
+export const updateUserImage = (photoUri) => {
+  return {
+    type: UPDATE_USER_IMAGE.REQUEST,
+    payload: photoUri
   }
 }
