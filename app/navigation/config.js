@@ -6,6 +6,8 @@ import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackV
 
 import BookingDetail from 'components/screens/Booking/BookingDetail'
 import CarLocation from 'components/screens/Booking/CarLocation'
+import RideEnd from 'components/screens/Booking/RideEnd'
+import RideFinished from 'components/screens/Booking/RideFinished'
 import ReceiptSubmit from 'components/screens/ReceiptSubmit/ReceiptSubmit'
 import ReceiptCamera from 'components/screens/ReceiptSubmit/ReceiptCamera'
 import ReceiptGallery from 'components/screens/ReceiptSubmit/ReceiptGallery'
@@ -72,6 +74,24 @@ export const Root = createStackNavigator(
         }
       }
     },
+    RideEnd: {
+      screen: RideEnd,
+      navigationOptions: {
+        title: 'End ride',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          // paddingLeft: 16
+        }
+      }
+    },
+    RideFinished: {
+      screen: RideFinished,
+      navigationOptions: {
+        header: null
+      }
+    },
     ReceiptSubmit: {
       screen: ReceiptSubmit,
       navigationOptions: {
@@ -134,6 +154,16 @@ export const Root = createStackNavigator(
     initialRouteName: 'Auth',
     headerLayoutPreset: 'center',
     transitionConfig: (toTransitionProps, fromTransitionProps) => {
+      let isBack = false
+      let backRoute = null
+      if (fromTransitionProps) {
+        isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
+        backRoute = fromTransitionProps.scene.route.routeName
+      }
+      const route = toTransitionProps.scene.route
+      if (route.routeName === 'NewBooking' || (backRoute === 'NewBooking' && isBack)) {
+        return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+      }
       return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
     }
   }

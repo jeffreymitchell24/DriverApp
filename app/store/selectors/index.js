@@ -1,6 +1,6 @@
 export * from './auth'
 export * from './registration'
-export * from './receipt'
+export * from './ride'
 export * from './email'
 export * from './bookings'
 export * from './helpCenter'

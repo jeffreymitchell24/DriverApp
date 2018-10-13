@@ -68,5 +68,12 @@ export default StyleSheet.create({
   button: {
     marginTop: 70,
     alignSelf: 'stretch'
+  },
+
+  spinnerContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

@@ -9,6 +9,8 @@ export const signIn = (credentials) => {
   }
 }
 
+export const REJECT_USER = 'REJECT_USER'
+
 export const DISCARD_SIGNIN_ERROR = 'DISCARD_SIGNIN_ERROR'
 export const discardSigninError = () => ({
   type: DISCARD_SIGNIN_ERROR

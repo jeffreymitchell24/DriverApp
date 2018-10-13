@@ -1,4 +1,5 @@
 import moment from 'moment'
+import forEach from 'lodash/forEach'
 
 export const getNext24hours = () => {
   let hours = []
@@ -56,4 +57,29 @@ export const tempDates = () => {
   }
 
   return {startTime, endTime}
+}
+
+export const get24hours = (date) => {
+  const start = moment(date).set({'hours': 0, 'minutes': 0})
+  const end = moment(date).set({'hours': 23, 'minutes': 59})
+  const range = moment.range(start, end)
+  const hours = Array.from(range.by('hour'))
+  return hours.map(m => m.format('HH:mm'))
+}
+
+export const getCurrentDayHours = () => {
+  const start = moment().set({'minutes': 0}).add(1, 'h')
+  const end = moment().set({'hours': 23, 'minutes': 59})
+  const range = moment.range(start, end)
+  const hours = Array.from(range.by('hour'))
+  return hours.map(m => m.format('HH:mm'))
+}
+
+export const getDisabledDays = (bookedHours) => {
+  let disabledDays = {}
+  forEach(bookedHours, (value, key) => {
+    if (value === false) disabledDays[key] = {disabled: true, disableTouchEvent: true}
+  })
+
+  return disabledDays
 }

@@ -1,18 +1,23 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TouchableOpacity, FlatList, ScrollView } from 'react-native'
+import { View, Text, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native'
 import Spinner from 'react-native-loading-spinner-overlay'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
 import { NavButton, Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
-import {Home, BookingConfirmed} from 'navigation/routeNames'
-import {getNext24hours, isBetweenLimits, tempDates} from 'helpers/date'
+import {Home, BookingConfirmed, BookingCalendar} from 'navigation/routeNames'
+import {isBetweenLimits, tempDates} from 'helpers/date'
+
 import styles from './styles'
 import { colors } from 'theme'
 
-const SLOT_HEIGHT = 34
-const GAP_HEIGHT = 6
-
+const BOOKED = {
+  '2018-10-14': ['16:00', '17:00'],
+  '2018-10-15': false,
+  '2018-10-16': false,
+  '2018-10-17': ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
+  '2018-10-18': ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '19:00', '20:00']
+}
 class TimeSlot extends PureComponent {
   onPress = () => {
     this.props.onPress(this.props.time)
@@ -45,22 +50,19 @@ TimeSlot.propTypes = {
 class NewBookingDetails extends PureComponent {
   constructor (props) {
     super(props)
-    let timeSlots = getNext24hours()
+    // let timeSlots = getNext24hours()
     const {startTime, endTime} = tempDates()
-    console.log(timeSlots)
+    // console.log(timeSlots)
     this.state = {
-      slots: timeSlots, // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24],
-      slotsNumToShow: 8,
-      startTime, // : {value: null, label: '09:00 AM'},
-      endTime, // : {value: null, label: '5:00 PM'},
-      tapTurn: 0,
+      startDate: null, // : {value: null, label: '09:00 AM'},
+      endDate: null, // : {value: null, label: '5:00 PM'},
       enableScrollViewScroll: true
     }
   }
   static navigationOptions = ({ navigation }) => {
-    return {
-      headerLeft: <NavButton icon='cancel' imageStyle={{height: 12, width: 12}} onPress={() => navigation.navigate(Home)} />
-    }
+    // return {
+    //   headerLeft: <NavButton icon='cancel' imageStyle={{height: 12, width: 12}} onPress={() => navigation.navigate(Home)} />
+    // }
   }
 
   componentWillUnmount () {
@@ -74,34 +76,23 @@ class NewBookingDetails extends PureComponent {
     }
   }
 
+  onStartDatePress = () => {
+    this.setState({endDate: null})
+    this.props.navigation.navigate(BookingCalendar, {bookDateType: 'pickup', bookedHours: BOOKED})
+  }
+  onEndDatePress = () => {
+    if (!this.state.endDate) Alert.alert('', 'Select start date first')
+    else this.props.navigation.navigate(BookingCalendar, {bookDateType: 'return', bookedHours: this.props.car.booked})
+  }
+
   onConfirmPress = () => {
-    const {car} = this.props
+    const {car: {car}} = this.props
     const {startTime, endTime} = this.state
     let timeStamps = {
       'slot_end_timestamp': endTime.timestamp,
       'slot_start_timestamp': startTime.timestamp
     }
     this.props.onBookCar({id: car.id, timeStamps})
-  }
-
-  onSwitchBookHours = (addExtraHours) => {
-    this.setState({
-      slotsNumToShow: addExtraHours ? 12 : 8
-    })
-  }
-
-  onTimeSlotPress = (timeslot) => {
-    this.setState(prevState => {
-      return {
-        startTime: prevState.tapTurn === 0 ? timeslot : prevState.startTime,
-        endTime: prevState.tapTurn === 1 ? timeslot : prevState.endTime,
-        tapTurn: prevState.tapTurn === 1 ? 0 : 1
-      }
-    })
-  }
-
-  onViewableSlotsChanged = ({viewableItems, changed}) => {
-    // console.log({viewableItems, changed})
   }
 
   enableContainerScroll = () => {
@@ -117,22 +108,16 @@ class NewBookingDetails extends PureComponent {
 
   keyExtractor = (item, index) => index.toString()
 
-  renderSeparator = () => {
-    return <View style={styles.listSeparator} />
-  }
-  renderSlot = ({item}) => {
-    let slotType = 'default'
-    const {endTime, startTime} = this.state
-    if (item.value === endTime.value || item.value === startTime.value) slotType = 'border'
-    else if (startTime.value && endTime.value && isBetweenLimits(startTime.value, endTime.value, item.value)) slotType = 'middle'
-    console.log('sloType', slotType)
-    return (
-      <TimeSlot slotType={slotType} time={item} onPress={this.onTimeSlotPress} />
-    )
-  }
-
   render () {
-    const {car} = this.props
+    const {isFetchingCar} = this.props
+    if (isFetchingCar) {
+      return (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator color={colors.red} size='large' />
+        </View>
+      )
+    }
+    const {car: {car}} = this.props
     const {
       image_s3_url: image,
       pickup_location: pickupLocation,
@@ -141,9 +126,8 @@ class NewBookingDetails extends PureComponent {
       model = '',
       color = ''
     } = car
-    const {slotsNumToShow, slots, startTime, endTime} = this.state
-    console.log(this.state.startTime, this.state.endTime)
-    let timeSlotContainerHeight = (SLOT_HEIGHT * slotsNumToShow) + (GAP_HEIGHT * (slotsNumToShow - 1))
+    const {startDate, endDate} = this.state
+    // console.log(this.state.startTime, this.state.endTime)
     return (
       <View
         onStartShouldSetResponderCapture={this.enableContainerScroll}
@@ -199,46 +183,20 @@ class NewBookingDetails extends PureComponent {
             </View>
             <View style={styles.scheduleContainer}>
               <SectionTitle title='SCHEDULE' />
-              {/* <View style={styles.switchContainer}>
-                <Switch
-                  backgroundActive={colors.red}
-                  backgroundInactive='#E5E5E5'
-                  circleColorActive={colors.white}
-                  height={31}
-                  width={51}
-                  onSyncPress={this.onSwitchBookHours}
-                />
-                <Text style={styles.switchText}>Book extra hours</Text>
-              </View> */}
               <View style={[styles.row, {marginVertical: 16}]}>
-                <View style={{flex: 1}}>
+                <TouchableOpacity style={{flex: 1}} onPress={this.onStartDatePress}>
                   <BookingDetail
-                    label='Start Time'
-                    text={startTime.label}
+                    label='Start Date'
+                    text={startDate || '--:--'}
                   />
-                </View>
-                <View style={{flex: 1}}>
+                </TouchableOpacity>
+                <TouchableOpacity style={{flex: 1}} onPress={this.onEndDatePress}>
                   <BookingDetail
-                    label='End Time'
-                    text={endTime.label}
+                    label='End Date'
+                    text={endDate || '--:--'}
                   />
-                </View>
+                </TouchableOpacity>
               </View>
-              {/* <View
-                style={{height: timeSlotContainerHeight}}
-                onStartShouldSetResponderCapture={this.enableTimeslotsScroll}
-              >
-                <FlatList
-                  ItemSeparatorComponent={this.renderSeparator}
-                  data={slots}
-                  extraData={{startTime: this.state.startTime, endTime: this.state.startTime}}
-                  keyExtractor={this.keyExtractor}
-                  // nestedScrollEnabled
-                  renderItem={this.renderSlot}
-                  showsVerticalScrollIndicator={false}
-                  onViewableItemsChanged={this.onViewableSlotsChanged}
-                />
-              </View> */}
             </View>
             <Button
               containerStyle={styles.button}
@@ -257,6 +215,7 @@ NewBookingDetails.propTypes = {
   bookingError: PropTypes.string,
   bookingPending: PropTypes.bool,
   car: PropTypes.object,
+  isFetchingCar: PropTypes.bool,
   navigation: PropTypes.object,
   onBookCar: PropTypes.func,
   onUnselectCar: PropTypes.func

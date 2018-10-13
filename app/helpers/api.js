@@ -133,6 +133,15 @@ export const fetchAvailableCars = async (token) => {
   return response.data.data
 }
 
+export const fetchCarDetails = async ({token, id}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.get(`${URL}/api/cars/${id}/book`, config)
+  console.log('fetchAvailableCars response', response)
+  return response.data.data
+}
+
 export const bookCar = async ({token, id, timeStamps}) => {
   let config = {
     headers: {'Authorization': `Bearer ${token}`}

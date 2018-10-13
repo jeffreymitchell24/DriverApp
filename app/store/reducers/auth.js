@@ -60,7 +60,10 @@ const handlers = {
       ...rehydrate,
       resetError: null,
       updateError: null,
-      authError: null
+      authError: null,
+      pending: false,
+      resetPending: false,
+      checkingUserStatus: false
     }
   },
   [SIGN_IN.REQUEST]: (state, { payload }) => {
