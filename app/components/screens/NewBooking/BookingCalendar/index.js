@@ -1,2 +1,12 @@
+import { connect } from 'react-redux'
+import {setBookingDate} from 'store/actions/newBooking'
 import BookingCalendar from './BookingCalendar'
-export default BookingCalendar
+
+const actions = {
+  onSetBookingDate: setBookingDate
+}
+
+export default connect(
+  null,
+  actions
+)(BookingCalendar)

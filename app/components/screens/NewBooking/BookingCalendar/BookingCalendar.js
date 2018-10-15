@@ -60,34 +60,40 @@ class BookingCalendar extends Component {
       headerLeft: <NavButton icon='cancel' imageStyle={{height: 12, width: 12}} onPress={() => navigation.goBack()} />
     }
   }
+  disableRestHours = false
   isHiddenPicker = true
   constructor (props) {
     super(props)
-    this.bookedHours = this.props.navigation.getParam('bookedHours', {})
+    let {params = {}} = this.props.navigation.state
+    let {startHour = -1, bookedHours = {}, bookDateType = 'start', maxDate = null, minDate = moment().format('YYYY-MM-DD')} = params
+    this.bookedHours = bookedHours
+    this.bookDateType = bookDateType
+    this.startHour = startHour
     let disabledDays = getDisabledDays(this.bookedHours)
     let currentDate = moment()
-    let pickupHours = getCurrentDayHours()
     let hourList = get24hours(currentDate.add(1, 'd'))
-    console.log('pickupHours', pickupHours)
-    this.minDate = currentDate.format('YYYY-MM-DD')
+    this.minDate = minDate
     this.state = {
-      maxDate: null,
-      startDate: null,
-      endDate: null,
-      startTimeIndex: null,
-      endTimeIndex: null,
+      maxDate,
       bounceValue: new Animated.Value(pickerHeight),
-      pickupHours,
       disabledDays,
       hourList,
       selectedDate: null,
-      selectedHour: null
+      selectedTime: -1
     }
   }
 
   onConfirmPress = () => {
     let bookDateType = this.props.navigation.getParam('bookDateType', 'start')
-    this.props.navigation.navigate(NewBookingDetails, { bookDateType })
+    const {selectedDate, selectedTime} = this.state
+    console.log('selectedDate', selectedDate)
+    let fullDate = {...selectedDate}
+    let [hour] = this.state.hourList[selectedTime].split(':')
+    fullDate.timestamp = moment(selectedDate.timestamp).hour(+hour).unix()
+    console.log('fullDate', fullDate)
+    console.log(moment(selectedDate.timestamp).hour(+hour).hour())
+    this.props.onSetBookingDate({type: bookDateType, date: fullDate})
+    this.props.navigation.navigate(NewBookingDetails, {bookDateType, selectedDate, selectedTime})
   }
   _toggleTimePicker = () => {
     var toValue = pickerHeight
@@ -112,8 +118,6 @@ class BookingCalendar extends Component {
   }
 
   onDateSelect = (selectedDate) => {
-    console.log('selectedDate', selectedDate)
-    const {startDate, endDate} = this.state
     // if ((startDate && endDate) || !startDate) {
     //   let maxDate = moment(selectedDate.dateString).add(1, 'days').format('YYYY-MM-DD')
     //   this.setState({startDate: selectedDate.dateString, endDate: null, maxDate})
@@ -128,47 +132,23 @@ class BookingCalendar extends Component {
     //     !this.isHiddenPicker && this._toggleTimePicker()
     //   }
     // }
-    this.setState({selectedDate: selectedDate.dateString})
+    this.setState({selectedDate})
     this.isHiddenPicker && this._toggleTimePicker()
-  }
-  onPickupTimeSelect = (index) => {
-    this.setState(state => ({startTimeIndex: index}))
-  }
-  onReturnTimeSelect = (index) => {
-    this.setState(state => ({endTimeIndex: index}))
   }
 
   onTimeSelect = (index) => {
-    this.setState({selectedHour: index})
+    this.setState({selectedTime: index})
   }
 
-  renderPickupPicker = () => {
-    return (
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.timePicker} >
-        {this.state.pickupHours.map((value, i) => (
-          <PickerItem key={i} time={value} />
-        ))}
-      </ScrollView>
-    )
-  }
-
-  renderReturnPicker = () => {
-    return (
-      <ScrollView showsVerticalScrollIndicator={false} style={styles.timePicker} >
-        {this.state.returnHours.map((value, i) => (
-          <PickerItem key={i} time={value} />
-        ))}
-      </ScrollView>
-    )
-  }
   render () {
-    const {disabledDays, selectedDate, selectedHour} = this.state
-    let isButtonActive = selectedDate && selectedHour
+    this.disableRestHours = false
+    const {disabledDays, selectedDate, selectedTime} = this.state
+    let isButtonActive = selectedDate && selectedTime > -1
     let markedDates = {...disabledDays}
     // if (startDate) markedDates[startDate] = {startingDay: true, color: colors.red, selected: true}
     // if (endDate) markedDates[endDate] = {endingDay: true, color: colors.red, selected: true}
 
-    if (selectedDate) markedDates[selectedDate] = {color: colors.red, selected: true, selectedColor: colors.red}
+    if (selectedDate) markedDates[selectedDate.dateString] = {color: colors.red, selected: true, selectedColor: colors.red}
     return (
       <View style={styles.container}>
         <Calendar
@@ -194,14 +174,33 @@ class BookingCalendar extends Component {
             <View style={styles.timePickerContainer}>
               <Text style={styles.timePickerLabel}>PICKUP</Text>
               <ScrollView showsVerticalScrollIndicator={false} style={styles.timePicker} >
-                {this.state.hourList.map((value, i) => {
+                {this.state.hourList.map((timeString, i) => {
                   let type = 'default'
-                  let dayForCheck = this.bookedHours[selectedDate]
-                  if (this.state.selectedHour === i) type = 'selected'
-                  else if (dayForCheck && dayForCheck !== false) {
-                    if (dayForCheck.includes(value)) type = 'disabled'
+                  let dayForCheck = this.bookedHours[(selectedDate && selectedDate.dateString) || null]
+                  if (this.state.selectedTime === i) type = 'selected'
+                  else if (this.bookDateType === 'start') {
+                    if (dayForCheck && dayForCheck !== false && dayForCheck.includes(timeString)) type = 'disabled'
+                  } else if (this.bookDateType === 'end') {
+                    let hour = +timeString.split(':')[0]
+                    if (selectedDate && selectedDate.dateString === this.minDate) {
+                      if (hour <= this.startHour) type = 'disabled'
+                      else if (hour - this.startHour === 1) type = 'default'
+                      else {
+                        let isBookedHour = dayForCheck && dayForCheck.includes(timeString)
+                        if (isBookedHour) {
+                          type = 'disabled'
+                          this.disableRestHours = true
+                        } else if (this.disableRestHours || hour - this.startHour > 12) type = 'disabled'
+                      }
+                    } else if (selectedDate && selectedDate.dateString === this.state.maxDate && this.minDate !== this.state.maxDate) {
+                      if (i === 0) type = 'default'
+                      else if (dayForCheck && dayForCheck.includes(timeString)) {
+                        type = 'disabled'
+                        this.disableRestHours = true
+                      } else if (this.disableRestHours || (hour + 24) - this.startHour > 12) type = 'disabled'
+                    }
                   }
-                  return <PickerItem key={i}slotType={type} time={value} onPress={() => this.onTimeSelect(i)} />
+                  return <PickerItem key={i}slotType={type} time={timeString} onPress={() => this.onTimeSelect(i)} />
                 })}
               </ScrollView>
               {/* <Picker
@@ -229,7 +228,8 @@ class BookingCalendar extends Component {
 }
 
 BookingCalendar.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  onSetBookingDate: PropTypes.func
 }
 
 export default BookingCalendar

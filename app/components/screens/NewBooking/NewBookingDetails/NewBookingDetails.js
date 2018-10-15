@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react'
 import { View, Text, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native'
+import moment from 'moment'
 import Spinner from 'react-native-loading-spinner-overlay'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
 import { NavButton, Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
 import {Home, BookingConfirmed, BookingCalendar} from 'navigation/routeNames'
-import {isBetweenLimits, tempDates} from 'helpers/date'
+import {getMaxDate, tempDates} from 'helpers/date'
 
 import styles from './styles'
 import { colors } from 'theme'
@@ -72,25 +73,36 @@ class NewBookingDetails extends PureComponent {
   componentDidUpdate (prevProps) {
     let {bookingError, bookingPending} = this.props
     if (!bookingError && !bookingPending && prevProps.bookingPending) {
-      this.props.navigation.navigate(BookingConfirmed)
+      return this.props.navigation.navigate(BookingConfirmed)
     }
   }
 
   onStartDatePress = () => {
     this.setState({endDate: null})
-    this.props.navigation.navigate(BookingCalendar, {bookDateType: 'pickup', bookedHours: BOOKED})
+    this.props.navigation.navigate(BookingCalendar, {bookDateType: 'start', bookedHours: BOOKED})
   }
   onEndDatePress = () => {
-    if (!this.state.endDate) Alert.alert('', 'Select start date first')
-    else this.props.navigation.navigate(BookingCalendar, {bookDateType: 'return', bookedHours: this.props.car.booked})
+    if (!this.props.startDate) Alert.alert('', 'Select start date first')
+    else {
+      let maxDate = getMaxDate(this.props.startDate, BOOKED)
+      console.log('maxDate', maxDate)
+      // Alert.alert('', maxDate)
+      this.props.navigation.navigate(BookingCalendar, {
+        bookDateType: 'end',
+        bookedHours: BOOKED,
+        maxDate,
+        minDate: this.props.startDate.dateString,
+        startHour: moment.unix(this.props.startDate.timestamp).hour()
+      })
+    }
   }
 
   onConfirmPress = () => {
     const {car: {car}} = this.props
-    const {startTime, endTime} = this.state
+    const {startDate, endDate} = this.props
     let timeStamps = {
-      'slot_end_timestamp': endTime.timestamp,
-      'slot_start_timestamp': startTime.timestamp
+      'booking_ending_at': moment.unix(endDate.timestamp).format('YYYY-MM-DD HH:mm'),
+      'booking_starting_at': moment.unix(startDate.timestamp).format('YYYY-MM-DD HH:mm')
     }
     this.props.onBookCar({id: car.id, timeStamps})
   }
@@ -126,8 +138,8 @@ class NewBookingDetails extends PureComponent {
       model = '',
       color = ''
     } = car
-    const {startDate, endDate} = this.state
-    // console.log(this.state.startTime, this.state.endTime)
+    const {startDate, endDate} = this.props
+    let isButtonActive = startDate && endDate
     return (
       <View
         onStartShouldSetResponderCapture={this.enableContainerScroll}
@@ -187,20 +199,20 @@ class NewBookingDetails extends PureComponent {
                 <TouchableOpacity style={{flex: 1}} onPress={this.onStartDatePress}>
                   <BookingDetail
                     label='Start Date'
-                    text={startDate || '--:--'}
+                    text={(startDate && moment.unix(startDate.timestamp).format('ddd MM/D hh:mm A')) || '--:--'}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity style={{flex: 1}} onPress={this.onEndDatePress}>
                   <BookingDetail
                     label='End Date'
-                    text={endDate || '--:--'}
+                    text={(endDate && moment.unix(endDate.timestamp).format('ddd MM/D hh:mm A')) || '--:--'}
                   />
                 </TouchableOpacity>
               </View>
             </View>
             <Button
               containerStyle={styles.button}
-              disabled
+              disabled={!isButtonActive}
               title='CONFIRM'
               onPress={this.onConfirmPress}
             />
@@ -215,8 +227,10 @@ NewBookingDetails.propTypes = {
   bookingError: PropTypes.string,
   bookingPending: PropTypes.bool,
   car: PropTypes.object,
+  endDate: PropTypes.object,
   isFetchingCar: PropTypes.bool,
   navigation: PropTypes.object,
+  startDate: PropTypes.object,
   onBookCar: PropTypes.func,
   onUnselectCar: PropTypes.func
 }

@@ -83,3 +83,25 @@ export const getDisabledDays = (bookedHours) => {
 
   return disabledDays
 }
+
+export const getMaxDate = (startDate, bookedHours) => {
+  let startTime = moment.unix(startDate.timestamp)
+  let startHour = startTime.hour()
+  if (startHour === 23) {
+    return startTime.add(1, 'd').format('YYYY-MM-DD')
+  }
+  if (startHour < 12) {
+    return startDate.dateString
+  }
+  if (bookedHours[startDate.dateString]) {
+    let time = bookedHours[startDate.dateString].find(timeString => {
+      let [hour] = timeString.split(':')
+      console.log(startHour <= +hour, startHour, +hour)
+      return startHour <= +hour
+    })
+    console.log('time', time)
+    return !time ? startTime.add(1, 'd').format('YYYY-MM-DD') : startDate.dateString
+  } else if (bookedHours[startDate.dateString] !== 'false') {
+    return startTime.add(1, 'd').format('YYYY-MM-DD')
+  }
+}
