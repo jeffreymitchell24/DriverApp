@@ -7,21 +7,20 @@ import {backgrounds} from 'images'
 import { Button } from 'components/ui'
 import styles from './styles'
 
-const BookingConfirmed = ({navigation}) => {
+const RideFinished = ({navigation}) => {
   const onBackButtonPressAndroid = () => true
   const onPress = () => {
     navigation.navigate(Home)
   }
-  let {car = '', startDate = '', endDate = ''} = navigation.getParam('bookingData', {})
   return (
     <AndroidBackHandler onBackPress={onBackButtonPressAndroid}>
       <View style={styles.container}>
         <View>
-          <Text style={styles.title}>Booking Confirmed!</Text>
+          <Text style={styles.title}>Thanks for driving with us!</Text>
           <View style={styles.imageContainer}>
             <Image resizeMode='contain' source={backgrounds['highFive']} style={styles.image} />
           </View>
-          <Text style={styles.mainText}>{`You have successfully booked a ride from ${startDate} to ${endDate} on ${car}.`}</Text>
+          <Text style={styles.mainText}>Your drive was successfully ended. Hope to see you soon again!</Text>
         </View>
         <Button
           containerStyle={styles.button}
@@ -35,8 +34,8 @@ const BookingConfirmed = ({navigation}) => {
   )
 }
 
-BookingConfirmed.propTypes = {
+RideFinished.propTypes = {
   navigation: PropTypes.object
 }
 
-export default BookingConfirmed
+export default RideFinished

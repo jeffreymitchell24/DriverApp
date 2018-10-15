@@ -1,10 +1,11 @@
-import { take, put, call, select, all } from 'redux-saga/effects'
+import { take, put, call, select, all, fork } from 'redux-saga/effects'
 import {takeLatest} from 'helpers/saga'
 import * as Api from 'helpers/api'
-
+import {checkUserStatusWrapper} from './auth'
 import {
   FETCH_USER_BOOKINGS,
   FETCH_AVAILABLE_CARS,
+  FETCH_SELECTED_CAR,
   BOOK_CAR
 } from 'store/actions/bookings'
 
@@ -26,7 +27,7 @@ function * fetchUserBookings (action) {
 }
 
 function * fetchUserBookingsFlow () {
-  yield takeLatest(FETCH_USER_BOOKINGS.REQUEST, fetchUserBookings)
+  yield takeLatest(FETCH_USER_BOOKINGS.REQUEST, checkUserStatusWrapper, fetchUserBookings)
 }
 
 function * fetchAvailableCars () {
@@ -43,28 +44,51 @@ function * fetchAvailableCars () {
 }
 
 function * fetchAvailableCarsFlow () {
-  yield takeLatest(FETCH_AVAILABLE_CARS.REQUEST, fetchAvailableCars)
+  yield takeLatest(FETCH_AVAILABLE_CARS.REQUEST, checkUserStatusWrapper, fetchAvailableCars)
+}
+
+function * fetchCarDetails ({payload: id}) {
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let response = yield call(Api.fetchCarDetails, {token, id})
+    yield put({type: FETCH_SELECTED_CAR.SUCCESS, payload: response})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: FETCH_SELECTED_CAR.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function * fetchCarDetailsFlow () {
+  yield takeLatest(FETCH_SELECTED_CAR.REQUEST, checkUserStatusWrapper, fetchCarDetails)
+}
+
+function * bookCar ({payload}) {
+  let {id, timeStamps} = payload
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let response = yield call(Api.bookCar, {token, id, timeStamps})
+    console.log('response', response)
+    yield put({type: BOOK_CAR.SUCCESS, payload: {}})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: BOOK_CAR.FAILURE, payload: error.response.data.error.message})
+  }
 }
 
 function * bookCarFlow () {
   while (true) {
-    let {payload: {id, timeStamps}} = yield take(BOOK_CAR.REQUEST)
-    let state = yield select()
-    let {token} = state.auth
-    try {
-      let response = yield call(Api.bookCar, {token, id, timeStamps})
-      console.log('response', response)
-      yield put({type: BOOK_CAR.SUCCESS, payload: {}})
-    } catch (error) {
-      console.log('error response', error.response)
-      console.log('error message', error.message)
-      yield put({type: BOOK_CAR.FAILURE, payload: error.response.data.error.message})
-    }
+    let action = yield take(BOOK_CAR.REQUEST)
+    yield fork(checkUserStatusWrapper, () => bookCar(action))
   }
 }
 
 export default [
   fetchUserBookingsFlow,
   fetchAvailableCarsFlow,
-  bookCarFlow
+  bookCarFlow,
+  fetchCarDetailsFlow
 ]

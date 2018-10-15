@@ -2,18 +2,20 @@
 import { combineReducers } from 'redux'
 import auth from './auth'
 import registration from './registration'
-import receipt from './receipt'
+import ride from './ride'
 import email from './email'
 import bookings from './bookings'
 import helpCenter from './helpCenter'
+import newBooking from './newBooking'
 
 const rootReducer = combineReducers({
   auth, // : persistReducer(config, auth),
   registration,
-  receipt,
+  ride,
   email,
   bookings,
-  helpCenter
+  helpCenter,
+  newBooking
 })
 
 export default rootReducer

@@ -2,7 +2,7 @@ import AvailableBookings from './AvailableBookings'
 
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
-import {fetchAvailableCars, selectCar} from 'store/actions/bookings'
+import {fetchAvailableCars, fetchSelectedCar} from 'store/actions/bookings'
 import {getAvailableCars, getFetchingCarsStatus, getFetchCarsError} from 'store/selectors'
 
 const selector = createStructuredSelector({
@@ -12,7 +12,7 @@ const selector = createStructuredSelector({
 })
 
 const actions = {
-  onSelectCar: selectCar,
+  onSelectCar: fetchSelectedCar,
   onFetchAvailableCars: fetchAvailableCars
 }
 

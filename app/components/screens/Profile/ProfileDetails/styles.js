@@ -31,6 +31,18 @@ export const styles = StyleSheet.create({
   button: {
     marginTop: 10,
     alignSelf: 'stretch'
+  },
+  pendingMessage: {
+    backgroundColor: colors.orange25Trans,
+    paddingVertical: 9,
+    paddingLeft: 12,
+    borderRadius: 4,
+    marginBottom: metrics.contentMarginSmall
+  },
+  pendingText: {
+    fontFamily: 'SFProText-Medium',
+    fontSize: 15,
+    color: colors.orange50
   }
 })
 

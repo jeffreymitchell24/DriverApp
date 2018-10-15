@@ -3,9 +3,11 @@ import { createReducer } from '../../helpers/redux'
 import {
   SAVE_RECEIPT_PHOTO,
   CLEAR_RECEIPT_PHOTO
-} from 'store/actions/receipt'
+} from 'store/actions/ride'
 
 const initialState = {
+  carPhotos: [],
+  gasTankPhotos: [],
   receiptPhoto: null
 }
 

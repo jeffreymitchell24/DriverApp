@@ -1,14 +1,32 @@
 import React, { Component } from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import {fieldNames} from 'constants/profile'
+import Spinner from 'react-native-loading-spinner-overlay'
 import {ProfileMain} from 'navigation/routeNames'
+import { colors } from 'theme'
 import { Button } from 'components/ui'
 import styles from './styles'
 
 class ChangesReview extends Component {
+  constructor (props) {
+    super(props)
+    this.profileChanges = this.props.navigation.getParam('profileChanges', [])
+  }
+  componentDidUpdate (prevProps) {
+    const {error, requestPending, navigation} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else navigation.navigate(ProfileMain)
+    }
+  }
   onSaveChanges = () => {
-    this.props.navigation.navigate(ProfileMain)
+    let changes = {}
+    this.profileChanges.forEach(item => {
+      if (item.id === 'fullname') changes['full_name'] = item.current
+      else changes[item.id] = item.current
+    })
+    this.props.onUpdateUserProfile(changes)
   }
 
   renderSeparator = () => {
@@ -35,12 +53,13 @@ class ChangesReview extends Component {
   }
   render () {
     let profileChanges = this.props.navigation.getParam('profileChanges', [])
+    console.log('profileChanges', profileChanges)
     return (
       <View style={styles.container}>
         <FlatList
           ItemSeparatorComponent={this.renderSeparator}
-          data={profileChanges}
-          extraData={profileChanges}
+          data={this.profileChanges}
+          extraData={this.profileChanges}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
         />
@@ -49,13 +68,17 @@ class ChangesReview extends Component {
           title='SAVE CHANGES'
           onPress={this.onSaveChanges}
         />
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </View>
     )
   }
 }
 
 ChangesReview.propTypes = {
-  navigation: PropTypes.object
+  error: PropTypes.string,
+  navigation: PropTypes.object,
+  requestPending: PropTypes.bool,
+  onUpdateUserProfile: PropTypes.func
 }
 
 export default ChangesReview

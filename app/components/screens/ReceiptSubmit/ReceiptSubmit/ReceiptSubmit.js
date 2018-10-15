@@ -39,10 +39,10 @@ class ReceiptSubmit extends Component {
     this.props.onClearReceiptPhoto()
   }
   onDatePress = () => {
-    this.setState({showPicker: true, pickerMode: 'date'})
+    this.setState({showPicker: true, pickerMode: 'datetime'})
   }
   onTimePress = () => {
-    this.setState({showPicker: true, pickerMode: 'time'})
+    this.setState({showPicker: true, pickerMode: 'datetime'})
   }
   render () {
     console.log(this.state)

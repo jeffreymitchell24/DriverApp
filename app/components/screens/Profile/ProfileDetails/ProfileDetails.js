@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, TouchableOpacity, Keyboard } from 'react-native'
+import { View, ScrollView, TouchableOpacity, Keyboard, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import Spinner from 'react-native-loading-spinner-overlay'
 import forEach from 'lodash/forEach'
@@ -158,6 +158,7 @@ class ProfileDetails extends Component {
   }
 
   renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
+    let isApprovalPending = this.props.user.profileUpdateStatus === 'pending'
     const {phone, address, email, fullname} = values
     let buttonActive = this.isSubmitActive() && isEmpty(errors) && this.addressSelected
     return (
@@ -170,7 +171,7 @@ class ProfileDetails extends Component {
           <View style={styles.textInputContainer}>
             <TextInputView
               autoCapitalize='words'
-              containerStyle={{paddingRight: 40}}
+              containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
               editable={this.state.editableField === 'fullname'}
               error={touched.fullname && errors.fullname}
               inputRef={(input) => { this.inputRefs['fullname'] = input }}
@@ -186,11 +187,15 @@ class ProfileDetails extends Component {
                 setFieldValue('fullname', value)
               })}
             />
-            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
-              onPress={() => this.onPenPress('fullname')}
-            >
-              {this.renderEditIcon({editable: this.state.editableField === 'fullname'})}
-            </TouchableOpacity>
+            {
+              !isApprovalPending && (
+                <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
+                  onPress={() => this.onPenPress('fullname')}
+                >
+                  {this.renderEditIcon({editable: this.state.editableField === 'fullname'})}
+                </TouchableOpacity>
+              )
+            }
           </View>
           <GoogleAutoComplete
             apiKey={GOOGLE_API_KEY}
@@ -204,7 +209,7 @@ class ProfileDetails extends Component {
                 <View style={styles.textInputContainer}>
                   <View>
                     <TextInputView
-                      containerStyle={{paddingRight: 40}}
+                      containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
                       editable={this.state.editableField === 'address'}
                       error={touched.address && errors.address}
                       inputRef={(input) => { this.inputRefs['address'] = input }}
@@ -229,20 +234,24 @@ class ProfileDetails extends Component {
                       this.renderSearchResults(locationResults, fetchDetails)
                     }
                   </View>
-                  <TouchableOpacity
-                    hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-                    style={styles.editIcon}
-                    onPress={() => this.onPenPress('address')}
-                  >
-                    {this.renderEditIcon({editable: this.state.editableField === 'address'})}
-                  </TouchableOpacity>
+                  {
+                    !isApprovalPending && (
+                      <TouchableOpacity
+                        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
+                        style={styles.editIcon}
+                        onPress={() => this.onPenPress('address')}
+                      >
+                        {this.renderEditIcon({editable: this.state.editableField === 'address'})}
+                      </TouchableOpacity>
+                    )
+                  }
                 </View>
               )
             }}
           </GoogleAutoComplete>
           <View style={styles.textInputContainer}>
             <TextInputView
-              containerStyle={{paddingRight: 40}}
+              containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
               editable={this.state.editableField === 'phone'}
               error={touched.phone && errors.phone}
               keyboardType='phone-pad'
@@ -260,15 +269,19 @@ class ProfileDetails extends Component {
                 setFieldValue('phone', value)
               })}
             />
-            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
-              onPress={() => this.onPenPress('phone')}
-            >
-              {this.renderEditIcon({editable: this.state.editableField === 'phone'})}
-            </TouchableOpacity>
+            {
+              !isApprovalPending && (
+                <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
+                  onPress={() => this.onPenPress('phone')}
+                >
+                  {this.renderEditIcon({editable: this.state.editableField === 'phone'})}
+                </TouchableOpacity>
+              )
+            }
           </View>
           <View style={styles.textInputContainer}>
             <TextInputView
-              containerStyle={{paddingRight: 40}}
+              containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
               editable={this.state.editableField === 'email'}
               error={touched.email && errors.email}
               inputRef={(input) => { this.inputRefs['email'] = input }}
@@ -285,33 +298,41 @@ class ProfileDetails extends Component {
                 setFieldValue('email', value)
               })}
             />
-            <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
-              onPress={() => this.onPenPress('email')}
-            >
-              {this.renderEditIcon({editable: this.state.editableField === 'email'})}
-            </TouchableOpacity>
+            {
+              !isApprovalPending && (
+                <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
+                  onPress={() => this.onPenPress('email')}
+                >
+                  {this.renderEditIcon({editable: this.state.editableField === 'email'})}
+                </TouchableOpacity>
+              )
+            }
           </View>
         </View>
-        <Button
-          containerStyle={styles.button}
-          disabled={!buttonActive}
-          title='REVIEW CHANGES'
-          onPress={handleSubmit}
-        />
+        {
+          !isApprovalPending && (
+            <Button
+              containerStyle={styles.button}
+              disabled={!buttonActive}
+              title='REVIEW CHANGES'
+              onPress={handleSubmit}
+            />
+          )
+        }
       </ScrollView>
     )
   }
   render () {
-    // let isButtonActive = this.isSubmitActive()
+    let isApprovalPending = this.props.user.profileUpdateStatus === 'pending'
     return (
       <View style={styles.container}>
-        {/* <FlatList
-          ItemSeparatorComponent={this.renderSeparator}
-          data={CONFIG}
-          extraData={{state: this.state, email: this.props.emailValidation}}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.renderItem}
-        /> */}
+        {
+          isApprovalPending && (
+            <View style={styles.pendingMessage}>
+              <Text style={styles.pendingText}>Pending update approval</Text>
+            </View>
+          )
+        }
         <Formik
           initialValues={{
             fullname: this.originalData.fullname,

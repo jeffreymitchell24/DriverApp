@@ -7,7 +7,7 @@ import { colors } from 'theme'
 import styles from './styles'
 
 class HomeView extends PureComponent {
-  keyExtractor = (item, index) => item.id
+  keyExtractor = (item, index) => index.toString()
 
   renderEmptyList = () => {
     const {onNewPress} = this.props

@@ -2,7 +2,7 @@ import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import ReceiptSubmit from './ReceiptSubmit'
 import {getReceiptPhoto} from 'store/selectors'
-import {clearReceiptPhoto} from 'store/actions/receipt'
+import {clearReceiptPhoto} from 'store/actions/ride'
 
 const selector = createStructuredSelector({
   receiptPhoto: getReceiptPhoto

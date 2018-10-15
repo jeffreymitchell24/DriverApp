@@ -20,17 +20,17 @@ class AvailableBookings extends PureComponent {
   }
 
   onBookingPress = (car) => {
-    this.props.onSelectCar(car)
+    this.props.onSelectCar(car.id)
     this.props.navigation.navigate(NewBookingDetails)
   }
 
-  keyExtractor = (item, index) => item.id.toString()
+  keyExtractor = (item, index) => item.car.id.toString()
 
   renderItem = ({item, index}) => {
     const {availability} = item
     return (
       <BookingCard
-        booking={item}
+        booking={item.car}
         extraDetail={`Available ${availability}`}
         onPress={this.onBookingPress}
       />
