@@ -2,8 +2,8 @@
 import R from 'ramda'
 
 // Bookings
-export const getUpcomingBookings = R.path(['bookings', 'history'])
-export const getBookingsHistory = R.path(['bookings', 'upcoming'])
+export const getUpcomingBookings = R.path(['bookings', 'upcoming'])
+export const getBookingsHistory = R.path(['bookings', 'history'])
 export const getFetchingStatus = R.path(['bookings', 'pending'])
 export const getFetchError = R.path(['bookings', 'fetchError'])
 

@@ -12,6 +12,7 @@ const BookingConfirmed = ({navigation}) => {
   const onPress = () => {
     navigation.navigate(Home)
   }
+  let {car = '', startDate = '', endDate = ''} = navigation.getParam('bookingData', {})
   return (
     <AndroidBackHandler onBackPress={onBackButtonPressAndroid}>
       <View style={styles.container}>
@@ -20,7 +21,7 @@ const BookingConfirmed = ({navigation}) => {
           <View style={styles.imageContainer}>
             <Image resizeMode='contain' source={backgrounds['highFive']} style={styles.image} />
           </View>
-          <Text style={styles.mainText}>You have successfully booked a ride from August 30, 11:00 AM to August 31, 08:00 PM on Toyota Prius.</Text>
+          <Text style={styles.mainText}>{`You have successfully booked a ride from ${startDate} to ${endDate} on ${car}.`}</Text>
         </View>
         <Button
           containerStyle={styles.button}

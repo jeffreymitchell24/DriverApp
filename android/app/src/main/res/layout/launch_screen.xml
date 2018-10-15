@@ -6,8 +6,8 @@
     android:background="@color/pink"
     android:gravity="center">
     <ImageView
-        android:layout_width="200dp"
-        android:layout_height="182dp"
+        android:layout_width="168dp"
+        android:layout_height="24dp"
         android:layout_marginTop="-24dp"
         android:src="@mipmap/splash_icon"
     />

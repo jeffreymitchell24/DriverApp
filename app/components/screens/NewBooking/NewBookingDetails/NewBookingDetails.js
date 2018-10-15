@@ -4,10 +4,10 @@ import moment from 'moment'
 import Spinner from 'react-native-loading-spinner-overlay'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
-import { NavButton, Button } from 'components/ui'
+import { Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
-import {Home, BookingConfirmed, BookingCalendar} from 'navigation/routeNames'
-import {getMaxDate, tempDates} from 'helpers/date'
+import { BookingConfirmed, BookingCalendar } from 'navigation/routeNames'
+import {getMaxDate} from 'helpers/date'
 
 import styles from './styles'
 import { colors } from 'theme'
@@ -52,7 +52,6 @@ class NewBookingDetails extends PureComponent {
   constructor (props) {
     super(props)
     // let timeSlots = getNext24hours()
-    const {startTime, endTime} = tempDates()
     // console.log(timeSlots)
     this.state = {
       startDate: null, // : {value: null, label: '09:00 AM'},
@@ -73,13 +72,19 @@ class NewBookingDetails extends PureComponent {
   componentDidUpdate (prevProps) {
     let {bookingError, bookingPending} = this.props
     if (!bookingError && !bookingPending && prevProps.bookingPending) {
-      return this.props.navigation.navigate(BookingConfirmed)
+      const {manufacturer, model} = this.props.car.car
+      let bookingData = {
+        car: `${manufacturer} ${model}`,
+        startDate: moment.unix(this.props.startDate.timestamp).format('MMMM DD, hh:mm A'),
+        endDate: moment.unix(this.props.startDate.timestamp).format('MMMM DD, hh:mm A')
+      }
+      return this.props.navigation.navigate(BookingConfirmed, {bookingData})
     }
   }
 
   onStartDatePress = () => {
     this.setState({endDate: null})
-    this.props.navigation.navigate(BookingCalendar, {bookDateType: 'start', bookedHours: BOOKED})
+    this.props.navigation.navigate(BookingCalendar, {bookDateType: 'start', bookedHours: this.props.car.booked})
   }
   onEndDatePress = () => {
     if (!this.props.startDate) Alert.alert('', 'Select start date first')
@@ -89,7 +94,7 @@ class NewBookingDetails extends PureComponent {
       // Alert.alert('', maxDate)
       this.props.navigation.navigate(BookingCalendar, {
         bookDateType: 'end',
-        bookedHours: BOOKED,
+        bookedHours: this.props.car.booked,
         maxDate,
         minDate: this.props.startDate.dateString,
         startHour: moment.unix(this.props.startDate.timestamp).hour()
@@ -101,7 +106,7 @@ class NewBookingDetails extends PureComponent {
     const {car: {car}} = this.props
     const {startDate, endDate} = this.props
     let timeStamps = {
-      'booking_ending_at': moment.unix(endDate.timestamp).format('YYYY-MM-DD HH:mm'),
+      'booking_ending_at': moment.unix(endDate.timestamp).subtract(1, 'hours').subtract(1, 'seconds').format('YYYY-MM-DD HH:mm'),
       'booking_starting_at': moment.unix(startDate.timestamp).format('YYYY-MM-DD HH:mm')
     }
     this.props.onBookCar({id: car.id, timeStamps})

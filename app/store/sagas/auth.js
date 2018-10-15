@@ -12,6 +12,7 @@ import {
   RESET_PASSWORD,
   CHECK_STATUS,
   UPDATE_USER_IMAGE,
+  UPDATE_USER_PROFILE,
   REJECT_USER
 } from 'store/actions/auth'
 
@@ -66,8 +67,8 @@ function * checkStatus (action) {
   let {token} = state.auth
   try {
     let response = yield call(Api.checkStatus, token)
-    const {status} = response
-    yield put({type: CHECK_STATUS.SUCCESS, payload: {status}})
+    const {status, profileUpdateStatus} = response
+    yield put({type: CHECK_STATUS.SUCCESS, payload: {status, profileUpdateStatus}})
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
@@ -103,6 +104,26 @@ function * updateProfileImageFlow () {
   }
 }
 
+function * updateProfileData ({payload}) {
+  let data = Api.toFormData(payload)
+  console.log(data, payload)
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let {user} = yield call(Api.updateUser, {token, data})
+    console.log('user', user)
+    yield put({type: UPDATE_USER_PROFILE.SUCCESS, payload: user})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: UPDATE_USER_PROFILE.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function * updateProfileDataFlow () {
+  yield takeLatest(UPDATE_USER_PROFILE.REQUEST, checkUserStatusWrapper, updateProfileData)
+}
+
 function * rejectUserFlow () {
   while (true) {
     yield take(REJECT_USER)
@@ -135,5 +156,6 @@ export default [
   rejectUserFlow,
   resetPasswordFlow,
   checkStatusFlow,
-  updateProfileImageFlow
+  updateProfileImageFlow,
+  updateProfileDataFlow
 ]

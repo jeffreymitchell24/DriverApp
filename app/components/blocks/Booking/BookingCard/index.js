@@ -9,7 +9,7 @@ class BookingCard extends PureComponent {
     onPress(booking)
   }
   render () {
-    const {booking: {car}, extraDetail} = this.props
+    const {booking, extraDetail} = this.props
     const {
       image_s3_url: image,
       pickup_location: pickupLocation,
@@ -19,7 +19,7 @@ class BookingCard extends PureComponent {
       model = '',
       plate = '',
       color = ''
-    } = car
+    } = booking
     return (
       <View style={styles.cardContainer}>
         <TouchableOpacity onPress={this.onPress}>

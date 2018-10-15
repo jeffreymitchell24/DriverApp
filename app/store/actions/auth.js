@@ -58,3 +58,11 @@ export const updateUserImage = (photoUri) => {
     payload: photoUri
   }
 }
+
+export const UPDATE_USER_PROFILE = createAsyncAction('UPDATE_USER_PROFILE')
+export const updateUserProfile = (data) => {
+  return {
+    type: UPDATE_USER_PROFILE.REQUEST,
+    payload: data
+  }
+}

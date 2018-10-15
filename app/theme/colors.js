@@ -7,6 +7,8 @@ export default {
   black: '#000000',
   green: '#12B886',
   teal: '#0CA678',
+  orange25Trans: 'rgba(250, 176, 5, 0.1)',
+  orange50: '#F59F00',
   gray25: '#D1D1D6',
   gray50: '#F1F3F5',
   gray75: '#F8F9FA',
