@@ -9,12 +9,11 @@ class BookingCard extends PureComponent {
     onPress(booking)
   }
   render () {
-    const {booking, extraDetail} = this.props
+    const {booking, extraDetail, bookingEnd, bookingStart} = this.props
     const {
       image_s3_url: image,
-      pickup_location: pickupLocation,
-      return_location: returnLocation,
-      booking_starting_at: bookingStart,
+      short_pickup_location: pickupLocation,
+      short_return_location: returnLocation,
       manufacturer = '',
       model = '',
       plate = '',
@@ -30,7 +29,7 @@ class BookingCard extends PureComponent {
             <Text style={styles.cardTitle}>{`${manufacturer} ${model}`}</Text>
           </TouchableOpacity>
           <Text style={styles.detailText}>{`${plate}, ${color}`}</Text>
-          <Text style={styles.detailText}>{`${bookingStart.formatted} –– `}</Text>
+          <Text style={styles.detailText}>{`${bookingStart} –– ${bookingEnd}`}</Text>
           <Text style={styles.detailText}>{`${pickupLocation} –– ${returnLocation}`}</Text>
           <Text style={styles.extraDetailText}>{extraDetail}</Text>
         </View>
@@ -41,6 +40,8 @@ class BookingCard extends PureComponent {
 
 BookingCard.propTypes = {
   booking: PropTypes.object,
+  bookingEnd: PropTypes.string,
+  bookingStart: PropTypes.string,
   extraDetail: PropTypes.string,
   onPress: PropTypes.func
 }

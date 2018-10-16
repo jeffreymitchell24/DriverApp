@@ -18,7 +18,7 @@ function * fetchUserBookings (action) {
       Api.fetchBookingsHistory(token)
     ])
     console.log('Booking Response', upcoming, history)
-    yield put({type: FETCH_USER_BOOKINGS.SUCCESS, payload: {upcoming, history}})
+    yield put({type: FETCH_USER_BOOKINGS.SUCCESS, payload: {upcoming: upcoming.bookings, history: history.bookings}})
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
@@ -71,7 +71,7 @@ function * bookCar ({payload}) {
   try {
     let response = yield call(Api.bookCar, {token, id, timeStamps})
     console.log('response', response)
-    yield put({type: BOOK_CAR.SUCCESS, payload: {}})
+    yield put({type: BOOK_CAR.SUCCESS, payload: {booking: response.booking}})
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)

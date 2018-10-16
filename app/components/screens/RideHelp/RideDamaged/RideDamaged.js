@@ -4,10 +4,10 @@ import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import { TextInputView } from 'components/blocks'
 import * as Yup from 'yup'
+import { requestMainPermissions } from 'helpers/permission'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
 import { HelpCamera } from 'navigation/routeNames'
 import { Formik } from 'formik'
-import { requestWriteStoragePermission } from 'helpers/permission'
 import styles from './styles'
 
 const validationSchema = Yup.object().shape({
@@ -22,7 +22,7 @@ class RideDamaged extends Component {
 
   }
   onPhotoPress = async (index) => {
-    let granted = await requestWriteStoragePermission()
+    let granted = await requestMainPermissions()
     if (granted) {
       const {onSelectPhoto, navigation} = this.props
       onSelectPhoto({type: 'rideDamagedPhotos', index})

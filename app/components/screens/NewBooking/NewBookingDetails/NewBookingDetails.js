@@ -71,14 +71,18 @@ class NewBookingDetails extends PureComponent {
 
   componentDidUpdate (prevProps) {
     let {bookingError, bookingPending} = this.props
-    if (!bookingError && !bookingPending && prevProps.bookingPending) {
-      const {manufacturer, model} = this.props.car.car
-      let bookingData = {
-        car: `${manufacturer} ${model}`,
-        startDate: moment.unix(this.props.startDate.timestamp).format('MMMM DD, hh:mm A'),
-        endDate: moment.unix(this.props.startDate.timestamp).format('MMMM DD, hh:mm A')
+    if (!bookingPending && prevProps.bookingPending) {
+      if (!bookingError) {
+        const {manufacturer, model} = this.props.car.car
+        let bookingData = {
+          car: `${manufacturer} ${model}`,
+          startDate: moment.unix(this.props.startDate.timestamp).format('MMMM DD, hh:mm A'),
+          endDate: moment.unix(this.props.endDate.timestamp).format('MMMM DD, hh:mm A')
+        }
+        return this.props.navigation.navigate(BookingConfirmed, {bookingData})
+      } else {
+        Alert.alert('', bookingError)
       }
-      return this.props.navigation.navigate(BookingConfirmed, {bookingData})
     }
   }
 
@@ -137,11 +141,12 @@ class NewBookingDetails extends PureComponent {
     const {car: {car}} = this.props
     const {
       image_s3_url: image,
-      pickup_location: pickupLocation,
-      return_location: returnLocation,
+      short_pickup_location: pickupLocation,
+      short_return_location: returnLocation,
       manufacturer = '',
       model = '',
-      color = ''
+      color = '',
+      year = ''
     } = car
     const {startDate, endDate} = this.props
     let isButtonActive = startDate && endDate
@@ -176,7 +181,7 @@ class NewBookingDetails extends PureComponent {
                   <View style={{marginBottom: 16}}>
                     <BookingDetail
                       label='Year'
-                      text=''
+                      text={year.toString()}
                     />
                   </View>
                   <BookingDetail

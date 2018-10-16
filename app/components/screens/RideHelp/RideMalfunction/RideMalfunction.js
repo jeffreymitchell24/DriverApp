@@ -3,7 +3,7 @@ import { View, ScrollView } from 'react-native'
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
 import isEmpty from 'lodash/isEmpty'
-import { requestWriteStoragePermission } from 'helpers/permission'
+import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import { HelpCamera } from 'navigation/routeNames'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
@@ -26,7 +26,7 @@ class RideMalfunction extends Component {
   }
 
   onPhotoPress = async (index) => {
-    let granted = await requestWriteStoragePermission()
+    let granted = await requestMainPermissions()
     if (granted) {
       const {onSelectPhoto, navigation} = this.props
       onSelectPhoto({type: 'rideMalfunctionPhotos', index})

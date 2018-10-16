@@ -11,6 +11,7 @@ import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
 import { Button } from 'components/ui'
+import { requestMainPermissions } from 'helpers/permission'
 import {Account, Documentation, SignIn, PersonalInfo, Home, RegisterReview} from 'navigation/routeNames'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 import Swiper from 'react-native-swiper'
@@ -19,6 +20,7 @@ import styles from './styles'
 
 class Intro extends Component {
   componentDidMount () {
+    requestMainPermissions()
     const {user} = this.props
     Keyboard.dismiss()
     console.log('user', user)
