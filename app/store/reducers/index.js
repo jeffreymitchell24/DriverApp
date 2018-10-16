@@ -1,28 +1,21 @@
-import { persistReducer } from 'redux-persist'
+
 import { combineReducers } from 'redux'
-import createSensitiveStorage from 'redux-persist-sensitive-storage'
 import auth from './auth'
 import registration from './registration'
-import receipt from './receipt'
+import ride from './ride'
 import email from './email'
 import bookings from './bookings'
-
-const sensitiveStorage = createSensitiveStorage({
-  keychainService: 'CarflowKeychain',
-  sharedPreferencesName: 'CarflowPrefs'
-})
-
-const config = {
-  key: 'auth',
-  storage: sensitiveStorage
-}
+import helpCenter from './helpCenter'
+import newBooking from './newBooking'
 
 const rootReducer = combineReducers({
   auth, // : persistReducer(config, auth),
   registration,
-  receipt,
+  ride,
   email,
-  bookings
+  bookings,
+  helpCenter,
+  newBooking
 })
 
 export default rootReducer

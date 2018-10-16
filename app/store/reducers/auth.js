@@ -8,36 +8,11 @@ import {
   SAVE_REJECTED_ID,
   DISCARD_RESET_ERROR,
   DISCARD_SIGNIN_ERROR,
-  UPDATE_USER_IMAGE
+  UPDATE_USER_IMAGE,
+  UPDATE_USER_PROFILE
 } from 'store/actions/auth'
 import {SIGN_UP} from 'store/actions/registration'
 const REHYDRATE = 'persist/REHYDRATE'
-
-// let user = {
-//   'id': 0,
-//   'full_name': 'Kyle Freedman',
-//   'email': 'kyle@freedman.com',
-//   'admin': true,
-//   'address': '100 West 33rd Street, New York, NY, 10001',
-//   'street': '100 West 33rd Street',
-//   'city': 'New York',
-//   'zip_code': '10001',
-//   'state': 'NY',
-//   'phone': '+1 212-695-4260',
-//   'photo': 'string',
-//   'status': 'pending',
-//   'ridesharing_approved': true,
-//   'documents_uploaded': true,
-//   'ridesharing_apps': 'uber, lyft',
-//   'tlcLicense': {
-//     'front': 'string',
-//     'back': 'string'
-//   },
-//   'drivingLicense': {
-//     'front': 'string',
-//     'back': 'strin'
-//   }
-// }
 
 const initialState = {
   pending: false,
@@ -60,7 +35,10 @@ const handlers = {
       ...rehydrate,
       resetError: null,
       updateError: null,
-      authError: null
+      authError: null,
+      pending: false,
+      resetPending: false,
+      checkingUserStatus: false
     }
   },
   [SIGN_IN.REQUEST]: (state, { payload }) => {
@@ -158,7 +136,8 @@ const handlers = {
       ...state,
       user: {
         ...state.user,
-        status: payload.status
+        status: payload.status,
+        profileUpdateStatus: payload.profileUpdateStatus
       },
       checkingUserStatus: false
     }
@@ -186,13 +165,31 @@ const handlers = {
     return {
       ...state,
       pending: false,
-      user: {
-        ...state.user,
-        photo: payload
-      }
+      user: payload
     }
   },
   [UPDATE_USER_IMAGE.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: false,
+      updateError: payload
+    }
+  },
+  [UPDATE_USER_PROFILE.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: true,
+      updateError: null
+    }
+  },
+  [UPDATE_USER_PROFILE.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      pending: false,
+      user: payload
+    }
+  },
+  [UPDATE_USER_PROFILE.FAILURE]: (state, { payload }) => {
     return {
       ...state,
       pending: false,

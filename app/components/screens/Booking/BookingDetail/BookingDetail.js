@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
-import { CarLocation, RideHelp, ReceiptSubmit } from 'navigation/routeNames'
+import { CarLocation, RideHelp, ReceiptSubmit, RideEnd } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
 import MapView from 'react-native-maps'
 import {styles, mapStyles} from './styles'
@@ -19,7 +19,7 @@ class BookingDetail extends Component {
   }
 
   onUnlockPress = () => {
-
+    this.props.navigation.navigate(RideEnd)
   }
 
   onHelpPress = () => {
@@ -180,7 +180,7 @@ class BookingDetail extends Component {
         </View>
         <Button
           containerStyle={styles.button}
-          disabled={unlockDisabled}
+          // disabled={unlockDisabled}
           title='UNLOCK CARD'
           onPress={this.onUnlockPress}
         />

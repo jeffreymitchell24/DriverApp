@@ -66,11 +66,11 @@ export const validateEmail = async (email) => {
   return response.data.data
 }
 
-export const updateUser = async ({id, token, data}) => {
+export const updateUser = async ({token, data}) => {
   let config = {
     headers: {'Authorization': `Bearer ${token}`}
   }
-  let response = await axios.post(`${URL}/api/users/${id}`, data, config)
+  let response = await axios.post(`${URL}/api/users/update`, data, config)
   console.log('updateUser response', response)
   return response.data.data
 }
@@ -129,6 +129,15 @@ export const fetchAvailableCars = async (token) => {
     headers: {'Authorization': `Bearer ${token}`}
   }
   let response = await axios.get(`${URL}/api/cars/available`, config)
+  console.log('fetchAvailableCars response', response)
+  return response.data.data
+}
+
+export const fetchCarDetails = async ({token, id}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.get(`${URL}/api/cars/${id}/book`, config)
   console.log('fetchAvailableCars response', response)
   return response.data.data
 }

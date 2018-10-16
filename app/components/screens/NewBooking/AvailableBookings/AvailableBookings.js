@@ -3,6 +3,7 @@ import { View, FlatList, ActivityIndicator } from 'react-native'
 import { NavButton } from 'components/ui'
 import {Home, NewBookingDetails} from 'navigation/routeNames'
 import { BookingCard } from 'components/blocks'
+import moment from 'moment'
 import PropTypes from 'prop-types'
 import { colors } from 'theme'
 import styles from './styles'
@@ -20,17 +21,19 @@ class AvailableBookings extends PureComponent {
   }
 
   onBookingPress = (car) => {
-    this.props.onSelectCar(car)
+    this.props.onSelectCar(car.id)
     this.props.navigation.navigate(NewBookingDetails)
   }
 
-  keyExtractor = (item, index) => item.id.toString()
+  keyExtractor = (item, index) => item.car.id.toString()
 
   renderItem = ({item, index}) => {
-    const {availability} = item
+    const {availability, car} = item
     return (
       <BookingCard
-        booking={item}
+        booking={car}
+        bookingEnd={moment(car['booking_available_to'], 'HH:mm:ss').format('hh:mm A')}
+        bookingStart={moment(car['booking_available_from'], 'HH:mm:ss').format('hh:mm A')}
         extraDetail={`Available ${availability}`}
         onPress={this.onBookingPress}
       />

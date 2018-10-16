@@ -9,6 +9,8 @@ export const signIn = (credentials) => {
   }
 }
 
+export const REJECT_USER = 'REJECT_USER'
+
 export const DISCARD_SIGNIN_ERROR = 'DISCARD_SIGNIN_ERROR'
 export const discardSigninError = () => ({
   type: DISCARD_SIGNIN_ERROR
@@ -54,5 +56,13 @@ export const updateUserImage = (photoUri) => {
   return {
     type: UPDATE_USER_IMAGE.REQUEST,
     payload: photoUri
+  }
+}
+
+export const UPDATE_USER_PROFILE = createAsyncAction('UPDATE_USER_PROFILE')
+export const updateUserProfile = (data) => {
+  return {
+    type: UPDATE_USER_PROFILE.REQUEST,
+    payload: data
   }
 }

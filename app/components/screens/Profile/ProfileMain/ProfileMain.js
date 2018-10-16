@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, Image } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, Image, Linking } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
+import { requestMainPermissions } from 'helpers/permission'
 import {icons} from 'images'
 import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera, Home, Auth} from 'navigation/routeNames'
 import { Section, SectionHeader, SectionContent, NavButton } from 'components/ui'
@@ -30,7 +31,15 @@ class ProfileMain extends Component {
     }
   }
 
-  onResetTo = (route) => {
+  onInstaPress = () => {
+    Linking.openURL('https://www.instagram.com/carfloinc/').catch(err => console.error('An error occurred', err))
+  }
+
+  onFBPress = () => {
+    Linking.openURL('https://m.facebook.com/carflow1/?view_public_for=191919698131979').catch(err => console.error('An error occurred', err))
+  }
+
+  resetTo = (route) => {
     const resetAction = StackActions.reset({
       key: null,
       index: 0,
@@ -41,11 +50,12 @@ class ProfileMain extends Component {
 
   onLogOut = () => {
     this.props.onSignOut()
-    this.onResetTo(Auth)
+    this.resetTo(Auth)
   }
 
-  onPhotoPress = () => {
-    this.props.navigation.navigate(ProfileCamera)
+  onPhotoPress = async () => {
+    let granted = await requestMainPermissions()
+    if (granted) this.props.navigation.navigate(ProfileCamera)
   }
 
   onNavigateTo = (route) => {
@@ -54,7 +64,7 @@ class ProfileMain extends Component {
 
   render () {
     const {full_name: fullname, photo} = this.props.user
-
+    console.log(photo)
     return (
       <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
         <View style={styles.profileInfo}>
@@ -62,7 +72,7 @@ class ProfileMain extends Component {
             {
               photo
                 ? (
-                  <Image source={{uri: photo}} style={styles.profileImage} />
+                  <Image source={{uri: `${photo}`}} style={styles.profileImage} />
                 ) : (
                   <Image source={icons['camera']} style={styles.iconCamera} />
                 )
@@ -86,8 +96,8 @@ class ProfileMain extends Component {
           <SectionHeader title='ABOUT US' />
           <SectionContent style={styles.socialList}>
             <ListItem icon='star' text='Rate us on the App Store' />
-            <ListItem icon='instagram' text='Follow us on Instagram' />
-            <ListItem icon='facebook' text='Like us on Facebook' />
+            <ListItem icon='instagram' text='Follow us on Instagram' onPress={this.onInstaPress} />
+            <ListItem icon='facebook' text='Like us on Facebook' onPress={this.onFBPress} />
             <ListItem icon='twitter' text='Follow us on Twitter' />
             <ListItem icon='book' text='Privacy policy' onPress={() => this.onNavigateTo(PrivacyPolicy)} />
             <ListItem icon='document' text={`Terms & conditions`} onPress={() => this.onNavigateTo(TermsConditions)} />

@@ -1,15 +1,15 @@
 import { connect } from 'react-redux'
-import { updateLicense } from 'store/actions/registration'
+import { updateUserImage } from 'store/actions/auth'
 import { createStructuredSelector } from 'reselect'
 
-import { getSelectedLicense } from 'store/selectors/registration'
+import { getUpdateError, getAuthStatus } from 'store/selectors/auth'
 import PicturePreview from './PicturePreview'
-
 const selector = createStructuredSelector({
-  selectedLicense: getSelectedLicense
+  error: getUpdateError,
+  requestPending: getAuthStatus
 })
 const actions = {
-  onUpdateLicense: updateLicense
+  onUpdateUserImage: updateUserImage
 }
 
 export default connect(

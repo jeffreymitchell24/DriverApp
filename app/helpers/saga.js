@@ -10,3 +10,7 @@ export const takeLatest = (pattern, saga, ...args) => fork(function * () {
     lastTask = yield fork(saga, ...args.concat(action))
   }
 })
+
+// export const handleError = ({error}) => {
+
+// }

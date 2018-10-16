@@ -16,9 +16,12 @@ import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
 
 import { NavBackImage } from 'components/ui'
+// New Bookings
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
 import NewBookingDetails from 'components/screens/NewBooking/NewBookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
+import BookingCalendar from 'components/screens/NewBooking/BookingCalendar'
+
 // import TermsConditions from 'components/screens/TermsConditions'
 import ChangePassword from 'components/screens/Profile/ChangePassword'
 import ChangesReview from 'components/screens/Profile/ChangesReview'
@@ -35,6 +38,9 @@ import RideDamaged from 'components/screens/RideHelp/RideDamaged'
 import RideAccident from 'components/screens/RideHelp/RideAccident'
 import RideCancel from 'components/screens/RideHelp/RideCancel'
 import RideLateDescription from 'components/screens/RideHelp/RideLateDescription'
+import HelpPhotoPreview from 'components/screens/RideHelp/Camera/HelpPhotoPreview'
+import HelpPhotoGallery from 'components/screens/RideHelp/Camera/HelpPhotoGallery'
+import HelpCamera from 'components/screens/RideHelp/Camera/HelpCamera'
 
 let navigationOptions = {
   headerStyle: {
@@ -202,13 +208,25 @@ export const NewBookingStack = createStackNavigator({
     navigationOptions: {
       title: 'New booking',
       headerTitle: null,
-      headerBackTitle: null
+      headerBackTitle: null,
+      headerBackImage: (<NavBackImage />),
+      headerLeftContainerStyle: {
+        paddingLeft: 0
+      }
     }
   },
   AvailableBookings: {
     screen: AvailableBookings,
     navigationOptions: {
       title: 'New booking',
+      headerTitle: null,
+      headerBackTitle: null
+    }
+  },
+  BookingCalendar: {
+    screen: BookingCalendar,
+    navigationOptions: {
+      title: null,
       headerTitle: null,
       headerBackTitle: null
     }
@@ -234,6 +252,19 @@ export const NewBookingStack = createStackNavigator({
     headerRightContainerStyle: {
       paddingRight: 16
     }
+  },
+  transitionConfig: (toTransitionProps, fromTransitionProps) => {
+    let isBack = false
+    let backRoute = null
+    if (fromTransitionProps) {
+      isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
+      backRoute = fromTransitionProps.scene.route.routeName
+    }
+    const route = toTransitionProps.scene.route
+    // console.log(bookingOverlays.includes(route.routeName), bookingOverlays.includes(backRoute), isBack)
+    if (route.routeName === 'BookingCalendar' || (backRoute === 'BookingCalendar' && isBack)) {
+      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+    } else return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
   }
 }
 )
@@ -394,6 +425,30 @@ export const HelpCenterStack = createStackNavigator({
     screen: RideLateDescription,
     navigationOptions: {
       title: "I'm late",
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  HelpCamera: {
+    screen: HelpCamera,
+    navigationOptions: {
+      headerTitle: null,
+      headerBackTitle: null,
+      ...navigationOptions
+    }
+  },
+  HelpPhotoPreview: {
+    screen: HelpPhotoPreview,
+    navigationOptions: {
+      header: null
+    }
+  },
+  HelpPhotoGallery: {
+    screen: HelpPhotoGallery,
+    navigationOptions: {
+      header: null,
+      title: 'Select photo',
       headerTitle: null,
       headerBackTitle: null,
       ...navigationOptions

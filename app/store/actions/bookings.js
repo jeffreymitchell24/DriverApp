@@ -13,11 +13,11 @@ export const fetchAvailableCars = () => {
     type: FETCH_AVAILABLE_CARS.REQUEST
   }
 }
-export const SELECT_CAR = 'SELECT_CAR'
-export const selectCar = (car) => {
+export const FETCH_SELECTED_CAR = createAsyncAction('FETCH_SELECTED_CAR')
+export const fetchSelectedCar = (id) => {
   return {
-    type: SELECT_CAR,
-    payload: car
+    type: FETCH_SELECTED_CAR.REQUEST,
+    payload: id
   }
 }
 

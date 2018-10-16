@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, TouchableWithoutFeedback } from 'react-native'
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-native-modal-datetime-picker'
+import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import {getCurrentDateAndTime, formatDate, formatTime} from 'helpers/date'
 import {ReceiptCamera} from 'navigation/routeNames'
@@ -21,8 +22,9 @@ class ReceiptSubmit extends Component {
     }
   }
 
-  onPhotoPress = () => {
-    this.props.navigation.navigate(ReceiptCamera)
+  onPhotoPress = async () => {
+    let granted = await requestMainPermissions()
+    if (granted) this.props.navigation.navigate(ReceiptCamera)
   }
   onHideDateTimePicker = () => {
     this.setState({showPicker: false})
@@ -39,10 +41,10 @@ class ReceiptSubmit extends Component {
     this.props.onClearReceiptPhoto()
   }
   onDatePress = () => {
-    this.setState({showPicker: true, pickerMode: 'date'})
+    this.setState({showPicker: true, pickerMode: 'datetime'})
   }
   onTimePress = () => {
-    this.setState({showPicker: true, pickerMode: 'time'})
+    this.setState({showPicker: true, pickerMode: 'datetime'})
   }
   render () {
     console.log(this.state)

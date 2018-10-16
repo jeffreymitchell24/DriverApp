@@ -3,7 +3,7 @@ import { createReducer } from '../../helpers/redux'
 import {
   FETCH_USER_BOOKINGS,
   FETCH_AVAILABLE_CARS,
-  SELECT_CAR,
+  FETCH_SELECTED_CAR,
   UNSELECT_CAR,
   BOOK_CAR
 } from 'store/actions/bookings'
@@ -15,6 +15,7 @@ const initialState = {
   fetchError: null,
   cars: [],
   selectedCar: null,
+  fetchingCar: false,
   fetchCarsError: null,
   fetchCardsPending: false,
   bookCarError: null,
@@ -65,9 +66,24 @@ const handlers = {
       fetchCarsError: payload
     }
   },
-  [SELECT_CAR]: (state, { payload }) => {
+  [FETCH_SELECTED_CAR.REQUEST]: (state, { payload }) => {
     return {
       ...state,
+      fetchingCar: true,
+      selectedCar: null
+    }
+  },
+  [FETCH_SELECTED_CAR.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      fetchingCar: false,
+      fetchCarError: payload
+    }
+  },
+  [FETCH_SELECTED_CAR.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      fetchingCar: false,
       selectedCar: payload
     }
   },
@@ -87,6 +103,7 @@ const handlers = {
   [BOOK_CAR.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
+      upcoming: [...state.upcoming, payload.booking],
       bookCarPending: false
     }
   },

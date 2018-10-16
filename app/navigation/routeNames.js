@@ -27,6 +27,7 @@ export const NewBooking = 'NewBooking'
 export const BookingConfirmed = 'BookingConfirmed'
 export const NewBookingDetails = 'NewBookingDetails'
 export const AvailableBookings = 'AvailableBookings'
+export const BookingCalendar = 'BookingCalendar'
 
 // Booking Detail
 export const BookingDetail = 'BookingDetail'
@@ -35,6 +36,8 @@ export const ReceiptSubmit = 'ReceiptSubmit'
 export const ReceiptCamera = 'ReceiptCamera'
 export const ReceiptGallery = 'ReceiptGallery'
 export const ReceiptPreview = 'ReceiptPreview'
+export const RideEnd = 'RideEnd'
+export const RideFinished = 'RideFinished'
 
 // Help Center
 export const RideHelp = 'RideHelp'
@@ -44,6 +47,9 @@ export const RideDamaged = 'RideDamaged'
 export const RideAccident = 'RideAccident'
 export const RideLateDescription = 'RideLateDescription'
 export const RideCancel = 'RideCancel'
+export const HelpCamera = 'HelpCamera'
+export const HelpPhotoPreview = 'HelpPhotoPreview'
+export const HelpPhotoGallery = 'HelpPhotoGallery'
 
 // Profile
 export const ProfileMain = 'ProfileMain'
