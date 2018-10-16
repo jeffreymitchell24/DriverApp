@@ -15,7 +15,7 @@ import PropTypes from 'prop-types'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { CheckBox } from 'react-native-elements'
 import {DocumentsCamera, RegisterReview} from 'navigation/routeNames'
-import { requestWriteStoragePermission } from 'helpers/permission'
+import { requestMainPermissions } from 'helpers/permission'
 import { colors } from 'theme'
 import { Button, Section, SectionHeader, SectionContent, Photo, RadioButton } from 'components/ui'
 import styles from './styles'
@@ -180,7 +180,7 @@ class Documentation extends Component {
   }
 
   onPhotoPress = async (licenseSide, licenseType) => {
-    let granted = await requestWriteStoragePermission()
+    let granted = await requestMainPermissions()
     if (granted) {
       const {onSelectLicense, navigation} = this.props
       onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})

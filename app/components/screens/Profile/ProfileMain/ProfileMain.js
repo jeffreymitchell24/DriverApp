@@ -3,6 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, Image, Linking } from 'react-
 import { StackActions, NavigationActions } from 'react-navigation'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
+import { requestMainPermissions } from 'helpers/permission'
 import {icons} from 'images'
 import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera, Home, Auth} from 'navigation/routeNames'
 import { Section, SectionHeader, SectionContent, NavButton } from 'components/ui'
@@ -52,8 +53,9 @@ class ProfileMain extends Component {
     this.resetTo(Auth)
   }
 
-  onPhotoPress = () => {
-    this.props.navigation.navigate(ProfileCamera)
+  onPhotoPress = async () => {
+    let granted = await requestMainPermissions()
+    if (granted) this.props.navigation.navigate(ProfileCamera)
   }
 
   onNavigateTo = (route) => {

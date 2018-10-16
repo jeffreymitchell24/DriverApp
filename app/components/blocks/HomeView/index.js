@@ -24,7 +24,10 @@ class HomeView extends PureComponent {
     const {onBookingPress} = this.props
     return (
       <BookingCard
-        booking={item}
+        booking={item.car}
+        bookingEnd={item['booking_ending_at'].formatted}
+        bookingStart={item['booking_starting_at'].formatted}
+        extraDetail={`Starting ${item['booking_starting_at'].formatted}`}
         onPress={onBookingPress}
       />
     )

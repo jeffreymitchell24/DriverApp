@@ -103,6 +103,7 @@ const handlers = {
   [BOOK_CAR.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
+      upcoming: [...state.upcoming, payload.booking],
       bookCarPending: false
     }
   },
