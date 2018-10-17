@@ -1,4 +1,5 @@
 import { PermissionsAndroid, Platform } from 'react-native'
+import forEach from 'lodash/forEach'
 
 let permissions = [
   PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
@@ -21,11 +22,9 @@ const requestMultiplePermissions = async (permissions) => {
     try {
       let results = await PermissionsAndroid.requestMultiple(permissions)
       let granted = true
-      results.forEach(result => {
-        console.log('result', result)
+      forEach(results, result => {
         if (result !== PermissionsAndroid.RESULTS.GRANTED) granted = false
       })
-      console.log('granted', granted)
       return granted
     } catch (err) {
       return false

@@ -59,7 +59,8 @@ export const tempDates = () => {
   return {startTime, endTime}
 }
 
-export const get24hours = (date) => {
+export const get24hours = () => {
+  let date = moment()
   const start = moment(date).set({'hours': 0, 'minutes': 0})
   const end = moment(date).set({'hours': 23, 'minutes': 59})
   const range = moment.range(start, end)

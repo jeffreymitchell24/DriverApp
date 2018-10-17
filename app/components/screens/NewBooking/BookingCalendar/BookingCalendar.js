@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import Moment from 'moment'
 import { extendMoment } from 'moment-range'
 import {Calendar} from 'react-native-calendars'
-import {get24hours, getCurrentDayHours, getDisabledDays} from 'helpers/date'
+import {get24hours, getDisabledDays} from 'helpers/date'
 import {NewBookingDetails} from 'navigation/routeNames'
 import { NavButton, Button } from 'components/ui'
 import { colors } from 'theme'
@@ -70,16 +70,19 @@ class BookingCalendar extends Component {
     this.bookDateType = bookDateType
     this.startHour = startHour
     let disabledDays = getDisabledDays(this.bookedHours)
-    let currentDate = moment()
-    let hourList = get24hours(currentDate.add(1, 'd'))
+    // this.currentDate = moment()
+    // this.minStartHour = this.currentDate.hour() + 1
+    let hourList = get24hours()
     this.minDate = minDate
+
     this.state = {
       maxDate,
       bounceValue: new Animated.Value(pickerHeight),
       disabledDays,
       hourList,
       selectedDate: null,
-      selectedTime: -1
+      selectedTime: -1,
+      minStartHour: null
     }
   }
 
@@ -132,7 +135,13 @@ class BookingCalendar extends Component {
     //     !this.isHiddenPicker && this._toggleTimePicker()
     //   }
     // }
-    this.setState({selectedDate})
+    console.log('selected', selectedDate)
+    let minStartHour = null
+    if (this.bookDateType === 'start') {
+      let currentDate = moment()
+      if (selectedDate.day === currentDate.date()) minStartHour = currentDate.hour() + 1
+    }
+    this.setState({selectedDate, minStartHour, selectedTime: -1})
     this.isHiddenPicker && this._toggleTimePicker()
   }
 
@@ -177,11 +186,12 @@ class BookingCalendar extends Component {
                 {this.state.hourList.map((timeString, i) => {
                   let type = 'default'
                   let dayForCheck = this.bookedHours[(selectedDate && selectedDate.dateString) || null]
+                  let hour = +timeString.split(':')[0]
                   if (this.state.selectedTime === i) type = 'selected'
                   else if (this.bookDateType === 'start') {
                     if (dayForCheck && dayForCheck !== false && dayForCheck.includes(timeString)) type = 'disabled'
+                    if (this.state.minStartHour && hour < this.state.minStartHour) type = 'disabled'
                   } else if (this.bookDateType === 'end') {
-                    let hour = +timeString.split(':')[0]
                     if (selectedDate && selectedDate.dateString === this.minDate) {
                       if (hour <= this.startHour) type = 'disabled'
                       else if (hour - this.startHour === 1) type = 'default'

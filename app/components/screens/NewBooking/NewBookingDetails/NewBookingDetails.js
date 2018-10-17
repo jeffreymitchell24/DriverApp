@@ -12,13 +12,6 @@ import {getMaxDate} from 'helpers/date'
 import styles from './styles'
 import { colors } from 'theme'
 
-const BOOKED = {
-  '2018-10-14': ['16:00', '17:00'],
-  '2018-10-15': false,
-  '2018-10-16': false,
-  '2018-10-17': ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'],
-  '2018-10-18': ['11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '19:00', '20:00']
-}
 class TimeSlot extends PureComponent {
   onPress = () => {
     this.props.onPress(this.props.time)
@@ -93,7 +86,7 @@ class NewBookingDetails extends PureComponent {
   onEndDatePress = () => {
     if (!this.props.startDate) Alert.alert('', 'Select start date first')
     else {
-      let maxDate = getMaxDate(this.props.startDate, BOOKED)
+      let maxDate = getMaxDate(this.props.startDate, this.props.car.booked)
       console.log('maxDate', maxDate)
       // Alert.alert('', maxDate)
       this.props.navigation.navigate(BookingCalendar, {
