@@ -48,8 +48,7 @@ class NewBookingDetails extends PureComponent {
     // console.log(timeSlots)
     this.state = {
       startDate: null, // : {value: null, label: '09:00 AM'},
-      endDate: null, // : {value: null, label: '5:00 PM'},
-      enableScrollViewScroll: true
+      endDate: null // : {value: null, label: '5:00 PM'},
     }
   }
   static navigationOptions = ({ navigation }) => {
@@ -103,21 +102,10 @@ class NewBookingDetails extends PureComponent {
     const {car: {car}} = this.props
     const {startDate, endDate} = this.props
     let timeStamps = {
-      'booking_ending_at': moment.unix(endDate.timestamp).subtract(1, 'hours').subtract(1, 'seconds').format('YYYY-MM-DD HH:mm'),
+      'booking_ending_at': moment.unix(endDate.timestamp).subtract(1, 'hours').minutes(59).format('YYYY-MM-DD HH:mm'),
       'booking_starting_at': moment.unix(startDate.timestamp).format('YYYY-MM-DD HH:mm')
     }
     this.props.onBookCar({id: car.id, timeStamps})
-  }
-
-  enableContainerScroll = () => {
-    this.setState({ enableScrollViewScroll: true })
-  }
-
-  enableTimeslotsScroll = () => {
-    this.setState({ enableScrollViewScroll: false })
-    if (this._myScroll.contentOffset === 0 && this.state.enableScrollViewScroll === false) {
-      this.setState({ enableScrollViewScroll: true })
-    }
   }
 
   keyExtractor = (item, index) => index.toString()
@@ -144,14 +132,11 @@ class NewBookingDetails extends PureComponent {
     const {startDate, endDate} = this.props
     let isButtonActive = startDate && endDate
     return (
-      <View
-        onStartShouldSetResponderCapture={this.enableContainerScroll}
-      >
+      <React.Fragment>
         <ScrollView
           contentContainerStyle={styles.container}
           // nestedScrollEnabled
           ref={myScroll => (this._myScroll = myScroll)}
-          scrollEnabled={this.state.enableScrollViewScroll}
           showsVerticalScrollIndicator={false}
         >
           <View>
@@ -213,16 +198,16 @@ class NewBookingDetails extends PureComponent {
                 </TouchableOpacity>
               </View>
             </View>
-            <Button
-              containerStyle={styles.button}
-              disabled={!isButtonActive}
-              title='CONFIRM'
-              onPress={this.onConfirmPress}
-            />
           </View>
+          <Button
+            containerStyle={styles.button}
+            disabled={!isButtonActive}
+            title='CONFIRM'
+            onPress={this.onConfirmPress}
+          />
         </ScrollView>
         <Spinner color={colors.red} visible={this.props.bookingPending} />
-      </View>
+      </React.Fragment>
     )
   }
 }

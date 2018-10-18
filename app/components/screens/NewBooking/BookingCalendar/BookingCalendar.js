@@ -213,16 +213,6 @@ class BookingCalendar extends Component {
                   return <PickerItem key={i}slotType={type} time={timeString} onPress={() => this.onTimeSelect(i)} />
                 })}
               </ScrollView>
-              {/* <Picker
-                itemStyle={styles.pickerItem}
-                selectedValue={this.state.startTimeIndex}
-                style={styles.timePicker}
-                onValueChange={this.onPickupTimeSelect}
-              >
-                {this.state.pickupHours.map((value, i) => (
-                  <PickerItem key={'money' + value} label={value} style={{backgroundColor: 'green'}} value={i} />
-                ))}
-              </Picker> */}
             </View>
           </View>
           <Button

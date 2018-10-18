@@ -20,7 +20,7 @@ export default StyleSheet.create({
     marginBottom: 6
   },
   detailText: {
-    fontSize: 17,
+    fontSize: 14,
     fontFamily: 'SFProText-Regular',
     color: colors.black
   },

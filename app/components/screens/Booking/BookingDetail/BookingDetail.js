@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
-import { CarLocation, RideHelp, ReceiptSubmit, RideEnd } from 'navigation/routeNames'
+import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, RideLicenseCamera } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
 import MapView from 'react-native-maps'
 import {styles, mapStyles} from './styles'
@@ -19,25 +19,54 @@ class BookingDetail extends Component {
   }
 
   onUnlockPress = () => {
-    this.props.navigation.navigate(RideEnd)
+    this.props.navigation.navigate(RideLicenseCamera)
   }
 
   onHelpPress = () => {
     this.props.navigation.navigate(RideHelp)
   }
-  onMapPress = () => {
-    this.props.navigation.navigate(CarLocation)
+  onMapPress = (locationType) => {
+    let geo = {}
+    const {
+      pickup_location_lat: pickupLat,
+      pickup_location_lon: pickupLon,
+      return_location_lat: returnLat,
+      return_location_lon: returnLon
+    } = this.props.ride.car
+
+    if (locationType === 'pickup') {
+      geo.lat = locationType === 'pickup' ? pickupLat : returnLat
+      geo.lon = locationType === 'pickup' ? pickupLon : returnLon
+    }
+
+    this.props.navigation.navigate(CarLocation, {geo})
   }
 
   render () {
     let unlockDisabled = true
+    const {ride} = this.props
+    if (!ride) return null
+    const {
+      image_s3_url: image,
+      pickup_location_lat: pickupLat,
+      pickup_location_lon: pickupLon,
+      return_location_lat: returnLat,
+      return_location_lon: returnLon,
+      full_pickup_location: pickupAddress,
+      full_return_location: returnAddress,
+      manufacturer = '',
+      model = '',
+      color = '',
+      year = '',
+      plate = ''
+    } = ride.car
     return (
       <ScrollView
         contentContainerStyle={styles.container}
       >
         <View>
           <View style={styles.carImageContainer}>
-            <CarImage />
+            <CarImage imageUri={image} />
           </View>
           <Section>
             <SectionHeader title='VEHICLE' />
@@ -47,13 +76,13 @@ class BookingDetail extends Component {
                   <View style={{flex: 1}}>
                     <Detail
                       label='Car Maker'
-                      text='Toyota'
+                      text={manufacturer}
                     />
                   </View>
                   <View style={{flex: 1}}>
                     <Detail
                       label='Model'
-                      text='Prius'
+                      text={model}
                     />
                   </View>
                 </View>
@@ -61,19 +90,19 @@ class BookingDetail extends Component {
                   <View style={{flex: 1}}>
                     <Detail
                       label='Color'
-                      text='White'
+                      text={color}
                     />
                   </View>
                   <View style={{flex: 1}}>
                     <Detail
                       label='Year'
-                      text='2016'
+                      text={year.toString()}
                     />
                   </View>
                 </View>
                 <Detail
                   label='Plate'
-                  text='FRY 2178'
+                  text={plate}
                 />
               </View>
             </SectionContent>
@@ -109,8 +138,8 @@ class BookingDetail extends Component {
               <View style={styles.map}>
                 <MapView
                   initialRegion={{
-                    latitude: 37.782189,
-                    longitude: -122.451182,
+                    latitude: pickupLat,
+                    longitude: pickupLon,
                     latitudeDelta: 0.001,
                     longitudeDelta: 0.001
                   }}
@@ -121,15 +150,14 @@ class BookingDetail extends Component {
                 >
                   <MapView.Marker
                     coordinate={{
-                      latitude: 37.782189,
-                      longitude: -122.451182
+                      latitude: pickupLat,
+                      longitude: pickupLon
                     }}
                   />
                 </MapView>
               </View>
-              <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
-              <Text style={styles.address}>34th Street 25</Text>
-              <TouchableOpacity onPress={this.onMapPress}>
+              <Text style={styles.address}>{pickupAddress}</Text>
+              <TouchableOpacity onPress={() => this.onMapPress('pickup')}>
                 <Text style={styles.mapButtonText}>Open in Maps</Text>
               </TouchableOpacity>
             </SectionContent>
@@ -140,9 +168,9 @@ class BookingDetail extends Component {
               <View style={styles.map}>
                 <MapView
                   initialRegion={{
-                    latitude: 37.782189,
-                    longitude: -122.451182,
-                    latitudeDelta: 0.001,
+                    latitude: returnLat,
+                    longitude: returnLon,
+                    latitudeDelta: 0.0010,
                     longitudeDelta: 0.001
                   }}
                   liteMode
@@ -152,15 +180,14 @@ class BookingDetail extends Component {
                 >
                   <MapView.Marker
                     coordinate={{
-                      latitude: 37.782189,
-                      longitude: -122.451182
+                      latitude: returnLat,
+                      longitude: returnLon
                     }}
                   />
                 </MapView>
               </View>
-              <Text style={styles.address}>Bronx Car Flow Parking Zone</Text>
-              <Text style={styles.address}>34th Street 25</Text>
-              <TouchableOpacity onPress={this.onMapPress}>
+              <Text style={styles.address}>{returnAddress}</Text>
+              <TouchableOpacity onPress={() => this.onMapPress('return')}>
                 <Text style={styles.mapButtonText}>Open in Maps</Text>
               </TouchableOpacity>
             </SectionContent>
@@ -191,7 +218,8 @@ class BookingDetail extends Component {
 }
 
 BookingDetail.propTypes = {
-  navigation: PropTypes.object
+  navigation: PropTypes.object,
+  ride: PropTypes.object
 }
 
 export default BookingDetail

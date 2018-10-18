@@ -39,14 +39,6 @@ export const register = async (user) => {
     headers: {'Content-Type': 'multipart/form-data'}
   }
   let response = await axios.post(`${URL}/api/register/create`, user, config)
-  // let response = await fetch(`${URL}/api/register/create`, {
-  //   headers: {
-  //     'Accept': 'application/json',
-  //     'Content-Type': 'multipart/form-data'
-  //   },
-  //   method: 'POST',
-  //   body: user
-  // })
   console.log('register response', response)
   return response.data.data
 }
@@ -138,7 +130,7 @@ export const fetchCarDetails = async ({token, id}) => {
     headers: {'Authorization': `Bearer ${token}`}
   }
   let response = await axios.get(`${URL}/api/cars/${id}/book`, config)
-  console.log('fetchAvailableCars response', response)
+  console.log('fetchCarDetails response', response)
   return response.data.data
 }
 
@@ -148,6 +140,32 @@ export const bookCar = async ({token, id, timeStamps}) => {
   }
   let response = await axios.post(`${URL}/api/cars/${id}/book`, timeStamps, config)
   console.log('bookCar response', response)
+  return response.data.data
+}
+
+export const checkRideLicense = async ({token, id, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/start`, data, config)
+  console.log('checkRideLicense response', response)
+  return response.data.data
+}
+
+export const endRide = async ({token, id, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/end`, data, config)
+  console.log('checkRideLicense response', response)
+  return response.data.data
+}
+export const cancelRide = async ({token, id}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/cancel`, {}, config)
+  console.log('checkRideLicense response', response)
   return response.data.data
 }
 

@@ -19,7 +19,7 @@ export default StyleSheet.create({
   timePickers: {
     borderTopColor: colors.gray50,
     borderTopWidth: 2,
-    paddingVertical: metrics.contentMarginSmall,
+    paddingBottom: metrics.contentMarginSmall,
     height: pickerHeight,
     alignSelf: 'stretch',
     position: 'absolute',
@@ -37,6 +37,7 @@ export default StyleSheet.create({
   },
   timePickerLabel: {
     // backgroundColor: colors.red,
+    paddingVertical: 8,
     textAlign: 'center',
     fontSize: metrics.fontSizeBig,
     color: colors.gray200,
@@ -62,6 +63,6 @@ export default StyleSheet.create({
   },
 
   button: {
-    marginTop: 5
+    marginTop: 13
   }
 })

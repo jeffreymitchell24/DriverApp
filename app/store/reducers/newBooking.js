@@ -5,6 +5,8 @@ import {
   RESET_DATES
 } from 'store/actions/newBooking'
 
+import {UNSELECT_CAR} from 'store/actions/bookings'
+
 const initialState = {
   startDate: null,
   endDate: null
@@ -19,6 +21,9 @@ const handlers = {
     }
   },
   [RESET_DATES]: (state, {payload}) => {
+    return initialState
+  },
+  [UNSELECT_CAR]: (state, { payload }) => {
     return initialState
   }
 }

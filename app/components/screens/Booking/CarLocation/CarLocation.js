@@ -1,21 +1,17 @@
-import React, { Component } from 'react'
-import { View, Text } from 'react-native'
+import React, { PureComponent } from 'react'
+import { View } from 'react-native'
+import PropTypes from 'prop-types'
 import MapView from 'react-native-maps'
 import styles from './styles'
-class CarLocation extends Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-    }
-  }
-
+class CarLocation extends PureComponent {
   render () {
+    const geo = this.props.navigation.getParam('geo', {})
     return (
       <View style={styles.container}>
         <MapView
           initialRegion={{
-            latitude: 37.782189,
-            longitude: -122.451182,
+            latitude: geo.lat,
+            longitude: geo.lon,
             latitudeDelta: 0.001,
             longitudeDelta: 0.001
           }}
@@ -24,8 +20,8 @@ class CarLocation extends Component {
         >
           <MapView.Marker
             coordinate={{
-              latitude: 37.782189,
-              longitude: -122.451182
+              latitude: geo.lat,
+              longitude: geo.lon
             }}
           />
         </MapView>
@@ -33,4 +29,9 @@ class CarLocation extends Component {
     )
   }
 }
+
+CarLocation.propTypes = {
+  navigation: PropTypes.object
+}
+
 export default CarLocation

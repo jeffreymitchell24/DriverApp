@@ -2,7 +2,7 @@ import Upcoming from './Upcoming'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import {getUpcomingBookings, getFetchingStatus, getFetchError} from 'store/selectors'
-import {fetchUserBookings} from 'store/actions/bookings'
+import {fetchUserBookings, selectRide} from 'store/actions/bookings'
 
 const selector = createStructuredSelector({
   bookings: getUpcomingBookings,
@@ -11,6 +11,7 @@ const selector = createStructuredSelector({
 })
 
 const actions = {
+  onSelectRide: selectRide,
   onFetchUserBookings: fetchUserBookings
 }
 

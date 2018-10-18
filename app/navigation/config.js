@@ -6,6 +6,8 @@ import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackV
 
 import BookingDetail from 'components/screens/Booking/BookingDetail'
 import CarLocation from 'components/screens/Booking/CarLocation'
+import RideLicenseCamera from 'components/screens/Booking/LicenseCamera'
+import RideLicensePreview from 'components/screens/Booking/LicensePreview'
 import RideEnd from 'components/screens/Booking/RideEnd'
 import RideFinished from 'components/screens/Booking/RideFinished'
 import ReceiptSubmit from 'components/screens/ReceiptSubmit/ReceiptSubmit'
@@ -72,6 +74,21 @@ export const Root = createStackNavigator(
         headerLeftContainerStyle: {
           // paddingLeft: 16
         }
+      }
+    },
+    RideLicenseCamera: {
+      screen: RideLicenseCamera,
+      navigationOptions: {
+        title: 'Take a photo of license plate',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    RideLicensePreview: {
+      screen: RideLicensePreview,
+      navigationOptions: {
+        header: null
       }
     },
     RideEnd: {

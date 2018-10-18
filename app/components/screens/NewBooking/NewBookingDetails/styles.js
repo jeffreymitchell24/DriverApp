@@ -7,7 +7,8 @@ export default StyleSheet.create({
     flexGrow: 1,
     backgroundColor: colors.white,
     padding: metrics.contentMarginSmall,
-    paddingBottom: metrics.contentMargin
+    paddingBottom: metrics.contentMargin,
+    justifyContent: 'space-between'
   },
 
   row: {
@@ -66,7 +67,6 @@ export default StyleSheet.create({
   },
 
   button: {
-    marginTop: 70,
     alignSelf: 'stretch'
   },
 

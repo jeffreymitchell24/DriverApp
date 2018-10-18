@@ -50,7 +50,7 @@ class HomeView extends PureComponent {
                 data={bookings}
                 extraData={bookings}
                 keyExtractor={this.keyExtractor}
-                renderItem={this.renderItem}
+                renderItem={this.props.renderItem || this.renderItem}
               />
             ) : (
               this.renderEmptyList()
@@ -69,6 +69,7 @@ class HomeView extends PureComponent {
 HomeView.propTypes = {
   bookings: PropTypes.array,
   isFetching: PropTypes.bool,
+  renderItem: PropTypes.func,
   onBookingPress: PropTypes.func,
   onNewPress: PropTypes.func
 }
