@@ -1,12 +1,14 @@
 import { take, put, call, select, all, fork } from 'redux-saga/effects'
 import {takeLatest} from 'helpers/saga'
 import * as Api from 'helpers/api'
+import {toImageFile} from 'helpers/image'
 import {checkUserStatusWrapper} from './auth'
 import {
   FETCH_USER_BOOKINGS,
   FETCH_AVAILABLE_CARS,
   FETCH_SELECTED_CAR,
-  BOOK_CAR
+  BOOK_CAR,
+  CHECK_LICENSE
 } from 'store/actions/bookings'
 
 function * fetchUserBookings (action) {
@@ -86,9 +88,32 @@ function * bookCarFlow () {
   }
 }
 
+function * checkRideLicense ({payload}) {
+  const {id, photoUri} = payload
+  let imageFile = yield toImageFile(photoUri)
+  let query = {photo: imageFile}
+  let data = Api.toFormData(query)
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let response = yield call(Api.checkRideLicense, {data, id, token})
+    console.log('response', response)
+    yield put({type: CHECK_LICENSE.SUCCESS, payload: response})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: CHECK_LICENSE.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function * checkRideLicenseFlow () {
+  yield takeLatest(CHECK_LICENSE.REQUEST, checkUserStatusWrapper, checkRideLicense)
+}
+
 export default [
   fetchUserBookingsFlow,
   fetchAvailableCarsFlow,
   bookCarFlow,
-  fetchCarDetailsFlow
+  fetchCarDetailsFlow,
+  checkRideLicenseFlow
 ]

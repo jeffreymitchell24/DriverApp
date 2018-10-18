@@ -18,11 +18,13 @@ class CameraView extends PureComponent {
   }
   static propTypes = {
     switchable: PropTypes.bool,
+    withGallery: PropTypes.bool,
     onGalleryPress: PropTypes.func,
     onTakePicture: PropTypes.func
   }
   static defaultProps = {
-    switchable: false
+    switchable: false,
+    withGallery: true
   }
 
   getCamRef = (ref) => (this.camera = ref)
@@ -70,9 +72,11 @@ class CameraView extends PureComponent {
             ) : (
               <React.Fragment>
                 <TouchableOpacity style={styles.captureButton} onPress={this.takePicture} />
-                <TouchableOpacity style={styles.galleryButton} onPress={this.onGalleryPress}>
-                  <Image source={icons['gallery']} style={styles.galleryIcon} />
-                </TouchableOpacity>
+                {this.props.withGallery && (
+                  <TouchableOpacity style={styles.galleryButton} onPress={this.onGalleryPress}>
+                    <Image source={icons['gallery']} style={styles.galleryIcon} />
+                  </TouchableOpacity>
+                )}
                 {
                   this.props.switchable &&
                   <TouchableOpacity style={styles.switchButton} onPress={this.onSwitchPress}>

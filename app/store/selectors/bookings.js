@@ -15,3 +15,9 @@ export const getSelectedCar = R.path(['bookings', 'selectedCar'])
 export const getCarFetchingStatus = R.path(['bookings', 'fetchingCar'])
 export const getBookingRequestStatus = R.path(['bookings', 'bookCarPending'])
 export const getBookingRequestError = R.path(['bookings', 'bookCarError'])
+
+// Ride
+export const getSelectedRide = R.path(['bookings', 'selectedRide'])
+export const getLicenseCheckRequestStatus = R.path(['bookings', 'licenseCheckPending'])
+export const getLicenseCheckError = R.path(['bookings', 'licenseCheckError'])
+export const getLicenseCheckStatus = R.path(['bookings', 'licenseChecked'])

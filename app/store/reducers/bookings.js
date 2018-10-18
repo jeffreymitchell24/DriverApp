@@ -5,7 +5,10 @@ import {
   FETCH_AVAILABLE_CARS,
   FETCH_SELECTED_CAR,
   UNSELECT_CAR,
-  BOOK_CAR
+  BOOK_CAR,
+  SELECT_RIDE,
+  UNSELECT_RIDE,
+  CHECK_LICENSE
 } from 'store/actions/bookings'
 
 const initialState = {
@@ -15,11 +18,15 @@ const initialState = {
   fetchError: null,
   cars: [],
   selectedCar: null,
+  selectedRide: null,
   fetchingCar: false,
   fetchCarsError: null,
   fetchCardsPending: false,
   bookCarError: null,
-  bookCarPending: false
+  bookCarPending: false,
+  licenseCheckPending: false,
+  licenseCheckError: null,
+  licenseChecked: false
 }
 
 const handlers = {
@@ -93,6 +100,18 @@ const handlers = {
       selectedCar: null
     }
   },
+  [SELECT_RIDE]: (state, { payload }) => {
+    return {
+      ...state,
+      selectedRide: payload
+    }
+  },
+  [UNSELECT_RIDE]: (state, { payload }) => {
+    return {
+      ...state,
+      selectedRide: null
+    }
+  },
   [BOOK_CAR.REQUEST]: (state, { payload }) => {
     return {
       ...state,
@@ -112,6 +131,30 @@ const handlers = {
       ...state,
       bookCarPending: false,
       bookCarError: payload
+    }
+  },
+  [CHECK_LICENSE.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      licenseCheckPending: true,
+      licenseCheckError: null,
+      licenseChecked: false
+    }
+  },
+  [CHECK_LICENSE.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.map(book => {return payload.id === book.id ? payload: book}),
+      selectedRide: payload,
+      licenseChecked: true,
+      licenseCheckPending: false
+    }
+  },
+  [CHECK_LICENSE.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      licenseCheckPending: false,
+      licenseCheckError: payload
     }
   }
 }

@@ -36,6 +36,8 @@ export const ReceiptSubmit = 'ReceiptSubmit'
 export const ReceiptCamera = 'ReceiptCamera'
 export const ReceiptGallery = 'ReceiptGallery'
 export const ReceiptPreview = 'ReceiptPreview'
+export const RideLicenseCamera = 'RideLicenseCamera'
+export const RideLicensePreview = 'RideLicensePreview'
 export const RideEnd = 'RideEnd'
 export const RideFinished = 'RideFinished'
 

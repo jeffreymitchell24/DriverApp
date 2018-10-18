@@ -35,3 +35,25 @@ export const bookCar = (bookingData) => {
     payload: bookingData
   }
 }
+
+export const SELECT_RIDE = 'SELECT_RIDE'
+export const selectRide = (ride) => {
+  return {
+    type: SELECT_RIDE,
+    payload: ride
+  }
+}
+export const UNSELECT_RIDE = 'UNSELECT_RIDE'
+export const unselectRide = () => {
+  return {
+    type: UNSELECT_CAR
+  }
+}
+
+export const CHECK_LICENSE = createAsyncAction('CHECK_LICENSE')
+export const checkLicense = ({photoUri, carId}) => {
+  return {
+    type: CHECK_LICENSE.REQUEST,
+    payload: {photoUri, carId}
+  }
+}
