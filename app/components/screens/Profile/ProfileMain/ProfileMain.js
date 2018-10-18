@@ -1,13 +1,28 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, Image, Linking } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, Image, Linking, Alert } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
+import Spinner from 'react-native-loading-spinner-overlay'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
+import ImagePicker from 'react-native-image-picker'
 import { requestMainPermissions } from 'helpers/permission'
 import {icons} from 'images'
-import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, ProfileCamera, Home, Auth} from 'navigation/routeNames'
+import {ProfileDetails, ChangePassword, TermsConditions, PrivacyPolicy, Home, Auth} from 'navigation/routeNames'
 import { Section, SectionHeader, SectionContent, NavButton } from 'components/ui'
+import { colors } from 'theme'
 import styles from './styles'
+
+var options = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true
+    // path: 'images'
+  },
+  noData: true
+}
 
 const ListItem = ({text, icon, onPress}) => (
   <TouchableOpacity style={styles.listItem} onPress={onPress}>
@@ -28,6 +43,13 @@ class ProfileMain extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(Home)} />
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    const {error, requestPending} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
     }
   }
 
@@ -55,7 +77,22 @@ class ProfileMain extends Component {
 
   onPhotoPress = async () => {
     let granted = await requestMainPermissions()
-    if (granted) this.props.navigation.navigate(ProfileCamera)
+    if (granted) this.showImagePicker() // this.props.navigation.navigate(ProfileCamera)
+  }
+
+  showImagePicker = () => {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response)
+      this.pickerIsOpened = false
+      if (response.didCancel) {
+        // this.props.navigation.goBack()
+      } else {
+        this.props.onUpdateUserImage(response.uri)
+        // this.props.navigation.navigate(PicturePreview, {
+        //   photoUri: response.uri
+        // })
+      }
+    })
   }
 
   onNavigateTo = (route) => {
@@ -109,15 +146,19 @@ class ProfileMain extends Component {
           </TouchableOpacity>
           <Text style={styles.appVersionText}>Version {VersionNumber.appVersion}</Text>
         </View>
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )
   }
 }
 
 ProfileMain.propTypes = {
+  error: PropTypes.string,
   navigation: PropTypes.object,
+  requestPending: PropTypes.bool,
   user: PropTypes.object,
-  onSignOut: PropTypes.func
+  onSignOut: PropTypes.func,
+  onUpdateUserImage: PropTypes.func
 }
 
 export default ProfileMain

@@ -7,6 +7,7 @@ import {
   TextInput,
   Alert
 } from 'react-native'
+import ImagePicker from 'react-native-image-picker'
 
 // import find from 'lodash/find'
 import forEach from 'lodash/forEach'
@@ -14,12 +15,25 @@ import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { CheckBox } from 'react-native-elements'
-import {DocumentsCamera, RegisterReview} from 'navigation/routeNames'
+import {RegisterReview} from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import { colors } from 'theme'
 import { Button, Section, SectionHeader, SectionContent, Photo, RadioButton } from 'components/ui'
 import styles from './styles'
 import {APP_CONFIG} from './config'
+
+// More info on all the options is below in the API Reference... just some common use cases shown here
+var options = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true
+    // path: 'images'
+  },
+  noData: true
+}
 
 class RideshareModal extends Component {
   constructor (props) {
@@ -182,13 +196,32 @@ class Documentation extends Component {
   onPhotoPress = async (licenseSide, licenseType) => {
     let granted = await requestMainPermissions()
     if (granted) {
-      const {onSelectLicense, navigation} = this.props
-      onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})
+      this.showImagePicker(licenseSide, licenseType)
+      // onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})
 
-      navigation.navigate(DocumentsCamera, {
-        title: licenseSide
-      })
+      // navigation.navigate(DocumentsCamera, {
+      //   title: licenseSide
+      // })
     }
+  }
+
+  showImagePicker = (licenseSide, licenseType) => {
+    ImagePicker.showImagePicker(options, (response) => {
+      console.log('Response = ', response)
+      this.pickerIsOpened = false
+      if (response.didCancel) {
+        // this.props.navigation.goBack()
+      } else {
+        this.props.onUpdateLicense({
+          type: licenseType,
+          side: licenseSide.toLowerCase(),
+          imageUri: response.uri
+        })
+        // this.props.navigation.navigate(PicturePreview, {
+        //   photoUri: response.uri
+        // })
+      }
+    })
   }
   onShowAppModal = () => {
     this.setState({showAppsModal: true})
