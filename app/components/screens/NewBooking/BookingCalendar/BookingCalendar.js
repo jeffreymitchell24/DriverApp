@@ -2,17 +2,15 @@ import React, { Component, PureComponent } from 'react'
 import { View, TouchableOpacity, Text, Animated, ScrollView } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PropTypes from 'prop-types'
-import Moment from 'moment'
+import moment from 'moment-timezone'
 import { extendMoment } from 'moment-range'
 import {Calendar} from 'react-native-calendars'
-import {get24hours, getDisabledDays} from 'helpers/date'
+import {get24hours, getDisabledDays, convertTo12h, formatBookedHours} from 'helpers/date'
 import {NewBookingDetails} from 'navigation/routeNames'
 import { NavButton, Button } from 'components/ui'
 import { colors } from 'theme'
 import styles, {pickerHeight} from './styles'
 // var PickerItem = Picker.Item
-
-const moment = extendMoment(Moment)
 
 class PickerItem extends PureComponent {
   onPress = () => {
@@ -65,8 +63,8 @@ class BookingCalendar extends Component {
   constructor (props) {
     super(props)
     let {params = {}} = this.props.navigation.state
-    let {startHour = -1, bookedHours = {}, bookDateType = 'start', maxDate = null, minDate = moment().format('YYYY-MM-DD')} = params
-    this.bookedHours = bookedHours
+    let {startHour = -1, bookedHours = {}, bookDateType = 'start', maxDate = null, minDate = moment().tz('America/New_York').format('YYYY-MM-DD')} = params
+    this.bookedHours = formatBookedHours(bookedHours)
     this.bookDateType = bookDateType
     this.startHour = startHour
     let disabledDays = getDisabledDays(this.bookedHours)
@@ -92,9 +90,10 @@ class BookingCalendar extends Component {
     console.log('selectedDate', selectedDate)
     let fullDate = {...selectedDate}
     let [hour] = this.state.hourList[selectedTime].split(':')
-    fullDate.timestamp = moment(selectedDate.timestamp).hour(+hour).unix()
+    let date = moment(selectedDate.dateString, 'YYYY-MM-DD').set('hour', +hour).utcOffset('-04:00', true)
+    fullDate.timestamp = date.unix()
     console.log('fullDate', fullDate)
-    console.log(moment(selectedDate.timestamp).hour(+hour).hour())
+    // console.log(moment(selectedDate.dateString, 'YYYY-MM-DD').set('hour', +hour).utcOffset('-04:00', true).hour())
     this.props.onSetBookingDate({type: bookDateType, date: fullDate})
     this.props.navigation.navigate(NewBookingDetails, {bookDateType, selectedDate, selectedTime})
   }
@@ -138,7 +137,7 @@ class BookingCalendar extends Component {
     console.log('selected', selectedDate)
     let minStartHour = null
     if (this.bookDateType === 'start') {
-      let currentDate = moment()
+      let currentDate = moment().tz('America/New_York')
       if (selectedDate.day === currentDate.date()) minStartHour = currentDate.hour() + 1
     }
     this.setState({selectedDate, minStartHour, selectedTime: -1})
@@ -210,7 +209,7 @@ class BookingCalendar extends Component {
                       } else if (this.disableRestHours || (hour + 24) - this.startHour > 12) type = 'disabled'
                     }
                   }
-                  return <PickerItem key={i}slotType={type} time={timeString} onPress={() => this.onTimeSelect(i)} />
+                  return <PickerItem key={i}slotType={type} time={convertTo12h(timeString)} onPress={() => this.onTimeSelect(i)} />
                 })}
               </ScrollView>
             </View>

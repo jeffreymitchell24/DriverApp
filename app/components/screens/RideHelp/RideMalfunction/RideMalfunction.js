@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
 import isEmpty from 'lodash/isEmpty'
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
-import { HelpCamera } from 'navigation/routeNames'
+import { HelpCamera, HelpCenter } from 'navigation/routeNames'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
 import { Formik } from 'formik'
 import styles from './styles'
@@ -18,11 +18,20 @@ const validationSchema = Yup.object().shape({
 class RideMalfunction extends Component {
   inputRefs = {}
 
+  componentDidUpdate (prevProps) {
+    const {error, requestPending, navigation} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else navigation.navigate(HelpCenter)
+    }
+  }
   componentWillUnmount () {
     this.props.onResetPhotos('rideMalfunctionPhotos')
   }
-  onSubmit = () => {
-
+  onSubmit = (values) => {
+    const {plate, description} = values
+    const {onSubmitReport, ride = {}, photos} = this.props
+    onSubmitReport({data: {photos, plate, description}, carId: ride.id})
   }
 
   onPhotoPress = async (index) => {
@@ -136,10 +145,14 @@ class RideMalfunction extends Component {
 }
 
 RideMalfunction.propTypes = {
+  error: PropTypes.string,
   navigation: PropTypes.object,
   photos: PropTypes.array,
+  requestPending: PropTypes.bool,
+  ride: PropTypes.object,
   onResetPhotos: PropTypes.func,
-  onSelectPhoto: PropTypes.func
+  onSelectPhoto: PropTypes.func,
+  onSubmitReport: PropTypes.func
 }
 
 export default RideMalfunction

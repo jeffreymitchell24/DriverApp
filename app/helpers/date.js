@@ -1,5 +1,8 @@
-import moment from 'moment'
+import Moment from 'moment-timezone'
+import { extendMoment } from 'moment-range'
 import forEach from 'lodash/forEach'
+
+const moment = extendMoment(Moment)
 
 export const getNext24hours = () => {
   let hours = []
@@ -105,4 +108,27 @@ export const getMaxDate = (startDate, bookedHours) => {
   } else if (bookedHours[startDate.dateString] !== 'false') {
     return startTime.add(1, 'd').format('YYYY-MM-DD')
   }
+}
+
+export const convertTo12h = (time) => {
+  time = time.toString().match(/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time]
+
+  if (time.length > 1) { // If time format correct
+    time = time.slice(1) // Remove full string match value
+    time[5] = +time[0] < 12 ? ' AM' : ' PM' // Set AM/PM
+    time[0] = +time[0] % 12 || 12 // Adjust hours
+  }
+  return time.join('') // return adjusted time or original string
+}
+
+export const formatBookedHours = (bookedHours) => {
+  let bookedDates = {}
+  forEach(bookedHours, (value, key) => {
+    let date = moment.unix(value).tz('America/New_York')
+    let dateString = date.format('YYYY-MM-DD')
+    if (!bookedDates[dateString]) bookedDates[dateString] = []
+    bookedDates[dateString].push(date.format('HH:mm'))
+  })
+  console.log('bookedDates', bookedDates)
+  return bookedDates
 }

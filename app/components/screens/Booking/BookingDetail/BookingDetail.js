@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
 import PropTypes from 'prop-types'
+import moment from 'moment-timezone'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
 import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, RideLicenseCamera } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
@@ -42,9 +43,22 @@ class BookingDetail extends Component {
     this.props.navigation.navigate(CarLocation, {geo})
   }
 
+  isMoreThan30Minutes = () => {
+    let {ride} = this.props
+    const {booking_starting_at: bookindStartingAt} = ride
+    let date = moment.tz(bookindStartingAt.object.date, 'America/New_York')
+    let now = moment().tz('America/New_York')
+
+    console.log(date.diff(now, 'minutes') > 30)
+    console.log('date', date.format())
+    console.log('now', now.format())
+    return date.diff(now, 'minutes') > 30
+  }
+
   render () {
-    let unlockDisabled = true
     const {ride} = this.props
+    let unlockDisabled = true
+    if (ride.status === 'pending' && !this.isMoreThan30Minutes()) unlockDisabled = false
     if (!ride) return null
     const {
       image_s3_url: image,
@@ -207,7 +221,7 @@ class BookingDetail extends Component {
         </View>
         <Button
           containerStyle={styles.button}
-          // disabled={unlockDisabled}
+          disabled={unlockDisabled}
           title='UNLOCK CARD'
           onPress={this.onUnlockPress}
         />

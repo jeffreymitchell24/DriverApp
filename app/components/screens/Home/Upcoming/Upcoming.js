@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { HomeView, UpcomingBookingCard } from 'components/blocks'
+
 import SplashScreen from 'react-native-splash-screen'
 import { AndroidBackHandler } from 'react-navigation-backhandler'
 import {NewBooking, BookingDetail} from 'navigation/routeNames'
@@ -12,7 +13,6 @@ class Upcoming extends Component {
     this.props.onFetchUserBookings()
   }
   onBookingPress = (booking) => {
-    console.log('booking', booking)
     this.props.onSelectRide(booking)
     this.props.navigation.navigate(BookingDetail)
   }

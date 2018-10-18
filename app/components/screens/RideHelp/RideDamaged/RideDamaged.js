@@ -1,12 +1,12 @@
 import React, { Component } from 'react'
-import { View, ScrollView } from 'react-native'
+import { View, ScrollView, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import { TextInputView } from 'components/blocks'
 import * as Yup from 'yup'
 import { requestMainPermissions } from 'helpers/permission'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
-import { HelpCamera } from 'navigation/routeNames'
+import { HelpCamera, HelpCenter } from 'navigation/routeNames'
 import { Formik } from 'formik'
 import styles from './styles'
 
@@ -15,11 +15,20 @@ const validationSchema = Yup.object().shape({
 })
 class RideDamaged extends Component {
   inputRefs = {}
+  componentDidUpdate (prevProps) {
+    const {error, requestPending, navigation} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else navigation.navigate(HelpCenter)
+    }
+  }
   componentWillUnmount () {
     this.props.onResetPhotos('rideDamagedPhotos')
   }
-  onSubmit = () => {
-
+  onSubmit = (values) => {
+    const {description} = values
+    const {onSubmitReport, ride = {}, photos} = this.props
+    onSubmitReport({data: {photos, description}, carId: ride.id})
   }
   onPhotoPress = async (index) => {
     let granted = await requestMainPermissions()
@@ -113,10 +122,14 @@ class RideDamaged extends Component {
 }
 
 RideDamaged.propTypes = {
+  error: PropTypes.string,
   navigation: PropTypes.object,
   photos: PropTypes.array,
+  requestPending: PropTypes.bool,
+  ride: PropTypes.object,
   onResetPhotos: PropTypes.func,
-  onSelectPhoto: PropTypes.func
+  onSelectPhoto: PropTypes.func,
+  onSubmitReport: PropTypes.func
 }
 
 export default RideDamaged
