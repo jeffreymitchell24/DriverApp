@@ -144,7 +144,7 @@ const handlers = {
   [CHECK_LICENSE.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => {return payload.id === book.id ? payload: book}),
+      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
       selectedRide: payload,
       licenseChecked: true,
       licenseCheckPending: false

@@ -152,12 +152,21 @@ export const checkRideLicense = async ({token, id, data}) => {
   return response.data.data
 }
 
+export const sendRideReceipt = async ({token, id, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/receipt`, data, config)
+  console.log('sendRideReceipt response', response)
+  return response.data.data
+}
+
 export const endRide = async ({token, id, data}) => {
   let config = {
     headers: {'Authorization': `Bearer ${token}`}
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/end`, data, config)
-  console.log('checkRideLicense response', response)
+  console.log('endRide response', response)
   return response.data.data
 }
 export const cancelRide = async ({token, id}) => {
@@ -165,7 +174,32 @@ export const cancelRide = async ({token, id}) => {
     headers: {'Authorization': `Bearer ${token}`}
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/cancel`, {}, config)
-  console.log('checkRideLicense response', response)
+  console.log('cancelRide response', response)
+  return response.data.data
+}
+
+export const rideDamaged = async ({token, id, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/help/damage`, data, config)
+  console.log('rideDamaged response', response)
+  return response.data.data
+}
+export const rideMalfunction = async ({token, id, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/help/malfunction`, data, config)
+  console.log('rideMalfunction response', response)
+  return response.data.data
+}
+export const rideLate = async ({token, id, data}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/help/late`, data, config)
+  console.log('rideLate response', response)
   return response.data.data
 }
 

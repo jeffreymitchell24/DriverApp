@@ -30,7 +30,7 @@ class RideCancel extends PureComponent {
             <Text style={styles.cancelText}>
               If you cancel,
               <Text style={styles.cancelTextBold}> ${cancelLoss} </Text>
-              will be deducted from your salary. Are you sure you want to cancel booking?
+              will be deducted from your earning. Are you sure you want to cancel booking?
             </Text>
           </View>
           <View style={styles.footerButtons}>

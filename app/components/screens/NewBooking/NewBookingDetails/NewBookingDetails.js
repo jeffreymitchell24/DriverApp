@@ -68,8 +68,8 @@ class NewBookingDetails extends PureComponent {
         const {manufacturer, model} = this.props.car.car
         let bookingData = {
           car: `${manufacturer} ${model}`,
-          startDate: moment.unix(this.props.startDate.timestamp).format('MMMM DD, hh:mm A'),
-          endDate: moment.unix(this.props.endDate.timestamp).format('MMMM DD, hh:mm A')
+          startDate: moment.unix(this.props.startDate.timestamp).tz('America/New_York').format('MMMM DD, hh:mm A'),
+          endDate: moment.unix(this.props.endDate.timestamp).tz('America/New_York').format('MMMM DD, hh:mm A')
         }
         return this.props.navigation.navigate(BookingConfirmed, {bookingData})
       } else {
@@ -93,7 +93,7 @@ class NewBookingDetails extends PureComponent {
         bookedHours: this.props.car.booked,
         maxDate,
         minDate: this.props.startDate.dateString,
-        startHour: moment.unix(this.props.startDate.timestamp).hour()
+        startHour: moment.unix(this.props.startDate.timestamp).tz('America/New_York').hour()
       })
     }
   }
@@ -101,9 +101,10 @@ class NewBookingDetails extends PureComponent {
   onConfirmPress = () => {
     const {car: {car}} = this.props
     const {startDate, endDate} = this.props
+    console.log(startDate, endDate)
     let timeStamps = {
-      'booking_ending_at': moment.unix(endDate.timestamp).subtract(1, 'hours').minutes(59).format('YYYY-MM-DD HH:mm'),
-      'booking_starting_at': moment.unix(startDate.timestamp).format('YYYY-MM-DD HH:mm')
+      'booking_ending_at': moment.unix(endDate.timestamp).tz('America/New_York').subtract(1, 'hours').minutes(59).format('YYYY-MM-DD HH:mm'),
+      'booking_starting_at': moment.unix(startDate.timestamp).tz('America/New_York').format('YYYY-MM-DD HH:mm')
     }
     this.props.onBookCar({id: car.id, timeStamps})
   }
@@ -187,13 +188,13 @@ class NewBookingDetails extends PureComponent {
                 <TouchableOpacity style={{flex: 1}} onPress={this.onStartDatePress}>
                   <BookingDetail
                     label='Start Date'
-                    text={(startDate && moment.unix(startDate.timestamp).format('ddd MM/D hh:mm A')) || '--:--'}
+                    text={(startDate && moment.unix(startDate.timestamp).tz('America/New_York').format('ddd MM/D hh:mm A')) || '--:--'}
                   />
                 </TouchableOpacity>
                 <TouchableOpacity style={{flex: 1}} onPress={this.onEndDatePress}>
                   <BookingDetail
                     label='End Date'
-                    text={(endDate && moment.unix(endDate.timestamp).format('ddd MM/D hh:mm A')) || '--:--'}
+                    text={(endDate && moment.unix(endDate.timestamp).tz('America/New_York').format('ddd MM/D hh:mm A')) || '--:--'}
                   />
                 </TouchableOpacity>
               </View>

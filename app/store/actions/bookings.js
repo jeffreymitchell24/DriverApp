@@ -57,3 +57,51 @@ export const checkLicense = ({photoUri, carId}) => {
     payload: {photoUri, carId}
   }
 }
+
+export const CANCEL_RIDE = createAsyncAction('CANCEL_RIDE')
+export const cancelRide = ({data, carId}) => {
+  return {
+    type: CANCEL_RIDE.REQUEST,
+    payload: {data, carId}
+  }
+}
+
+export const END_RIDE = createAsyncAction('END_RIDE')
+export const endRide = ({data, carId}) => {
+  return {
+    type: END_RIDE.REQUEST,
+    payload: {data, carId}
+  }
+}
+
+export const LATE_FOR_RIDE = createAsyncAction('LATE_FOR_RIDE')
+export const lateForRide = ({data, carId}) => {
+  return {
+    type: LATE_FOR_RIDE.REQUEST,
+    payload: {data, carId}
+  }
+}
+
+export const SUBMIT_RECEIPT = createAsyncAction('SUBMIT_RECEIPT')
+export const submitReceipt = ({data, carId}) => {
+  return {
+    type: SUBMIT_RECEIPT.REQUEST,
+    payload: {data, carId}
+  }
+}
+
+export const HELP_RIDE_DAMAGED = createAsyncAction('HELP_RIDE_DAMAGED')
+export const helpRideDamaged = ({data, carId}) => {
+  return {
+    type: HELP_RIDE_DAMAGED.REQUEST,
+    payload: {data, carId}
+  }
+}
+
+export const HELP_RIDE_MALFUNCTIONED = createAsyncAction('HELP_RIDE_MALFUNCTIONED')
+export const helpRideMalfunction = ({data, carId}) => {
+  return {
+    type: HELP_RIDE_MALFUNCTIONED.REQUEST,
+    payload: {data, carId}
+  }
+}

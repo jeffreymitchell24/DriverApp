@@ -7,11 +7,19 @@ import {
   RESET_PHOTOS
 } from 'store/actions/helpCenter'
 
+import {
+  LATE_FOR_RIDE,
+  HELP_RIDE_DAMAGED,
+  HELP_RIDE_MALFUNCTIONED
+} from 'store/actions/bookings'
+
 const initialState = {
   rideDamagedPhotos: [],
   rideMalfunctionPhotos: [],
   rideLatePhotos: [],
-  selectedPhoto: null
+  selectedPhoto: null,
+  requestPending: false,
+  error: null
 }
 
 const handlers = {
@@ -44,6 +52,69 @@ const handlers = {
     return {
       ...state,
       [payload.type]: []
+    }
+  },
+  [LATE_FOR_RIDE.REQUEST]: (state, {payload}) => {
+    return {
+      ...state,
+      requestPending: true,
+      error: null
+    }
+  },
+  [LATE_FOR_RIDE.SUCCESS]: (state, {payload}) => {
+    return {
+      ...state,
+      error: null,
+      requestPending: false
+    }
+  },
+  [LATE_FOR_RIDE.FAILURE]: (state, {payload}) => {
+    return {
+      ...state,
+      error: payload,
+      requestPending: false
+    }
+  },
+  [HELP_RIDE_DAMAGED.REQUEST]: (state, {payload}) => {
+    return {
+      ...state,
+      requestPending: true,
+      error: null
+    }
+  },
+  [HELP_RIDE_DAMAGED.SUCCESS]: (state, {payload}) => {
+    return {
+      ...state,
+      error: null,
+      requestPending: false
+    }
+  },
+  [HELP_RIDE_DAMAGED.FAILURE]: (state, {payload}) => {
+    return {
+      ...state,
+      error: payload,
+      requestPending: false
+    }
+  },
+  [HELP_RIDE_MALFUNCTIONED.REQUEST]: (state, {payload}) => {
+    return {
+      ...state,
+      requestPending: true,
+      error: null
+    }
+  },
+  [HELP_RIDE_MALFUNCTIONED.SUCCESS]: (state, {payload}) => {
+    return {
+      ...state,
+      error: null,
+      requestPending: false
+    }
+  },
+  [HELP_RIDE_MALFUNCTIONED.FAILURE]: (state, {payload}) => {
+    return {
+      ...state,
+      error: payload,
+      requestPending: false
     }
   }
 }
