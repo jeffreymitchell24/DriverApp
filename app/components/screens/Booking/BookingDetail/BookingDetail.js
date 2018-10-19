@@ -57,9 +57,15 @@ class BookingDetail extends Component {
 
   render () {
     const {ride} = this.props
+    console.log('ride', ride)
     let unlockDisabled = true
     if (ride.status === 'pending' && !this.isMoreThan30Minutes()) unlockDisabled = false
     if (!ride) return null
+    const {
+      booking_starting_at: bookindStartingAt,
+      booking_ending_at: bookindEndingAt,
+      car
+    } = ride
     const {
       image_s3_url: image,
       pickup_location_lat: pickupLat,
@@ -73,7 +79,9 @@ class BookingDetail extends Component {
       color = '',
       year = '',
       plate = ''
-    } = ride.car
+    } = car
+
+    let duration = moment(bookindEndingAt.object.date).diff(moment(bookindStartingAt.object.date), 'hours') + 1
     return (
       <ScrollView
         contentContainerStyle={styles.container}
@@ -129,19 +137,19 @@ class BookingDetail extends Component {
                   <View style={{flex: 1}}>
                     <Detail
                       label='Start'
-                      text='Aug 20, 11:00AM'
+                      text={bookindStartingAt.formatted}
                     />
                   </View>
                   <View style={{flex: 1}}>
                     <Detail
                       label='End'
-                      text='Aug 20, 11:00PM'
+                      text={bookindEndingAt.formatted}
                     />
                   </View>
                 </View>
                 <Detail
                   label='Total'
-                  text='12 hours'
+                  text={`${duration} hours`}
                 />
               </View>
             </SectionContent>
