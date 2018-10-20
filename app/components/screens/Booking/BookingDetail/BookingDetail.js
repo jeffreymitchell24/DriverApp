@@ -14,7 +14,9 @@ class BookingDetail extends Component {
     this.state = {
     }
   }
-
+  componentWillUnmount () {
+    this.props.onUnselectRide()
+  }
   onSubmitReceiptPress = () => {
     this.props.navigation.navigate(ReceiptSubmit)
   }
@@ -34,11 +36,8 @@ class BookingDetail extends Component {
       return_location_lat: returnLat,
       return_location_lon: returnLon
     } = this.props.ride.car
-
-    if (locationType === 'pickup') {
-      geo.lat = locationType === 'pickup' ? pickupLat : returnLat
-      geo.lon = locationType === 'pickup' ? pickupLon : returnLon
-    }
+    geo.lat = locationType === 'pickup' ? pickupLat : returnLat
+    geo.lon = locationType === 'pickup' ? pickupLon : returnLon
 
     this.props.navigation.navigate(CarLocation, {geo})
   }
@@ -241,7 +240,8 @@ class BookingDetail extends Component {
 
 BookingDetail.propTypes = {
   navigation: PropTypes.object,
-  ride: PropTypes.object
+  ride: PropTypes.object,
+  onUnselectRide: PropTypes.func
 }
 
 export default BookingDetail

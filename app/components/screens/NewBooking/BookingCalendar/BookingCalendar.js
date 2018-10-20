@@ -3,7 +3,6 @@ import { View, TouchableOpacity, Text, Animated, ScrollView } from 'react-native
 import Icon from 'react-native-vector-icons/Ionicons'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
-import { extendMoment } from 'moment-range'
 import {Calendar} from 'react-native-calendars'
 import {get24hours, getDisabledDays, convertTo12h, formatBookedHours} from 'helpers/date'
 import {NewBookingDetails} from 'navigation/routeNames'

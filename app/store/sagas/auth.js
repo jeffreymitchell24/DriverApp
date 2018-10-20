@@ -1,4 +1,4 @@
-import { take, put, call, cancelled, select, fork } from 'redux-saga/effects'
+import { take, put, call, cancelled, select, fork, cancel } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import {Alert} from 'react-native'
 import NavigationService from 'navigation/NavigationService'

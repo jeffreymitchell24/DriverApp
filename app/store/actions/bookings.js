@@ -46,7 +46,7 @@ export const selectRide = (ride) => {
 export const UNSELECT_RIDE = 'UNSELECT_RIDE'
 export const unselectRide = () => {
   return {
-    type: UNSELECT_CAR
+    type: UNSELECT_RIDE
   }
 }
 
@@ -59,10 +59,10 @@ export const checkLicense = ({photoUri, carId}) => {
 }
 
 export const CANCEL_RIDE = createAsyncAction('CANCEL_RIDE')
-export const cancelRide = ({data, carId}) => {
+export const cancelRide = ({carId}) => {
   return {
     type: CANCEL_RIDE.REQUEST,
-    payload: {data, carId}
+    payload: {carId}
   }
 }
 

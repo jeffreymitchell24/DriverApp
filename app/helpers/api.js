@@ -167,7 +167,7 @@ export const endRide = async ({token, id, data}) => {
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/end`, data, config)
   console.log('endRide response', response)
-  return response.data.data
+  return response.data
 }
 export const cancelRide = async ({token, id}) => {
   let config = {
@@ -175,16 +175,17 @@ export const cancelRide = async ({token, id}) => {
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/cancel`, {}, config)
   console.log('cancelRide response', response)
-  return response.data.data
+  return response.data
 }
 
 export const rideDamaged = async ({token, id, data}) => {
   let config = {
     headers: {'Authorization': `Bearer ${token}`}
   }
+  console.log('data', data)
   let response = await axios.post(`${URL}/api/bookings/${id}/help/damage`, data, config)
   console.log('rideDamaged response', response)
-  return response.data.data
+  return response.data
 }
 export const rideMalfunction = async ({token, id, data}) => {
   let config = {
@@ -192,7 +193,7 @@ export const rideMalfunction = async ({token, id, data}) => {
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/help/malfunction`, data, config)
   console.log('rideMalfunction response', response)
-  return response.data.data
+  return response.data
 }
 export const rideLate = async ({token, id, data}) => {
   let config = {
@@ -200,7 +201,7 @@ export const rideLate = async ({token, id, data}) => {
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/help/late`, data, config)
   console.log('rideLate response', response)
-  return response.data.data
+  return response.data
 }
 
 export const toFormData = (data) => {

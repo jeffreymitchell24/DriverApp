@@ -8,6 +8,8 @@ import { TextInputView } from 'components/blocks'
 import { HelpCamera, HelpCenter } from 'navigation/routeNames'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
 import { Formik } from 'formik'
+import Spinner from 'react-native-loading-spinner-overlay'
+import { colors } from 'theme'
 import styles from './styles'
 
 const validationSchema = Yup.object().shape({
@@ -139,6 +141,7 @@ class RideMalfunction extends Component {
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </HelpCenterSection>
     )
   }

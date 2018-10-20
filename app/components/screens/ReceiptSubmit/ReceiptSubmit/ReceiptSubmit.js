@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, TouchableWithoutFeedback } from 'react-native'
+import { View, ScrollView, TouchableWithoutFeedback, Alert, Animated, TouchableOpacity, Text } from 'react-native'
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import { requestMainPermissions } from 'helpers/permission'
@@ -9,7 +9,10 @@ import {ReceiptCamera} from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent, Photo } from 'components/ui'
 import styles from './styles'
 
+const RECEIPT_TYPES = ['Gas bill', 'Parking ticket', 'Traffic ticket', 'Repair bill', 'Toll', 'Proof of damage']
+
 class ReceiptSubmit extends Component {
+  isHiddenPicker = true
   constructor (props) {
     super(props)
     const {time, date} = getCurrentDateAndTime()
@@ -18,8 +21,45 @@ class ReceiptSubmit extends Component {
       showPicker: false,
       pickerMode: 'time',
       date,
-      time
+      time,
+      expanded: false,
+      animation: new Animated.Value(0),
+      receiptType: ''
     }
+  }
+
+  componentDidUpdate (prevProps) {
+    const {error, requestPending, navigation} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else navigation.goBack()
+    }
+  }
+
+  onReceiptTypeSelect = (type) => {
+    this.setState({receiptType: type}, () => this.toggle())
+  }
+
+  toggle = () => {
+    var toValue = 0
+
+    if (this.isHiddenPicker) {
+      toValue = 180
+    }
+
+    // This will animate the transalteY of the subview between 0 & 100 depending on its current state
+    // 100 comes from the style below, which is the height of the subview.
+    Animated.spring(
+      this.state.animation,
+      {
+        toValue: toValue,
+        velocity: 3,
+        tension: 2,
+        friction: 8
+      }
+    ).start()
+
+    this.isHiddenPicker = !this.isHiddenPicker
   }
 
   onPhotoPress = async () => {
@@ -41,10 +81,27 @@ class ReceiptSubmit extends Component {
     this.props.onClearReceiptPhoto()
   }
   onDatePress = () => {
-    this.setState({showPicker: true, pickerMode: 'datetime'})
+    this.setState({showPicker: true, pickerMode: 'date'})
   }
   onTimePress = () => {
-    this.setState({showPicker: true, pickerMode: 'datetime'})
+    this.setState({showPicker: true, pickerMode: 'time'})
+  }
+
+  renderDropDown = () => {
+    return (
+      <Animated.View style={[styles.dropdown, {height: this.state.animation}]}>
+        {RECEIPT_TYPES.map((type, i) => {
+          let extraStyle = {}
+          if (i === RECEIPT_TYPES.length - 1) extraStyle = { borderBottomWidth: 2 }
+          else if (i === 0)extraStyle = { borderTopWidth: 0 }
+          return (
+            <TouchableOpacity key={i} style={[styles.dropdownItem, extraStyle]} onPress={() => this.onReceiptTypeSelect(type)}>
+              <Text style={styles.dropdownItemText}>{type}</Text>
+            </TouchableOpacity>
+          )
+        })}
+      </Animated.View>
+    )
   }
   render () {
     console.log(this.state)
@@ -54,12 +111,19 @@ class ReceiptSubmit extends Component {
         keyboardShouldPersistTaps='always'
       >
         <View style={styles.form}>
-          <TextInputView
-            keyboardType='default'
-            label='TITLE'
-            name='title'
-            placeholder=''
-          />
+          <TouchableWithoutFeedback onPress={this.toggle}>
+            <View pointerEvents='box-only'>
+              <TextInputView
+                containerStyle={{marginBottom: 0}}
+                keyboardType='default'
+                label='TITLE'
+                name='title'
+                placeholder=''
+                value={this.state.receiptType}
+              />
+            </View>
+          </TouchableWithoutFeedback>
+          {this.renderDropDown()}
           <TextInputView
             keyboardType='default'
             label='LOCATION'
@@ -122,8 +186,11 @@ class ReceiptSubmit extends Component {
 }
 
 ReceiptSubmit.propTypes = {
+  error: PropTypes.string,
   navigation: PropTypes.object,
   receiptPhoto: PropTypes.string,
+  requestPending: PropTypes.bool,
+  ride: PropTypes.object,
   onClearReceiptPhoto: PropTypes.func
 }
 

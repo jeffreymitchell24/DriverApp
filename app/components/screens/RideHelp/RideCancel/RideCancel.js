@@ -1,8 +1,10 @@
 import React, { PureComponent } from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Alert } from 'react-native'
+import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
 import { NavButton, HelpCenterSection, Button } from 'components/ui'
-import {HelpCenter} from 'navigation/routeNames'
+import {HelpCenter, Home} from 'navigation/routeNames'
+import { colors } from 'theme'
 import styles from './styles'
 
 class RideCancel extends PureComponent {
@@ -12,12 +14,24 @@ class RideCancel extends PureComponent {
     }
   }
 
+  componentDidUpdate (prevProps) {
+    const {error, requestPending, navigation} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else navigation.navigate(Home)
+    }
+  }
+
+  componentWillUnmount () {
+    this.props.error && this.props.onResetError()
+  }
+
   onCancel = () => {
     this.props.navigation.navigate(HelpCenter)
   }
 
   onConfirm = () => {
-    this.props.navigation.navigate(HelpCenter)
+    this.props.onConfirm({carId: this.props.ride.id})
   }
 
   render () {
@@ -45,13 +59,23 @@ class RideCancel extends PureComponent {
               onPress={this.onConfirm} />
           </View>
         </View>
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </HelpCenterSection>
     )
   }
 }
 
 RideCancel.propTypes = {
-  navigation: PropTypes.object
+  error: PropTypes.string,
+  navigation: PropTypes.object,
+  requestPending: PropTypes.bool,
+  ride: PropTypes.object,
+  onConfirm: PropTypes.func,
+  onResetError: PropTypes.func
+}
+
+RideCancel.defaultProps = {
+  ride: {}
 }
 
 export default RideCancel

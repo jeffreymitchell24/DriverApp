@@ -30,3 +30,10 @@ export const resetPhotos = (type) => {
     }
   }
 }
+
+export const RESET_RIDE_CANCEL_ERROR = 'bookings/RESET_RIDE_CANCEL_ERROR'
+export const resetRideCancelError = () => {
+  return {
+    type: RESET_RIDE_CANCEL_ERROR
+  }
+}
