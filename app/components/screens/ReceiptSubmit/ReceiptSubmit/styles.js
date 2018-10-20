@@ -15,5 +15,20 @@ export default StyleSheet.create({
   photoUploadSection: {
     paddingTop: 0,
     borderBottomWidth: 0
+  },
+  dropdown: {
+    overflow: 'hidden',
+    marginBottom: metrics.contentMarginSmall
+  },
+  dropdownItem: {
+    height: 30,
+    justifyContent: 'center',
+    borderColor: colors.gray50,
+    borderWidth: 2,
+    borderBottomWidth: 0
+  },
+  dropdownItemText: {
+    fontSize: metrics.fontSize,
+    fontFamily: 'SFProText-Regular'
   }
 })

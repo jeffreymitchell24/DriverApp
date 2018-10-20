@@ -21,7 +21,5 @@ export const getSelectedRide = R.path(['bookings', 'selectedRide'])
 export const getLicenseCheckRequestStatus = R.path(['bookings', 'licenseCheckPending'])
 export const getLicenseCheckError = R.path(['bookings', 'licenseCheckError'])
 export const getLicenseCheckStatus = R.path(['bookings', 'licenseChecked'])
-
-// HelpCenter
-export const getRideHelpRequestStatus = R.path(['bookings', 'requestPending'])
-export const getRideHelpRequestError = R.path(['bookings', 'error'])
+export const getRideCancelRequestStatus = R.path(['bookings', 'rideCancelPending'])
+export const getRideCancelError = R.path(['bookings', 'rideCancelError'])

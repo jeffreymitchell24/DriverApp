@@ -8,7 +8,9 @@ import {
   BOOK_CAR,
   SELECT_RIDE,
   UNSELECT_RIDE,
-  CHECK_LICENSE
+  CHECK_LICENSE,
+  CANCEL_RIDE,
+  RESET_RIDE_CANCEL_ERROR
 } from 'store/actions/bookings'
 
 const initialState = {
@@ -26,7 +28,9 @@ const initialState = {
   bookCarPending: false,
   licenseCheckPending: false,
   licenseCheckError: null,
-  licenseChecked: false
+  licenseChecked: false,
+  rideCancelPending: false,
+  rideCancelError: null
 }
 
 const handlers = {
@@ -155,6 +159,33 @@ const handlers = {
       ...state,
       licenseCheckPending: false,
       licenseCheckError: payload
+    }
+  },
+  [CANCEL_RIDE.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      rideCancelPending: true,
+      rideCancelError: null
+    }
+  },
+  [CANCEL_RIDE.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.filter(book => book.id !== payload.id),
+      rideCancelPending: false
+    }
+  },
+  [CANCEL_RIDE.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      rideCancelPending: false,
+      rideCancelError: payload
+    }
+  },
+  [RESET_RIDE_CANCEL_ERROR]: (state, { payload }) => {
+    return {
+      ...state,
+      rideCancelError: null
     }
   }
 }

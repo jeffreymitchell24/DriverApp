@@ -7,6 +7,8 @@ import * as Yup from 'yup'
 import { requestMainPermissions } from 'helpers/permission'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
 import { HelpCamera, HelpCenter } from 'navigation/routeNames'
+import Spinner from 'react-native-loading-spinner-overlay'
+import { colors } from 'theme'
 import { Formik } from 'formik'
 import styles from './styles'
 
@@ -116,6 +118,7 @@ class RideDamaged extends Component {
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </HelpCenterSection>
     )
   }
