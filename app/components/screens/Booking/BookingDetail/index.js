@@ -2,15 +2,18 @@ import BookingDetail from './BookingDetail'
 
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
-import {getSelectedRide} from 'store/selectors'
-import {unselectRide} from 'store/actions/bookings'
+import {getSelectedRide, getLicenseCheckError, getLicenseCheckRequestStatus} from 'store/selectors'
+import {unselectRide, checkLicense} from 'store/actions/bookings'
 
 const selector = createStructuredSelector({
-  ride: getSelectedRide
+  ride: getSelectedRide,
+  error: getLicenseCheckError,
+  requestPending: getLicenseCheckRequestStatus
 })
 
 const actions = {
-  onUnselectRide: unselectRide
+  onUnselectRide: unselectRide,
+  onUnlockRide: checkLicense
 }
 
 export default connect(

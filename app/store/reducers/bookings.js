@@ -10,7 +10,11 @@ import {
   UNSELECT_RIDE,
   CHECK_LICENSE,
   CANCEL_RIDE,
-  RESET_RIDE_CANCEL_ERROR
+  RESET_RIDE_CANCEL_ERROR,
+  LATE_FOR_RIDE,
+  HELP_RIDE_DAMAGED,
+  HELP_RIDE_MALFUNCTIONED,
+  SUBMIT_RECEIPT
 } from 'store/actions/bookings'
 
 const initialState = {
@@ -186,6 +190,34 @@ const handlers = {
     return {
       ...state,
       rideCancelError: null
+    }
+  },
+  [LATE_FOR_RIDE.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      selectedRide: payload
+    }
+  },
+  [HELP_RIDE_DAMAGED.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      selectedRide: payload
+    }
+  },
+  [HELP_RIDE_MALFUNCTIONED.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      selectedRide: payload
+    }
+  },
+  [SUBMIT_RECEIPT.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      selectedRide: payload
     }
   }
 }
