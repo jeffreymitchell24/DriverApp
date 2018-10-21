@@ -22,6 +22,7 @@ export default StyleSheet.create({
   },
   dropdownItem: {
     height: 30,
+    paddingHorizontal: 10,
     justifyContent: 'center',
     borderColor: colors.gray50,
     borderWidth: 2,

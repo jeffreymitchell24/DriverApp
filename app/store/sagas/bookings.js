@@ -95,14 +95,14 @@ function * bookCarFlow () {
 }
 
 function * checkRideLicense ({payload}) {
-  const {id, photoUri} = payload
-  let imageFile = yield toImageFile(photoUri)
-  let query = {photo: imageFile}
-  let data = Api.toFormData(query)
+  const {carId: id} = payload // photoUri
+  // let imageFile = yield toImageFile(photoUri)
+  // let query = {photo: imageFile}
+  // let data = Api.toFormData(query)
   let state = yield select()
   let {token} = state.auth
   try {
-    let response = yield call(Api.checkRideLicense, {data, id, token})
+    let response = yield call(Api.checkRideLicense, {id, token}) // data
     console.log('response', response)
     yield put({type: CHECK_LICENSE.SUCCESS, payload: response})
   } catch (error) {
@@ -171,6 +171,7 @@ function * rideDamaged ({payload}) {
     yield put({type: HELP_RIDE_DAMAGED.SUCCESS, payload: response})
   } catch (error) {
     console.log('error', error)
+    console.log('error.request._response', error.request._response)
     console.log('error response', error.response)
     console.log('error message', error.message)
     yield put({type: HELP_RIDE_DAMAGED.FAILURE, payload: (error.response && error.response.data.error.message) || ''})
@@ -234,12 +235,9 @@ function * rideLateFlow () {
 }
 
 function * submitRideReceipt ({payload}) {
-  const {carId: id, data: {photos, reason, delay}} = payload
-  let query = {reason, 'delay_minutes': delay}
-  if (photos.length > 0) {
-    let transformedPhotos = yield transformPhotoArray(photos)
-    query['car_photos'] = transformedPhotos
-  }
+  const {carId: id, data: {location, title, price, date, time, photo}} = payload
+  let imageFile = yield toImageFile(photo)
+  let query = {location, title, price, 'receipt_date': date, time, photo: imageFile}
   console.log('query', query)
   let data = Api.toFormData(query)
   let state = yield select()
@@ -247,11 +245,11 @@ function * submitRideReceipt ({payload}) {
   try {
     let response = yield call(Api.sendRideReceipt, {id, token, data})
     console.log('response', response)
-    yield put({type: LATE_FOR_RIDE.SUCCESS, payload: response})
+    yield put({type: SUBMIT_RECEIPT.SUCCESS, payload: response})
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: LATE_FOR_RIDE.FAILURE, payload: error.response.data.error.message})
+    yield put({type: SUBMIT_RECEIPT.FAILURE, payload: error.response.data.error.message})
   }
 }
 
@@ -277,6 +275,7 @@ export default [
   rideCancelFlow,
   rideDamagedFlow,
   rideMalfunctionFlow,
-  rideLateFlow
+  rideLateFlow,
+  submitRideReceiptFlow
   // rideEndFlow
 ]

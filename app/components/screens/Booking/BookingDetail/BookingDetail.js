@@ -1,11 +1,13 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native'
+import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
 import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, RideLicenseCamera } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
 import MapView from 'react-native-maps'
+import Spinner from 'react-native-loading-spinner-overlay'
+import { colors } from 'theme'
 import {styles, mapStyles} from './styles'
 
 class BookingDetail extends Component {
@@ -17,12 +19,20 @@ class BookingDetail extends Component {
   componentWillUnmount () {
     this.props.onUnselectRide()
   }
+  componentDidUpdate (prevProps) {
+    const {error, requestPending} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+    }
+  }
   onSubmitReceiptPress = () => {
     this.props.navigation.navigate(ReceiptSubmit)
   }
 
   onUnlockPress = () => {
-    this.props.navigation.navigate(RideLicenseCamera)
+    // this.props.navigation.navigate(RideLicenseCamera)
+    const {onUnlockRide, ride = {}} = this.props
+    onUnlockRide({carId: ride.id})
   }
 
   onHelpPress = () => {
@@ -58,6 +68,9 @@ class BookingDetail extends Component {
     const {ride} = this.props
     console.log('ride', ride)
     let unlockDisabled = true
+    let buttonText = 'UNLOCK CAR'
+    if (ride.status === 'driving') buttonText = 'END DRIVE'
+    else if (ride.status === 'ended' || ride.status === 'canceled') buttonText = 'BOOK AGAIN'
     if (ride.status === 'pending' && !this.isMoreThan30Minutes()) unlockDisabled = false
     if (!ride) return null
     const {
@@ -229,18 +242,22 @@ class BookingDetail extends Component {
         <Button
           containerStyle={styles.button}
           disabled={unlockDisabled}
-          title='UNLOCK CARD'
+          title={buttonText}
           onPress={this.onUnlockPress}
         />
         <Text style={styles.lockedText}>Unlock is available 30 minutes before{'\n'} scheduled start of the ride</Text>
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )
   }
 }
 
 BookingDetail.propTypes = {
+  error: PropTypes.string,
   navigation: PropTypes.object,
+  requestPending: PropTypes.bool,
   ride: PropTypes.object,
+  onUnlockRide: PropTypes.func,
   onUnselectRide: PropTypes.func
 }
 
