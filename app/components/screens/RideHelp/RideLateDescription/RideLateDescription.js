@@ -31,7 +31,7 @@ class RideLateDescription extends PureComponent {
     this.props.onResetPhotos('rideLatePhotos')
   }
   onPhotoPress = async () => {
-    let granted = await requestMainPermissions()
+    let granted = await requestMainPermissions(true)
     if (granted) {
       const {onSelectPhoto, navigation} = this.props
       onSelectPhoto({type: 'rideLatePhotos', index: 0})
