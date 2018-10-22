@@ -194,7 +194,7 @@ class Documentation extends Component {
   }
 
   onPhotoPress = async (licenseSide, licenseType) => {
-    let granted = await requestMainPermissions()
+    let granted = await requestMainPermissions(true)
     if (granted) {
       this.showImagePicker(licenseSide, licenseType)
       // onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})

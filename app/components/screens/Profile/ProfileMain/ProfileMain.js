@@ -76,7 +76,7 @@ class ProfileMain extends Component {
   }
 
   onPhotoPress = async () => {
-    let granted = await requestMainPermissions()
+    let granted = await requestMainPermissions(true)
     if (granted) this.showImagePicker() // this.props.navigation.navigate(ProfileCamera)
   }
 

@@ -33,7 +33,7 @@ class RideDamaged extends Component {
     onSubmitReport({data: {photos, description}, carId: ride.id})
   }
   onPhotoPress = async (index) => {
-    let granted = await requestMainPermissions()
+    let granted = await requestMainPermissions(true)
     if (granted) {
       const {onSelectPhoto, navigation} = this.props
       onSelectPhoto({type: 'rideDamagedPhotos', index})
