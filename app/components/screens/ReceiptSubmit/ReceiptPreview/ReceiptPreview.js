@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import {PicturePreviewView} from 'components/blocks'
-import {ReceiptSubmit} from 'navigation/routeNames'
+import {ReceiptSubmit, RideEnd} from 'navigation/routeNames'
 
 class ReceiptPreview extends Component {
   onCancelPress = () => {
@@ -9,9 +9,11 @@ class ReceiptPreview extends Component {
   }
 
   onConfirmPress = (photoUri) => {
-    const {navigation, onSaveReceiptPhoto} = this.props
-    onSaveReceiptPhoto(photoUri)
-    navigation.navigate(ReceiptSubmit)
+    const {navigation, onSavePhoto, selectedPhoto} = this.props
+    const {type, index} = selectedPhoto
+    onSavePhoto({type, index, photoUri})
+    if (type === 'gasTankPhotos' || type === 'carPhotos') navigation.navigate(RideEnd)
+    else if (type === 'receiptPhoto') navigation.navigate(ReceiptSubmit)
   }
 
   render () {
@@ -27,7 +29,8 @@ class ReceiptPreview extends Component {
 }
 ReceiptPreview.propTypes = {
   navigation: PropTypes.object,
-  onSaveReceiptPhoto: PropTypes.func
+  selectedPhoto: PropTypes.object,
+  onSavePhoto: PropTypes.func
 }
 
 export default ReceiptPreview

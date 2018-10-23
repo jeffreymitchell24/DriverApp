@@ -74,7 +74,7 @@ export const requestMainPermissions = async (showAlert = false) => {
           } else if (result === 'denied') granted = false
         })
         if (restricted.length > 0 && showAlert) {
-          Alert.alert('Permissions', 'We need access to your camera')
+          Alert.alert('Permissions', 'We need access to your camera and storage')
         }
       } else {
         let denied = []

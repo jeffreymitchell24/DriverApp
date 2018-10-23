@@ -5,7 +5,8 @@ import {
   ScrollView,
   TouchableOpacity,
   TextInput,
-  Alert
+  Alert,
+  Platform
 } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 
@@ -23,7 +24,7 @@ import styles from './styles'
 import {APP_CONFIG} from './config'
 
 // More info on all the options is below in the API Reference... just some common use cases shown here
-var options = {
+let androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
@@ -32,6 +33,12 @@ var options = {
     cameraRoll: true
     // path: 'images'
   },
+  noData: true
+}
+let iosOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
   noData: true
 }
 
@@ -206,7 +213,7 @@ class Documentation extends Component {
   }
 
   showImagePicker = (licenseSide, licenseType) => {
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(Platform.OS === 'android' ? androidOptions : iosOptions, (response) => {
       console.log('Response = ', response)
       this.pickerIsOpened = false
       if (response.didCancel) {

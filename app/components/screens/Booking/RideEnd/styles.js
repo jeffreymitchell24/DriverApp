@@ -47,5 +47,25 @@ export default StyleSheet.create({
     fontSize: metrics.fontSize,
     fontFamily: 'SFProText-Regular',
     marginBottom: 8
+  },
+  additionalInputContainer: {
+    overflow: 'hidden',
+    position: 'relative'
+  },
+  additionalButtonText: {
+    fontSize: metrics.fontSizeBig,
+    color: colors.red,
+    fontFamily: 'SFProText-Regular'
+  },
+  closeButton: {
+    position: 'absolute',
+    right: 0,
+    top: 0
+  },
+
+  closeButtonText: {
+    fontSize: metrics.fontSize,
+    color: colors.red,
+    fontFamily: 'SFProText-Regular'
   }
 })

@@ -237,7 +237,7 @@ function * rideLateFlow () {
 function * submitRideReceipt ({payload}) {
   const {carId: id, data: {location, title, price, date, time, photo}} = payload
   let imageFile = yield toImageFile(photo)
-  let query = {location, title, price, 'receipt_date': date, time, photo: imageFile}
+  let query = {location, title, price: +price, 'receipt_date': date, 'receipt_time': time, photo: imageFile}
   console.log('query', query)
   let data = Api.toFormData(query)
   let state = yield select()

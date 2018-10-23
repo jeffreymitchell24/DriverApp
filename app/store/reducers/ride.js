@@ -1,8 +1,9 @@
 import { createReducer } from '../../helpers/redux'
 
 import {
-  SAVE_RECEIPT_PHOTO,
-  CLEAR_RECEIPT_PHOTO
+  SAVE_RIDE_PHOTO,
+  CLEAR_RECEIPT_PHOTO,
+  SELECT_PHOTO
 } from 'store/actions/ride'
 
 import {
@@ -10,17 +11,38 @@ import {
 } from 'store/actions/bookings'
 
 const initialState = {
-  carPhotos: [],
-  gasTankPhotos: [],
+  carPhotos: [null, null, null, null],
+  gasTankPhotos: [null],
+  selectedPhoto: null,
   receiptPhoto: null,
   receiptSubmitError: null,
   receiptSubmitPending: false
 }
 
 const handlers = {
-  [SAVE_RECEIPT_PHOTO]: (state, { payload }) => {
+  [SELECT_PHOTO]: (state, { payload }) => {
     return {
-      receiptPhoto: payload
+      ...state,
+      selectedPhoto: payload
+    }
+  },
+  [SAVE_RIDE_PHOTO]: (state, { payload }) => {
+    const {type: photoType, index, photoUri} = payload
+    if (photoType === 'receiptPhoto') {
+      return {
+        receiptPhoto: photoUri,
+        selectedPhoto: null
+      }
+    }
+    let updatedPhotos = []
+    updatedPhotos = state[photoType].map((photo, i) => {
+      return index === i ? photoUri : photo
+    })
+
+    return {
+      ...state,
+      [photoType]: updatedPhotos,
+      selectedPhoto: null
     }
   },
   [CLEAR_RECEIPT_PHOTO]: (state, { payload }) => {
