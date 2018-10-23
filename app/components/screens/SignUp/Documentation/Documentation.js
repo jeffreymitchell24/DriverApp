@@ -222,6 +222,7 @@ class Documentation extends Component {
   showImagePicker = (licenseSide, licenseType) => {
     ImagePicker.showImagePicker(Platform.OS === 'android' ? androidOptions : iosOptions, (response) => {
       console.log('Response = ', response)
+      Alert.alert('Response', response)
       this.pickerIsOpened = false
       if (response.didCancel) {
         // this.props.navigation.goBack()
