@@ -1,8 +1,8 @@
-export const SAVE_RECEIPT_PHOTO = 'SAVE_RECEIPT_PHOTO'
-export const saveReceiptPhoto = (photoUri) => {
+export const SAVE_RIDE_PHOTO = 'SAVE_RIDE_PHOTO'
+export const saveRidePhoto = (payload) => {
   return {
-    type: SAVE_RECEIPT_PHOTO,
-    payload: photoUri
+    type: SAVE_RIDE_PHOTO,
+    payload
   }
 }
 
@@ -13,7 +13,7 @@ export const clearReceiptPhoto = () => {
   }
 }
 
-export const SELECT_PHOTO = 'helpCenter/SELECT_PHOTO'
+export const SELECT_PHOTO = 'ride/SELECT_PHOTO'
 export const selectPhoto = (payload) => {
   return {
     type: SELECT_PHOTO,

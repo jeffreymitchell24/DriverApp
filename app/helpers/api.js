@@ -158,7 +158,7 @@ export const sendRideReceipt = async ({token, id, data}) => {
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/receipt`, data, config)
   console.log('sendRideReceipt response', response)
-  return response.data.data
+  return response.data
 }
 
 export const endRide = async ({token, id, data}) => {

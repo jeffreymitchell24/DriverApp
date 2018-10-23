@@ -3,6 +3,7 @@ import { View, ScrollView, TouchableWithoutFeedback, Alert, Animated, TouchableO
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import * as Yup from 'yup'
+import Spinner from 'react-native-loading-spinner-overlay'
 import { Formik } from 'formik'
 import moment from 'moment'
 import isEmpty from 'lodash/isEmpty'
@@ -10,6 +11,7 @@ import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import {getCurrentDateAndTime, formatDate, formatTime} from 'helpers/date'
 import {ReceiptCamera} from 'navigation/routeNames'
+import { colors } from 'theme'
 import { Button, Section, SectionHeader, SectionContent, Photo } from 'components/ui'
 import styles from './styles'
 
@@ -75,7 +77,12 @@ class ReceiptSubmit extends Component {
 
   onPhotoPress = async () => {
     let granted = await requestMainPermissions(true)
-    if (granted) this.props.navigation.navigate(ReceiptCamera)
+    if (granted) {
+      const {onSelectPhoto, navigation} = this.props
+      onSelectPhoto({type: 'receiptPhoto', index: 0})
+
+      navigation.navigate(ReceiptCamera)
+    }
   }
   onHideDateTimePicker = () => {
     this.setState({showPicker: false})
@@ -229,6 +236,7 @@ class ReceiptSubmit extends Component {
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </View>
     )
   }

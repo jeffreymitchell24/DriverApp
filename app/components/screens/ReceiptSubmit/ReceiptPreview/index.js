@@ -1,12 +1,18 @@
 import ReceiptPreview from './ReceiptPreview'
 import { connect } from 'react-redux'
-import { saveReceiptPhoto } from 'store/actions/ride'
+import { createStructuredSelector } from 'reselect'
+import {getSelectedRidePhotoData} from 'store/selectors'
+import { saveRidePhoto } from 'store/actions/ride'
+
+const selector = createStructuredSelector({
+  selectedPhoto: getSelectedRidePhotoData
+})
 
 const actions = {
-  onSaveReceiptPhoto: saveReceiptPhoto
+  onSavePhoto: saveRidePhoto
 }
 
 export default connect(
-  null,
+  selector,
   actions
 )(ReceiptPreview)

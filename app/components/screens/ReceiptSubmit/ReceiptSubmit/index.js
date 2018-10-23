@@ -2,7 +2,8 @@ import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
 import ReceiptSubmit from './ReceiptSubmit'
 import {getReceiptPhoto, getSelectedRide, getReceiptSubmitRequestStatus, getReceiptSubmitError} from 'store/selectors'
-import {clearReceiptPhoto} from 'store/actions/ride'
+import {clearReceiptPhoto, selectPhoto} from 'store/actions/ride'
+
 import { submitReceipt } from 'store/actions/bookings'
 
 const selector = createStructuredSelector({
@@ -12,6 +13,7 @@ const selector = createStructuredSelector({
   requestPending: getReceiptSubmitRequestStatus
 })
 const actions = {
+  onSelectPhoto: selectPhoto,
   onSubmitReceipt: submitReceipt,
   onClearReceiptPhoto: clearReceiptPhoto
 }

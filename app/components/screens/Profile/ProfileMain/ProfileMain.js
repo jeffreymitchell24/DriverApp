@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { ScrollView, View, Text, TouchableOpacity, Image, Linking, Alert } from 'react-native'
+import { ScrollView, View, Text, TouchableOpacity, Image, Linking, Alert, Platform } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import VersionNumber from 'react-native-version-number'
@@ -12,7 +12,7 @@ import { Section, SectionHeader, SectionContent, NavButton } from 'components/ui
 import { colors } from 'theme'
 import styles from './styles'
 
-var options = {
+let androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
@@ -21,6 +21,12 @@ var options = {
     cameraRoll: true
     // path: 'images'
   },
+  noData: true
+}
+let iosOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
   noData: true
 }
 
@@ -81,7 +87,7 @@ class ProfileMain extends Component {
   }
 
   showImagePicker = () => {
-    ImagePicker.showImagePicker(options, (response) => {
+    ImagePicker.showImagePicker(Platform.OS === 'android' ? androidOptions : iosOptions, (response) => {
       console.log('Response = ', response)
       this.pickerIsOpened = false
       if (response.didCancel) {
