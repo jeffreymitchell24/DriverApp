@@ -39,7 +39,13 @@ let iosOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
-  noData: true
+  noData: true,
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
 }
 
 class RideshareModal extends Component {
@@ -222,7 +228,7 @@ class Documentation extends Component {
         this.props.onUpdateLicense({
           type: licenseType,
           side: licenseSide.toLowerCase(),
-          imageUri: response.uri
+          imageUri: Platform.OS === 'android' ? response.uri : response.uri
         })
         // this.props.navigation.navigate(PicturePreview, {
         //   photoUri: response.uri
