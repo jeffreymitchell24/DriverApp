@@ -40,6 +40,7 @@ let iosOptions = {
   title: 'License Photo',
   mediaType: 'photo',
   noData: true,
+  quality: 0.5,
   storageOptions: {
     skipBackup: true,
     cameraRoll: true,
@@ -228,7 +229,7 @@ class Documentation extends Component {
         this.props.onUpdateLicense({
           type: licenseType,
           side: licenseSide.toLowerCase(),
-          imageUri: Platform.OS === 'android' ? response.uri : response.uri
+          imageUri: Platform.OS === 'android' ? response.uri : response.origURL
         })
         // this.props.navigation.navigate(PicturePreview, {
         //   photoUri: response.uri

@@ -21,17 +21,18 @@ function getImageSize (uri) {
 }
 
 export const toImageFile = async (imageUri, maxSize = 100000) => {
-  // let details = await RNFetchBlob.fs.stat(imageUri)
+  let details = await RNFetchBlob.fs.stat(imageUri)
   let uriToUpload = imageUri
-  // console.log('details', details)
-  // console.log('uriToUpload 1', uriToUpload)
-  // if (details.size > maxSize) {
-  //   let imageSize = await getImageSize(uriToUpload)
-  //   console.log('imageSize', imageSize)
-  //   // const result = await ImageResizer.createResizedImage(imageUri, imageSize.width, imageSize.height, 'JPEG', 60)
-  //   // console.log('RESIZE RESULT', result)
-  //   uriToUpload = imageUri// Platform.OS === 'android' ? result.uri : result.path
-  // }
+  console.log('details', details)
+  console.log('uriToUpload 1', uriToUpload)
+  if (details.size > maxSize) {
+    let imageSize = await getImageSize(uriToUpload)
+    let ratio = imageSize.width / imageSize.height
+    console.log('imageSize', imageSize)
+    const result = await ImageResizer.createResizedImage(imageUri, 800, 800 / ratio, 'JPEG', 60)
+    console.log('RESIZE RESULT', result)
+    uriToUpload = Platform.OS === 'android' ? result.uri : result.path
+  }
   // let imageFile = new FormData()
   // imageFile.append('image', {
   //   uri: uriToUpload,
