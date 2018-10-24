@@ -23,7 +23,6 @@ import { Button, Section, SectionHeader, SectionContent, Photo, RadioButton } fr
 import styles from './styles'
 import {APP_CONFIG} from './config'
 
-// More info on all the options is below in the API Reference... just some common use cases shown here
 let androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
@@ -41,12 +40,12 @@ let iosOptions = {
   mediaType: 'photo',
   noData: true,
   quality: 0.5
-  // storageOptions: {
-  //   skipBackup: true,
-  //   cameraRoll: true,
-  //   waitUntilSaved: true
-  //   // path: 'images'
-  // }
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
 }
 
 class RideshareModal extends Component {
@@ -229,7 +228,7 @@ class Documentation extends Component {
         this.props.onUpdateLicense({
           type: licenseType,
           side: licenseSide.toLowerCase(),
-          imageUri: Platform.OS === 'android' ? response.uri : response.origURL
+          imageUri: response.uri // Platform.OS === 'android' ? response.uri : response.origURL
         })
         // this.props.navigation.navigate(PicturePreview, {
         //   photoUri: response.uri
