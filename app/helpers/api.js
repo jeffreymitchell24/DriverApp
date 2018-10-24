@@ -167,7 +167,7 @@ export const endRide = async ({token, id, data}) => {
   }
   let response = await axios.post(`${URL}/api/bookings/${id}/end`, data, config)
   console.log('endRide response', response)
-  return response.data.data
+  return response.data
 }
 export const cancelRide = async ({token, id}) => {
   let config = {

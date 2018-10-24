@@ -10,6 +10,7 @@ import {
   UNSELECT_RIDE,
   CHECK_LICENSE,
   CANCEL_RIDE,
+  END_RIDE,
   RESET_RIDE_CANCEL_ERROR,
   LATE_FOR_RIDE,
   HELP_RIDE_DAMAGED,
@@ -34,7 +35,9 @@ const initialState = {
   licenseCheckError: null,
   licenseChecked: false,
   rideCancelPending: false,
-  rideCancelError: null
+  rideCancelError: null,
+  rideEndPending: false,
+  rideEndError: null
 }
 
 const handlers = {
@@ -218,6 +221,28 @@ const handlers = {
       ...state,
       upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
       selectedRide: payload
+    }
+  },
+  [END_RIDE.REQUEST]: (state, { payload }) => {
+    return {
+      ...state,
+      rideEndPending: true,
+      rideEndError: null
+    }
+  },
+  [END_RIDE.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      upcoming: state.upcoming.filter(book => book.id !== payload.id),
+      history: [payload, ...state.history],
+      rideEndPending: false
+    }
+  },
+  [END_RIDE.FAILURE]: (state, { payload }) => {
+    return {
+      ...state,
+      rideEndPending: false,
+      rideEndError: payload
     }
   }
 }

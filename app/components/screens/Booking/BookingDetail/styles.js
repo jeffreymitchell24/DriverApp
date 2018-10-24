@@ -55,6 +55,40 @@ export const styles = StyleSheet.create({
     fontSize: metrics.fontSize,
     fontFamily: 'SFProText-Regular',
     color: colors.gray200
+  },
+
+  endedRideDetails: {
+    marginTop: metrics.contentMarginSmall
+  },
+
+  sectionHeader: {
+    fontSize: metrics.fontSizeBig,
+    color: colors.black
+  },
+
+  photoListContainer: {
+    paddingTop: metrics.contentMargin,
+    paddingBottom: metrics.contentMarginSmall
+  },
+
+  photoList: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+  },
+  photoContainer: {
+    marginBottom: 8
+  },
+
+  photoBlock: {
+    // marginRight: 7
+  },
+
+  photoLabel: {
+    color: colors.gray100,
+    fontSize: metrics.fontSize,
+    fontFamily: 'SFProText-Regular',
+    marginBottom: 8
   }
 })
 
