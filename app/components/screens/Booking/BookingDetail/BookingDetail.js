@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
 import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, RideLicenseCamera } from 'navigation/routeNames'
-import { Button, Section, SectionHeader, SectionContent } from 'components/ui'
+import { Button, Section, SectionHeader, SectionContent, Photo } from 'components/ui'
 import MapView from 'react-native-maps'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { colors } from 'theme'
@@ -29,10 +29,14 @@ class BookingDetail extends Component {
     this.props.navigation.navigate(ReceiptSubmit)
   }
 
-  onUnlockPress = () => {
+  onButtonPress = () => {
     // this.props.navigation.navigate(RideLicenseCamera)
     const {onUnlockRide, ride = {}} = this.props
-    onUnlockRide({carId: ride.id})
+    if (ride.status === 'driving') {
+      this.props.navigation.navigate(RideEnd)
+    } else {
+      onUnlockRide({carId: ride.id})
+    }
   }
 
   onHelpPress = () => {
@@ -64,14 +68,70 @@ class BookingDetail extends Component {
     return date.diff(now, 'minutes') > 30
   }
 
+  renderEndedRideDetails = () => {
+    const {ride: {ended_report: report}} = this.props
+    return (
+      <View style={styles.endedRideDetails}>
+        <SectionHeader title='RETURN CHECK' />
+        <Section>
+          <SectionHeader style={styles.sectionHeader} title='Car is not damaged' />
+          <SectionContent style={styles.photoList}>
+            <View style={styles.photoBlock}>
+              <Text style={styles.photoLabel}>Front</Text>
+              <Photo
+                imageUri={report.photo_front_s3_link}
+                touchable={false}
+              />
+            </View>
+            <View style={styles.photoBlock}>
+              <Text style={styles.photoLabel}>Back</Text>
+              <Photo
+                imageUri={report.photo_back_s3_link}
+                touchable={false}
+              />
+            </View>
+            <View style={styles.photoBlock}>
+              <Text style={styles.photoLabel}>Right side</Text>
+              <Photo
+                imageUri={report.photo_right_s3_link}
+                touchable={false}
+              />
+            </View>
+            <View style={styles.photoBlock}>
+              <Text style={styles.photoLabel}>Left side</Text>
+              <Photo
+                imageUri={report.photo_left_s3_link}
+                touchable={false}
+              />
+            </View>
+          </SectionContent>
+        </Section>
+        <Section>
+          <SectionHeader style={styles.sectionHeader} title='Gas tank is full' />
+          <SectionContent>
+            <View style={styles.photoBlock}>
+              <Text style={styles.photoLabel}>Gas tank indicator</Text>
+              <Photo
+                imageUri={report.photo_gas_tank_s3_link}
+                touchable={false}
+              />
+            </View>
+          </SectionContent>
+        </Section>
+      </View>
+    )
+  }
+
   render () {
     const {ride} = this.props
     console.log('ride', ride)
-    let unlockDisabled = true
+    let buttonDisabled = true
     let buttonText = 'UNLOCK CAR'
-    if (ride.status === 'driving') buttonText = 'END DRIVE'
-    else if (ride.status === 'ended' || ride.status === 'canceled') buttonText = 'BOOK AGAIN'
-    if (ride.status === 'pending' && !this.isMoreThan30Minutes()) unlockDisabled = false
+    if (ride.status === 'driving') {
+      buttonText = 'END DRIVE'
+      buttonDisabled = false
+    } else if (ride.status === 'ended' || ride.status === 'canceled') buttonText = 'BOOK AGAIN'
+    if (ride.status === 'pending' && !this.isMoreThan30Minutes()) buttonDisabled = false
     if (!ride) return null
     const {
       booking_starting_at: bookindStartingAt,
@@ -226,26 +286,38 @@ class BookingDetail extends Component {
               </TouchableOpacity>
             </SectionContent>
           </Section>
-          <Section>
-            <SectionHeader title='DO YOU NEED HELP?' />
-            <TouchableOpacity style={styles.linkButton} onPress={this.onHelpPress}>
-              <Text style={styles.linkButtonText}>Open help center</Text>
-            </TouchableOpacity>
-          </Section>
-          <Section style={{borderBottomWidth: 0}}>
-            <SectionHeader title='RECEIPT' />
-            <TouchableOpacity style={styles.linkButton} onPress={this.onSubmitReceiptPress}>
-              <Text style={styles.linkButtonText}>Submit expense receipt</Text>
-            </TouchableOpacity>
-          </Section>
+          {
+            (ride.status === 'pending' || ride.status === 'driving') && (
+              <React.Fragment>
+                <Section>
+                  <SectionHeader title='DO YOU NEED HELP?' />
+                  <TouchableOpacity style={styles.linkButton} onPress={this.onHelpPress}>
+                    <Text style={styles.linkButtonText}>Open help center</Text>
+                  </TouchableOpacity>
+                </Section>
+                <Section style={{borderBottomWidth: 0}}>
+                  <SectionHeader title='RECEIPT' />
+                  <TouchableOpacity style={styles.linkButton} onPress={this.onSubmitReceiptPress}>
+                    <Text style={styles.linkButtonText}>Submit expense receipt</Text>
+                  </TouchableOpacity>
+                </Section>
+
+              </React.Fragment>
+            )
+          }
+          {ride.status === 'ended' && (
+            this.renderEndedRideDetails()
+          )}
         </View>
         <Button
           containerStyle={styles.button}
-          disabled={unlockDisabled}
+          disabled={buttonDisabled}
           title={buttonText}
-          onPress={this.onUnlockPress}
+          onPress={this.onButtonPress}
         />
-        <Text style={styles.lockedText}>Unlock is available 30 minutes before{'\n'} scheduled start of the ride</Text>
+        {ride.status === 'pending' && (
+          <Text style={styles.lockedText}>Unlock is available 30 minutes before{'\n'} scheduled start of the ride</Text>
+        )}
         <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )

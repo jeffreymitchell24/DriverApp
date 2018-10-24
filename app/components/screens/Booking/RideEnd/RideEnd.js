@@ -1,10 +1,12 @@
 import React, { Component } from 'react'
-import { View, Text, ScrollView, TouchableOpacity } from 'react-native'
+import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
-import { ReceiptCamera } from 'navigation/routeNames'
+import { ReceiptCamera, BookingDetail } from 'navigation/routeNames'
+import Spinner from 'react-native-loading-spinner-overlay'
 import { Photo, Button, SectionHeader, Section, SectionContent } from 'components/ui'
+import { colors } from 'theme'
 import styles from './styles'
 
 class RideEnd extends Component {
@@ -12,8 +14,21 @@ class RideEnd extends Component {
   constructor (props) {
     super(props)
     this.state = {
-      showPlusButton: true
+      showPlusButton: true,
+      notes: ''
     }
+  }
+
+  componentDidUpdate (prevProps) {
+    const {error, requestPending, navigation} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else navigation.navigate(BookingDetail)
+    }
+  }
+
+  onEditNotes = (value) => {
+    this.setState({notes: value})
   }
 
   toggleNotes = () => {
@@ -21,7 +36,10 @@ class RideEnd extends Component {
   }
 
   onConfirmPress = () => {
-    this.props.onEndRide()
+    const {gasTankPhotos, carPhotos, ride = {}} = this.props
+    const {notes} = this.state
+    console.log(gasTankPhotos, carPhotos, notes)
+    this.props.onEndRide({carId: ride.id, data: {carPhotos, gasTankPhotos, notes}})
     // this.props.navigation.navigate()
   }
 
@@ -35,9 +53,17 @@ class RideEnd extends Component {
     }
   }
 
+  isButtonActive = () => {
+    let active = true
+    const {gasTankPhotos, carPhotos} = this.props
+    carPhotos.forEach(photo => { active = !!photo })
+    active = !!gasTankPhotos[0]
+    return active
+  }
+
   render () {
     const {gasTankPhotos, carPhotos} = this.props
-    let buttonActive = false
+    let buttonActive = this.isButtonActive()
     return (
       <ScrollView
         contentContainerStyle={styles.container}
@@ -104,7 +130,8 @@ class RideEnd extends Component {
                       label='Notes'
                       name='notes'
                       placeholder='Add notes'
-                      value={''}
+                      value={this.state.notes}
+                      onChangeText={this.onEditNotes}
                     />
                     <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.closeButton} onPress={this.toggleNotes}>
                       <Text style={styles.closeButtonText}>Close</Text>
@@ -119,6 +146,7 @@ class RideEnd extends Component {
           title='CONFIRM'
           onPress={this.onConfirmPress}
         />
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )
   }
@@ -126,8 +154,11 @@ class RideEnd extends Component {
 
 RideEnd.propTypes = {
   carPhotos: PropTypes.array,
+  error: PropTypes.string,
   gasTankPhotos: PropTypes.array,
   navigation: PropTypes.object,
+  requestPending: PropTypes.bool,
+  ride: PropTypes.object,
   onEndRide: PropTypes.func
 }
 

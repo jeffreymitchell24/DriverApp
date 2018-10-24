@@ -130,27 +130,44 @@ function * rideCancel ({payload}) {
   }
 }
 
+async function transformLicenses ({carPhotos, gasTankPhotos}) {
+  let compressed = {}
+  compressed['car_front_photo'] = await toImageFile(carPhotos[0])
+  compressed['car_back_photo'] = await toImageFile(carPhotos[1])
+  compressed['car_right_photo'] = await toImageFile(carPhotos[2])
+  compressed['car_left_photo'] = await toImageFile(carPhotos[3])
+  compressed['gas_tank_photo'] = await toImageFile(gasTankPhotos[0])
+  return compressed
+}
+
 function * rideCancelFlow () {
   yield takeLatest(CANCEL_RIDE.REQUEST, checkUserStatusWrapper, rideCancel)
 }
-// function * rideEnd ({payload}) {
-//   const {carId: id} = payload
-//   let state = yield select()
-//   let {token} = state.auth
-//   try {
-//     let response = yield call(Api.endRide, {id, data, token})
-//     console.log('response', response)
-//     yield put({type: END_RIDE.SUCCESS, payload: response})
-//   } catch (error) {
-//     console.log('error response', error.response)
-//     console.log('error message', error.message)
-//     yield put({type: END_RIDE.FAILURE, payload: error.response.data.error.message})
-//   }
-// }
+function * rideEnd ({payload}) {
+  const {carId: id, data: {carPhotos, gasTankPhotos, notes}} = payload
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos})
+    let query = {
+      ...rideEndPhotos
+    }
+    if (notes) query.notes = notes
+    console.log('query', query)
+    let data = Api.toFormData(query)
+    let response = yield call(Api.endRide, {id, data, token})
+    console.log('response', response)
+    yield put({type: END_RIDE.SUCCESS, payload: response})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: END_RIDE.FAILURE, payload: error.response.data.error.message})
+  }
+}
 
-// function * rideEndFlow () {
-//   yield takeLatest(END_RIDE.REQUEST, checkUserStatusWrapper, rideEnd)
-// }
+function * rideEndFlow () {
+  yield takeLatest(END_RIDE.REQUEST, checkUserStatusWrapper, rideEnd)
+}
 
 function * rideDamaged ({payload}) {
   console.log('payload', payload)
@@ -276,6 +293,6 @@ export default [
   rideDamagedFlow,
   rideMalfunctionFlow,
   rideLateFlow,
-  submitRideReceiptFlow
-  // rideEndFlow
+  submitRideReceiptFlow,
+  rideEndFlow
 ]

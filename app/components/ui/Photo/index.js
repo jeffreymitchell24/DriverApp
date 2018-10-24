@@ -1,17 +1,19 @@
 import React from 'react'
 import {
   Image,
-  TouchableOpacity
+  TouchableOpacity,
+  View
 } from 'react-native'
 import PropTypes from 'prop-types'
 import { icons } from 'images'
 import styles from './styles'
 
-const Photo = ({onPress, imageUri}) => {
+const Photo = ({onPress, imageUri, touchable = false}) => {
   let image = ''
   if (imageUri) image = {uri: imageUri}
+  let Wrapper = touchable ? TouchableOpacity : View
   return (
-    <TouchableOpacity style={styles.photoContainer} onPress={onPress}>
+    <Wrapper style={styles.photoContainer} onPress={onPress}>
       {
         imageUri
           ? (
@@ -20,12 +22,13 @@ const Photo = ({onPress, imageUri}) => {
             <Image source={icons['camera']} style={styles.iconCamera} />
           )
       }
-    </TouchableOpacity>
+    </Wrapper>
   )
 }
 
 Photo.propTypes = {
   imageUri: PropTypes.string,
+  touchable: PropTypes.bool,
   onPress: PropTypes.func
 }
 
