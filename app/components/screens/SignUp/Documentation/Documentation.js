@@ -39,7 +39,7 @@ let iosOptions = {
   title: 'License Photo',
   mediaType: 'photo',
   noData: true,
-  quality: 0.5
+  quality: 0.5,
   storageOptions: {
     skipBackup: true,
     cameraRoll: true,
