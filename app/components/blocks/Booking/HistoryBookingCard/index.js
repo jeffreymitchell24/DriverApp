@@ -3,30 +3,28 @@ import {BookingCard} from '../BookingCard'
 import moment from 'moment-timezone'
 import PropTypes from 'prop-types'
 
-const UpcomingBookingCard = ({booking, onPress}) => {
+const HistoryBookingCard = ({booking, onPress}) => {
   const onBookingPress = () => {
     onPress(booking)
   }
-  let startingAt = moment.tz(booking['booking_starting_at'].object.date, 'America/New_York')
-  let now = moment().tz('America/New_York')
   return (
     <BookingCard
       booking={booking.car}
       bookingEnd={booking['booking_ending_at'].formatted}
       bookingStart={booking['booking_starting_at'].formatted}
-      extraDetail={`Starting in ${now.to(startingAt, true)}`}
+      extraDetail={`Booked ${moment.tz(booking['booking_ending_at'].object.date, 'America/New_York').fromNow()}`}
       onPress={onBookingPress}
     />
   )
 }
 
-UpcomingBookingCard.propTypes = {
+HistoryBookingCard.propTypes = {
   booking: PropTypes.object,
   onPress: PropTypes.func
 }
 
-UpcomingBookingCard.defaultProps = {
+HistoryBookingCard.defaultProps = {
   onPress: () => {}
 }
 
-export {UpcomingBookingCard}
+export {HistoryBookingCard}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { HomeView, UpcomingBookingCard } from 'components/blocks'
+import { HomeView, HistoryBookingCard } from 'components/blocks'
 import {NewBooking, BookingDetail} from 'navigation/routeNames'
 import PropTypes from 'prop-types'
 
@@ -14,7 +14,7 @@ class History extends Component {
   }
   renderItem = ({item, index}) => {
     return (
-      <UpcomingBookingCard
+      <HistoryBookingCard
         booking={item}
         onPress={this.onBookingPress}
       />

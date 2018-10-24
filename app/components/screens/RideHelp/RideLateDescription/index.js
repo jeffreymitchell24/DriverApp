@@ -2,14 +2,15 @@ import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import {selectPhoto, resetPhotos} from 'store/actions/helpCenter'
 import { lateForRide } from 'store/actions/bookings'
-import {getRideLatePhotos, getSelectedRide, getRideHelpRequestStatus, getRideHelpRequestError} from 'store/selectors'
+import {getRideLatePhotos, getSelectedRide, getRideHelpRequestStatus, getRideHelpRequestError, getLateNotificationData} from 'store/selectors'
 import RideLateDescription from './RideLateDescription'
 
 const selector = createStructuredSelector({
   photos: getRideLatePhotos,
   ride: getSelectedRide,
   error: getRideHelpRequestError,
-  requestPending: getRideHelpRequestStatus
+  requestPending: getRideHelpRequestStatus,
+  notification: getLateNotificationData
 })
 
 const actions = {

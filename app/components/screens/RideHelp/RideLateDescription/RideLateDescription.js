@@ -41,8 +41,8 @@ class RideLateDescription extends PureComponent {
   }
   onSubmit = (values) => {
     const {reason} = values
-    const {onSubmitReport, ride = {}, photos} = this.props
-    onSubmitReport({data: {photos, reason, delay: this.state.delay}, carId: ride.id})
+    const {onSubmitReport, ride = {}, photos, notification} = this.props
+    onSubmitReport({data: {photos, reason, delay: this.state.delay}, carId: ride.id, notificationId: notification.id})
   }
   renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched }) => {
     const {reason} = values
@@ -147,6 +147,7 @@ class RideLateDescription extends PureComponent {
 RideLateDescription.propTypes = {
   error: PropTypes.string,
   navigation: PropTypes.object,
+  notification: PropTypes.object,
   photos: PropTypes.array,
   requestPending: PropTypes.bool,
   ride: PropTypes.object,

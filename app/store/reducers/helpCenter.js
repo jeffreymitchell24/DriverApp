@@ -8,7 +8,8 @@ import {
 } from 'store/actions/helpCenter'
 
 import {
-  LATE_FOR_RIDE,
+  SEND_LATE_FOR_RIDE_DETAILS,
+  SEND_LATE_FOR_RIDE_NOTIFICATION,
   HELP_RIDE_DAMAGED,
   HELP_RIDE_MALFUNCTIONED
 } from 'store/actions/bookings'
@@ -19,7 +20,10 @@ const initialState = {
   rideLatePhotos: [],
   selectedPhoto: null,
   requestPending: false,
-  error: null
+  error: null,
+  lateNotifRequestPending: false,
+  lateNotifRequestError: null,
+  notification: {}
 }
 
 const handlers = {
@@ -54,21 +58,44 @@ const handlers = {
       [payload.type]: []
     }
   },
-  [LATE_FOR_RIDE.REQUEST]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST]: (state, {payload}) => {
+    return {
+      ...state,
+      lateNotifRequestPending: true,
+      lateNotifRequestError: null,
+      notification: {}
+    }
+  },
+  [SEND_LATE_FOR_RIDE_NOTIFICATION.SUCCESS]: (state, {payload}) => {
+    return {
+      ...state,
+      lateNotifRequestError: null,
+      lateNotifRequestPending: false,
+      notification: payload
+    }
+  },
+  [SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE]: (state, {payload}) => {
+    return {
+      ...state,
+      lateNotifRequestError: payload,
+      lateNotifRequestPending: false
+    }
+  },
+  [SEND_LATE_FOR_RIDE_DETAILS.REQUEST]: (state, {payload}) => {
     return {
       ...state,
       requestPending: true,
       error: null
     }
   },
-  [LATE_FOR_RIDE.SUCCESS]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_DETAILS.SUCCESS]: (state, {payload}) => {
     return {
       ...state,
       error: null,
       requestPending: false
     }
   },
-  [LATE_FOR_RIDE.FAILURE]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_DETAILS.FAILURE]: (state, {payload}) => {
     return {
       ...state,
       error: payload,

@@ -12,7 +12,8 @@ import {
   CANCEL_RIDE,
   END_RIDE,
   RESET_RIDE_CANCEL_ERROR,
-  LATE_FOR_RIDE,
+  SEND_LATE_FOR_RIDE_DETAILS,
+  SEND_LATE_FOR_RIDE_NOTIFICATION,
   HELP_RIDE_DAMAGED,
   HELP_RIDE_MALFUNCTIONED,
   SUBMIT_RECEIPT
@@ -195,7 +196,7 @@ const handlers = {
       rideCancelError: null
     }
   },
-  [LATE_FOR_RIDE.SUCCESS]: (state, { payload }) => {
+  [SEND_LATE_FOR_RIDE_DETAILS.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
       upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
@@ -235,6 +236,7 @@ const handlers = {
       ...state,
       upcoming: state.upcoming.filter(book => book.id !== payload.id),
       history: [payload, ...state.history],
+      selectedRide: payload,
       rideEndPending: false
     }
   },

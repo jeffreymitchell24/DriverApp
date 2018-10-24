@@ -89,6 +89,13 @@ export const styles = StyleSheet.create({
     fontSize: metrics.fontSize,
     fontFamily: 'SFProText-Regular',
     marginBottom: 8
+  },
+
+  timer: {
+    color: colors.gray200,
+    fontSize: metrics.fontSize,
+    fontFamily: 'SFProText-Regular',
+    marginTop: 4
   }
 })
 

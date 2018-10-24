@@ -74,11 +74,19 @@ export const endRide = ({data, carId}) => {
   }
 }
 
-export const LATE_FOR_RIDE = createAsyncAction('LATE_FOR_RIDE')
-export const lateForRide = ({data, carId}) => {
+export const SEND_LATE_FOR_RIDE_NOTIFICATION = createAsyncAction('SEND_LATE_FOR_RIDE_NOTIFICATION')
+export const sendLateNotification = ({carId}) => {
   return {
-    type: LATE_FOR_RIDE.REQUEST,
-    payload: {data, carId}
+    type: SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST,
+    payload: {carId}
+  }
+}
+
+export const SEND_LATE_FOR_RIDE_DETAILS = createAsyncAction('SEND_LATE_FOR_RIDE_DETAILS')
+export const lateForRide = ({data, carId, notificationId}) => {
+  return {
+    type: SEND_LATE_FOR_RIDE_DETAILS.REQUEST,
+    payload: {data, carId, notificationId}
   }
 }
 

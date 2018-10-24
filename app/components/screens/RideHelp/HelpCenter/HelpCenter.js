@@ -3,6 +3,7 @@ import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import {RideLateDescription, BookingDetail} from 'navigation/routeNames'
 import { HelpCenterSection, NavButton } from 'components/ui'
+import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
 import CONFIG from './config'
 import { colors } from 'theme'
@@ -14,6 +15,23 @@ class HelpCenter extends PureComponent {
       headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(BookingDetail)} />
     }
   }
+  componentDidUpdate (prevProps) {
+    const {error, requestPending} = this.props
+    if (prevProps.requestPending && !requestPending) {
+      if (error)Alert.alert('Error', error)
+      else {
+        Alert.alert(
+          'Thank you for notifying us',
+          'Our administrator has been notified. You can add more details about why you are being late (optional).',
+          [
+            {text: 'OK', onPress: () => this.onOkPress()},
+            {text: 'More', onPress: () => this.onMorePress()}
+          ],
+          { cancelable: false }
+        )
+      }
+    }
+  }
   onOkPress = () => {
     this.props.navigation.navigate(BookingDetail)
   }
@@ -21,15 +39,8 @@ class HelpCenter extends PureComponent {
     this.props.navigation.navigate(RideLateDescription)
   }
   onLatePress = () => {
-    Alert.alert(
-      'Thank you for notifying us',
-      'Our administrator has been notified. You can add more details about why you are being late (optional).',
-      [
-        {text: 'OK', onPress: () => this.onOkPress()},
-        {text: 'More', onPress: () => this.onMorePress()}
-      ],
-      { cancelable: false }
-    )
+    const {onSendLateNotification, ride} = this.props
+    onSendLateNotification({carId: ride.id})
   }
 
   keyExtractor = (item, index) => item.id
@@ -58,12 +69,17 @@ class HelpCenter extends PureComponent {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderListItem}
         />
+        <Spinner color={colors.red} visible={this.props.requestPending} />
       </HelpCenterSection>
     )
   }
 }
 HelpCenter.propTypes = {
-  navigation: PropTypes.object
+  error: PropTypes.string,
+  navigation: PropTypes.object,
+  requestPending: PropTypes.bool,
+  ride: PropTypes.object,
+  onSendLateNotification: PropTypes.func
 }
 
 export default HelpCenter

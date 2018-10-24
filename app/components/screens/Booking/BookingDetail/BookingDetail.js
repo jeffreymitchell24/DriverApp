@@ -3,12 +3,80 @@ import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
-import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, RideLicenseCamera } from 'navigation/routeNames'
+import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, NewBookingDetails } from 'navigation/routeNames'
 import { Button, Section, SectionHeader, SectionContent, Photo } from 'components/ui'
 import MapView from 'react-native-maps'
 import Spinner from 'react-native-loading-spinner-overlay'
+import {convertMinsToHrsMins} from 'helpers/date'
 import { colors } from 'theme'
 import {styles, mapStyles} from './styles'
+
+class Countdown extends Component {
+  intervalHandle = null
+
+  constructor (props) {
+    super(props)
+    const {type, endTime, startTime} = this.props
+    this.intervalHandle = null
+    this.minutesRemaining = 0
+    let countdownMessage = ''
+    this.now = moment().tz('America/New_York').unix()
+    if (type === 'pending') {
+      this.start = moment.tz(startTime.date, 'America/New_York').add(1, 'm').unix()
+      this.minutesRemaining = Math.floor((this.start - this.now) / 60)
+      let diffString = convertMinsToHrsMins(this.minutesRemaining)
+      countdownMessage = `Starting in ${diffString}`
+    } else if (type === 'driving') {
+      this.end = moment.tz(endTime.date, 'America/New_York').add(1, 'm').unix()
+      this.minutesRemaining = Math.floor((this.end - this.now) / 60)
+      let diffString = convertMinsToHrsMins()
+      countdownMessage = `Ending in ${diffString}`
+    }
+    this.state = {
+      countdownMessage
+    }
+  }
+  componentDidMount = () => {
+    this.startCountdown()
+  }
+  startCountdown = () => {
+    this.intervalHandle = setInterval(this.tick, 1000 * 60)
+  }
+  tick = () => {
+    this.minutesRemaining--
+
+    let diffString = convertMinsToHrsMins(this.minutesRemaining)
+    if (this.props.type === 'pending') {
+      let countdownMessage = `Starting in ${diffString}`
+      this.setState({
+        countdownMessage
+      })
+    } else if (this.props.type === 'driving') {
+      let countdownMessage = `Ending in ${diffString}`
+      this.setState({
+        countdownMessage
+      })
+    }
+    if (this.minutesRemaining === 0) {
+      clearInterval(this.intervalHandle)
+    }
+  }
+  render () {
+    const {type} = this.props
+    if (type === 'ended' || type === 'cancelled') return null
+    const {countdownMessage} = this.state
+    console.log('countdownMessage', countdownMessage)
+    return (
+      <Text style={styles.timer}>{countdownMessage}</Text>
+    )
+  }
+}
+
+Countdown.propTypes = {
+  endTime: PropTypes.object,
+  startTime: PropTypes.object,
+  type: PropTypes.string
+}
 
 class BookingDetail extends Component {
   constructor (props) {
@@ -34,6 +102,9 @@ class BookingDetail extends Component {
     const {onUnlockRide, ride = {}} = this.props
     if (ride.status === 'driving') {
       this.props.navigation.navigate(RideEnd)
+    } else if (ride.status === 'ended') {
+      this.props.onSelectCarForBooking(ride.car.id)
+      this.props.navigation.navigate(NewBookingDetails)
     } else {
       onUnlockRide({carId: ride.id})
     }
@@ -130,8 +201,10 @@ class BookingDetail extends Component {
     if (ride.status === 'driving') {
       buttonText = 'END DRIVE'
       buttonDisabled = false
-    } else if (ride.status === 'ended' || ride.status === 'canceled') buttonText = 'BOOK AGAIN'
-    if (ride.status === 'pending' && !this.isMoreThan30Minutes()) buttonDisabled = false
+    } else if (ride.status === 'ended' || ride.status === 'canceled') {
+      buttonText = 'BOOK AGAIN'
+      buttonDisabled = false
+    } else if (ride.status === 'pending' && !this.isMoreThan30Minutes()) buttonDisabled = false
     if (!ride) return null
     const {
       booking_starting_at: bookindStartingAt,
@@ -205,19 +278,22 @@ class BookingDetail extends Component {
             <SectionHeader title='SCHEDULE' />
             <SectionContent style={{flexDirection: 'column'}}>
               <View>
-                <View style={[styles.row, {marginBottom: 16}]}>
-                  <View style={{flex: 1}}>
-                    <Detail
-                      label='Start'
-                      text={bookindStartingAt.formatted}
-                    />
+                <View style={{marginBottom: 16}}>
+                  <View style={[styles.row]}>
+                    <View style={{flex: 1}}>
+                      <Detail
+                        label='Start'
+                        text={bookindStartingAt.formatted}
+                      />
+                    </View>
+                    <View style={{flex: 1}}>
+                      <Detail
+                        label='End'
+                        text={bookindEndingAt.formatted}
+                      />
+                    </View>
                   </View>
-                  <View style={{flex: 1}}>
-                    <Detail
-                      label='End'
-                      text={bookindEndingAt.formatted}
-                    />
-                  </View>
+                  <Countdown endTime={bookindEndingAt.object} startTime={bookindStartingAt.object} type={ride.status} />
                 </View>
                 <Detail
                   label='Total'
@@ -329,6 +405,7 @@ BookingDetail.propTypes = {
   navigation: PropTypes.object,
   requestPending: PropTypes.bool,
   ride: PropTypes.object,
+  onSelectCarForBooking: PropTypes.func,
   onUnlockRide: PropTypes.func,
   onUnselectRide: PropTypes.func
 }
