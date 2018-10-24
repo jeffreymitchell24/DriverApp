@@ -11,7 +11,8 @@ import {
   CHECK_LICENSE,
   CANCEL_RIDE,
   END_RIDE,
-  LATE_FOR_RIDE,
+  SEND_LATE_FOR_RIDE_DETAILS,
+  SEND_LATE_FOR_RIDE_NOTIFICATION,
   SUBMIT_RECEIPT,
   HELP_RIDE_DAMAGED,
   HELP_RIDE_MALFUNCTIONED
@@ -225,8 +226,27 @@ function * rideMalfunctionFlow () {
   yield takeLatest(HELP_RIDE_MALFUNCTIONED.REQUEST, checkUserStatusWrapper, rideMalfunction)
 }
 
+function * sendRideLateNotification ({payload}) {
+  const {carId: id} = payload
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let response = yield call(Api.rideLateNotification, {id, token})
+    console.log('response', response)
+    yield put({type: SEND_LATE_FOR_RIDE_NOTIFICATION.SUCCESS, payload: response})
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function * sendRideLateNotificationFlow () {
+  yield takeLatest(SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST, checkUserStatusWrapper, sendRideLateNotification)
+}
+
 function * rideLate ({payload}) {
-  const {carId: id, data: {photos, reason, delay}} = payload
+  const {carId: id, data: {photos, reason, delay}, notificationId} = payload
   let query = {reason, 'delay_minutes': delay}
   if (photos.length > 0) {
     let transformedPhotos = yield transformPhotoArray(photos)
@@ -237,18 +257,18 @@ function * rideLate ({payload}) {
   let state = yield select()
   let {token} = state.auth
   try {
-    let response = yield call(Api.rideLate, {id, token, data})
+    let response = yield call(Api.rideLate, {id, token, data, notificationId})
     console.log('response', response)
-    yield put({type: LATE_FOR_RIDE.SUCCESS, payload: response})
+    yield put({type: SEND_LATE_FOR_RIDE_DETAILS.SUCCESS, payload: response})
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: LATE_FOR_RIDE.FAILURE, payload: error.response.data.error.message})
+    yield put({type: SEND_LATE_FOR_RIDE_DETAILS.FAILURE, payload: error.response.data.error.message})
   }
 }
 
 function * rideLateFlow () {
-  yield takeLatest(LATE_FOR_RIDE.REQUEST, checkUserStatusWrapper, rideLate)
+  yield takeLatest(SEND_LATE_FOR_RIDE_DETAILS.REQUEST, checkUserStatusWrapper, rideLate)
 }
 
 function * submitRideReceipt ({payload}) {
@@ -294,5 +314,6 @@ export default [
   rideMalfunctionFlow,
   rideLateFlow,
   submitRideReceiptFlow,
-  rideEndFlow
+  rideEndFlow,
+  sendRideLateNotificationFlow
 ]

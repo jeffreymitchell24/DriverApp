@@ -196,11 +196,20 @@ export const rideMalfunction = async ({token, id, data}) => {
   console.log('rideMalfunction response', response)
   return response.data.data
 }
-export const rideLate = async ({token, id, data}) => {
+export const rideLate = async ({token, id, notificationId, data}) => {
   let config = {
     headers: {'Authorization': `Bearer ${token}`}
   }
-  let response = await axios.post(`${URL}/api/bookings/${id}/help/late`, data, config)
+  let response = await axios.post(`${URL}/api/bookings/${id}/help/late/${notificationId}/details`, data, config)
+  console.log('rideLate response', response)
+  return response.data.data
+}
+
+export const rideLateNotification = async ({token, id}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.post(`${URL}/api/bookings/${id}/help/late`, {}, config)
   console.log('rideLate response', response)
   return response.data.data
 }
