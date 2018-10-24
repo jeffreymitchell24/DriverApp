@@ -2,6 +2,7 @@
 import { Image, Platform } from 'react-native'
 import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
+var RNFS = require('react-native-fs')
 const uuidv4 = require('uuid/v4')
 
 function getImageSize (uri) {
@@ -21,7 +22,7 @@ function getImageSize (uri) {
 }
 
 export const toImageFile = async (imageUri, maxSize = 100000) => {
-  let details = await RNFetchBlob.fs.stat(imageUri)
+  let details = await RNFS.stat(imageUri)
   let uriToUpload = imageUri
   console.log('details', details)
   console.log('uriToUpload 1', uriToUpload)

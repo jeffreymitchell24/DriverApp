@@ -8,7 +8,7 @@ import PropTypes from 'prop-types'
 import { icons } from 'images'
 import styles from './styles'
 
-const Photo = ({onPress, imageUri, touchable = false}) => {
+const Photo = ({onPress, imageUri, touchable = true}) => {
   let image = ''
   if (imageUri) image = {uri: imageUri}
   let Wrapper = touchable ? TouchableOpacity : View

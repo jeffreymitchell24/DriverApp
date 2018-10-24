@@ -23,7 +23,6 @@ import { Button, Section, SectionHeader, SectionContent, Photo, RadioButton } fr
 import styles from './styles'
 import {APP_CONFIG} from './config'
 
-// More info on all the options is below in the API Reference... just some common use cases shown here
 let androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
@@ -222,7 +221,6 @@ class Documentation extends Component {
   showImagePicker = (licenseSide, licenseType) => {
     ImagePicker.showImagePicker(Platform.OS === 'android' ? androidOptions : iosOptions, (response) => {
       console.log('Response = ', response)
-      Alert.alert('Response', response)
       this.pickerIsOpened = false
       if (response.didCancel) {
         // this.props.navigation.goBack()
@@ -230,7 +228,7 @@ class Documentation extends Component {
         this.props.onUpdateLicense({
           type: licenseType,
           side: licenseSide.toLowerCase(),
-          imageUri: Platform.OS === 'android' ? response.uri : response.origURL
+          imageUri: response.uri // Platform.OS === 'android' ? response.uri : response.origURL
         })
         // this.props.navigation.navigate(PicturePreview, {
         //   photoUri: response.uri
