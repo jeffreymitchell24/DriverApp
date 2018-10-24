@@ -3,6 +3,7 @@ package com.carflo.carflow;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.rnfs.RNFSPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.RNTextInputMask.RNTextInputMaskPackage;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new RNFSPackage(),
             new ImagePickerPackage(),
             new ReactNativeWheelPickerPackage(),
             new RNTextInputMaskPackage(),

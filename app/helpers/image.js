@@ -1,5 +1,5 @@
 
-import { Image } from 'react-native'
+import { Image, Platform } from 'react-native'
 import ImageResizer from 'react-native-image-resizer'
 import RNFetchBlob from 'rn-fetch-blob'
 const uuidv4 = require('uuid/v4')
@@ -27,11 +27,11 @@ export const toImageFile = async (imageUri, maxSize = 100000) => {
   console.log('uriToUpload 1', uriToUpload)
   if (details.size > maxSize) {
     let imageSize = await getImageSize(uriToUpload)
+    let ratio = imageSize.width / imageSize.height
     console.log('imageSize', imageSize)
-    const {uri} = await ImageResizer.createResizedImage(imageUri, imageSize.width, imageSize.height, 'JPEG', 60)
-    let details2 = await RNFetchBlob.fs.stat(uri)
-    console.log('details2', details2)
-    uriToUpload = uri
+    const result = await ImageResizer.createResizedImage(imageUri, 800, 800 / ratio, 'JPEG', 60)
+    console.log('RESIZE RESULT', result)
+    uriToUpload = Platform.OS === 'android' ? result.uri : result.path
   }
   // let imageFile = new FormData()
   // imageFile.append('image', {

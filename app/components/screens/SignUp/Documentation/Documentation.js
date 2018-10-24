@@ -39,7 +39,14 @@ let iosOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
-  noData: true
+  noData: true,
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
 }
 
 class RideshareModal extends Component {
@@ -215,6 +222,7 @@ class Documentation extends Component {
   showImagePicker = (licenseSide, licenseType) => {
     ImagePicker.showImagePicker(Platform.OS === 'android' ? androidOptions : iosOptions, (response) => {
       console.log('Response = ', response)
+      Alert.alert('Response', response)
       this.pickerIsOpened = false
       if (response.didCancel) {
         // this.props.navigation.goBack()
@@ -222,7 +230,7 @@ class Documentation extends Component {
         this.props.onUpdateLicense({
           type: licenseType,
           side: licenseSide.toLowerCase(),
-          imageUri: response.uri
+          imageUri: Platform.OS === 'android' ? response.uri : response.origURL
         })
         // this.props.navigation.navigate(PicturePreview, {
         //   photoUri: response.uri
