@@ -40,13 +40,13 @@ let iosOptions = {
   title: 'License Photo',
   mediaType: 'photo',
   noData: true,
-  quality: 0.5,
-  storageOptions: {
-    skipBackup: true,
-    cameraRoll: true,
-    waitUntilSaved: true
-    // path: 'images'
-  }
+  quality: 0.5
+  // storageOptions: {
+  //   skipBackup: true,
+  //   cameraRoll: true,
+  //   waitUntilSaved: true
+  //   // path: 'images'
+  // }
 }
 
 class RideshareModal extends Component {
@@ -222,7 +222,6 @@ class Documentation extends Component {
   showImagePicker = (licenseSide, licenseType) => {
     ImagePicker.showImagePicker(Platform.OS === 'android' ? androidOptions : iosOptions, (response) => {
       console.log('Response = ', response)
-      Alert.alert('Response', response)
       this.pickerIsOpened = false
       if (response.didCancel) {
         // this.props.navigation.goBack()
