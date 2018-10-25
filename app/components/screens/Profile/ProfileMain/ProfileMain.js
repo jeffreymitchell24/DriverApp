@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { ScrollView, View, Text, TouchableOpacity, Image, Linking, Alert, Platform } from 'react-native'
-import { StackActions, NavigationActions } from 'react-navigation'
+import { StackActions, NavigationActions, NavigationEvents } from 'react-navigation'
 import Spinner from 'react-native-loading-spinner-overlay'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
@@ -59,6 +59,15 @@ class ProfileMain extends Component {
     }
   }
 
+  handleScreenFocus = () => {
+    console.log('handleScreenFocus')
+    const {user, onProfileUpdateCheck} = this.props
+    let {profile_update_request: profileUpdRequest = {}} = user
+    if (profileUpdRequest.status === 'pending') {
+      onProfileUpdateCheck()
+    }
+  }
+
   onInstaPress = () => {
     Linking.openURL('https://www.instagram.com/carfloinc/').catch(err => console.error('An error occurred', err))
   }
@@ -109,51 +118,57 @@ class ProfileMain extends Component {
     const {full_name: fullname, photo} = this.props.user
     console.log(photo)
     return (
-      <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
-        <View style={styles.profileInfo}>
-          <TouchableOpacity style={styles.photoContainer} onPress={this.onPhotoPress}>
-            {
-              photo
-                ? (
-                  <Image source={{uri: `${photo}`}} style={styles.profileImage} />
-                ) : (
-                  <Image source={icons['camera']} style={styles.iconCamera} />
-                )
-            }
-          </TouchableOpacity>
-          <Text style={styles.userName}>{fullname}</Text>
-        </View>
-        <Section>
-          <SectionHeader title='PROFILE' />
-          <SectionContent>
-            <ListItem icon='user' text='Personal Details' onPress={() => this.onNavigateTo(ProfileDetails)} />
-          </SectionContent>
-        </Section>
-        <Section>
-          <SectionHeader title='SECURITY' />
-          <SectionContent>
-            <ListItem icon='lock' text='Change Password' onPress={() => this.onNavigateTo(ChangePassword)} />
-          </SectionContent>
-        </Section>
-        <Section>
-          <SectionHeader title='ABOUT US' />
-          <SectionContent style={styles.socialList}>
-            <ListItem icon='star' text='Rate us on the App Store' />
-            <ListItem icon='instagram' text='Follow us on Instagram' onPress={this.onInstaPress} />
-            <ListItem icon='facebook' text='Like us on Facebook' onPress={this.onFBPress} />
-            <ListItem icon='twitter' text='Follow us on Twitter' />
-            <ListItem icon='book' text='Privacy policy' onPress={() => this.onNavigateTo(PrivacyPolicy)} />
-            <ListItem icon='document' text={`Terms & conditions`} onPress={() => this.onNavigateTo(TermsConditions)} />
-          </SectionContent>
-        </Section>
-        <View style={styles.footer}>
-          <TouchableOpacity onPress={this.onLogOut} >
-            <Text style={styles.logOutText}>Log Out</Text>
-          </TouchableOpacity>
-          <Text style={styles.appVersionText}>Version {VersionNumber.appVersion}</Text>
-        </View>
-        <Spinner color={colors.red} visible={this.props.requestPending} />
-      </ScrollView>
+      <React.Fragment>
+        <NavigationEvents
+          onDidFocus={this.handleScreenFocus}
+        />
+        <ScrollView contentContainerStyle={styles.container} style={{flex: 1}}>
+          <View style={styles.profileInfo}>
+            <TouchableOpacity style={styles.photoContainer} onPress={this.onPhotoPress}>
+              {
+                photo
+                  ? (
+                    <Image source={{uri: `${photo}`}} style={styles.profileImage} />
+                  ) : (
+                    <Image source={icons['camera']} style={styles.iconCamera} />
+                  )
+              }
+            </TouchableOpacity>
+            <Text style={styles.userName}>{fullname}</Text>
+          </View>
+          <Section>
+            <SectionHeader title='PROFILE' />
+            <SectionContent>
+              <ListItem icon='user' text='Personal Details' onPress={() => this.onNavigateTo(ProfileDetails)} />
+            </SectionContent>
+          </Section>
+          <Section>
+            <SectionHeader title='SECURITY' />
+            <SectionContent>
+              <ListItem icon='lock' text='Change Password' onPress={() => this.onNavigateTo(ChangePassword)} />
+            </SectionContent>
+          </Section>
+          <Section>
+            <SectionHeader title='ABOUT US' />
+            <SectionContent style={styles.socialList}>
+              <ListItem icon='star' text='Rate us on the App Store' />
+              <ListItem icon='instagram' text='Follow us on Instagram' onPress={this.onInstaPress} />
+              <ListItem icon='facebook' text='Like us on Facebook' onPress={this.onFBPress} />
+              <ListItem icon='twitter' text='Follow us on Twitter' />
+              <ListItem icon='book' text='Privacy policy' onPress={() => this.onNavigateTo(PrivacyPolicy)} />
+              <ListItem icon='document' text={`Terms & conditions`} onPress={() => this.onNavigateTo(TermsConditions)} />
+            </SectionContent>
+          </Section>
+          <View style={styles.footer}>
+            <TouchableOpacity onPress={this.onLogOut} >
+              <Text style={styles.logOutText}>Log Out</Text>
+            </TouchableOpacity>
+            <Text style={styles.appVersionText}>Version {VersionNumber.appVersion}</Text>
+          </View>
+          <Spinner color={colors.red} visible={this.props.requestPending} />
+        </ScrollView>
+
+      </React.Fragment>
     )
   }
 }
@@ -163,6 +178,7 @@ ProfileMain.propTypes = {
   navigation: PropTypes.object,
   requestPending: PropTypes.bool,
   user: PropTypes.object,
+  onProfileUpdateCheck: PropTypes.func,
   onSignOut: PropTypes.func,
   onUpdateUserImage: PropTypes.func
 }

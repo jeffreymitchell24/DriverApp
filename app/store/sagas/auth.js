@@ -1,4 +1,4 @@
-import { take, put, call, cancelled, select, fork, cancel } from 'redux-saga/effects'
+import { take, put, call, cancelled, select, fork } from 'redux-saga/effects'
 import { delay } from 'redux-saga'
 import {Alert} from 'react-native'
 import NavigationService from 'navigation/NavigationService'
@@ -13,7 +13,8 @@ import {
   CHECK_STATUS,
   UPDATE_USER_IMAGE,
   UPDATE_USER_PROFILE,
-  REJECT_USER
+  REJECT_USER,
+  CHECK_PROFILE_UPDATE
 } from 'store/actions/auth'
 
 function * authorize ({payload}) {
@@ -132,6 +133,31 @@ function * rejectUserFlow () {
     NavigationService.reset(Auth)
   }
 }
+// pending,approved,rejected
+function * profileUpdateCheck () {
+  let state = yield select()
+  let {token} = state.auth
+  try {
+    let {user} = yield call(Api.getUser, {token})
+    let {profile_update_request: profileUpdRequest = {}, status} = user
+    if (status === 'rejected') {
+      yield put({type: REJECT_USER})
+    } else {
+      if (profileUpdRequest.status === 'rejected') {
+        Alert.alert('', 'Profile update was rejected')
+      }
+      yield put({type: UPDATE_USER_PROFILE.SUCCESS, payload: user})
+    }
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({type: CHECK_PROFILE_UPDATE.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function * profileUpdateCheckFlow () {
+  yield takeLatest(CHECK_PROFILE_UPDATE.REQUEST, checkUserStatusWrapper, profileUpdateCheck)
+}
 
 export function * checkUserStatusWrapper (cbSaga, action) {
   let state = yield select()
@@ -157,5 +183,6 @@ export default [
   resetPasswordFlow,
   checkStatusFlow,
   updateProfileImageFlow,
-  updateProfileDataFlow
+  updateProfileDataFlow,
+  profileUpdateCheckFlow
 ]
