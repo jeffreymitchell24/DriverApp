@@ -66,3 +66,10 @@ export const updateUserProfile = (data) => {
     payload: data
   }
 }
+
+export const CHECK_PROFILE_UPDATE = createAsyncAction('CHECK_PROFILE_UPDATE')
+export const profileUpdateCheck = () => {
+  return {
+    type: CHECK_PROFILE_UPDATE.REQUEST
+  }
+}

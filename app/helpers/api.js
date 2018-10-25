@@ -76,6 +76,16 @@ const options = {
   successActionStatus: 201
 }
 
+export const getUser = async ({token}) => {
+  let config = {
+    headers: {'Authorization': `Bearer ${token}`}
+  }
+  let response = await axios.get(`${URL}/api/users/me`, config)
+  console.log('getUser response', response)
+  return response.data.data
+  
+}
+
 export const uploadImageToAws = async (imageFile) => {
   try {
     let response = await RNS3.put(imageFile, options)

@@ -250,7 +250,7 @@ function * rideLate ({payload}) {
   let query = {reason, 'delay_minutes': delay}
   if (photos.length > 0) {
     let transformedPhotos = yield transformPhotoArray(photos)
-    query['car_photos'] = transformedPhotos
+    query['photo'] = transformedPhotos[0]
   }
   console.log('query', query)
   let data = Api.toFormData(query)
