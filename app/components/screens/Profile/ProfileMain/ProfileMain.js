@@ -63,7 +63,7 @@ class ProfileMain extends Component {
     console.log('handleScreenFocus')
     const {user, onProfileUpdateCheck} = this.props
     let {profile_update_request: profileUpdRequest = {}} = user
-    if (profileUpdRequest.status === 'pending') {
+    if (profileUpdRequest && profileUpdRequest.status === 'pending') {
       onProfileUpdateCheck()
     }
   }

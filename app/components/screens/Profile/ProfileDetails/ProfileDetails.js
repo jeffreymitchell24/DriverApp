@@ -325,7 +325,7 @@ class ProfileDetails extends Component {
   render () {
     const {user} = this.props
     let {profile_update_request: profileUpdRequest = {}} = user
-    let isApprovalPending = profileUpdRequest.status === 'pending'
+    let isApprovalPending = (profileUpdRequest && profileUpdRequest.status === 'pending')
     return (
       <View style={styles.container}>
         {

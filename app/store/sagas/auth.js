@@ -143,7 +143,7 @@ function * profileUpdateCheck () {
     if (status === 'rejected') {
       yield put({type: REJECT_USER})
     } else {
-      if (profileUpdRequest.status === 'rejected') {
+      if (profileUpdRequest && profileUpdRequest.status === 'rejected') {
         Alert.alert('', 'Profile update was rejected')
       }
       yield put({type: UPDATE_USER_PROFILE.SUCCESS, payload: user})

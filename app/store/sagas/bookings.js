@@ -156,6 +156,7 @@ function * rideEnd ({payload}) {
     if (notes) query.notes = notes
     console.log('query', query)
     let data = Api.toFormData(query)
+    console.log('data', data)
     let response = yield call(Api.endRide, {id, data, token})
     console.log('response', response)
     yield put({type: END_RIDE.SUCCESS, payload: response})
