@@ -39,6 +39,9 @@ class Countdown extends Component {
   componentDidMount = () => {
     this.startCountdown()
   }
+  componentWillUnmount = () => {
+    clearInterval(this.intervalHandle)
+  }
   startCountdown = () => {
     this.intervalHandle = setInterval(this.tick, 1000 * 60)
   }

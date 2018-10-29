@@ -22,15 +22,22 @@ function getImageSize (uri) {
 }
 
 export const toImageFile = async (imageUri, maxSize = 100000) => {
-  let details = await RNFS.stat(imageUri)
+  let uri = imageUri
   let uriToUpload = imageUri
+  let imageSize = await getImageSize(uriToUpload)
+  let ratio = imageSize.width / imageSize.height
+  console.log(uri.includes('assets-library://asset', 0))
+  if (uri.includes('assets-library://asset', 0)) {
+    uri = await RNFS.copyAssetsFileIOS(uri, RNFS.DocumentDirectoryPath + `${uuidv4()}.jpg`, imageSize.width, imageSize.height)
+    console.log('res', uri)
+  }
+  console.log('imageUri', uri)
+  let details = await RNFS.stat(uri)
   console.log('details', details)
   console.log('uriToUpload 1', uriToUpload)
   if (details.size > maxSize) {
-    let imageSize = await getImageSize(uriToUpload)
-    let ratio = imageSize.width / imageSize.height
     console.log('imageSize', imageSize)
-    const result = await ImageResizer.createResizedImage(imageUri, 800, 800 / ratio, 'JPEG', 60)
+    const result = await ImageResizer.createResizedImage(uri, 800, 800 / ratio, 'JPEG', 60)
     console.log('RESIZE RESULT', result)
     uriToUpload = Platform.OS === 'android' ? result.uri : result.path
   }
