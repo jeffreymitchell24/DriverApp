@@ -179,7 +179,7 @@ class BookingCalendar extends Component {
         <Animated.View style={[styles.timePickers, {transform: [{translateY: this.state.bounceValue}]}]}>
           <View style={styles.timePickerRow}>
             <View style={styles.timePickerContainer}>
-              <Text style={styles.timePickerLabel}>PICKUP</Text>
+              <Text style={styles.timePickerLabel}>{ this.bookDateType === 'end' ? 'DROPOFF' : 'PICKUP'}</Text>
               <ScrollView showsVerticalScrollIndicator={false} style={styles.timePicker} >
                 {this.state.hourList.map((timeString, i) => {
                   let type = 'default'
