@@ -28,7 +28,7 @@ export const toImageFile = async (imageUri, maxSize = 100000) => {
   let ratio = imageSize.width / imageSize.height
   console.log(uri.includes('assets-library://asset', 0))
   if (uri.includes('assets-library://asset', 0)) {
-    uri = await RNFS.copyAssetsFileIOS(uri, RNFS.DocumentDirectoryPath + `${uuidv4()}.jpg`, imageSize.width, imageSize.height)
+    uri = await RNFS.copyAssetsFileIOS(uri, RNFS.DocumentDirectoryPath + `/${uuidv4()}.jpg`, imageSize.width, imageSize.height)
     console.log('res', uri)
   }
   console.log('imageUri', uri)
