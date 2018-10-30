@@ -72,7 +72,7 @@ class ChangePassword extends PureComponent {
           <Button
             containerStyle={styles.button}
             disabled={buttonDisabled}
-            title='RESEND PASSWORD'
+            title='RESET PASSWORD'
             onPress={handleSubmit}
           />
         </View>
