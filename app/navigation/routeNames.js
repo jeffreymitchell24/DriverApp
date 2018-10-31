@@ -21,6 +21,7 @@ export const TermsConditions = 'TermsConditions'
 // App
 export const Home = 'Home'
 export const Profile = 'Profile'
+export const History = 'History'
 
 // New Booking
 export const NewBooking = 'NewBooking'

@@ -4,6 +4,7 @@ import React from 'react'
 
 import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'
 
+import History from 'components/screens/History'
 import BookingDetail from 'components/screens/Booking/BookingDetail'
 import CarLocation from 'components/screens/Booking/CarLocation'
 import RideLicenseCamera from 'components/screens/Booking/LicenseCamera'
@@ -43,7 +44,7 @@ export const Root = createStackNavigator(
     Home: {
       screen: HomeTabStack,
       navigationOptions: {
-        title: 'Car Flow',
+        title: 'Bookings',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions,
@@ -61,6 +62,18 @@ export const Root = createStackNavigator(
         ...navigationOptions,
         headerLeftContainerStyle: {
           // paddingLeft: 16
+        }
+      }
+    },
+    History: {
+      screen: History,
+      navigationOptions: {
+        title: 'Booking history',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 22
         }
       }
     },

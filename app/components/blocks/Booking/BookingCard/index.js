@@ -1,5 +1,9 @@
 import React, { PureComponent } from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
+
+import {icons} from 'images'
+import moment from 'moment'
+
 import PropTypes from 'prop-types'
 import styles from './styles'
 
@@ -9,29 +13,36 @@ class BookingCard extends PureComponent {
     onPress(booking)
   }
   render () {
-    const {booking, extraDetail, bookingEnd, bookingStart} = this.props
+    const {booking, extraDetail, bookingEnd, bookingStart, isRecurring} = this.props
     const {
       image_s3_url: image,
-      short_pickup_location: pickupLocation,
-      short_return_location: returnLocation,
+      full_pickup_location: pickupLocation,
+      full_return_location: returnLocation,
       manufacturer = '',
-      model = '',
-      plate = '',
-      color = ''
+      model = ''
     } = booking
+
+    const bookingStartTime = moment(bookingStart).format('hh:mm a')
+    const bookingEndTime = moment(bookingEnd).format('hh:mm a')
+
     return (
       <View style={styles.cardContainer}>
-        <TouchableOpacity onPress={this.onPress}>
-          <Image source={{uri: image}} style={styles.cardImage} />
-        </TouchableOpacity>
-        <View style={styles.cardContent}>
+        <View style={styles.leftBlock}>
           <TouchableOpacity onPress={this.onPress}>
-            <Text style={styles.cardTitle}>{`${manufacturer} ${model}`}</Text>
+            <Image resizeMode={'contain'} source={{uri: image}} style={styles.cardImage} />
           </TouchableOpacity>
-          <Text style={styles.detailText}>{`${plate}, ${color}`}</Text>
-          <Text style={styles.detailText}>{`${bookingStart} –– ${bookingEnd}`}</Text>
-          <Text style={styles.detailText}>{`${pickupLocation} –– ${returnLocation}`}</Text>
-          <Text style={styles.extraDetailText}>{extraDetail}</Text>
+        </View>
+        <View style={styles.rightBlock}>
+          <View style={styles.cardContent}>
+            <TouchableOpacity onPress={this.onPress}>
+              <Text style={styles.cardTitle}>{`${manufacturer} ${model}`}</Text>
+            </TouchableOpacity>
+            <Text style={styles.detailText}>{`${bookingStartTime} –– ${bookingEndTime}`}</Text>
+            <Text style={styles.detailText}>Pickup: {pickupLocation}</Text>
+            <Text style={styles.detailText}>Dropoff: {returnLocation}</Text>
+            <Text style={styles.extraDetailText}>{extraDetail}</Text>
+          </View>
+          {isRecurring && <Image source={icons.recurring} style={styles.recurringContainer} />}
         </View>
       </View>
     )

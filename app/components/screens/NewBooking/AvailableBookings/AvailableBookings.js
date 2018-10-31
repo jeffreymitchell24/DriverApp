@@ -32,8 +32,8 @@ class AvailableBookings extends PureComponent {
     return (
       <BookingCard
         booking={car}
-        bookingEnd={moment(car['booking_available_to'], 'HH:mm:ss').format('hh:mm A')}
-        bookingStart={moment(car['booking_available_from'], 'HH:mm:ss').format('hh:mm A')}
+        bookingEnd={moment(car['booking_available_to'], 'HH:mm:ss')}
+        bookingStart={moment(car['booking_available_from'], 'HH:mm:ss')}
         extraDetail={`Available ${availability}`}
         onPress={this.onBookingPress}
       />
