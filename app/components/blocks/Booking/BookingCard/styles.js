@@ -6,12 +6,22 @@ export default StyleSheet.create({
   cardContainer: {
     borderBottomWidth: 2,
     borderBottomColor: colors.gray50,
-    paddingTop: metrics.contentMarginSmall
+    paddingTop: metrics.contentMarginSmall,
+
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+  leftBlock: {
+    flex: 1
+  },
+  rightBlock: {
+    flex: 2,
+    marginLeft: 10
   },
   cardImage: {
-    backgroundColor: colors.gray100,
-    alignSelf: 'stretch',
-    height: 110
+    backgroundColor: colors.white,
+    height: 110,
+    width: '100%'
   },
   cardContent: {
     paddingVertical: metrics.contentMarginMiddle
@@ -27,10 +37,14 @@ export default StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     fontSize: metrics.fontSize
   },
-
   extraDetailText: {
     color: colors.teal,
     fontFamily: 'SFProText-Regular',
     fontSize: metrics.fontSize
+  },
+  recurringContainer: {
+    position: 'absolute',
+    top: 12,
+    right: 12
   }
 })

@@ -12,5 +12,7 @@ module.exports = {
   user: require('./user.png'),
   lock: require('./lock.png'),
   document: require('./document.png'),
-  book: require('./book.png')
+  book: require('./book.png'),
+  historyBtn: require('./historyBtn.png'),
+  recurring: require('./recurring.png')
 }

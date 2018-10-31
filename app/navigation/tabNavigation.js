@@ -1,15 +1,17 @@
 import React from 'react'
 import { createMaterialTopTabNavigator } from 'react-navigation'
-import Upcoming from 'components/screens/Home/Upcoming'
-import History from 'components/screens/Home/History'
-import {Profile} from 'navigation/routeNames'
-import {ProfileButton} from 'components/ui'
+import All from 'components/screens/Home/All'
+import OneTime from 'components/screens/Home/OneTime'
+import Recurring from 'components/screens/Home/Recurring'
+import { Profile, History as HistoryRoute } from 'navigation/routeNames'
+import { ProfileButton, HistoryButton } from 'components/ui'
 import { colors } from 'theme'
 
 const HomeTabStack = createMaterialTopTabNavigator(
   {
-    Upcoming: Upcoming,
-    History: History
+    All,
+    'One-Time': OneTime,
+    Recurring
   },
   {
     tabBarOptions: {
@@ -32,11 +34,23 @@ const HomeTabStack = createMaterialTopTabNavigator(
     }
   }
 )
+
 HomeTabStack.navigationOptions = ({ navigation }) => {
   return {
-    headerLeft: <ProfileButton onPress={() => navigation.navigate(Profile, {
-      backKey: HomeTabStack
-    })} />
+    headerLeft: (
+      <ProfileButton
+        onPress={() => navigation.navigate(Profile, {
+          backKey: HomeTabStack
+        })}
+      />
+    ),
+    headerRight: (
+      <HistoryButton
+        onPress={() => navigation.navigate(HistoryRoute, {
+          backKey: HomeTabStack
+        })}
+      />
+    )
   }
 }
 
