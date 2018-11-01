@@ -5,4 +5,5 @@ export const getReceiptSubmitRequestStatus = R.path(['ride', 'receiptSubmitPendi
 export const getReceiptSubmitError = R.path(['ride', 'receiptSubmitError'])
 export const getCarPhotos = R.path(['ride', 'carPhotos'])
 export const getGasTankPhotos = R.path(['ride', 'gasTankPhotos'])
+export const getMileagePhotos = R.path(['ride', 'mileagePhotos'])
 export const getSelectedRidePhotoData = R.path(['ride', 'selectedPhoto'])

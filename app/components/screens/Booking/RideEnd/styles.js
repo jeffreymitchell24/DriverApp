@@ -12,8 +12,7 @@ export default StyleSheet.create({
     paddingHorizontal: metrics.contentMarginSmall
   },
 
-  form: {
-  },
+  form: {},
 
   sectionHeader: {
     fontSize: metrics.fontSizeBig,

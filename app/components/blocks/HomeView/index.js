@@ -13,9 +13,9 @@ class HomeView extends PureComponent {
     const {onNewPress} = this.props
     return (
       <View style={styles.emptyListContainer}>
-        <Text style={styles.emptyListText}>You don't have any rides.</Text>
+        <Text style={styles.emptyListText}>You don't have any upcoming bookings.</Text>
         <TouchableOpacity onPress={onNewPress}>
-          <Text style={[styles.emptyListText, {color: colors.red}]}>Start booking now</Text>
+          <Text style={[styles.emptyListText, {color: colors.red}]}>Create booking now</Text>
         </TouchableOpacity>
       </View>
     )

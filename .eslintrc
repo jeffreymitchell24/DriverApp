@@ -11,6 +11,9 @@
   },
   "rules": {
     "react/jsx-sort-props": [2, { "callbacksLast": true }],
-    "react/sort-prop-types": [2, { "callbacksLast": true }]
+    "react/sort-prop-types": [2, { "callbacksLast": true }],
+    "space-before-function-paren": "off",
+    "jsx-quotes": "off",
+    "space-in-parens": "off"
   }
 }

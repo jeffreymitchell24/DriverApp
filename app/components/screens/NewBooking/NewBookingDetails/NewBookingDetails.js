@@ -1,13 +1,24 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TouchableOpacity, Alert, ScrollView, ActivityIndicator } from 'react-native'
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  Alert,
+  ScrollView,
+  ActivityIndicator
+} from 'react-native'
 import moment from 'moment'
 import Spinner from 'react-native-loading-spinner-overlay'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
 import { Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
-import { BookingConfirmed, BookingCalendar } from 'navigation/routeNames'
-import {getMaxDate} from 'helpers/date'
+import {
+  BookingConfirmed,
+  BookingCalendar,
+  CarLocation
+} from 'navigation/routeNames'
+import { getMaxDate } from 'helpers/date'
 
 import styles from './styles'
 import { colors } from 'theme'
@@ -16,8 +27,8 @@ class TimeSlot extends PureComponent {
   onPress = () => {
     this.props.onPress(this.props.time)
   }
-  render () {
-    const {time, slotType} = this.props
+  render() {
+    const { time, slotType } = this.props
     let backgroundColor = colors.gray50
     let textColor = colors.gray300
     if (slotType === 'border') {
@@ -28,8 +39,13 @@ class TimeSlot extends PureComponent {
       textColor = colors.white
     }
     return (
-      <TouchableOpacity style={[styles.timeSlot, {backgroundColor}]} onPress={this.onPress}>
-        <Text style={[styles.timeSlotText, {color: textColor}]}>{time.label}</Text>
+      <TouchableOpacity
+        style={[styles.timeSlot, { backgroundColor }]}
+        onPress={this.onPress}
+      >
+        <Text style={[styles.timeSlotText, { color: textColor }]}>
+          {time.label}
+        </Text>
       </TouchableOpacity>
     )
   }
@@ -42,7 +58,14 @@ TimeSlot.propTypes = {
 }
 
 class NewBookingDetails extends PureComponent {
-  constructor (props) {
+  static navigationOptions = ({ navigation }) => {
+    console.log('!!!!!', navigation)
+    return {
+      title: navigation.getParam('carName', 'New booking')
+    }
+  }
+
+  constructor(props) {
     super(props)
     // let timeSlots = getNext24hours()
     // console.log(timeSlots)
@@ -51,36 +74,66 @@ class NewBookingDetails extends PureComponent {
       endDate: null // : {value: null, label: '5:00 PM'},
     }
   }
-  static navigationOptions = ({ navigation }) => {
-    // return {
-    //   headerLeft: <NavButton icon='cancel' imageStyle={{height: 12, width: 12}} onPress={() => navigation.navigate(Home)} />
-    // }
-  }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onUnselectCar()
   }
 
-  componentDidUpdate (prevProps) {
-    let {bookingError, bookingPending} = this.props
+  componentDidMount() {
+    const { car: carData } = this.props
+    console.log('carData', carData)
+    if (carData && carData.car) {
+      const { car } = carData
+      console.log('car', car)
+      this.props.navigation.setParams({
+        carName: `${car.manufacturer} ${car.model}`
+      })
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    let { bookingError, bookingPending } = this.props
     if (!bookingPending && prevProps.bookingPending) {
       if (!bookingError) {
-        const {manufacturer, model} = this.props.car.car
+        const { manufacturer, model } = this.props.car.car
         let bookingData = {
           car: `${manufacturer} ${model}`,
-          startDate: moment.unix(this.props.startDate.timestamp).tz('America/New_York').format('MMMM DD, hh:mm A'),
-          endDate: moment.unix(this.props.endDate.timestamp).tz('America/New_York').format('MMMM DD, hh:mm A')
+          startDate: moment
+            .unix(this.props.startDate.timestamp)
+            .tz('America/New_York')
+            .format('MMMM DD, hh:mm A'),
+          endDate: moment
+            .unix(this.props.endDate.timestamp)
+            .tz('America/New_York')
+            .format('MMMM DD, hh:mm A')
         }
-        return this.props.navigation.navigate(BookingConfirmed, {bookingData})
+        return this.props.navigation.navigate(BookingConfirmed, { bookingData })
       } else {
         Alert.alert('', bookingError)
       }
     }
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (this.props.isFetchingCar && !nextProps.isFetchingCar) {
+      let { car: carData, navigation } = nextProps
+
+      if (carData && carData.car) {
+        const { car } = carData
+
+        navigation.setParams({
+          carName: `${car.manufacturer} ${car.model}`
+        })
+      }
+    }
+  }
+
   onStartDatePress = () => {
-    this.setState({endDate: null})
-    this.props.navigation.navigate(BookingCalendar, {bookDateType: 'start', bookedHours: this.props.car.booked})
+    this.setState({ endDate: null })
+    this.props.navigation.navigate(BookingCalendar, {
+      bookDateType: 'start',
+      bookedHours: this.props.car.booked
+    })
   }
   onEndDatePress = () => {
     if (!this.props.startDate) Alert.alert('', 'Select start date first')
@@ -93,44 +146,78 @@ class NewBookingDetails extends PureComponent {
         bookedHours: this.props.car.booked,
         maxDate,
         minDate: this.props.startDate.dateString,
-        startHour: moment.unix(this.props.startDate.timestamp).tz('America/New_York').hour()
+        startHour: moment
+          .unix(this.props.startDate.timestamp)
+          .tz('America/New_York')
+          .hour()
       })
     }
   }
 
   onConfirmPress = () => {
-    const {car: {car}} = this.props
-    const {startDate, endDate} = this.props
+    const {
+      car: { car }
+    } = this.props
+    const { startDate, endDate } = this.props
     console.log(startDate, endDate)
     let timeStamps = {
-      'booking_ending_at': moment.unix(endDate.timestamp).tz('America/New_York').subtract(1, 'hours').minutes(59).format('YYYY-MM-DD HH:mm'),
-      'booking_starting_at': moment.unix(startDate.timestamp).tz('America/New_York').format('YYYY-MM-DD HH:mm')
+      booking_ending_at: moment
+        .unix(endDate.timestamp)
+        .tz('America/New_York')
+        .subtract(1, 'hours')
+        .minutes(59)
+        .format('YYYY-MM-DD HH:mm'),
+      booking_starting_at: moment
+        .unix(startDate.timestamp)
+        .tz('America/New_York')
+        .format('YYYY-MM-DD HH:mm')
     }
-    this.props.onBookCar({id: car.id, timeStamps})
+    this.props.onBookCar({ id: car.id, timeStamps })
   }
 
   keyExtractor = (item, index) => index.toString()
 
-  render () {
-    const {isFetchingCar} = this.props
+  onMapPress = locationType => {
+    let geo = {}
+
+    const {
+      pickup_location_lat: pickupLat,
+      pickup_location_lon: pickupLon,
+      return_location_lat: returnLat,
+      return_location_lon: returnLon
+    } = this.props.car.car
+
+    geo.lat = locationType === 'pickup' ? pickupLat : returnLat
+    geo.lon = locationType === 'pickup' ? pickupLon : returnLon
+
+    console.log('onMapPress', this.props.car, geo)
+
+    this.props.navigation.navigate(CarLocation, { geo })
+  }
+
+  render() {
+    const { isFetchingCar } = this.props
     if (isFetchingCar) {
       return (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator color={colors.red} size='large' />
+          <ActivityIndicator color={colors.red} size="large" />
         </View>
       )
     }
-    const {car: {car}} = this.props
+    const {
+      car: { car }
+    } = this.props
     const {
       image_s3_url: image,
-      short_pickup_location: pickupLocation,
-      short_return_location: returnLocation,
+      full_pickup_location: pickupLocation,
+      full_return_location: returnLocation,
+      plate,
       manufacturer = '',
       model = '',
       color = '',
       year = ''
     } = car
-    const {startDate, endDate} = this.props
+    const { startDate, endDate } = this.props
     let isButtonActive = startDate && endDate
     return (
       <React.Fragment>
@@ -143,58 +230,71 @@ class NewBookingDetails extends PureComponent {
           <View>
             <CarImage imageUri={image} />
             <View style={styles.bookingDetailsList}>
-              <View style={[styles.row, {marginBottom: 16}]}>
-                <View style={{flex: 1}}>
-                  <View style={{marginBottom: 16}}>
+              <View style={[styles.row, { marginBottom: 16 }]}>
+                <View style={{ flex: 1 }}>
+                  <View style={{ marginBottom: 16 }}>
                     <BookingDetail
-                      label='Car Maker'
-                      text={manufacturer}
+                      label="CAR"
+                      text={`${manufacturer} ${model}, ${color}, ${year}`}
                     />
                   </View>
-                  <BookingDetail
-                    label='Color'
-                    text={color}
-                  />
                 </View>
-                <View style={{flex: 1}}>
-                  <View style={{marginBottom: 16}}>
+              </View>
+              <View style={[styles.row, { marginBottom: 16 }]}>
+                <View style={{ flex: 1 }}>
+                  <View style={{ width: '80%' }}>
+                    <BookingDetail label="PICKUP" text={pickupLocation} />
+                  </View>
+                  <TouchableOpacity onPress={() => this.onMapPress('pickup')}>
+                    <Text style={styles.mapButtonText}>Open in Maps</Text>
+                  </TouchableOpacity>
+                </View>
+                <View style={{ flex: 1 }}>
+                  <View style={{ width: '80%' }}>
                     <BookingDetail
-                      label='Year'
-                      text={year.toString()}
+                      label="RETURN"
+                      text={`${returnLocation}, ${plate}`}
                     />
                   </View>
-                  <BookingDetail
-                    label='Model'
-                    text={model}
-                  />
+                  <TouchableOpacity onPress={() => this.onMapPress('return')}>
+                    <Text style={styles.mapButtonText}>Open in Maps</Text>
+                  </TouchableOpacity>
                 </View>
-              </View>
-              <View style={{marginBottom: 16}}>
-                <BookingDetail
-                  label='Pickup location'
-                  text={pickupLocation}
-                />
-              </View>
-              <View style={{marginBottom: 16}}>
-                <BookingDetail
-                  label='Return location'
-                  text={returnLocation}
-                />
               </View>
             </View>
             <View style={styles.scheduleContainer}>
-              <SectionTitle title='SCHEDULE' />
-              <View style={[styles.row, {marginVertical: 16}]}>
-                <TouchableOpacity style={{flex: 1}} onPress={this.onStartDatePress}>
+              <SectionTitle title="SCHEDULE" />
+              <View style={[styles.row, { marginVertical: 16 }]}>
+                <TouchableOpacity
+                  style={{ flex: 1 }}
+                  onPress={this.onStartDatePress}
+                >
                   <BookingDetail
-                    label='Start Date'
-                    text={(startDate && moment.unix(startDate.timestamp).tz('America/New_York').format('ddd MM/D hh:mm A')) || '--:--'}
+                    label="Start Date"
+                    text={
+                      (startDate &&
+                        moment
+                          .unix(startDate.timestamp)
+                          .tz('America/New_York')
+                          .format('ddd MM/D hh:mm A')) ||
+                      '--:--'
+                    }
                   />
                 </TouchableOpacity>
-                <TouchableOpacity style={{flex: 1}} onPress={this.onEndDatePress}>
+                <TouchableOpacity
+                  style={{ flex: 1 }}
+                  onPress={this.onEndDatePress}
+                >
                   <BookingDetail
-                    label='End Date'
-                    text={(endDate && moment.unix(endDate.timestamp).tz('America/New_York').format('ddd MM/D hh:mm A')) || '--:--'}
+                    label="End Date"
+                    text={
+                      (endDate &&
+                        moment
+                          .unix(endDate.timestamp)
+                          .tz('America/New_York')
+                          .format('ddd MM/D hh:mm A')) ||
+                      '--:--'
+                    }
                   />
                 </TouchableOpacity>
               </View>
@@ -203,7 +303,7 @@ class NewBookingDetails extends PureComponent {
           <Button
             containerStyle={styles.button}
             disabled={!isButtonActive}
-            title='CONFIRM'
+            title="CONFIRM"
             onPress={this.onConfirmPress}
           />
         </ScrollView>

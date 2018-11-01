@@ -3,31 +3,51 @@ import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import { BookingDetail as Detail, CarImage } from 'components/blocks'
-import { CarLocation, RideHelp, ReceiptSubmit, RideEnd, NewBookingDetails } from 'navigation/routeNames'
-import { Button, Section, SectionHeader, SectionContent, Photo } from 'components/ui'
+import {
+  CarLocation,
+  RideHelp,
+  ReceiptSubmit,
+  RideEnd,
+  NewBookingDetails
+} from 'navigation/routeNames'
+import {
+  Button,
+  Section,
+  SectionHeader,
+  SectionContent,
+  Photo
+} from 'components/ui'
 import MapView from 'react-native-maps'
 import Spinner from 'react-native-loading-spinner-overlay'
-import {convertMinsToHrsMins} from 'helpers/date'
+import { convertMinsToHrsMins } from 'helpers/date'
 import { colors } from 'theme'
-import {styles, mapStyles} from './styles'
+import { styles, mapStyles } from './styles'
 
 class Countdown extends Component {
   intervalHandle = null
 
-  constructor (props) {
+  constructor(props) {
     super(props)
-    const {type, endTime, startTime} = this.props
+    const { type, endTime, startTime } = this.props
     this.intervalHandle = null
     this.minutesRemaining = 0
     let countdownMessage = ''
-    this.now = moment().tz('America/New_York').unix()
+    this.now = moment()
+      .tz('America/New_York')
+      .unix()
     if (type === 'pending') {
-      this.start = moment.tz(startTime.date, 'America/New_York').add(1, 'm').unix()
+      this.start = moment
+        .tz(startTime.date, 'America/New_York')
+        .add(1, 'm')
+        .unix()
       this.minutesRemaining = Math.floor((this.start - this.now) / 60)
       let diffString = convertMinsToHrsMins(this.minutesRemaining)
       countdownMessage = `Starting in ${diffString}`
     } else if (type === 'driving') {
-      this.end = moment.tz(endTime.date, 'America/New_York').add(1, 'm').unix()
+      this.end = moment
+        .tz(endTime.date, 'America/New_York')
+        .add(1, 'm')
+        .unix()
       this.minutesRemaining = Math.floor((this.end - this.now) / 60)
       let diffString = convertMinsToHrsMins()
       countdownMessage = `Ending in ${diffString}`
@@ -64,14 +84,12 @@ class Countdown extends Component {
       clearInterval(this.intervalHandle)
     }
   }
-  render () {
-    const {type} = this.props
+  render() {
+    const { type } = this.props
     if (type === 'ended' || type === 'cancelled') return null
-    const {countdownMessage} = this.state
+    const { countdownMessage } = this.state
     console.log('countdownMessage', countdownMessage)
-    return (
-      <Text style={styles.timer}>{countdownMessage}</Text>
-    )
+    return <Text style={styles.timer}>{countdownMessage}</Text>
   }
 }
 
@@ -82,18 +100,17 @@ Countdown.propTypes = {
 }
 
 class BookingDetail extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
-    this.state = {
-    }
+    this.state = {}
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onUnselectRide()
   }
-  componentDidUpdate (prevProps) {
-    const {error, requestPending} = this.props
+  componentDidUpdate(prevProps) {
+    const { error, requestPending } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error)Alert.alert('Error', error)
+      if (error) Alert.alert('Error', error)
     }
   }
   onSubmitReceiptPress = () => {
@@ -101,22 +118,21 @@ class BookingDetail extends Component {
   }
 
   onButtonPress = () => {
-    // this.props.navigation.navigate(RideLicenseCamera)
-    const {onUnlockRide, ride = {}} = this.props
+    const { ride = {} } = this.props
     if (ride.status === 'driving') {
-      this.props.navigation.navigate(RideEnd)
+      this.props.navigation.navigate(RideEnd, { isEnd: true })
     } else if (ride.status === 'ended') {
       this.props.onSelectCarForBooking(ride.car.id)
       this.props.navigation.navigate(NewBookingDetails)
     } else {
-      onUnlockRide({carId: ride.id})
+      this.props.navigation.navigate(RideEnd, { isEnd: false })
     }
   }
 
   onHelpPress = () => {
     this.props.navigation.navigate(RideHelp)
   }
-  onMapPress = (locationType) => {
+  onMapPress = locationType => {
     let geo = {}
     const {
       pickup_location_lat: pickupLat,
@@ -127,12 +143,12 @@ class BookingDetail extends Component {
     geo.lat = locationType === 'pickup' ? pickupLat : returnLat
     geo.lon = locationType === 'pickup' ? pickupLon : returnLon
 
-    this.props.navigation.navigate(CarLocation, {geo})
+    this.props.navigation.navigate(CarLocation, { geo })
   }
 
   isMoreThan30Minutes = () => {
-    let {ride} = this.props
-    const {booking_starting_at: bookindStartingAt} = ride
+    let { ride } = this.props
+    const { booking_starting_at: bookindStartingAt } = ride
     let date = moment.tz(bookindStartingAt.object.date, 'America/New_York')
     let now = moment().tz('America/New_York')
 
@@ -143,45 +159,41 @@ class BookingDetail extends Component {
   }
 
   renderEndedRideDetails = () => {
-    const {ride: {ended_report: report}} = this.props
+    const {
+      ride: { ended_report: report }
+    } = this.props
     return (
       <View style={styles.endedRideDetails}>
-        <SectionHeader title='RETURN CHECK' />
+        <SectionHeader title="RETURN CHECK" />
         <Section>
-          <SectionHeader style={styles.sectionHeader} title='Car is not damaged' />
+          <SectionHeader
+            style={styles.sectionHeader}
+            title="Car is not damaged"
+          />
           <SectionContent style={styles.photoList}>
             <View style={styles.photoBlock}>
               <Text style={styles.photoLabel}>Front</Text>
-              <Photo
-                imageUri={report.photo_front_s3_link}
-                touchable={false}
-              />
+              <Photo imageUri={report.photo_front_s3_link} touchable={false} />
             </View>
             <View style={styles.photoBlock}>
               <Text style={styles.photoLabel}>Back</Text>
-              <Photo
-                imageUri={report.photo_back_s3_link}
-                touchable={false}
-              />
+              <Photo imageUri={report.photo_back_s3_link} touchable={false} />
             </View>
             <View style={styles.photoBlock}>
               <Text style={styles.photoLabel}>Right side</Text>
-              <Photo
-                imageUri={report.photo_right_s3_link}
-                touchable={false}
-              />
+              <Photo imageUri={report.photo_right_s3_link} touchable={false} />
             </View>
             <View style={styles.photoBlock}>
               <Text style={styles.photoLabel}>Left side</Text>
-              <Photo
-                imageUri={report.photo_left_s3_link}
-                touchable={false}
-              />
+              <Photo imageUri={report.photo_left_s3_link} touchable={false} />
             </View>
           </SectionContent>
         </Section>
         <Section>
-          <SectionHeader style={styles.sectionHeader} title='Gas tank is full' />
+          <SectionHeader
+            style={styles.sectionHeader}
+            title="Gas tank is full"
+          />
           <SectionContent>
             <View style={styles.photoBlock}>
               <Text style={styles.photoLabel}>Gas tank indicator</Text>
@@ -196,8 +208,8 @@ class BookingDetail extends Component {
     )
   }
 
-  render () {
-    const {ride} = this.props
+  render() {
+    const { ride } = this.props
     console.log('ride', ride)
     let buttonDisabled = true
     let buttonText = 'UNLOCK CAR'
@@ -207,7 +219,9 @@ class BookingDetail extends Component {
     } else if (ride.status === 'ended' || ride.status === 'canceled') {
       buttonText = 'BOOK AGAIN'
       buttonDisabled = false
-    } else if (ride.status === 'pending' && !this.isMoreThan30Minutes()) buttonDisabled = false
+    } else if (ride.status === 'pending' && !this.isMoreThan30Minutes()) {
+      buttonDisabled = false
+    }
     if (!ride) return null
     const {
       booking_starting_at: bookindStartingAt,
@@ -229,85 +243,70 @@ class BookingDetail extends Component {
       plate = ''
     } = car
 
-    let duration = moment(bookindEndingAt.object.date).diff(moment(bookindStartingAt.object.date), 'hours') + 1
+    let duration =
+      moment(bookindEndingAt.object.date).diff(
+        moment(bookindStartingAt.object.date),
+        'hours'
+      ) + 1
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         <View>
           <View style={styles.carImageContainer}>
             <CarImage imageUri={image} />
           </View>
           <Section>
-            <SectionHeader title='VEHICLE' />
-            <SectionContent style={{flexDirection: 'column'}}>
+            <SectionHeader title="VEHICLE" />
+            <SectionContent style={{ flexDirection: 'column' }}>
               <View>
                 <View style={styles.row}>
-                  <View style={{flex: 1}}>
-                    <Detail
-                      label='Car Maker'
-                      text={manufacturer}
-                    />
+                  <View style={{ flex: 1 }}>
+                    <Detail label="Car Maker" text={manufacturer} />
                   </View>
-                  <View style={{flex: 1}}>
-                    <Detail
-                      label='Model'
-                      text={model}
-                    />
+                  <View style={{ flex: 1 }}>
+                    <Detail label="Model" text={model} />
                   </View>
                 </View>
-                <View style={[styles.row, {marginVertical: 16}]}>
-                  <View style={{flex: 1}}>
-                    <Detail
-                      label='Color'
-                      text={color}
-                    />
+                <View style={[styles.row, { marginVertical: 16 }]}>
+                  <View style={{ flex: 1 }}>
+                    <Detail label="Color" text={color} />
                   </View>
-                  <View style={{flex: 1}}>
-                    <Detail
-                      label='Year'
-                      text={year.toString()}
-                    />
+                  <View style={{ flex: 1 }}>
+                    <Detail label="Year" text={year.toString()} />
                   </View>
                 </View>
-                <Detail
-                  label='Plate'
-                  text={plate}
-                />
+                <Detail label="Plate" text={plate} />
               </View>
             </SectionContent>
           </Section>
           <Section>
-            <SectionHeader title='SCHEDULE' />
-            <SectionContent style={{flexDirection: 'column'}}>
+            <SectionHeader title="SCHEDULE" />
+            <SectionContent style={{ flexDirection: 'column' }}>
               <View>
-                <View style={{marginBottom: 16}}>
+                <View style={{ marginBottom: 16 }}>
                   <View style={[styles.row]}>
-                    <View style={{flex: 1}}>
+                    <View style={{ flex: 1 }}>
                       <Detail
-                        label='Start'
+                        label="Start"
                         text={bookindStartingAt.formatted}
                       />
                     </View>
-                    <View style={{flex: 1}}>
-                      <Detail
-                        label='End'
-                        text={bookindEndingAt.formatted}
-                      />
+                    <View style={{ flex: 1 }}>
+                      <Detail label="End" text={bookindEndingAt.formatted} />
                     </View>
                   </View>
-                  <Countdown endTime={bookindEndingAt.object} startTime={bookindStartingAt.object} type={ride.status} />
+                  <Countdown
+                    endTime={bookindEndingAt.object}
+                    startTime={bookindStartingAt.object}
+                    type={ride.status}
+                  />
                 </View>
-                <Detail
-                  label='Total'
-                  text={`${duration} hours`}
-                />
+                <Detail label="Total" text={`${duration} hours`} />
               </View>
             </SectionContent>
           </Section>
           <Section>
-            <SectionHeader title='PICKUP' />
-            <SectionContent style={{flexDirection: 'column'}}>
+            <SectionHeader title="PICKUP" />
+            <SectionContent style={{ flexDirection: 'column' }}>
               <View style={styles.map}>
                 <MapView
                   initialRegion={{
@@ -336,14 +335,14 @@ class BookingDetail extends Component {
             </SectionContent>
           </Section>
           <Section>
-            <SectionHeader title='RETURN' />
-            <SectionContent style={{flexDirection: 'column'}}>
+            <SectionHeader title="RETURN" />
+            <SectionContent style={{ flexDirection: 'column' }}>
               <View style={styles.map}>
                 <MapView
                   initialRegion={{
                     latitude: returnLat,
                     longitude: returnLon,
-                    latitudeDelta: 0.0010,
+                    latitudeDelta: 0.001,
                     longitudeDelta: 0.001
                   }}
                   liteMode
@@ -365,28 +364,31 @@ class BookingDetail extends Component {
               </TouchableOpacity>
             </SectionContent>
           </Section>
-          {
-            (ride.status === 'pending' || ride.status === 'driving') && (
-              <React.Fragment>
-                <Section>
-                  <SectionHeader title='DO YOU NEED HELP?' />
-                  <TouchableOpacity style={styles.linkButton} onPress={this.onHelpPress}>
-                    <Text style={styles.linkButtonText}>Open help center</Text>
-                  </TouchableOpacity>
-                </Section>
-                <Section style={{borderBottomWidth: 0}}>
-                  <SectionHeader title='RECEIPT' />
-                  <TouchableOpacity style={styles.linkButton} onPress={this.onSubmitReceiptPress}>
-                    <Text style={styles.linkButtonText}>Submit expense receipt</Text>
-                  </TouchableOpacity>
-                </Section>
-
-              </React.Fragment>
-            )
-          }
-          {ride.status === 'ended' && (
-            this.renderEndedRideDetails()
+          {(ride.status === 'pending' || ride.status === 'driving') && (
+            <React.Fragment>
+              <Section>
+                <SectionHeader title="DO YOU NEED HELP?" />
+                <TouchableOpacity
+                  style={styles.linkButton}
+                  onPress={this.onHelpPress}
+                >
+                  <Text style={styles.linkButtonText}>Open help center</Text>
+                </TouchableOpacity>
+              </Section>
+              <Section style={{ borderBottomWidth: 0 }}>
+                <SectionHeader title="RECEIPT" />
+                <TouchableOpacity
+                  style={styles.linkButton}
+                  onPress={this.onSubmitReceiptPress}
+                >
+                  <Text style={styles.linkButtonText}>
+                    Submit expense receipt
+                  </Text>
+                </TouchableOpacity>
+              </Section>
+            </React.Fragment>
           )}
+          {ride.status === 'ended' && this.renderEndedRideDetails()}
         </View>
         <Button
           containerStyle={styles.button}
@@ -395,7 +397,10 @@ class BookingDetail extends Component {
           onPress={this.onButtonPress}
         />
         {ride.status === 'pending' && (
-          <Text style={styles.lockedText}>Unlock is available 30 minutes before{'\n'} scheduled start of the ride</Text>
+          <Text style={styles.lockedText}>
+            Unlock is available 30 minutes before
+            {'\n'} scheduled start of the ride
+          </Text>
         )}
         <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
@@ -409,7 +414,7 @@ BookingDetail.propTypes = {
   requestPending: PropTypes.bool,
   ride: PropTypes.object,
   onSelectCarForBooking: PropTypes.func,
-  onUnlockRide: PropTypes.func,
+  // onUnlockRide: PropTypes.func,
   onUnselectRide: PropTypes.func
 }
 

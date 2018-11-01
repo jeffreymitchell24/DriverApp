@@ -15,7 +15,8 @@ import {
   SEND_LATE_FOR_RIDE_NOTIFICATION,
   SUBMIT_RECEIPT,
   HELP_RIDE_DAMAGED,
-  HELP_RIDE_MALFUNCTIONED
+  HELP_RIDE_MALFUNCTIONED,
+  START_RIDE
 } from 'store/actions/bookings'
 
 function * fetchUserBookings (action) {
@@ -131,25 +132,53 @@ function * rideCancel ({payload}) {
   }
 }
 
-async function transformLicenses ({carPhotos, gasTankPhotos}) {
+async function transformLicenses ({carPhotos, gasTankPhotos,mileagePhotos}) {
   let compressed = {}
   compressed['car_front_photo'] = await toImageFile(carPhotos[0])
   compressed['car_back_photo'] = await toImageFile(carPhotos[1])
   compressed['car_right_photo'] = await toImageFile(carPhotos[2])
   compressed['car_left_photo'] = await toImageFile(carPhotos[3])
   compressed['gas_tank_photo'] = await toImageFile(gasTankPhotos[0])
+  compressed['mileage_photo'] = await toImageFile(mileagePhotos[0])
+
   return compressed
+}
+
+function * rideStartFlow () {
+  yield takeLatest(START_RIDE.REQUEST, checkUserStatusWrapper, rideStart)
+}
+function * rideStart () {
+  const {carId: id, data: {carPhotos, gasTankPhotos, mileagePhotos, notes}} = payload
+  let state = yield select()
+  // let {token} = state.auth
+  try {
+    // let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos, mileagePhotos})
+    // let query = {
+    //   ...rideEndPhotos
+    // }
+    // if (notes) query.notes = notes
+    // console.log('query', query)
+    // let data = Api.toFormData(query)
+    // console.log('data', data)
+    // let response = yield call(Api.endRide, {id, data, token})
+    // console.log('response', response)
+    yield put({type: START_RIDE.SUCCESS, payload: {}})
+  } catch (error) {
+    // console.log('error response', error.response)
+    // console.log('error message', error.message)
+    // yield put({type: END_RIDE.FAILURE, payload: error.response.data.error.message})
+  }
 }
 
 function * rideCancelFlow () {
   yield takeLatest(CANCEL_RIDE.REQUEST, checkUserStatusWrapper, rideCancel)
 }
 function * rideEnd ({payload}) {
-  const {carId: id, data: {carPhotos, gasTankPhotos, notes}} = payload
+  const {carId: id, data: {carPhotos, gasTankPhotos, mileagePhotos, notes}} = payload
   let state = yield select()
   let {token} = state.auth
   try {
-    let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos})
+    let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos, mileagePhotos})
     let query = {
       ...rideEndPhotos
     }
@@ -316,5 +345,6 @@ export default [
   rideLateFlow,
   submitRideReceiptFlow,
   rideEndFlow,
-  sendRideLateNotificationFlow
+  sendRideLateNotificationFlow,
+  rideStartFlow
 ]

@@ -107,7 +107,7 @@ export const Root = createStackNavigator(
     RideEnd: {
       screen: RideEnd,
       navigationOptions: {
-        title: 'End ride',
+        // title: 'End ride',
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions,
