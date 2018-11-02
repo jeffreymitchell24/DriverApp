@@ -41,6 +41,7 @@ class AvailableBookings extends PureComponent {
         bookingEnd={moment(car['booking_available_to'], 'HH:mm:ss')}
         bookingStart={moment(car['booking_available_from'], 'HH:mm:ss')}
         extraDetail={`Available ${availability}`}
+        isRecurring={false}
         onPress={this.onBookingPress}
       />
     )

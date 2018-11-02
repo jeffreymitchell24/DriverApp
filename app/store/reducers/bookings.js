@@ -13,7 +13,7 @@ import {
   END_RIDE,
   RESET_RIDE_CANCEL_ERROR,
   SEND_LATE_FOR_RIDE_DETAILS,
-  SEND_LATE_FOR_RIDE_NOTIFICATION,
+  // SEND_LATE_FOR_RIDE_NOTIFICATION,
   HELP_RIDE_DAMAGED,
   HELP_RIDE_MALFUNCTIONED,
   SUBMIT_RECEIPT
@@ -21,7 +21,11 @@ import {
 
 const initialState = {
   pending: false,
-  upcoming: [],
+  upcoming: {
+    all: [],
+    oneTime: [],
+    recurring: []
+  },
   history: [],
   fetchError: null,
   cars: [],
@@ -53,8 +57,7 @@ const handlers = {
     return {
       ...state,
       pending: false,
-      upcoming: payload.upcoming,
-      history: payload.history
+      ...payload
     }
   },
   [FETCH_USER_BOOKINGS.FAILURE]: (state, { payload }) => {
@@ -156,7 +159,9 @@ const handlers = {
   [CHECK_LICENSE.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      upcoming: state.upcoming.map(book => {
+        return payload.id === book.id ? payload : book
+      }),
       selectedRide: payload,
       licenseChecked: true,
       licenseCheckPending: false
@@ -199,28 +204,36 @@ const handlers = {
   [SEND_LATE_FOR_RIDE_DETAILS.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      upcoming: state.upcoming.map(book => {
+        return payload.id === book.id ? payload : book
+      }),
       selectedRide: payload
     }
   },
   [HELP_RIDE_DAMAGED.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      upcoming: state.upcoming.map(book => {
+        return payload.id === book.id ? payload : book
+      }),
       selectedRide: payload
     }
   },
   [HELP_RIDE_MALFUNCTIONED.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      upcoming: state.upcoming.map(book => {
+        return payload.id === book.id ? payload : book
+      }),
       selectedRide: payload
     }
   },
   [SUBMIT_RECEIPT.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => { return payload.id === book.id ? payload : book }),
+      upcoming: state.upcoming.map(book => {
+        return payload.id === book.id ? payload : book
+      }),
       selectedRide: payload
     }
   },

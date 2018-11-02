@@ -16,8 +16,13 @@ import ReceiptCamera from 'components/screens/ReceiptSubmit/ReceiptCamera'
 import ReceiptGallery from 'components/screens/ReceiptSubmit/ReceiptGallery'
 import ReceiptPreview from 'components/screens/ReceiptSubmit/ReceiptPreview'
 
-import { NewBookingStack, ProfileStack, HelpCenterStack, AuthStack } from './stackNavigation'
-import {HomeTabStack} from './tabNavigation'
+import {
+  NewBookingStack,
+  ProfileStack,
+  HelpCenterStack,
+  AuthStack
+} from './stackNavigation'
+import { HomeTabStack } from './tabNavigation'
 
 let navigationOptions = {
   headerStyle: {
@@ -30,7 +35,7 @@ let navigationOptions = {
     fontWeight: 'normal',
     color: '#343A40'
   },
-  headerBackImage: (<NavBackImage />)
+  headerBackImage: <NavBackImage />
 }
 
 export const Root = createStackNavigator(
@@ -72,9 +77,8 @@ export const Root = createStackNavigator(
         headerTitle: null,
         headerBackTitle: null,
         ...navigationOptions,
-        headerLeftContainerStyle: {
-          paddingLeft: 22
-        }
+        headerBackImage: <NavBackImage short />,
+        headerLeftContainerStyle: {}
       }
     },
     CarLocation: {
@@ -187,14 +191,19 @@ export const Root = createStackNavigator(
       let isBack = false
       let backRoute = null
       if (fromTransitionProps) {
-        isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
+        isBack =
+          fromTransitionProps.navigation.state.index >=
+          toTransitionProps.navigation.state.index
         backRoute = fromTransitionProps.scene.route.routeName
       }
       const route = toTransitionProps.scene.route
-      if (route.routeName === 'NewBooking' || (backRoute === 'NewBooking' && isBack)) {
-        return {screenInterpolator: CardStackStyleInterpolator.forVertical}
+      if (
+        route.routeName === 'NewBooking' ||
+        (backRoute === 'NewBooking' && isBack)
+      ) {
+        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
       }
-      return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+      return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
     }
   }
 )

@@ -86,7 +86,7 @@ class NewBookingDetails extends PureComponent {
       const { car } = carData
       console.log('car', car)
       this.props.navigation.setParams({
-        carName: `${car.manufacturer} ${car.model}`
+        carName: `${car.manufacturer.name} ${car.model}`
       })
     }
   }
@@ -97,7 +97,7 @@ class NewBookingDetails extends PureComponent {
       if (!bookingError) {
         const { manufacturer, model } = this.props.car.car
         let bookingData = {
-          car: `${manufacturer} ${model}`,
+          car: `${manufacturer.name} ${model}`,
           startDate: moment
             .unix(this.props.startDate.timestamp)
             .tz('America/New_York')
@@ -122,7 +122,7 @@ class NewBookingDetails extends PureComponent {
         const { car } = carData
 
         navigation.setParams({
-          carName: `${car.manufacturer} ${car.model}`
+          carName: `${car.manufacturer.name} ${car.model}`
         })
       }
     }
@@ -212,7 +212,7 @@ class NewBookingDetails extends PureComponent {
       full_pickup_location: pickupLocation,
       full_return_location: returnLocation,
       plate,
-      manufacturer = '',
+      manufacturer = {},
       model = '',
       color = '',
       year = ''
@@ -235,7 +235,7 @@ class NewBookingDetails extends PureComponent {
                   <View style={{ marginBottom: 16 }}>
                     <BookingDetail
                       label="CAR"
-                      text={`${manufacturer} ${model}, ${color}, ${year}`}
+                      text={`${manufacturer.name} ${model}, ${color}, ${year}`}
                     />
                   </View>
                 </View>

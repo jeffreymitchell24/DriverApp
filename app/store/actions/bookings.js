@@ -1,9 +1,10 @@
 import { createAsyncAction } from 'helpers/redux'
 
 export const FETCH_USER_BOOKINGS = createAsyncAction('FETCH_USER_BOOKINGS')
-export const fetchUserBookings = () => {
+export const fetchUserBookings = type => {
   return {
-    type: FETCH_USER_BOOKINGS.REQUEST
+    type: FETCH_USER_BOOKINGS.REQUEST,
+    payload: type
   }
 }
 

@@ -14,6 +14,7 @@
     "react/sort-prop-types": [2, { "callbacksLast": true }],
     "space-before-function-paren": "off",
     "jsx-quotes": "off",
-    "space-in-parens": "off"
+    "space-in-parens": "off",
+    "generator-star-spacing": "off"
   }
 }

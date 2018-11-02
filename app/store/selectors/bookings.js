@@ -1,8 +1,17 @@
-
 import R from 'ramda'
 
 // Bookings
-export const getUpcomingBookings = R.path(['bookings', 'upcoming'])
+export const getUpcomingAllBookings = R.path(['bookings', 'upcoming', 'all'])
+export const getUpcomingOneTimeBookings = R.path([
+  'bookings',
+  'upcoming',
+  'oneTime'
+])
+export const getUpcomingRecurringBookings = R.path([
+  'bookings',
+  'upcoming',
+  'recurring'
+])
 export const getBookingsHistory = R.path(['bookings', 'history'])
 export const getFetchingStatus = R.path(['bookings', 'pending'])
 export const getFetchError = R.path(['bookings', 'fetchError'])
@@ -18,10 +27,16 @@ export const getBookingRequestError = R.path(['bookings', 'bookCarError'])
 
 // Ride
 export const getSelectedRide = R.path(['bookings', 'selectedRide'])
-export const getLicenseCheckRequestStatus = R.path(['bookings', 'licenseCheckPending'])
+export const getLicenseCheckRequestStatus = R.path([
+  'bookings',
+  'licenseCheckPending'
+])
 export const getLicenseCheckError = R.path(['bookings', 'licenseCheckError'])
 export const getLicenseCheckStatus = R.path(['bookings', 'licenseChecked'])
-export const getRideCancelRequestStatus = R.path(['bookings', 'rideCancelPending'])
+export const getRideCancelRequestStatus = R.path([
+  'bookings',
+  'rideCancelPending'
+])
 export const getRideCancelError = R.path(['bookings', 'rideCancelError'])
 export const getRideEndRequestStatus = R.path(['bookings', 'rideEndPending'])
 export const getRideEndError = R.path(['bookings', 'rideEndError'])

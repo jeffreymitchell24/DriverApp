@@ -1,9 +1,9 @@
 import React from 'react'
-import {BookingCard} from '../BookingCard'
+import { BookingCard } from '../BookingCard'
 import moment from 'moment-timezone'
 import PropTypes from 'prop-types'
 
-const HistoryBookingCard = ({booking, onPress}) => {
+const HistoryBookingCard = ({ booking, onPress }) => {
   const onBookingPress = () => {
     onPress(booking)
   }
@@ -12,7 +12,7 @@ const HistoryBookingCard = ({booking, onPress}) => {
       booking={booking.car}
       bookingEnd={booking['booking_ending_at'].formatted}
       bookingStart={booking['booking_starting_at'].formatted}
-      extraDetail={`Booked ${moment.tz(booking['booking_ending_at'].object.date, 'America/New_York').fromNow()}`}
+      isRecurring={booking['is_recurring']}
       onPress={onBookingPress}
     />
   )
@@ -27,4 +27,4 @@ HistoryBookingCard.defaultProps = {
   onPress: () => {}
 }
 
-export {HistoryBookingCard}
+export { HistoryBookingCard }

@@ -236,7 +236,7 @@ class BookingDetail extends Component {
       return_location_lon: returnLon,
       full_pickup_location: pickupAddress,
       full_return_location: returnAddress,
-      manufacturer = '',
+      manufacturer = {},
       model = '',
       color = '',
       year = '',
@@ -260,7 +260,7 @@ class BookingDetail extends Component {
               <View>
                 <View style={styles.row}>
                   <View style={{ flex: 1 }}>
-                    <Detail label="Car Maker" text={manufacturer} />
+                    <Detail label="Car Maker" text={manufacturer.name} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Detail label="Model" text={model} />
