@@ -50,8 +50,7 @@ export default StyleSheet.create({
     height: 6,
     backgroundColor: colors.white
   },
-  timeSlotsListContainer: {
-  },
+  timeSlotsListContainer: {},
 
   timeSlot: {
     backgroundColor: colors.gray50,
@@ -75,5 +74,11 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+
+  mapButtonText: {
+    fontSize: 13,
+    fontFamily: 'SFProText-Regular',
+    color: colors.red
   }
 })

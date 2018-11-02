@@ -23,11 +23,17 @@ export default StyleSheet.create({
   button: {
     marginTop: metrics.contentMargin
   },
-
   spinnerContainer: {
     flex: 1,
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+
+  sectionTitle: {
+    fontSize: 13,
+    fontFamily: 'SFProText-Regular',
+    color: '#495057',
+    backgroundColor: colors.white
   }
 })

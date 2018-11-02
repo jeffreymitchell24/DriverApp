@@ -4,9 +4,12 @@ import { colors, metrics } from 'theme'
 
 export default StyleSheet.create({
   cardContainer: {
-    borderBottomWidth: 2,
-    borderBottomColor: colors.gray50,
-    paddingTop: metrics.contentMarginSmall,
+    borderWidth: 1,
+    borderColor: colors.gray50,
+    borderRadius: 5,
+    marginTop: metrics.contentMarginSmall / 2,
+    marginBottom: metrics.contentMarginSmall / 2,
+    padding: 8,
 
     flexDirection: 'row',
     alignItems: 'center'
@@ -24,12 +27,11 @@ export default StyleSheet.create({
     width: '100%'
   },
   cardContent: {
-    paddingVertical: metrics.contentMarginMiddle
   },
   cardTitle: {
-    color: colors.red,
-    fontFamily: 'SFProText-Bold',
-    fontSize: metrics.fontSizeBig,
+    color: colors.black,
+    fontFamily: 'SFProText-Regular',
+    fontSize: 15,
     marginBottom: 4
   },
   detailText: {
@@ -44,7 +46,7 @@ export default StyleSheet.create({
   },
   recurringContainer: {
     position: 'absolute',
-    top: 12,
-    right: 12
+    top: -2,
+    right: 4
   }
 })

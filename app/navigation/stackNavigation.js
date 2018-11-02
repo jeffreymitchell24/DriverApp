@@ -206,7 +206,7 @@ export const NewBookingStack = createStackNavigator({
   NewBookingDetails: {
     screen: NewBookingDetails,
     navigationOptions: {
-      title: 'New booking',
+      // title: 'New booking',
       headerTitle: null,
       headerBackTitle: null,
       headerBackImage: (<NavBackImage />),

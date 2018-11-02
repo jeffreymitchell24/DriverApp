@@ -1,8 +1,8 @@
 import { take, put, call, select, all, fork } from 'redux-saga/effects'
-import {takeLatest} from 'helpers/saga'
+import { takeLatest } from 'helpers/saga'
 import * as Api from 'helpers/api'
-import {toImageFile} from 'helpers/image'
-import {checkUserStatusWrapper} from './auth'
+import { toImageFile } from 'helpers/image'
+import { checkUserStatusWrapper } from './auth'
 import {
   FETCH_USER_BOOKINGS,
   FETCH_AVAILABLE_CARS,
@@ -15,141 +15,242 @@ import {
   SEND_LATE_FOR_RIDE_NOTIFICATION,
   SUBMIT_RECEIPT,
   HELP_RIDE_DAMAGED,
-  HELP_RIDE_MALFUNCTIONED
+  HELP_RIDE_MALFUNCTIONED,
+  START_RIDE
 } from 'store/actions/bookings'
 
-function * fetchUserBookings (action) {
+function* fetchUserBookings(action) {
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let [upcoming, history] = yield all([
-      Api.fetchUpcomingBookings(token),
-      Api.fetchBookingsHistory(token)
-    ])
-    console.log('Booking Response', upcoming, history)
-    yield put({type: FETCH_USER_BOOKINGS.SUCCESS, payload: {upcoming: upcoming.bookings, history: history.bookings}})
+    const bookingsType = action.payload
+
+    let payload = {}
+
+    if (bookingsType === 'upcoming') {
+      const [allUpcoming, oneTime, recurring] = yield all([
+        Api.fetchUpcomingBookings(token, 'all'),
+        Api.fetchUpcomingBookings(token, 'one-time'),
+        Api.fetchUpcomingBookings(token, 'recurring')
+      ])
+      console.log([allUpcoming, oneTime, recurring])
+      payload = {
+        upcoming: {
+          all: allUpcoming.bookings,
+          oneTime: oneTime.bookings,
+          recurring: recurring.bookings
+        }
+      }
+    } else {
+      const history = yield Api.fetchBookingsHistory(token)
+
+      payload = {
+        history: history.bookings
+      }
+    }
+
+    console.log('Booking Response', payload)
+    yield put({
+      type: FETCH_USER_BOOKINGS.SUCCESS,
+      payload
+    })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: FETCH_USER_BOOKINGS.FAILURE, payload: error.response.data.message})
+    yield put({
+      type: FETCH_USER_BOOKINGS.FAILURE,
+      payload: error.response.data.message
+    })
   }
 }
 
-function * fetchUserBookingsFlow () {
-  yield takeLatest(FETCH_USER_BOOKINGS.REQUEST, checkUserStatusWrapper, fetchUserBookings)
+function* fetchUserBookingsFlow() {
+  yield takeLatest(
+    FETCH_USER_BOOKINGS.REQUEST,
+    checkUserStatusWrapper,
+    fetchUserBookings
+  )
 }
 
-function * fetchAvailableCars () {
+function* fetchAvailableCars() {
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
     let response = yield call(Api.fetchAvailableCars, token)
-    yield put({type: FETCH_AVAILABLE_CARS.SUCCESS, payload: response})
+    yield put({ type: FETCH_AVAILABLE_CARS.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: FETCH_AVAILABLE_CARS.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: FETCH_AVAILABLE_CARS.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * fetchAvailableCarsFlow () {
-  yield takeLatest(FETCH_AVAILABLE_CARS.REQUEST, checkUserStatusWrapper, fetchAvailableCars)
+function* fetchAvailableCarsFlow() {
+  yield takeLatest(
+    FETCH_AVAILABLE_CARS.REQUEST,
+    checkUserStatusWrapper,
+    fetchAvailableCars
+  )
 }
 
-function * fetchCarDetails ({payload: id}) {
+function* fetchCarDetails({ payload: id }) {
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.fetchCarDetails, {token, id})
-    yield put({type: FETCH_SELECTED_CAR.SUCCESS, payload: response})
+    let response = yield call(Api.fetchCarDetails, { token, id })
+    yield put({ type: FETCH_SELECTED_CAR.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: FETCH_SELECTED_CAR.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: FETCH_SELECTED_CAR.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * fetchCarDetailsFlow () {
-  yield takeLatest(FETCH_SELECTED_CAR.REQUEST, checkUserStatusWrapper, fetchCarDetails)
+function* fetchCarDetailsFlow() {
+  yield takeLatest(
+    FETCH_SELECTED_CAR.REQUEST,
+    checkUserStatusWrapper,
+    fetchCarDetails
+  )
 }
 
-function * bookCar ({payload}) {
-  let {id, timeStamps} = payload
+function* bookCar({ payload }) {
+  let { id, timeStamps } = payload
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.bookCar, {token, id, timeStamps})
+    let response = yield call(Api.bookCar, { token, id, timeStamps })
     console.log('response', response)
-    yield put({type: BOOK_CAR.SUCCESS, payload: {booking: response.booking}})
+    yield put({
+      type: BOOK_CAR.SUCCESS,
+      payload: { booking: response.booking }
+    })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: BOOK_CAR.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: BOOK_CAR.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * bookCarFlow () {
+function* bookCarFlow() {
   while (true) {
     let action = yield take(BOOK_CAR.REQUEST)
     yield fork(checkUserStatusWrapper, () => bookCar(action))
   }
 }
 
-function * checkRideLicense ({payload}) {
-  const {carId: id} = payload // photoUri
+function* checkRideLicense({ payload }) {
+  const { carId: id } = payload // photoUri
   // let imageFile = yield toImageFile(photoUri)
   // let query = {photo: imageFile}
   // let data = Api.toFormData(query)
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.checkRideLicense, {id, token}) // data
+    let response = yield call(Api.checkRideLicense, { id, token }) // data
     console.log('response', response)
-    yield put({type: CHECK_LICENSE.SUCCESS, payload: response})
+    yield put({ type: CHECK_LICENSE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: CHECK_LICENSE.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: CHECK_LICENSE.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * checkRideLicenseFlow () {
-  yield takeLatest(CHECK_LICENSE.REQUEST, checkUserStatusWrapper, checkRideLicense)
+function* checkRideLicenseFlow() {
+  yield takeLatest(
+    CHECK_LICENSE.REQUEST,
+    checkUserStatusWrapper,
+    checkRideLicense
+  )
 }
-function * rideCancel ({payload}) {
-  const {carId: id} = payload
+function* rideCancel({ payload }) {
+  const { carId: id } = payload
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.cancelRide, {id, token})
+    let response = yield call(Api.cancelRide, { id, token })
     console.log('response', response)
-    yield put({type: CANCEL_RIDE.SUCCESS, payload: response})
+    yield put({ type: CANCEL_RIDE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: CANCEL_RIDE.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: CANCEL_RIDE.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-async function transformLicenses ({carPhotos, gasTankPhotos}) {
+async function transformLicenses({ carPhotos, gasTankPhotos, mileagePhotos }) {
   let compressed = {}
   compressed['car_front_photo'] = await toImageFile(carPhotos[0])
   compressed['car_back_photo'] = await toImageFile(carPhotos[1])
   compressed['car_right_photo'] = await toImageFile(carPhotos[2])
   compressed['car_left_photo'] = await toImageFile(carPhotos[3])
   compressed['gas_tank_photo'] = await toImageFile(gasTankPhotos[0])
+  compressed['mileage_photo'] = await toImageFile(mileagePhotos[0])
+
   return compressed
 }
 
-function * rideCancelFlow () {
+function* rideStartFlow() {
+  yield takeLatest(START_RIDE.REQUEST, checkUserStatusWrapper, rideStart)
+}
+function* rideStart() {
+  const {
+    carId: id,
+    data: { carPhotos, gasTankPhotos, mileagePhotos, notes }
+  } = payload
+  let state = yield select()
+  // let {token} = state.auth
+  try {
+    // let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos, mileagePhotos})
+    // let query = {
+    //   ...rideEndPhotos
+    // }
+    // if (notes) query.notes = notes
+    // console.log('query', query)
+    // let data = Api.toFormData(query)
+    // console.log('data', data)
+    // let response = yield call(Api.endRide, {id, data, token})
+    // console.log('response', response)
+    yield put({ type: START_RIDE.SUCCESS, payload: {} })
+  } catch (error) {
+    // console.log('error response', error.response)
+    // console.log('error message', error.message)
+    // yield put({type: END_RIDE.FAILURE, payload: error.response.data.error.message})
+  }
+}
+
+function* rideCancelFlow() {
   yield takeLatest(CANCEL_RIDE.REQUEST, checkUserStatusWrapper, rideCancel)
 }
-function * rideEnd ({payload}) {
-  const {carId: id, data: {carPhotos, gasTankPhotos, notes}} = payload
+function* rideEnd({ payload }) {
+  const {
+    carId: id,
+    data: { carPhotos, gasTankPhotos, mileagePhotos, notes }
+  } = payload
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos})
+    let rideEndPhotos = yield transformLicenses({
+      carPhotos,
+      gasTankPhotos,
+      mileagePhotos
+    })
     let query = {
       ...rideEndPhotos
     }
@@ -157,24 +258,30 @@ function * rideEnd ({payload}) {
     console.log('query', query)
     let data = Api.toFormData(query)
     console.log('data', data)
-    let response = yield call(Api.endRide, {id, data, token})
+    let response = yield call(Api.endRide, { id, data, token })
     console.log('response', response)
-    yield put({type: END_RIDE.SUCCESS, payload: response})
+    yield put({ type: END_RIDE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: END_RIDE.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: END_RIDE.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * rideEndFlow () {
+function* rideEndFlow() {
   yield takeLatest(END_RIDE.REQUEST, checkUserStatusWrapper, rideEnd)
 }
 
-function * rideDamaged ({payload}) {
+function* rideDamaged({ payload }) {
   console.log('payload', payload)
-  const {carId: id, data: {photos, description}} = payload
-  let query = {description}
+  const {
+    carId: id,
+    data: { photos, description }
+  } = payload
+  let query = { description }
   if (photos.length > 0) {
     let transformedPhotos = yield transformPhotoArray(photos)
     query['car_photos'] = transformedPhotos
@@ -183,27 +290,37 @@ function * rideDamaged ({payload}) {
   let data = Api.toFormData(query)
   console.log('data', data)
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.rideDamaged, {id, token, data})
+    let response = yield call(Api.rideDamaged, { id, token, data })
     console.log('response', response)
-    yield put({type: HELP_RIDE_DAMAGED.SUCCESS, payload: response})
+    yield put({ type: HELP_RIDE_DAMAGED.SUCCESS, payload: response })
   } catch (error) {
     console.log('error', error)
     console.log('error.request._response', error.request._response)
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: HELP_RIDE_DAMAGED.FAILURE, payload: (error.response && error.response.data.error.message) || ''})
+    yield put({
+      type: HELP_RIDE_DAMAGED.FAILURE,
+      payload: (error.response && error.response.data.error.message) || ''
+    })
   }
 }
 
-function * rideDamagedFlow () {
-  yield takeLatest(HELP_RIDE_DAMAGED.REQUEST, checkUserStatusWrapper, rideDamaged)
+function* rideDamagedFlow() {
+  yield takeLatest(
+    HELP_RIDE_DAMAGED.REQUEST,
+    checkUserStatusWrapper,
+    rideDamaged
+  )
 }
 
-function * rideMalfunction ({payload}) {
-  const {carId: id, data: {photos, description, plate}} = payload
-  let query = {description, 'license_plate': plate}
+function* rideMalfunction({ payload }) {
+  const {
+    carId: id,
+    data: { photos, description, plate }
+  } = payload
+  let query = { description, license_plate: plate }
   if (photos.length > 0) {
     let transformedPhotos = yield transformPhotoArray(photos)
     query['car_photos'] = transformedPhotos
@@ -211,44 +328,65 @@ function * rideMalfunction ({payload}) {
   console.log('query', query)
   let data = Api.toFormData(query)
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.rideMalfunction, {id, token, data})
+    let response = yield call(Api.rideMalfunction, { id, token, data })
     console.log('response', response)
-    yield put({type: HELP_RIDE_MALFUNCTIONED.SUCCESS, payload: response})
+    yield put({ type: HELP_RIDE_MALFUNCTIONED.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: HELP_RIDE_MALFUNCTIONED.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: HELP_RIDE_MALFUNCTIONED.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * rideMalfunctionFlow () {
-  yield takeLatest(HELP_RIDE_MALFUNCTIONED.REQUEST, checkUserStatusWrapper, rideMalfunction)
+function* rideMalfunctionFlow() {
+  yield takeLatest(
+    HELP_RIDE_MALFUNCTIONED.REQUEST,
+    checkUserStatusWrapper,
+    rideMalfunction
+  )
 }
 
-function * sendRideLateNotification ({payload}) {
-  const {carId: id} = payload
+function* sendRideLateNotification({ payload }) {
+  const { carId: id } = payload
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.rideLateNotification, {id, token})
+    let response = yield call(Api.rideLateNotification, { id, token })
     console.log('response', response)
-    yield put({type: SEND_LATE_FOR_RIDE_NOTIFICATION.SUCCESS, payload: response})
+    yield put({
+      type: SEND_LATE_FOR_RIDE_NOTIFICATION.SUCCESS,
+      payload: response
+    })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * sendRideLateNotificationFlow () {
-  yield takeLatest(SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST, checkUserStatusWrapper, sendRideLateNotification)
+function* sendRideLateNotificationFlow() {
+  yield takeLatest(
+    SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST,
+    checkUserStatusWrapper,
+    sendRideLateNotification
+  )
 }
 
-function * rideLate ({payload}) {
-  const {carId: id, data: {photos, reason, delay}, notificationId} = payload
-  let query = {reason, 'delay_minutes': delay}
+function* rideLate({ payload }) {
+  const {
+    carId: id,
+    data: { photos, reason, delay },
+    notificationId
+  } = payload
+  let query = { reason, delay_minutes: delay }
   if (photos.length > 0) {
     let transformedPhotos = yield transformPhotoArray(photos)
     query['photo'] = transformedPhotos[0]
@@ -256,50 +394,76 @@ function * rideLate ({payload}) {
   console.log('query', query)
   let data = Api.toFormData(query)
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.rideLate, {id, token, data, notificationId})
+    let response = yield call(Api.rideLate, { id, token, data, notificationId })
     console.log('response', response)
-    yield put({type: SEND_LATE_FOR_RIDE_DETAILS.SUCCESS, payload: response})
+    yield put({ type: SEND_LATE_FOR_RIDE_DETAILS.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: SEND_LATE_FOR_RIDE_DETAILS.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: SEND_LATE_FOR_RIDE_DETAILS.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * rideLateFlow () {
-  yield takeLatest(SEND_LATE_FOR_RIDE_DETAILS.REQUEST, checkUserStatusWrapper, rideLate)
+function* rideLateFlow() {
+  yield takeLatest(
+    SEND_LATE_FOR_RIDE_DETAILS.REQUEST,
+    checkUserStatusWrapper,
+    rideLate
+  )
 }
 
-function * submitRideReceipt ({payload}) {
-  const {carId: id, data: {location, title, price, date, time, photo}} = payload
+function* submitRideReceipt({ payload }) {
+  const {
+    carId: id,
+    data: { location, title, price, date, time, photo }
+  } = payload
   let imageFile = yield toImageFile(photo)
-  let query = {location, title, price: +price, 'receipt_date': date, 'receipt_time': time, photo: imageFile}
+  let query = {
+    location,
+    title,
+    price: +price,
+    receipt_date: date,
+    receipt_time: time,
+    photo: imageFile
+  }
   console.log('query', query)
   let data = Api.toFormData(query)
   let state = yield select()
-  let {token} = state.auth
+  let { token } = state.auth
   try {
-    let response = yield call(Api.sendRideReceipt, {id, token, data})
+    let response = yield call(Api.sendRideReceipt, { id, token, data })
     console.log('response', response)
-    yield put({type: SUBMIT_RECEIPT.SUCCESS, payload: response})
+    yield put({ type: SUBMIT_RECEIPT.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
-    yield put({type: SUBMIT_RECEIPT.FAILURE, payload: error.response.data.error.message})
+    yield put({
+      type: SUBMIT_RECEIPT.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 
-function * submitRideReceiptFlow () {
-  yield takeLatest(SUBMIT_RECEIPT.REQUEST, checkUserStatusWrapper, submitRideReceipt)
+function* submitRideReceiptFlow() {
+  yield takeLatest(
+    SUBMIT_RECEIPT.REQUEST,
+    checkUserStatusWrapper,
+    submitRideReceipt
+  )
 }
 
-async function transformPhotoArray (photos) {
-  let transformedPhotos = await Promise.all(photos.map(async (photoUri) => {
-    let imageFile = await toImageFile(photoUri)
-    return imageFile
-  }))
+async function transformPhotoArray(photos) {
+  let transformedPhotos = await Promise.all(
+    photos.map(async photoUri => {
+      let imageFile = await toImageFile(photoUri)
+      return imageFile
+    })
+  )
   console.log('transformedPhotos', transformedPhotos)
   return transformedPhotos
 }
@@ -316,5 +480,6 @@ export default [
   rideLateFlow,
   submitRideReceiptFlow,
   rideEndFlow,
-  sendRideLateNotificationFlow
+  sendRideLateNotificationFlow,
+  rideStartFlow
 ]

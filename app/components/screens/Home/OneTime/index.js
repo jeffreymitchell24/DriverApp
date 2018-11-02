@@ -1,11 +1,15 @@
 import Upcoming from './OneTime'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
-import {getUpcomingBookings, getFetchingStatus, getFetchError} from 'store/selectors'
-import {fetchUserBookings, selectRide} from 'store/actions/bookings'
+import {
+  getUpcomingOneTimeBookings,
+  getFetchingStatus,
+  getFetchError
+} from 'store/selectors'
+import { fetchUserBookings, selectRide } from 'store/actions/bookings'
 
 const selector = createStructuredSelector({
-  bookings: getUpcomingBookings,
+  bookings: getUpcomingOneTimeBookings,
   isFetchingPending: getFetchingStatus,
   fetchError: getFetchError
 })

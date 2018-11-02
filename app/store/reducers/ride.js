@@ -6,13 +6,12 @@ import {
   SELECT_PHOTO
 } from 'store/actions/ride'
 
-import {
-  SUBMIT_RECEIPT
-} from 'store/actions/bookings'
+import { SUBMIT_RECEIPT } from 'store/actions/bookings'
 
 const initialState = {
   carPhotos: [null, null, null, null],
   gasTankPhotos: [null],
+  mileagePhotos: [null],
   selectedPhoto: null,
   receiptPhoto: null,
   receiptSubmitError: null,
@@ -27,7 +26,7 @@ const handlers = {
     }
   },
   [SAVE_RIDE_PHOTO]: (state, { payload }) => {
-    const {type: photoType, index, photoUri} = payload
+    const { type: photoType, index, photoUri } = payload
     if (photoType === 'receiptPhoto') {
       return {
         receiptPhoto: photoUri,

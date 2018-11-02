@@ -3,6 +3,7 @@ module.exports = {
   camera: require('./camera.png'),
   cancel: require('./cancel.png'),
   arrowLeft: require('./arrow-left.png'),
+  arrowLeftShort: require('./arrow-left-short.png'),
   gallery: require('./gallery.png'),
   filter: require('./filter/filter.png'),
   facebook: require('./facebook.png'),

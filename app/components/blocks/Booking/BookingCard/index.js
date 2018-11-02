@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
-import {icons} from 'images'
+import { icons } from 'images'
 import moment from 'moment'
 
 import PropTypes from 'prop-types'
@@ -9,16 +9,22 @@ import styles from './styles'
 
 class BookingCard extends PureComponent {
   onPress = () => {
-    const {booking, onPress} = this.props
+    const { booking, onPress } = this.props
     onPress(booking)
   }
-  render () {
-    const {booking, extraDetail, bookingEnd, bookingStart, isRecurring} = this.props
+  render() {
+    const {
+      booking,
+      extraDetail,
+      bookingEnd,
+      bookingStart,
+      isRecurring
+    } = this.props
     const {
       image_s3_url: image,
       full_pickup_location: pickupLocation,
       full_return_location: returnLocation,
-      manufacturer = '',
+      manufacturer = {},
       model = ''
     } = booking
 
@@ -29,20 +35,32 @@ class BookingCard extends PureComponent {
       <View style={styles.cardContainer}>
         <View style={styles.leftBlock}>
           <TouchableOpacity onPress={this.onPress}>
-            <Image resizeMode={'contain'} source={{uri: image}} style={styles.cardImage} />
+            <Image
+              resizeMode={'contain'}
+              source={{ uri: image }}
+              style={styles.cardImage}
+            />
           </TouchableOpacity>
         </View>
         <View style={styles.rightBlock}>
           <View style={styles.cardContent}>
             <TouchableOpacity onPress={this.onPress}>
-              <Text style={styles.cardTitle}>{`${manufacturer} ${model}`}</Text>
+              <Text style={styles.cardTitle}>{`${
+                manufacturer.name
+              } ${model}`}</Text>
             </TouchableOpacity>
-            <Text style={styles.detailText}>{`${bookingStartTime} –– ${bookingEndTime}`}</Text>
+            <Text
+              style={styles.detailText}
+            >{`${bookingStartTime} –– ${bookingEndTime}`}</Text>
             <Text style={styles.detailText}>Pickup: {pickupLocation}</Text>
             <Text style={styles.detailText}>Dropoff: {returnLocation}</Text>
-            <Text style={styles.extraDetailText}>{extraDetail}</Text>
+       
+              <Text style={styles.extraDetailText}>{extraDetail}</Text>
+            
           </View>
-          {isRecurring && <Image source={icons.recurring} style={styles.recurringContainer} />}
+          {isRecurring && (
+            <Image source={icons.recurring} style={styles.recurringContainer} />
+          )}
         </View>
       </View>
     )
@@ -54,6 +72,7 @@ BookingCard.propTypes = {
   bookingEnd: PropTypes.string,
   bookingStart: PropTypes.string,
   extraDetail: PropTypes.string,
+  isRecurring: PropTypes.bool,
   onPress: PropTypes.func
 }
 
@@ -61,4 +80,4 @@ BookingCard.defaultProps = {
   onPress: () => {}
 }
 
-export {BookingCard}
+export { BookingCard }

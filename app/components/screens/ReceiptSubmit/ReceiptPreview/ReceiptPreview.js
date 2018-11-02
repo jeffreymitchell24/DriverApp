@@ -12,7 +12,7 @@ class ReceiptPreview extends Component {
     const {navigation, onSavePhoto, selectedPhoto} = this.props
     const {type, index} = selectedPhoto
     onSavePhoto({type, index, photoUri})
-    if (type === 'gasTankPhotos' || type === 'carPhotos') navigation.navigate(RideEnd)
+    if (type === 'gasTankPhotos' || type === 'carPhotos' || type === 'mileagePhotos') navigation.navigate(RideEnd)
     else if (type === 'receiptPhoto') navigation.navigate(ReceiptSubmit)
   }
 

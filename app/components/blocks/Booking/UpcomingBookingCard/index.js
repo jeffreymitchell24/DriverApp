@@ -1,25 +1,28 @@
 import React, { PureComponent } from 'react'
-import {BookingCard} from '../BookingCard'
+import { BookingCard } from '../BookingCard'
 import moment from 'moment-timezone'
 import PropTypes from 'prop-types'
 
 class UpcomingBookingCard extends PureComponent {
-  constructor (props) {
+  constructor(props) {
     super(props)
 
-    this.startingAt = moment.tz(props.booking['booking_starting_at'].object.date, 'America/New_York')
+    this.startingAt = moment.tz(
+      props.booking['booking_starting_at'].object.date,
+      'America/New_York'
+    )
 
     this.state = {
       extraDetail: ''
     }
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.getTime()
     this.timer = setInterval(this.getTime, 30000)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     clearInterval(this.timer)
   }
 
@@ -45,7 +48,7 @@ class UpcomingBookingCard extends PureComponent {
     onPress(booking)
   }
 
-  render () {
+  render() {
     const { booking } = this.props
     const { extraDetail } = this.state
 
@@ -55,6 +58,7 @@ class UpcomingBookingCard extends PureComponent {
         bookingEnd={booking['booking_ending_at'].formatted}
         bookingStart={booking['booking_starting_at'].formatted}
         extraDetail={extraDetail}
+        isRecurring={booking['is_recurring']}
         onPress={this.onBookingPress}
       />
     )
@@ -70,4 +74,4 @@ UpcomingBookingCard.defaultProps = {
   onPress: () => {}
 }
 
-export {UpcomingBookingCard}
+export { UpcomingBookingCard }
