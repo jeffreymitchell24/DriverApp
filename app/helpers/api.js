@@ -111,6 +111,9 @@ export const fetchUpcomingBookings = async (token, type) => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
+
+  console.log(config)
+
   let response = await axios.get(`${URL}/api/bookings/upcoming/${type}`, config)
   console.log('fetchUpcomingBookings response', response)
   return response.data.data
@@ -120,6 +123,7 @@ export const fetchBookingsHistory = async token => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
+
   let response = await axios.get(`${URL}/api/bookings/history`, config)
   console.log('fetchBookingsHistory response', response)
   return response.data.data
@@ -129,7 +133,17 @@ export const fetchAvailableCars = async token => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
-  let response = await axios.post(`${URL}/api/cars/available`, config)
+
+  const params = new URLSearchParams()
+  params.append('available_from', '2018-11-05 11:00')
+  params.append('available_to', '2018-11-05 11:00')
+  params.append('categories[0]', '1')
+  params.append('allowed_recurring', '0')
+  params.append('pickup_location_lat', '40.666294')
+  params.append('pickup_location_lon', '-73.959628')
+  params.append('allowed_range_miles', '100')
+
+  let response = await axios.post(`${URL}/api/cars/available`, params, config)
   console.log('fetchAvailableCars response', response)
   return response.data.data
 }
@@ -163,7 +177,11 @@ export const checkRideLicense = async ({ token, id, data }) => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
-  let response = await axios.post(`${URL}/api/bookings/${id}/start`, {}, config)
+  let response = await axios.post(
+    `${URL}/api/bookings/${id}/start`,
+    data || {},
+    config
+  )
   console.log('checkRideLicense response', response)
   return response.data.data
 }

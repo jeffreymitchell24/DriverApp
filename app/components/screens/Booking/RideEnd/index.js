@@ -19,14 +19,14 @@ const selector = createStructuredSelector({
   ride: getSelectedRide,
   carPhotos: getCarPhotos,
   gasTankPhotos: getGasTankPhotos,
-  mileagePhotos: getMileagePhotos,
-  onClearReceiptPhoto: clearReceiptPhoto
+  mileagePhotos: getMileagePhotos
 })
 
 const actions = {
   onUnlockRide: checkLicense,
   onSelectPhoto: selectPhoto,
-  onEndRide: endRide
+  onEndRide: endRide,
+  onClearReceiptPhoto: clearReceiptPhoto
 }
 
 export default connect(

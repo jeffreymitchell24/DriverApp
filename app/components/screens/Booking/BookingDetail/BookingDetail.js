@@ -204,6 +204,18 @@ class BookingDetail extends Component {
             </View>
           </SectionContent>
         </Section>
+        <Section>
+          <SectionHeader style={styles.sectionHeader} title="Mileage" />
+          <SectionContent>
+            <View style={styles.photoBlock}>
+              <Text style={styles.photoLabel}>Mileage</Text>
+              <Photo
+                imageUri={report.photo_mileage_s3_link}
+                touchable={false}
+              />
+            </View>
+          </SectionContent>
+        </Section>
       </View>
     )
   }

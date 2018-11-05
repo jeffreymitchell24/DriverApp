@@ -4,6 +4,7 @@ import { NavButton } from 'components/ui'
 import { Home, NewBookingDetails } from 'navigation/routeNames'
 import { BookingCard } from 'components/blocks'
 import moment from 'moment'
+import _ from 'lodash'
 import PropTypes from 'prop-types'
 import { colors } from 'theme'
 import styles from './styles'
@@ -48,6 +49,7 @@ class AvailableBookings extends PureComponent {
   }
   render() {
     const { isFetchingPending, cars } = this.props
+
     if (isFetchingPending) {
       return (
         <View style={styles.spinnerContainer}>
@@ -55,6 +57,7 @@ class AvailableBookings extends PureComponent {
         </View>
       )
     }
+
     return (
       <View style={styles.container}>
         <FlatList

@@ -137,7 +137,10 @@ const handlers = {
   [BOOK_CAR.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: [...state.upcoming, payload.booking],
+      upcoming: {
+        ...state.upcoming,
+        all: [...state.upcoming, payload.booking]
+      },
       bookCarPending: false
     }
   },
@@ -159,9 +162,17 @@ const handlers = {
   [CHECK_LICENSE.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => {
-        return payload.id === book.id ? payload : book
-      }),
+      upcoming: {
+        all: state.upcoming.all.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        oneTime: state.upcoming.oneTime.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        recurring: state.upcoming.recurring.map(book => {
+          return payload.id === book.id ? payload : book
+        })
+      },
       selectedRide: payload,
       licenseChecked: true,
       licenseCheckPending: false
@@ -184,7 +195,13 @@ const handlers = {
   [CANCEL_RIDE.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.filter(book => book.id !== payload.id),
+      upcoming: {
+        all: state.upcoming.all.filter(book => book.id !== payload.id),
+        oneTime: state.upcoming.oneTime.filter(book => book.id !== payload.id),
+        recurring: state.upcoming.recurring.filter(
+          book => book.id !== payload.id
+        )
+      },
       rideCancelPending: false
     }
   },
@@ -204,36 +221,68 @@ const handlers = {
   [SEND_LATE_FOR_RIDE_DETAILS.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => {
-        return payload.id === book.id ? payload : book
-      }),
+      upcoming: {
+        all: state.upcoming.all.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        oneTime: state.upcoming.oneTime.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        recurring: state.upcoming.recurring.map(book => {
+          return payload.id === book.id ? payload : book
+        })
+      },
       selectedRide: payload
     }
   },
   [HELP_RIDE_DAMAGED.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => {
-        return payload.id === book.id ? payload : book
-      }),
+      upcoming: {
+        all: state.upcoming.all.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        oneTime: state.upcoming.oneTime.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        recurring: state.upcoming.recurring.map(book => {
+          return payload.id === book.id ? payload : book
+        })
+      },
       selectedRide: payload
     }
   },
   [HELP_RIDE_MALFUNCTIONED.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => {
-        return payload.id === book.id ? payload : book
-      }),
+      upcoming: {
+        all: state.upcoming.all.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        oneTime: state.upcoming.oneTime.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        recurring: state.upcoming.recurring.map(book => {
+          return payload.id === book.id ? payload : book
+        })
+      },
       selectedRide: payload
     }
   },
   [SUBMIT_RECEIPT.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.map(book => {
-        return payload.id === book.id ? payload : book
-      }),
+      upcoming: {
+        all: state.upcoming.all.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        oneTime: state.upcoming.oneTime.map(book => {
+          return payload.id === book.id ? payload : book
+        }),
+        recurring: state.upcoming.recurring.map(book => {
+          return payload.id === book.id ? payload : book
+        })
+      },
       selectedRide: payload
     }
   },
@@ -247,7 +296,11 @@ const handlers = {
   [END_RIDE.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
-      upcoming: state.upcoming.filter(book => book.id !== payload.id),
+      upcoming: {
+        all: state.upcoming.all.filter(book => book.id !== payload.id),
+        oneTime: state.upcoming.oneTime.filter(book => book.id !== payload.id),
+        recurring: state.upcoming.recurring.filter(book => book.id !== payload.id)
+      },
       history: [payload, ...state.history],
       selectedRide: payload,
       rideEndPending: false

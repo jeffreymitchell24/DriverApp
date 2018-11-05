@@ -1,11 +1,11 @@
 import React, { Component } from 'react'
 import { CameraView } from 'components/blocks'
 import PropTypes from 'prop-types'
-import {ReceiptPreview, ReceiptGallery} from 'navigation/routeNames'
+import { ReceiptPreview, ReceiptGallery } from 'navigation/routeNames'
 
 class ReceiptCamera extends Component {
-  getCamRef = (ref) => (this.camera = ref)
-  onTakePicture = ({photoUri}) => {
+  getCamRef = ref => (this.camera = ref)
+  onTakePicture = ({ photoUri }) => {
     this.props.navigation.navigate(ReceiptPreview, {
       photoUri
     })
@@ -15,9 +15,10 @@ class ReceiptCamera extends Component {
     this.props.navigation.navigate(ReceiptGallery)
   }
 
-  render () {
+  render() {
     return (
       <CameraView
+        withGallery={false}
         onGalleryPress={this.onGalleryPress}
         onTakePicture={this.onTakePicture}
       />
