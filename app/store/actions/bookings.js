@@ -52,10 +52,10 @@ export const unselectRide = () => {
 }
 
 export const CHECK_LICENSE = createAsyncAction('CHECK_LICENSE')
-export const checkLicense = ({ photoUri, carId }) => {
+export const checkLicense = ({ photoUri, carId, data }) => {
   return {
     type: CHECK_LICENSE.REQUEST,
-    payload: { photoUri, carId }
+    payload: { photoUri, carId, data }
   }
 }
 

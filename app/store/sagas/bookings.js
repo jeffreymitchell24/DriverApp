@@ -149,14 +149,27 @@ function* bookCarFlow() {
 }
 
 function* checkRideLicense({ payload }) {
-  const { carId: id } = payload // photoUri
-  // let imageFile = yield toImageFile(photoUri)
-  // let query = {photo: imageFile}
-  // let data = Api.toFormData(query)
+  const {
+    carId: id,
+    data: { carPhotos, gasTankPhotos, mileagePhotos, notes }
+  } = payload // photoUri
+  let rideEndPhotos = yield transformLicenses({
+    carPhotos,
+    gasTankPhotos,
+    mileagePhotos
+  })
+  let query = {
+    ...rideEndPhotos
+  }
+  if (notes) query.notes = notes
+  console.log('query', query)
+  let data = Api.toFormData(query)
+  console.log('data', data)
+
   let state = yield select()
   let { token } = state.auth
   try {
-    let response = yield call(Api.checkRideLicense, { id, token }) // data
+    let response = yield call(Api.checkRideLicense, { id, data, token }) // data
     console.log('response', response)
     yield put({ type: CHECK_LICENSE.SUCCESS, payload: response })
   } catch (error) {
@@ -215,23 +228,30 @@ function* rideStart() {
     data: { carPhotos, gasTankPhotos, mileagePhotos, notes }
   } = payload
   let state = yield select()
-  // let {token} = state.auth
+  let { token } = state.auth
   try {
-    // let rideEndPhotos = yield transformLicenses({carPhotos, gasTankPhotos, mileagePhotos})
-    // let query = {
-    //   ...rideEndPhotos
-    // }
-    // if (notes) query.notes = notes
-    // console.log('query', query)
-    // let data = Api.toFormData(query)
-    // console.log('data', data)
-    // let response = yield call(Api.endRide, {id, data, token})
-    // console.log('response', response)
+    let rideEndPhotos = yield transformLicenses({
+      carPhotos,
+      gasTankPhotos,
+      mileagePhotos
+    })
+    let query = {
+      ...rideEndPhotos
+    }
+    if (notes) query.notes = notes
+    console.log('query', query)
+    let data = Api.toFormData(query)
+    console.log('data', data)
+    let response = yield call(Api.endRide, { id, data, token })
+    console.log('response', response)
     yield put({ type: START_RIDE.SUCCESS, payload: {} })
   } catch (error) {
-    // console.log('error response', error.response)
-    // console.log('error message', error.message)
-    // yield put({type: END_RIDE.FAILURE, payload: error.response.data.error.message})
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({
+      type: END_RIDE.FAILURE,
+      payload: error.response.data.error.message
+    })
   }
 }
 

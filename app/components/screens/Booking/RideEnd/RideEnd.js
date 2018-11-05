@@ -33,8 +33,7 @@ class RideEnd extends Component {
 
     this.state = {
       showPlusButton: true,
-      notes: '',
-      isEndRide: props.navigation.getParam('isEnd', true)
+      notes: ''
     }
   }
 
@@ -44,6 +43,12 @@ class RideEnd extends Component {
       if (error) Alert.alert('Error', error)
       else navigation.navigate(BookingDetail)
     }
+  }
+
+  componentDidMount() {
+    this.setState({
+      isEndRide: this.props.navigation.getParam('isEnd', true)
+    })
   }
 
   componentWillUnmount() {
@@ -76,7 +81,10 @@ class RideEnd extends Component {
         data: { carPhotos, gasTankPhotos, notes, mileagePhotos }
       })
     } else {
-      onUnlockRide({ carId: ride.id })
+      onUnlockRide({
+        carId: ride.id,
+        data: { carPhotos, gasTankPhotos, notes, mileagePhotos }
+      })
       this.props.navigation.goBack()
     }
   }
@@ -93,11 +101,13 @@ class RideEnd extends Component {
 
   isButtonActive = () => {
     let active = true
-    const { gasTankPhotos, carPhotos } = this.props
+    const { gasTankPhotos, carPhotos, mileagePhotos } = this.props
     carPhotos.forEach(photo => {
       active = !!photo
     })
     active = !!gasTankPhotos[0]
+    active = !!mileagePhotos[0]
+
     return active
   }
 
