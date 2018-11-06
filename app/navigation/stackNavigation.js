@@ -15,7 +15,7 @@ import TermsConditions from 'components/screens/TermsConditions'
 import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
 
-import { NavBackImage } from 'components/ui'
+import { NavBackImage, NavFilterImg } from 'components/ui'
 // New Bookings
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
 import NewBookingDetails from 'components/screens/NewBooking/NewBookingDetails'
@@ -47,7 +47,7 @@ let navigationOptions = {
     elevation: 0,
     borderBottomWidth: 0
   },
-  headerBackImage: (<NavBackImage />),
+  headerBackImage: <NavBackImage />,
   headerTitleStyle: {
     fontSize: 16,
     fontFamily: 'SFProText-Regular',
@@ -74,400 +74,430 @@ const RegisterReviewStack = createStackNavigator({
   }
 })
 
-export const AuthStack = createStackNavigator({
-  Intro: {
-    screen: Intro,
-    navigationOptions: {
-      title: null,
-      header: null
-    }
-  },
-  Account: {
-    screen: Account,
-    navigationOptions: {
-      title: 'Account',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions,
-      headerLeftContainerStyle: {
-        paddingLeft: 22
+export const AuthStack = createStackNavigator(
+  {
+    Intro: {
+      screen: Intro,
+      navigationOptions: {
+        title: null,
+        header: null
+      }
+    },
+    Account: {
+      screen: Account,
+      navigationOptions: {
+        title: 'Account',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 22
+        }
+      }
+    },
+    PersonalInfo: {
+      screen: PersonalInfo,
+      navigationOptions: {
+        title: 'Personal Information',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    Documentation: {
+      screen: Documentation,
+      navigationOptions: {
+        title: 'Documentation',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    DocumentsCamera: {
+      screen: DocumentsCamera,
+      navigationOptions: {
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    PicturePreview: {
+      screen: PicturePreview,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PictureGallery: {
+      screen: PictureGallery,
+      navigationOptions: {
+        header: null,
+        title: 'Select photo',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    SignIn: {
+      screen: SignIn,
+      navigationOptions: {
+        title: 'Sign In',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    ResetPassword: {
+      screen: ResetPassword,
+      navigationOptions: {
+        title: 'Reset your password',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    TermsConditions: {
+      screen: TermsConditions,
+      navigationOptions: {
+        title: 'Terms & conditions',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    RegisterReview: {
+      screen: RegisterReviewStack,
+      navigationOptions: {
+        header: null
       }
     }
   },
-  PersonalInfo: {
-    screen: PersonalInfo,
-    navigationOptions: {
-      title: 'Personal Information',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  Documentation: {
-    screen: Documentation,
-    navigationOptions: {
-      title: 'Documentation',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  DocumentsCamera: {
-    screen: DocumentsCamera,
-    navigationOptions: {
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  PicturePreview: {
-    screen: PicturePreview,
-    navigationOptions: {
-      header: null
-    }
-  },
-  PictureGallery: {
-    screen: PictureGallery,
-    navigationOptions: {
-      header: null,
-      title: 'Select photo',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  SignIn: {
-    screen: SignIn,
-    navigationOptions: {
-      title: 'Sign In',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  ResetPassword: {
-    screen: ResetPassword,
-    navigationOptions: {
-      title: 'Reset your password',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  TermsConditions: {
-    screen: TermsConditions,
-    navigationOptions: {
-      title: 'Terms & conditions',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  RegisterReview: {
-    screen: RegisterReviewStack,
-    navigationOptions: {
-      header: null
-    }
-  }
-},
-{
-  initialRouteName: 'Intro',
-  headerLayoutPreset: 'center',
-  transitionConfig: (toTransitionProps, fromTransitionProps) => {
-    let isBack = false
-    let backRoute = null
-    if (fromTransitionProps) {
-      isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
-      backRoute = fromTransitionProps.scene.route.routeName
-    }
-    const route = toTransitionProps.scene.route
-    if ((route.routeName === 'Intro' || route.routeName === 'Account') && backRoute === 'SignIn') {
-      if (route.routeName === 'Account' && !isBack) {
-        return fromTop(500)
+  {
+    initialRouteName: 'Intro',
+    headerLayoutPreset: 'center',
+    transitionConfig: (toTransitionProps, fromTransitionProps) => {
+      let isBack = false
+      let backRoute = null
+      if (fromTransitionProps) {
+        isBack =
+          fromTransitionProps.navigation.state.index >=
+          toTransitionProps.navigation.state.index
+        backRoute = fromTransitionProps.scene.route.routeName
       }
-      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
-    } else if (route.routeName === 'SignIn' && route.params && route.params.showFromBottom && !isBack) {
-      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
-    } else return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+      const route = toTransitionProps.scene.route
+      if (
+        (route.routeName === 'Intro' || route.routeName === 'Account') &&
+        backRoute === 'SignIn'
+      ) {
+        if (route.routeName === 'Account' && !isBack) {
+          return fromTop(500)
+        }
+        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+      } else if (
+        route.routeName === 'SignIn' &&
+        route.params &&
+        route.params.showFromBottom &&
+        !isBack
+      ) {
+        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+      } else {
+        return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
+      }
+    }
   }
-}
 )
 
-export const NewBookingStack = createStackNavigator({
-  BookingConfirmed: {
-    screen: BookingConfirmed,
-    navigationOptions: {
-      title: null,
-      header: null,
-      headerTitle: null,
-      headerBackTitle: null
-    }
-  },
-  NewBookingDetails: {
-    screen: NewBookingDetails,
-    navigationOptions: {
-      // title: 'New booking',
-      headerTitle: null,
-      headerBackTitle: null,
-      headerBackImage: (<NavBackImage />),
-      headerLeftContainerStyle: {
-        paddingLeft: 0
+export const NewBookingStack = createStackNavigator(
+  {
+    BookingConfirmed: {
+      screen: BookingConfirmed,
+      navigationOptions: {
+        title: null,
+        header: null,
+        headerTitle: null,
+        headerBackTitle: null
+      }
+    },
+    NewBookingDetails: {
+      screen: NewBookingDetails,
+      navigationOptions: {
+        // title: 'New booking',
+        headerTitle: null,
+        headerBackTitle: null,
+        headerBackImage: <NavBackImage />,
+        headerLeftContainerStyle: {
+          paddingLeft: 0
+        }
+      }
+    },
+    AvailableBookings: {
+      screen: AvailableBookings,
+      navigationOptions: {
+        title: 'Available cars',
+        headerTitle: null,
+        headerBackTitle: null,
+        headerLeftContainerStyle: {
+          paddingLeft: 0
+        }
+      }
+    },
+    BookingCalendar: {
+      screen: BookingCalendar,
+      navigationOptions: {
+        title: null,
+        headerTitle: null,
+        headerBackTitle: null
       }
     }
   },
-  AvailableBookings: {
-    screen: AvailableBookings,
+  {
+    initialRouteName: 'AvailableBookings',
+    headerLayoutPreset: 'center',
     navigationOptions: {
-      title: 'New booking',
-      headerTitle: null,
-      headerBackTitle: null
-    }
-  },
-  BookingCalendar: {
-    screen: BookingCalendar,
-    navigationOptions: {
-      title: null,
-      headerTitle: null,
-      headerBackTitle: null
-    }
-  }
-},
-{
-  initialRouteName: 'AvailableBookings',
-  headerLayoutPreset: 'center',
-  navigationOptions: {
-    headerStyle: {
-      elevation: 0,
-      borderBottomWidth: 0
-    },
-    headerTitleStyle: {
-      fontSize: 16,
-      fontFamily: 'SFProText-Regular',
-      fontWeight: 'normal',
-      color: '#343A40'
-    },
-    headerLeftContainerStyle: {
-      paddingLeft: 16
-    },
-    headerRightContainerStyle: {
-      paddingRight: 16
-    }
-  },
-  transitionConfig: (toTransitionProps, fromTransitionProps) => {
-    let isBack = false
-    let backRoute = null
-    if (fromTransitionProps) {
-      isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
-      backRoute = fromTransitionProps.scene.route.routeName
-    }
-    const route = toTransitionProps.scene.route
-    // console.log(bookingOverlays.includes(route.routeName), bookingOverlays.includes(backRoute), isBack)
-    if (route.routeName === 'BookingCalendar' || (backRoute === 'BookingCalendar' && isBack)) {
-      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
-    } else return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
-  }
-}
-)
-
-export const ProfileStack = createStackNavigator({
-  ChangePassword: {
-    screen: ChangePassword,
-    navigationOptions: {
-      title: 'Change password',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  ChangesReview: {
-    screen: ChangesReview,
-    navigationOptions: {
-      title: 'Approve changes',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  ProfileCamera: {
-    screen: ProfileCamera,
-    navigationOptions: {
-      title: 'Profile photo',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  PicturePreview: {
-    screen: PhotoPreview,
-    navigationOptions: {
-      header: null
-    }
-  },
-  PictureGallery: {
-    screen: PictureGallery,
-    navigationOptions: {
-      title: 'Select photo',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  ProfileDetails: {
-    screen: ProfileDetails,
-    navigationOptions: {
-      title: 'Personal details',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  ProfileMain: {
-    screen: ProfileMain,
-    navigationOptions: {
-      title: null,
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions,
-      headerLeftContainerStyle: {
-        paddingLeft: 22
-      },
       headerStyle: {
         elevation: 0,
         borderBottomWidth: 0
-      }
-    }
-  },
-  TermsConditions: {
-    screen: TermsConditions,
-    navigationOptions: {
-      title: 'Terms & conditions',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  PrivacyPolicy: {
-    screen: PrivacyPolicy,
-    navigationOptions: {
-      title: 'Privacy policy',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  }
-},
-{
-  initialRouteName: 'ProfileMain',
-  headerLayoutPreset: 'center',
-  transitionConfig: (prop) => {
-    const routeName = prop.scene.route.routeName
-    if (routeName === 'ChangesReview') {
-      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
-    } else {
-      return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
-    }
-  }
-})
-
-export const HelpCenterStack = createStackNavigator({
-  HelpCenter: {
-    screen: HelpCenter,
-    navigationOptions: {
-      title: 'Help Center',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions,
-      headerLeftContainerStyle: {
-        paddingLeft: 22
-      }
-    }
-  },
-  RideMalfunction: {
-    screen: RideMalfunction,
-    navigationOptions: {
-      title: 'Car malfunctioned',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  RideDamaged: {
-    screen: RideDamaged,
-    navigationOptions: {
-      title: 'Car damaged',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  RideAccident: {
-    screen: RideAccident,
-    navigationOptions: {
-      title: 'I had an accident',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  RideCancel: {
-    screen: RideCancel,
-    navigationOptions: {
-      title: 'Cancel booking',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions,
+      },
+      headerTitleStyle: {
+        fontSize: 16,
+        fontFamily: 'SFProText-Regular',
+        fontWeight: 'normal',
+        color: '#343A40'
+      },
       headerLeftContainerStyle: {
         paddingLeft: 16
+      },
+      headerRightContainerStyle: {
+        paddingRight: 16
+      }
+    },
+    transitionConfig: (toTransitionProps, fromTransitionProps) => {
+      let isBack = false
+      let backRoute = null
+      if (fromTransitionProps) {
+        isBack =
+          fromTransitionProps.navigation.state.index >=
+          toTransitionProps.navigation.state.index
+        backRoute = fromTransitionProps.scene.route.routeName
+      }
+      const route = toTransitionProps.scene.route
+      // console.log(bookingOverlays.includes(route.routeName), bookingOverlays.includes(backRoute), isBack)
+      if (
+        route.routeName === 'BookingCalendar' ||
+        (backRoute === 'BookingCalendar' && isBack)
+      ) {
+        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+      } else {
+        return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
+      }
+    }
+  }
+)
+
+export const ProfileStack = createStackNavigator(
+  {
+    ChangePassword: {
+      screen: ChangePassword,
+      navigationOptions: {
+        title: 'Change password',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    ChangesReview: {
+      screen: ChangesReview,
+      navigationOptions: {
+        title: 'Approve changes',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    ProfileCamera: {
+      screen: ProfileCamera,
+      navigationOptions: {
+        title: 'Profile photo',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    PicturePreview: {
+      screen: PhotoPreview,
+      navigationOptions: {
+        header: null
+      }
+    },
+    PictureGallery: {
+      screen: PictureGallery,
+      navigationOptions: {
+        title: 'Select photo',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    ProfileDetails: {
+      screen: ProfileDetails,
+      navigationOptions: {
+        title: 'Personal details',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    ProfileMain: {
+      screen: ProfileMain,
+      navigationOptions: {
+        title: null,
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 22
+        },
+        headerStyle: {
+          elevation: 0,
+          borderBottomWidth: 0
+        }
+      }
+    },
+    TermsConditions: {
+      screen: TermsConditions,
+      navigationOptions: {
+        title: 'Terms & conditions',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    PrivacyPolicy: {
+      screen: PrivacyPolicy,
+      navigationOptions: {
+        title: 'Privacy policy',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
       }
     }
   },
-  RideLateDescription: {
-    screen: RideLateDescription,
-    navigationOptions: {
-      title: "I'm late",
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  HelpCamera: {
-    screen: HelpCamera,
-    navigationOptions: {
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
-    }
-  },
-  HelpPhotoPreview: {
-    screen: HelpPhotoPreview,
-    navigationOptions: {
-      header: null
-    }
-  },
-  HelpPhotoGallery: {
-    screen: HelpPhotoGallery,
-    navigationOptions: {
-      header: null,
-      title: 'Select photo',
-      headerTitle: null,
-      headerBackTitle: null,
-      ...navigationOptions
+  {
+    initialRouteName: 'ProfileMain',
+    headerLayoutPreset: 'center',
+    transitionConfig: prop => {
+      const routeName = prop.scene.route.routeName
+      if (routeName === 'ChangesReview') {
+        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+      } else {
+        return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
+      }
     }
   }
-},
-{
-  initialRouteName: 'HelpCenter',
-  headerLayoutPreset: 'center',
-  transitionConfig: (toTransitionProps, fromTransitionProps) => {
-    // let isBack = false
-    let backRoute = null
-    if (fromTransitionProps) {
-      // isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
-      backRoute = fromTransitionProps.scene.route.routeName
+)
+
+export const HelpCenterStack = createStackNavigator(
+  {
+    HelpCenter: {
+      screen: HelpCenter,
+      navigationOptions: {
+        title: 'Help Center',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 22
+        }
+      }
+    },
+    RideMalfunction: {
+      screen: RideMalfunction,
+      navigationOptions: {
+        title: 'Car malfunctioned',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    RideDamaged: {
+      screen: RideDamaged,
+      navigationOptions: {
+        title: 'Car damaged',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    RideAccident: {
+      screen: RideAccident,
+      navigationOptions: {
+        title: 'I had an accident',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    RideCancel: {
+      screen: RideCancel,
+      navigationOptions: {
+        title: 'Cancel booking',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions,
+        headerLeftContainerStyle: {
+          paddingLeft: 16
+        }
+      }
+    },
+    RideLateDescription: {
+      screen: RideLateDescription,
+      navigationOptions: {
+        title: "I'm late",
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    HelpCamera: {
+      screen: HelpCamera,
+      navigationOptions: {
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
+    },
+    HelpPhotoPreview: {
+      screen: HelpPhotoPreview,
+      navigationOptions: {
+        header: null
+      }
+    },
+    HelpPhotoGallery: {
+      screen: HelpPhotoGallery,
+      navigationOptions: {
+        header: null,
+        title: 'Select photo',
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
+      }
     }
-    const route = toTransitionProps.scene.route
-    if (route.routeName === 'RideCancel' || backRoute === 'RideCancel') {
-      return {screenInterpolator: CardStackStyleInterpolator.forVertical}
-    } else return {screenInterpolator: CardStackStyleInterpolator.forHorizontal}
+  },
+  {
+    initialRouteName: 'HelpCenter',
+    headerLayoutPreset: 'center',
+    transitionConfig: (toTransitionProps, fromTransitionProps) => {
+      // let isBack = false
+      let backRoute = null
+      if (fromTransitionProps) {
+        // isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
+        backRoute = fromTransitionProps.scene.route.routeName
+      }
+      const route = toTransitionProps.scene.route
+      if (route.routeName === 'RideCancel' || backRoute === 'RideCancel') {
+        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+      } else {
+        return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
+      }
+    }
   }
-})
+)

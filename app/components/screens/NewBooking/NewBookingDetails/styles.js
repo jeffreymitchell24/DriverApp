@@ -80,5 +80,57 @@ export default StyleSheet.create({
     fontSize: 13,
     fontFamily: 'SFProText-Regular',
     color: colors.red
+  },
+
+  timeContainer: {
+    borderBottomColor: '#000',
+    borderBottomWidth: 1
+  },
+
+  recurringContainer: {
+    marginVertical: 10
+  },
+
+  reccuringBanner: {
+    backgroundColor: '#FEF5F5',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
+
+  recurringBannerText: {
+    fontSize: 13,
+    fontFamily: 'Helvetica',
+    marginLeft: 10
+  },
+
+  createRecurringBlockContainer: {
+    marginTop: 10,
+    flexDirection: 'row'
+  },
+
+  recurringLeftBlock: {
+    flex: 1
+  },
+
+  recurringRightBlock: {
+    marginLeft: 10
+  },
+
+  recurringText: {
+    fontSize: 18,
+    fontFamily: 'Helvetica',
+    marginBottom: 8
+  },
+
+  recurringDescription: {
+    fontSize: 13,
+    fontFamily: 'SFProText-Regular',
+    color: '#495057'
+  },
+
+  recurringImageContainer: {
+    width: 24,
+    height: 24
   }
 })
