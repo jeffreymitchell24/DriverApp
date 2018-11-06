@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
-import { NavButton } from 'components/ui'
 import { Home, NewBookingDetails } from 'navigation/routeNames'
+import { NavFilterImg } from 'components/ui'
 import { BookingCard } from 'components/blocks'
 import moment from 'moment'
 import _ from 'lodash'
@@ -13,13 +13,12 @@ class AvailableBookings extends PureComponent {
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: (
-        <NavButton
-          icon="cancel"
-          imageStyle={{ height: 12, width: 12 }}
-          onPress={() => navigation.navigate(Home)}
+        <NavFilterImg
+          onPress={() => {
+            navigation.navigate(Home)
+          }}
         />
       )
-      // headerRight: <NavButton icon='filter' imageStyle={{height: 15, width: 15}} />
     }
   }
 
@@ -36,13 +35,17 @@ class AvailableBookings extends PureComponent {
 
   renderItem = ({ item, index }) => {
     const { availability, car } = item
+
+    const bookingEnd = moment(car['booking_available_to'], 'HH:mm:ss')
+    const bookingStart = moment(car['booking_available_from'], 'HH:mm:ss')
+
     return (
       <BookingCard
         booking={car}
-        bookingEnd={moment(car['booking_available_to'], 'HH:mm:ss')}
-        bookingStart={moment(car['booking_available_from'], 'HH:mm:ss')}
+        bookingEnd={bookingEnd.format()}
+        bookingStart={bookingStart.format()}
         extraDetail={`Available ${availability}`}
-        isRecurring={false}
+        isRecurring={!!car['allowed_recurring']}
         onPress={this.onBookingPress}
       />
     )
@@ -58,10 +61,12 @@ class AvailableBookings extends PureComponent {
       )
     }
 
+    const ordered = _.orderBy(cars, 'availability', ['asc'])
+
     return (
       <View style={styles.container}>
         <FlatList
-          data={cars}
+          data={ordered}
           extraData={cars}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}

@@ -54,9 +54,7 @@ class BookingCard extends PureComponent {
             >{`${bookingStartTime} –– ${bookingEndTime}`}</Text>
             <Text style={styles.detailText}>Pickup: {pickupLocation}</Text>
             <Text style={styles.detailText}>Dropoff: {returnLocation}</Text>
-       
-              <Text style={styles.extraDetailText}>{extraDetail}</Text>
-            
+            <Text style={styles.extraDetailText}>{extraDetail}</Text>
           </View>
           {isRecurring && (
             <Image source={icons.recurring} style={styles.recurringContainer} />

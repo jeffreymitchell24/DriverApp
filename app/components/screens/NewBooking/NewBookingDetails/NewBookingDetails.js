@@ -5,20 +5,29 @@ import {
   TouchableOpacity,
   Alert,
   ScrollView,
-  ActivityIndicator
+  ActivityIndicator,
+  Image
 } from 'react-native'
+import { Switch } from 'react-native-switch'
 import moment from 'moment'
 import Spinner from 'react-native-loading-spinner-overlay'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
 import { Button } from 'components/ui'
-import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
+import {
+  BookingDetail,
+  CarImage,
+  SectionTitle,
+  DatePicker
+} from 'components/blocks'
 import {
   BookingConfirmed,
   BookingCalendar,
   CarLocation
 } from 'navigation/routeNames'
 import { getMaxDate } from 'helpers/date'
+
+import { icons } from 'images'
 
 import styles from './styles'
 import { colors } from 'theme'
@@ -70,8 +79,9 @@ class NewBookingDetails extends PureComponent {
     // let timeSlots = getNext24hours()
     // console.log(timeSlots)
     this.state = {
-      startDate: null, // : {value: null, label: '09:00 AM'},
-      endDate: null // : {value: null, label: '5:00 PM'},
+      startDate: null,
+      endDate: null,
+      isRecurring: false
     }
   }
 
@@ -89,6 +99,17 @@ class NewBookingDetails extends PureComponent {
         carName: `${car.manufacturer.name} ${car.model}`
       })
     }
+
+    const now = moment()
+    const start =
+      now.minute() || now.second() || now.millisecond()
+        ? now.add(1, 'hour').startOf('hour')
+        : now.startOf('hour')
+
+    this.setState({
+      startDate: start.format(),
+      endDate: start.add({ hours: 12 }).format()
+    })
   }
 
   componentDidUpdate(prevProps) {
@@ -114,6 +135,7 @@ class NewBookingDetails extends PureComponent {
     }
   }
 
+  // eslint-disable-next-line
   UNSAFE_componentWillReceiveProps(nextProps) {
     if (this.props.isFetchingCar && !nextProps.isFetchingCar) {
       let { car: carData, navigation } = nextProps
@@ -126,6 +148,20 @@ class NewBookingDetails extends PureComponent {
         })
       }
     }
+  }
+
+  handleToogleRecurringSwitch = () => {
+    this.setState({
+      isRecurring: !this.state.isRecurring
+    })
+  }
+
+  handleDateChange = (nextDate, type) => {
+    const updateField = type === 'Start' ? 'startDate' : 'endDate'
+
+    this.setState({
+      [updateField]: nextDate
+    })
   }
 
   onStartDatePress = () => {
@@ -159,6 +195,7 @@ class NewBookingDetails extends PureComponent {
       car: { car }
     } = this.props
     const { startDate, endDate } = this.props
+    const { isRecurring } = this.state
     console.log(startDate, endDate)
     let timeStamps = {
       booking_ending_at: moment
@@ -170,9 +207,13 @@ class NewBookingDetails extends PureComponent {
       booking_starting_at: moment
         .unix(startDate.timestamp)
         .tz('America/New_York')
-        .format('YYYY-MM-DD HH:mm')
+        .format('YYYY-MM-DD HH:mm'),
+      is_recurring: isRecurring
     }
-    this.props.onBookCar({ id: car.id, timeStamps })
+    this.props.onBookCar({
+      id: car.id,
+      timeStamps
+    })
   }
 
   keyExtractor = (item, index) => index.toString()
@@ -195,8 +236,52 @@ class NewBookingDetails extends PureComponent {
     this.props.navigation.navigate(CarLocation, { geo })
   }
 
+  renderRecurringBlock = () => {
+    const { startDate, endDate, isRecurring } = this.state
+
+    return (
+      <View styles={{ ...styles.timeContainer, ...styles.recurringContainer }}>
+        <View style={styles.reccuringBanner}>
+          <Image
+            source={icons.recurring}
+            style={styles.recurringImageContainer}
+          />
+          <Text style={styles.recurringBannerText}>
+            Available for recurring bookings
+          </Text>
+        </View>
+        <View style={styles.createRecurringBlockContainer}>
+          <View style={styles.recurringLeftBlock}>
+            <Text style={styles.recurringText}>Create recurring booking</Text>
+            <Text style={styles.recurringDescription}>
+              Book this car automatically on every{' '}
+              {moment(startDate).format('dddd [from] hhA')} to{' '}
+              {moment(endDate).format('hhA')}
+            </Text>
+          </View>
+          <View style={styles.recurringRightBlock}>
+            <Switch
+              backgroundActive="#F03E3E"
+              backgroundInactive={'#DEE2E6'}
+              barHeight={30}
+              circleBorderWidth={2}
+              circleSize={27}
+              innerCircleStyle={{
+                borderColor: isRecurring ? '#F03E3E' : '#DEE2E6'
+              }}
+              switchWidthMultiplier={2}
+              value={isRecurring}
+              onValueChange={this.handleToogleRecurringSwitch}
+            />
+          </View>
+        </View>
+      </View>
+    )
+  }
+
   render() {
-    const { isFetchingCar } = this.props
+    const { isRecurring } = this.state
+    const { isFetchingCar, navigation } = this.props
     if (isFetchingCar) {
       return (
         <View style={styles.spinnerContainer}>
@@ -204,6 +289,9 @@ class NewBookingDetails extends PureComponent {
         </View>
       )
     }
+
+    if (!this.props.car) return navigation.goBack()
+
     const {
       car: { car }
     } = this.props
@@ -264,6 +352,21 @@ class NewBookingDetails extends PureComponent {
             </View>
             <View style={styles.scheduleContainer}>
               <SectionTitle title="SCHEDULE" />
+              {!!car['allowed_recurring'] && this.renderRecurringBlock()}
+              <DatePicker
+                formatter={
+                  isRecurring ? '[Every] dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'
+                }
+                type="Start"
+                value={this.state.startDate}
+                onChange={this.handleDateChange}
+              />
+              <DatePicker
+                formatter={isRecurring ? 'dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'}
+                type="End"
+                value={this.state.endDate}
+                onChange={this.handleDateChange}
+              />
               <View style={[styles.row, { marginVertical: 16 }]}>
                 <TouchableOpacity
                   style={{ flex: 1 }}
