@@ -105,7 +105,7 @@ export default StyleSheet.create({
   },
 
   createRecurringBlockContainer: {
-    marginTop: 10,
+    marginTop: 20,
     flexDirection: 'row'
   },
 

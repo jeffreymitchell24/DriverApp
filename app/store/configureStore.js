@@ -6,9 +6,7 @@ import { composeWithDevTools } from 'redux-devtools-extension'
 // import createSensitiveStorage from 'redux-persist-sensitive-storage'
 import storage from 'redux-persist/lib/storage'
 export default (rootReducer, rootSaga) => {
-  const middlewares = [
-    thunk
-  ]
+  const middlewares = [thunk]
   const enhancers = []
   // const sensitiveStorage = createSensitiveStorage({
   //   keychainService: 'CarflowKeychain',
@@ -17,7 +15,7 @@ export default (rootReducer, rootSaga) => {
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth']
+    whitelist: ['auth', 'filters']
   }
 
   const sagaMonitor = null

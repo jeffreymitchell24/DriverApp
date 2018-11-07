@@ -50,6 +50,7 @@
     "react-native-version-number": "^0.3.4",
     "react-native-wheel-datepicker": "^2.2.3",
     "react-native-wheel-picker": "^1.2.0",
+    "react-native-wheel-picker-android": "^1.1.4",
     "react-navigation": "2.16.0",
     "react-navigation-backhandler": "^1.1.1",
     "react-navigation-transitions": "^1.0.5",

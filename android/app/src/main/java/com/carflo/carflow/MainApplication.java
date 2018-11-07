@@ -3,10 +3,10 @@ package com.carflo.carflow;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.zyu.ReactNativeWheelPickerPackage;
+import com.wheelpicker.WheelPickerPackage;
+// import com.zyu.ReactNativeWheelPickerPackage;
 import com.rnfs.RNFSPackage;
 import com.imagepicker.ImagePickerPackage;
-import com.zyu.ReactNativeWheelPickerPackage;
 import com.RNTextInputMask.RNTextInputMaskPackage;
 import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
 import com.airbnb.android.react.maps.MapsPackage;
@@ -16,9 +16,7 @@ import org.reactnative.camera.RNCameraPackage;
 import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
-import org.reactnative.camera.RNCameraPackage;
 import org.devio.rn.splashscreen.SplashScreenReactPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -39,10 +37,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new ReactNativeWheelPickerPackage(),
+            new WheelPickerPackage(),
+            // new ReactNativeWheelPickerPackage(),
             new RNFSPackage(),
             new ImagePickerPackage(),
-            new ReactNativeWheelPickerPackage(),
             new RNTextInputMaskPackage(),
             new RNSensitiveInfoPackage(),
             new MapsPackage(),

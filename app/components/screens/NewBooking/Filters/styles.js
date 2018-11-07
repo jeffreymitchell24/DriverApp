@@ -3,17 +3,28 @@ import { StyleSheet } from 'react-native'
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
+    backgroundColor: '#fff'
   },
   filterRow: {
     width: '100%',
 
-    borderTopColor: '#F1F3F5',
-    borderTopWidth: 1,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
 
-    borderBotttomColor: '#F1F3F5',
-    borderBotttomWidth: 1
+    borderColor: '#F1F3F5',
+    borderBottomWidth: 1
+  },
+  fieldName: {
+    fontSize: 17,
+    fontFamily: 'SFProText-Regular',
+    color: '#212529'
+  },
+  recurringImageContainer: {
+    width: 24,
+    height: 24
   }
 })
 
-export { styles }
+export default styles

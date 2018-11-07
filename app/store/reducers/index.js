@@ -1,4 +1,3 @@
-
 import { combineReducers } from 'redux'
 import auth from './auth'
 import registration from './registration'
@@ -7,6 +6,7 @@ import email from './email'
 import bookings from './bookings'
 import helpCenter from './helpCenter'
 import newBooking from './newBooking'
+import filters from './filters'
 
 const rootReducer = combineReducers({
   auth, // : persistReducer(config, auth),
@@ -15,7 +15,8 @@ const rootReducer = combineReducers({
   email,
   bookings,
   helpCenter,
-  newBooking
+  newBooking,
+  filters
 })
 
 export default rootReducer

@@ -18,6 +18,7 @@ import ResetPassword from 'components/screens/ResetPassword'
 import { NavBackImage, NavFilterImg } from 'components/ui'
 // New Bookings
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
+import NewBooking from 'components/screens/NewBooking/Filters'
 import NewBookingDetails from 'components/screens/NewBooking/NewBookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
 import BookingCalendar from 'components/screens/NewBooking/BookingCalendar'
