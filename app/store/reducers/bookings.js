@@ -135,11 +135,13 @@ const handlers = {
     }
   },
   [BOOK_CAR.SUCCESS]: (state, { payload }) => {
+    const nextTab = payload.booking.is_recurring ? 'recurring' : 'oneTime'
     return {
       ...state,
       upcoming: {
         ...state.upcoming,
-        all: [...state.upcoming, payload.booking]
+        all: [...(state.upcoming.all || []), payload.booking],
+        [nextTab]: [...(state.upcoming[nextTab] || []), payload.booking]
       },
       bookCarPending: false
     }
@@ -299,7 +301,9 @@ const handlers = {
       upcoming: {
         all: state.upcoming.all.filter(book => book.id !== payload.id),
         oneTime: state.upcoming.oneTime.filter(book => book.id !== payload.id),
-        recurring: state.upcoming.recurring.filter(book => book.id !== payload.id)
+        recurring: state.upcoming.recurring.filter(
+          book => book.id !== payload.id
+        )
       },
       history: [payload, ...state.history],
       selectedRide: payload,

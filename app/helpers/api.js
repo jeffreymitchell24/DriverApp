@@ -162,11 +162,13 @@ export const bookCar = async ({ token, id, timeStamps }) => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
+
   let response = await axios.post(
     `${URL}/api/cars/${id}/book`,
-    {timeStamps},
+    timeStamps,
     config
   )
+
   console.log('bookCar response', response)
   return response.data.data
 }

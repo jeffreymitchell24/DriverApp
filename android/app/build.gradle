@@ -148,10 +148,10 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-wheel-picker-android')
     compile project(':react-native-wheel-datepicker')
     compile project(':react-native-fs')
     compile project(':react-native-image-picker')
-    compile project(':react-native-wheel-picker')
     compile project(':react-native-text-input-mask')
     compile project(':react-native-sensitive-info')
     implementation project(':react-native-maps')
