@@ -1,15 +1,7 @@
-
-export const SET_DATE = 'SET_DATE'
-export const setBookingDate = ({type, date}) => {
+export const ADD_ADDRESS_TO_HISTORY = 'ADD_ADDRESS_TO_HISTORY'
+export const addAddressToHistory = address => {
   return {
-    type: SET_DATE,
-    payload: {type, date}
-  }
-}
-
-export const RESET_DATES = 'RESET_DATES'
-export const resetDates = () => {
-  return {
-    type: RESET_DATES
+    type: ADD_ADDRESS_TO_HISTORY,
+    payload: address
   }
 }

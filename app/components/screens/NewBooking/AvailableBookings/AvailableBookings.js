@@ -15,7 +15,7 @@ class AvailableBookings extends PureComponent {
       headerLeft: (
         <NavFilterImg
           onPress={() => {
-            navigation.navigate(Home)
+            navigation.goBack()
           }}
         />
       )
@@ -23,7 +23,7 @@ class AvailableBookings extends PureComponent {
   }
 
   componentDidMount() {
-    this.props.onFetchAvailableCars()
+    // this.props.onFetchAvailableCars()
   }
 
   onBookingPress = car => {
@@ -81,7 +81,7 @@ AvailableBookings.propTypes = {
   // fetchError: PropTypes.string,
   isFetchingPending: PropTypes.bool,
   navigation: PropTypes.object,
-  onFetchAvailableCars: PropTypes.func,
+  // onFetchAvailableCars: PropTypes.func,
   onSelectCar: PropTypes.func
 }
 

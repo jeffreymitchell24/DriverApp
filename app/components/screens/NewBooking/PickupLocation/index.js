@@ -1,19 +1,20 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 
-import { getFilters } from 'store/selectors/filters'
-import { fetchAvailableCars } from 'store/actions/bookings'
+import { getAdressHistory } from 'store/selectors/newBooking'
+
+import { addAddressToHistory } from 'store/actions/newBooking'
 import { updateFilter } from 'store/actions/newBookingsFilters'
 
-import Component from './Filters'
+import Component from './PickupLocation'
 
 const actions = {
   onFilterUpdate: updateFilter,
-  onFetchAvailableCars: fetchAvailableCars
+  onChooseAddress: addAddressToHistory
 }
 
 const selector = createStructuredSelector({
-  filters: getFilters
+  history: getAdressHistory
 })
 
 export default connect(

@@ -25,6 +25,7 @@ export const History = 'History'
 
 // New Booking
 export const NewBooking = 'NewBooking'
+export const PickupLocation = 'PickupLocation'
 export const BookingConfirmed = 'BookingConfirmed'
 export const NewBookingDetails = 'NewBookingDetails'
 export const AvailableBookings = 'AvailableBookings'

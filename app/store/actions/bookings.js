@@ -9,9 +9,10 @@ export const fetchUserBookings = type => {
 }
 
 export const FETCH_AVAILABLE_CARS = createAsyncAction('FETCH_AVAILABLE_CARS')
-export const fetchAvailableCars = () => {
+export const fetchAvailableCars = params => {
   return {
-    type: FETCH_AVAILABLE_CARS.REQUEST
+    type: FETCH_AVAILABLE_CARS.REQUEST,
+    payload: params
   }
 }
 export const FETCH_SELECTED_CAR = createAsyncAction('FETCH_SELECTED_CAR')

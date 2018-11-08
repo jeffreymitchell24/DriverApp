@@ -129,19 +129,10 @@ export const fetchBookingsHistory = async token => {
   return response.data.data
 }
 
-export const fetchAvailableCars = async token => {
+export const fetchAvailableCars = async (params, token) => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
-
-  const params = new URLSearchParams()
-  params.append('available_from', '2018-11-05 11:00')
-  params.append('available_to', '2018-11-05 11:00')
-  params.append('categories[0]', '1')
-  // params.append('allowed_recurring', '0')
-  params.append('pickup_location_lat', '40.666294')
-  params.append('pickup_location_lon', '-73.959628')
-  params.append('allowed_range_miles', '100')
 
   let response = await axios.post(`${URL}/api/cars/available`, params, config)
   console.log('fetchAvailableCars response', response)
