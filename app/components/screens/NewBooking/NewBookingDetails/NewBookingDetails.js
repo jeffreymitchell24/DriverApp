@@ -84,7 +84,7 @@ class NewBookingDetails extends PureComponent {
           endDate: moment(endDate)
             // .unix(endDate)
             // .tz('America/New_York')
-            // .subtract(1, 'hours')
+            .subtract(1, 'hours')
             .minutes(59),
           startDate: moment(startDate),
           // .unix(startDate)
@@ -145,7 +145,7 @@ class NewBookingDetails extends PureComponent {
       booking_ending_at: moment(endDate)
         // .unix(endDate)
         // .tz('America/New_York')
-        // .subtract(1, 'hours')
+        .subtract(1, 'hours')
         .minutes(59)
         .format('YYYY-MM-DD HH:mm'),
       booking_starting_at: moment(startDate)

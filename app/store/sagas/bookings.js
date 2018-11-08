@@ -72,11 +72,11 @@ function* fetchUserBookingsFlow() {
   )
 }
 
-function* fetchAvailableCars() {
+function* fetchAvailableCars(action) {
   let state = yield select()
   let { token } = state.auth
   try {
-    let response = yield call(Api.fetchAvailableCars, token)
+    let response = yield call(Api.fetchAvailableCars, action.payload, token)
     yield put({ type: FETCH_AVAILABLE_CARS.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)

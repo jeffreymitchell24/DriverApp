@@ -16,5 +16,7 @@ module.exports = {
   book: require('./book.png'),
   historyBtn: require('./historyBtn.png'),
   recurring: require('./recurring.png'),
-  navFiltersBtn: require('./navFilterBtn.png')
+  navFiltersBtn: require('./navFilterBtn.png'),
+  geolocation: require('./geolocation.png'),
+  mapMarker: require('./map-marker.png')
 }

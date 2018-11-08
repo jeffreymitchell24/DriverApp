@@ -1,10 +1,5 @@
 import React, { Component } from 'react'
-import {
-  View,
-  ScrollView,
-  Keyboard,
-  Alert
-} from 'react-native'
+import { View, ScrollView, Keyboard, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
@@ -12,16 +7,16 @@ import { GoogleAutoComplete } from 'react-native-google-autocomplete'
 // import { GooglePlacesAutocomplete } from 'react-native-google-places-autocomplete'
 import { TextInputView, LocationItem } from 'components/blocks'
 import { Button } from 'components/ui'
-import {Documentation} from 'navigation/routeNames'
-import {GOOGLE_API_KEY} from 'config/apiKeys'
-import {capitalize} from 'helpers/name'
-import {formatPhoneNumber} from 'helpers/phone'
-import {styles, googleStyles} from './styles'
+import { Documentation } from 'navigation/routeNames'
+import { GOOGLE_API_KEY } from 'config/apiKeys'
+import { capitalize } from 'helpers/name'
+import { formatPhoneNumber } from 'helpers/phone'
+import { styles, googleStyles } from './styles'
 // import * as Yup from 'yup'
 
 const uuidv4 = require('uuid/v4')
-const customValidate = (values) => {
-  const {fullname, address, phone} = values
+const customValidate = values => {
+  const { fullname, address, phone } = values
   let errors = {}
   if (!fullname) errors.fullname = 'This field is required.'
   if (!address) errors.address = 'This field is required.'
@@ -45,20 +40,20 @@ class PersonalInfo extends Component {
   addressSelected = false
   showAddressResults = true
   inputRefs = {}
-  componentDidMount () {
+  componentDidMount() {
     this.placesAutocompleteToken = uuidv4()
     console.log('token', this.placesAutocompleteToken)
   }
 
-  componentWillUnmount () {
+  componentWillUnmount() {
     const signoutOnBack = this.props.navigation.getParam('signoutOnBack', false)
     if (signoutOnBack) this.props.onSignOut()
   }
 
-  onSubmit = (values) => {
-    const {fullname, address, phone} = values
+  onSubmit = values => {
+    const { fullname, address, phone } = values
     Keyboard.dismiss()
-    const {onSaveProfileInfo} = this.props
+    const { onSaveProfileInfo } = this.props
     let profile = {
       fullname,
       address,
@@ -68,13 +63,13 @@ class PersonalInfo extends Component {
     this.props.navigation.navigate(Documentation)
   }
 
-  onEditPhone = (phone) => {
+  onEditPhone = phone => {
     let formattedPhone = formatPhoneNumber(phone)
     console.log('formattedPhone', formattedPhone)
-    this.setState({phone: formattedPhone})
+    this.setState({ phone: formattedPhone })
   }
 
-  onLocationPress = (address) => {
+  onLocationPress = address => {
     console.log('address', address)
     this.addressSelected = true
     this.showAddressResults = false
@@ -87,11 +82,11 @@ class PersonalInfo extends Component {
   }
 
   onEditField = (value, type) => {
-    this.setState({[type]: type === 'fullname' ? capitalize(value) : value})
+    this.setState({ [type]: type === 'fullname' ? capitalize(value) : value })
   }
 
   onFocusPhone = () => {
-    if (this.state.phone.length === 0) this.setState({phone: '+1 '})
+    if (this.state.phone.length === 0) this.setState({ phone: '+1 ' })
   }
 
   validateForm = (values, props) => {
@@ -101,14 +96,17 @@ class PersonalInfo extends Component {
       errors.address = 'Select address from location list'
     }
     let fieldErrors = customValidate(values)
-    errors = {...errors, ...fieldErrors}
+    errors = { ...errors, ...fieldErrors }
 
     return errors
   }
 
   renderSearchResults = (locationResults, fetchDetails) => {
     return (
-      <View contentContainerStyle={googleStyles.contentContainerStyle} style={googleStyles.container}>
+      <View
+        contentContainerStyle={googleStyles.contentContainerStyle}
+        style={googleStyles.container}
+      >
         {locationResults.map((el, i) => (
           <LocationItem
             {...el}
@@ -121,31 +119,40 @@ class PersonalInfo extends Component {
     )
   }
 
-  renderSearch = ({values, errors, touched, setFieldTouched, setValues, setFieldValue}) => {
-    let {address} = values
+  renderSearch = ({
+    values,
+    errors,
+    touched,
+    setFieldTouched,
+    setValues,
+    setFieldValue
+  }) => {
+    let { address } = values
     return (
       <GoogleAutoComplete
         apiKey={GOOGLE_API_KEY}
-        components='country:us'
+        components="country:us"
         debounce={500}
-        queryTypes='address'
+        queryTypes="address"
       >
         {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
           // console.log('locationResults', locationResults)
           return (
-            <View style={{marginBottom: 16}}>
+            <View style={{ marginBottom: 16 }}>
               <TextInputView
                 blurOnSubmit={false}
-                containerStyle={{marginBottom: 0}}
+                containerStyle={{ marginBottom: 0 }}
                 error={touched.address && errors.address}
-                inputRef={(input) => { this.inputRefs['address'] = input }}
-                label='CURRENT ADDRESS'
-                name='address'
-                placeholder=''
+                inputRef={input => {
+                  this.inputRefs['address'] = input
+                }}
+                label="CURRENT ADDRESS"
+                name="address"
+                placeholder=""
                 returnKeyType={'next'}
                 value={address}
                 onBlur={() => setFieldTouched('address')}
-                onChangeText={(value) => {
+                onChangeText={value => {
                   this.addressSelected = false
                   this.showAddressResults = true
                   setFieldValue('address', value)
@@ -153,11 +160,9 @@ class PersonalInfo extends Component {
                 }}
                 onSubmitEditing={() => this.inputRefs['phone'].focus()}
               />
-              {
-                this.showAddressResults &&
+              {this.showAddressResults &&
                 locationResults.length > 0 &&
-                this.renderSearchResults(locationResults, fetchDetails)
-              }
+                this.renderSearchResults(locationResults, fetchDetails)}
             </View>
           )
         }}
@@ -165,54 +170,74 @@ class PersonalInfo extends Component {
     )
   }
 
-  renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
-    let {fullname, phone} = values
+  renderForm = ({
+    setFieldTouched,
+    setFieldValue,
+    setValues,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched
+  }) => {
+    let { fullname, phone } = values
     console.log('phone', phone)
     let buttonActive = isEmpty(errors) && this.addressSelected
     return (
       <ScrollView
         contentContainerStyle={styles.formContainer}
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps="always"
         style={{}}
       >
         <View style={styles.form}>
           <TextInputView
-            autoCapitalize='words'
+            autoCapitalize="words"
             blurOnSubmit={false}
             error={touched.fullname && errors.fullname}
-            inputRef={(input) => { this.inputRefs['fullname'] = input }}
-            label='FULL NAME'
-            name='fullname'
-            placeholder=''
+            inputRef={input => {
+              this.inputRefs['fullname'] = input
+            }}
+            label="FULL NAME"
+            name="fullname"
+            placeholder=""
             returnKeyType={'next'}
             value={fullname}
             onBlur={() => setFieldTouched('fullname')}
-            onChangeText={(value) => {
+            onChangeText={value => {
               setFieldValue('fullname', value)
             }}
             onSubmitEditing={() => this.inputRefs['address'].focus()}
           />
-          {this.renderSearch({values, errors, touched, setFieldTouched, setFieldValue, setValues})}
+          {this.renderSearch({
+            values,
+            errors,
+            touched,
+            setFieldTouched,
+            setFieldValue,
+            setValues
+          })}
           <TextInputView
             error={touched.phone && errors.phone}
-            keyboardType='phone-pad'
-            label='PHONE NUMBER'
+            keyboardType="phone-pad"
+            label="PHONE NUMBER"
             mask={'+1 [000]-[000]-[0000]'}
             maxLength={15}
-            name='phone'
-            placeholder='e.g. +1 212 1234-567'
-            refInput={(input) => { this.inputRefs['phone'] = input }}
-            returnKeyType='done'
+            name="phone"
+            placeholder="e.g. +1 212 1234-567"
+            refInput={input => {
+              this.inputRefs['phone'] = input
+            }}
+            returnKeyType="done"
             value={phone}
             onBlur={() => setFieldTouched('phone')}
-            onChangeText={(value) => setFieldValue('phone', value)}
+            onChangeText={value => setFieldValue('phone', value)}
           />
         </View>
         <View style={styles.footer}>
           <Button
             containerStyle={styles.button}
             disabled={!buttonActive}
-            title='NEXT'
+            title="NEXT"
             onPress={handleSubmit}
           />
         </View>
@@ -220,12 +245,17 @@ class PersonalInfo extends Component {
     )
   }
 
-  render () {
+  render() {
     // let { fullname, phone, address } = this.state
     return (
       <View style={styles.container}>
         <Formik
-          initialValues={{fullname: '', address: '', phone: '', addressSelected: false}}
+          initialValues={{
+            fullname: '',
+            address: '',
+            phone: '',
+            addressSelected: false
+          }}
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validate={this.validateForm}

@@ -13,12 +13,12 @@ const initialState = {
   startDate: startDate.format(),
   endDate: startDate.add({ hours: 12 }).format(),
   vehicleOptions: [],
-  address: {
-    title: '',
-    lat: 0,
-    lon: 0
+  location: {
+    address: '',
+    lat: null,
+    lon: null
   },
-  range: 10,
+  range: 3,
   isRecurring: false
 }
 

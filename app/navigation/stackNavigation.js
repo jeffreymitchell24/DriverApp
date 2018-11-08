@@ -15,10 +15,11 @@ import TermsConditions from 'components/screens/TermsConditions'
 import SignIn from 'components/screens/SignIn'
 import ResetPassword from 'components/screens/ResetPassword'
 
-import { NavBackImage, NavFilterImg } from 'components/ui'
+import { NavBackImage } from 'components/ui'
 // New Bookings
 import BookingConfirmed from 'components/screens/NewBooking/BookingConfirmed'
 import NewBooking from 'components/screens/NewBooking/Filters'
+import PickupLocation from 'components/screens/NewBooking/PickupLocation'
 import NewBookingDetails from 'components/screens/NewBooking/NewBookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
 import BookingCalendar from 'components/screens/NewBooking/BookingCalendar'
@@ -230,6 +231,30 @@ export const NewBookingStack = createStackNavigator(
         }
       }
     },
+    NewBooking: {
+      screen: NewBooking,
+      navigationOptions: {
+        title: 'New Booking',
+        headerTitle: null,
+        headerBackTitle: null,
+        headerLeftContainerStyle: {
+          paddingLeft: 10
+        }
+      }
+    },
+    PickupLocation: {
+      screen: PickupLocation,
+      navigationOptions: {
+        title: 'Pickup Location',
+        headerTitle: null,
+        headerBackTitle: null,
+        headerBackImage: null,
+        headerLeft: null,
+        headerRightContainerStyle: {
+          paddingRight: 10
+        }
+      }
+    },
     AvailableBookings: {
       screen: AvailableBookings,
       navigationOptions: {
@@ -251,7 +276,7 @@ export const NewBookingStack = createStackNavigator(
     }
   },
   {
-    initialRouteName: 'AvailableBookings',
+    initialRouteName: 'NewBooking',
     headerLayoutPreset: 'center',
     navigationOptions: {
       headerStyle: {

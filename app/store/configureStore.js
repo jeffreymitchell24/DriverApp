@@ -15,7 +15,8 @@ export default (rootReducer, rootSaga) => {
   const persistConfig = {
     key: 'root',
     storage,
-    whitelist: ['auth', 'filters']
+    whitelist: ['auth', 'newBooking'],
+    blacklist: ['filters']
   }
 
   const sagaMonitor = null

@@ -1,30 +1,19 @@
 import { createReducer } from '../../helpers/redux'
 
-import {
-  SET_DATE,
-  RESET_DATES
-} from 'store/actions/newBooking'
+import { ADD_ADDRESS_TO_HISTORY } from '../actions/newBooking'
 
-import {UNSELECT_CAR} from 'store/actions/bookings'
+import _ from 'lodash'
 
 const initialState = {
-  startDate: null,
-  endDate: null
+  addressHistory: []
 }
 
 const handlers = {
-  [SET_DATE]: (state, { payload }) => {
-    const {type, date} = payload
+  [ADD_ADDRESS_TO_HISTORY]: (state, { payload }) => {
     return {
-      startDate: type === 'start' ? date : state.startDate,
-      endDate: type === 'start' ? state.endDate : date
+      ...state,
+      addressHistory: [payload, ..._.slice(state.addressHistory || [], 0, 4)]
     }
-  },
-  [RESET_DATES]: (state, {payload}) => {
-    return initialState
-  },
-  [UNSELECT_CAR]: (state, { payload }) => {
-    return initialState
   }
 }
 export default createReducer(initialState, handlers)

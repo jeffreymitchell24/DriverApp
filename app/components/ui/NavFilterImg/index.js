@@ -2,11 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { View, StyleSheet, Text, TouchableOpacity } from 'react-native'
 
-const NavFilterImg = ({ onPress }) => {
+const NavFilterImg = ({ text, onPress }) => {
   return (
     <TouchableOpacity onPress={onPress}>
       <View style={{ padding: 10, paddingLeft: 0 }}>
-        <Text style={styles.text}>Filters</Text>
+        <Text style={styles.text}>{text || 'Filters'}</Text>
       </View>
     </TouchableOpacity>
   )
@@ -21,6 +21,7 @@ const styles = StyleSheet.create({
 })
 
 NavFilterImg.propTypes = {
+  text: PropTypes.string,
   onPress: PropTypes.func
 }
 
