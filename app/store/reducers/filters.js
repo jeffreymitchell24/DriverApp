@@ -2,6 +2,7 @@ import { createReducer } from '../../helpers/redux'
 
 import moment from 'moment'
 import { UPDATE_FILTER } from '../actions/newBookingsFilters'
+import { LOAD_CAR_CATEGORIES } from '../actions/newBooking'
 
 const now = moment()
 const startDate =
@@ -19,6 +20,7 @@ const initialState = {
     lon: null
   },
   range: 3,
+  categories: [],
   isRecurring: false
 }
 
@@ -27,6 +29,15 @@ const handlers = {
     return {
       ...state,
       [payload.filter]: payload.nextValue
+    }
+  },
+  [LOAD_CAR_CATEGORIES.SUCCESS]: (state, { payload }) => {
+    return {
+      ...state,
+      categories: payload.categories.map(item => ({
+        ...item,
+        selected: true
+      }))
     }
   }
 }

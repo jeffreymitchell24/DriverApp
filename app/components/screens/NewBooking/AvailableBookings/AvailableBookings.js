@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { View, FlatList, ActivityIndicator } from 'react-native'
-import { Home, NewBookingDetails } from 'navigation/routeNames'
+import { NewBookingDetails } from 'navigation/routeNames'
 import { NavFilterImg } from 'components/ui'
 import { BookingCard } from 'components/blocks'
 import moment from 'moment'

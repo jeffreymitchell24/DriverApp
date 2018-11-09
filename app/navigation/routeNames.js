@@ -30,6 +30,7 @@ export const BookingConfirmed = 'BookingConfirmed'
 export const NewBookingDetails = 'NewBookingDetails'
 export const AvailableBookings = 'AvailableBookings'
 export const BookingCalendar = 'BookingCalendar'
+export const VehicleOptions = 'VehicleOptions'
 
 // Booking Detail
 export const BookingDetail = 'BookingDetail'

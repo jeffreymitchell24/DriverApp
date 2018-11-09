@@ -2,10 +2,26 @@ import React, { PureComponent } from 'react'
 import { Switch } from 'react-native-switch'
 import PropTypes from 'prop-types'
 import { NavButton, Button } from 'components/ui'
-import { Home, PickupLocation, AvailableBookings } from 'navigation/routeNames'
+import {
+  Home,
+  PickupLocation,
+  AvailableBookings,
+  VehicleOptions
+} from 'navigation/routeNames'
 import { Slider } from 'react-native-elements'
-import { View, Text, Image, TextInput } from 'react-native'
+import {
+  View,
+  Text,
+  Image,
+  TextInput,
+  ActivityIndicator,
+  TouchableWithoutFeedback,
+  Keyboard,
+  Alert
+} from 'react-native'
+import { colors } from 'theme'
 
+import _ from 'lodash'
 import moment from 'moment'
 
 import { icons } from 'images'
@@ -61,12 +77,30 @@ class Filters extends PureComponent {
     showAddressResults: false
   }
 
+  componentDidMount() {
+    const { onCarCategoriesLoad } = this.props
+
+    onCarCategoriesLoad()
+  }
+
   onConfirmPress = () => {
     const {
-      filters: { startDate, endDate, isRecurring, location, range },
+      filters: { startDate, endDate, isRecurring, location, range, categories },
       onFetchAvailableCars,
       navigation
     } = this.props
+
+    const selectedCategories = []
+
+    categories.forEach(item => {
+      if (item.selected) selectedCategories.push(item.id)
+    })
+
+    if (selectedCategories.length === 0) {
+      Alert.alert('', 'Choose at least one vehicle option.')
+
+      return
+    }
 
     const req = {
       available_to: moment(endDate)
@@ -79,12 +113,12 @@ class Filters extends PureComponent {
         // .unix(startDate)
         // .tz('America/New_York')
         .format('YYYY-MM-DD HH:mm'),
-      categories: [1]
+      categories: categories.map(item => item.id)
     }
 
     if (location.lat && location.lon) {
       req.pickup_location_lat = location.lat
-      req.pickup_location_lon = location.lon
+      req.pickup_location_lon = location.lng
       req.allowed_range_miles = RANGES[range].value
     }
 
@@ -92,9 +126,23 @@ class Filters extends PureComponent {
       req.allowed_recurring = isRecurring
     }
 
+    console.log('onFetchAvailableCars', req)
+
     onFetchAvailableCars(req)
 
     navigation.navigate(AvailableBookings)
+  }
+
+  handleClearLocation = () => {
+    const { onFilterUpdate } = this.props
+
+    const nextLocation = {
+      address: '',
+      lat: null,
+      lon: null
+    }
+
+    onFilterUpdate('location', nextLocation)
   }
 
   handleDateChange = (nextDate, type) => {
@@ -122,17 +170,49 @@ class Filters extends PureComponent {
     onFilterUpdate('isRecurring', !filters.isRecurring)
   }
 
+  getVehicleOptionsString = () => {
+    const {
+      filters: { categories }
+    } = this.props
+
+    if (_.some(categories, item => !item.selected)) {
+      const names = []
+
+      categories.forEach(item => {
+        if (item.selected) names.push(item.name)
+      })
+
+      return _.truncate(_.join(names, ', '), {
+        length: 20
+      })
+    }
+
+    return 'All'
+  }
+
   render() {
     const {
       filters: { startDate, endDate, isRecurring, location, range },
-      onFilterUpdate
+      onFilterUpdate,
+      isFetchingCarCategories,
+      navigation
     } = this.props
+
+    if (isFetchingCarCategories) {
+      return (
+        <View style={styles.spinnerContainer}>
+          <ActivityIndicator color={colors.red} size="large" />
+        </View>
+      )
+    }
+
+    console.log(this.getVehicleOptionsString())
 
     return (
       <View style={styles.container}>
         <DatePicker
           formatter="dddd, DD MMM hh:mmA"
-          // startDate={new Date()}
+          startDate={new Date().toISOString()}
           style={{ marginTop: 20 }}
           type="Start"
           value={startDate}
@@ -140,28 +220,66 @@ class Filters extends PureComponent {
         />
         <DatePicker
           formatter="dddd, DD MMM hh:mmA"
-          // startDate={moment(startDate)
-          // .add({ hours: 1 })
-          // .toDate()}
+          startDate={moment(startDate)
+            .add({ hours: 1 })
+            .toDate()
+            .toISOString()}
           type="End"
           value={endDate}
           onChange={this.handleDateChange}
         />
+        <TouchableWithoutFeedback
+          onPress={() => navigation.navigate(VehicleOptions)}
+        >
+          <View
+            style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
+          >
+            <Text style={[styles.fieldName]}>Vehicle options</Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center'
+              }}
+            >
+              <Text
+                style={{
+                  fontSize: 17,
+                  fontFamily: 'Helvetica',
+                  color: '#F03E3E'
+                }}
+              >
+                {this.getVehicleOptionsString()}
+              </Text>
+              <Image
+                source={icons.arowRightGray}
+                style={{ width: 8, height: 13, marginLeft: 10 }}
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
         <View style={styles.filterRow}>
           <TextInput
             placeholder="Pickup location"
-            style={{ width: '100%', fontSize: 18, fontFamily: 'Helvetica' }}
+            style={{ flex: 1, fontSize: 18, fontFamily: 'Helvetica' }}
             value={location.address || ''}
-            onFocus={() => this.props.navigation.navigate(PickupLocation)}
+            onFocus={() => {
+              Keyboard.dismiss()
+
+              this.props.navigation.navigate(PickupLocation)
+            }}
           />
+          <TouchableWithoutFeedback onPress={this.handleClearLocation}>
+            <Image
+              source={icons.cancelGray}
+              style={{ width: 12, height: 12, marginLeft: 10 }}
+            />
+          </TouchableWithoutFeedback>
         </View>
         <View style={[styles.filterRow, { flexDirection: 'column' }]}>
-          <View style={styles.filterRow}>
-            <Text
-              style={[styles.fieldName, { borderBottomWidth: 0, padding: 0 }]}
-            >
-              Range from location
-            </Text>
+          <View
+            style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
+          >
+            <Text style={[styles.fieldName]}>Range from location</Text>
             <Text style={styles.fieldValue}>{RANGES[range].title}</Text>
           </View>
           <Slider
@@ -178,7 +296,9 @@ class Filters extends PureComponent {
               borderRadius: 100,
               shadowOffset: { width: 3, height: 3 },
               shadowColor: 'black',
-              shadowOpacity: 0.5
+              shadowOpacity: 0.5,
+              borderColor: '#F1F3F5',
+              borderWidth: 1
             }}
             thumbTintColor="#000"
             trackStyle={{
@@ -217,12 +337,14 @@ class Filters extends PureComponent {
             />
           </View>
         </View>
-        <Button
-          containerStyle={styles.button}
-          // disabled={}
-          title="SHOW AVAILABLE CARS"
-          onPress={this.onConfirmPress}
-        />
+        <View style={{ marginTop: 15 }}>
+          <Button
+            containerStyle={styles.button}
+            // disabled={}
+            title="SHOW AVAILABLE CARS"
+            onPress={this.onConfirmPress}
+          />
+        </View>
       </View>
     )
   }
@@ -230,7 +352,9 @@ class Filters extends PureComponent {
 
 Filters.propTypes = {
   filters: PropTypes.object,
+  isFetchingCarCategories: PropTypes.bool,
   navigation: PropTypes.object,
+  onCarCategoriesLoad: PropTypes.func,
   onFetchAvailableCars: PropTypes.func,
   onFilterUpdate: PropTypes.func
 }

@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { colors } from 'theme'
 
 export const styles = StyleSheet.create({
   container: {
@@ -30,25 +31,11 @@ export const styles = StyleSheet.create({
   recurringImageContainer: {
     width: 24,
     height: 24
-  }
-})
-
-export const googleStyles = StyleSheet.create({
-  locationItem: {
-    marginBottom: 12
   },
-  container: {
-    // maxHeight: 100,
-    elevation: 3,
-    backgroundColor: '#fff',
-    marginHorizontal: 2,
-    paddingTop: 12,
-    paddingHorizontal: 16,
-    marginBottom: 16
-    // borderWidth: 2,
-    // borderColor: colors.red
-  },
-  contentContainerStyle: {
-    backgroundColor: '#fff'
+  spinnerContainer: {
+    flex: 1,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center'
   }
 })

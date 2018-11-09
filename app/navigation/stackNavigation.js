@@ -23,6 +23,7 @@ import PickupLocation from 'components/screens/NewBooking/PickupLocation'
 import NewBookingDetails from 'components/screens/NewBooking/NewBookingDetails'
 import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
 import BookingCalendar from 'components/screens/NewBooking/BookingCalendar'
+import VehicleOptions from 'components/screens/NewBooking/VehicleOptions'
 
 // import TermsConditions from 'components/screens/TermsConditions'
 import ChangePassword from 'components/screens/Profile/ChangePassword'
@@ -253,6 +254,15 @@ export const NewBookingStack = createStackNavigator(
         headerRightContainerStyle: {
           paddingRight: 10
         }
+      }
+    },
+    VehicleOptions: {
+      screen: VehicleOptions,
+      navigationOptions: {
+        headerTitle: null,
+        headerBackTitle: null,
+        headerBackImage: <NavBackImage short />,
+        headerLeftContainerStyle: {}
       }
     },
     AvailableBookings: {

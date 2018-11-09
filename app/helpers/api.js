@@ -275,3 +275,13 @@ export const toFormData = data => {
   })
   return form
 }
+
+export const fetchCarCategories = async token => {
+  let config = {
+    headers: { Authorization: `Bearer ${token}` }
+  }
+
+  let response = await axios.get(`${URL}/api/cars/categories`, config)
+  console.log('fetchCarCategories response', response)
+  return response.data.data
+}

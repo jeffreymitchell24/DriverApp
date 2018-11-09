@@ -47,7 +47,7 @@ class DatePicker extends PureComponent {
   render() {
     const { animation } = this.state
 
-    const { value, type, formatter, style } = this.props
+    const { value, type, formatter, style, startDate } = this.props
 
     return (
       <View style={[styles.container, style]}>
@@ -69,6 +69,7 @@ class DatePicker extends PureComponent {
         >
           <DatePickerIOS
             date={new Date(value)}
+            minimumDate={startDate ? new Date(startDate) : new Date()}
             mode="datetime"
             style={{ width: '100%' }}
             onDateChange={this.handleChange}
@@ -81,6 +82,7 @@ class DatePicker extends PureComponent {
 
 DatePicker.propTypes = {
   formatter: PropTypes.string,
+  startDate: PropTypes.string,
   style: PropTypes.object,
   type: PropTypes.string,
   value: PropTypes.string,

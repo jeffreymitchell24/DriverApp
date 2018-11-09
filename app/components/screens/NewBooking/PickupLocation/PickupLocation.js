@@ -4,8 +4,9 @@ import { NavFilterImg } from 'components/ui'
 import { GOOGLE_API_KEY } from 'config/apiKeys'
 
 import { GoogleAutoComplete } from 'react-native-google-autocomplete'
+import BackgroundGeolocation from 'react-native-mauron85-background-geolocation'
 
-import { View, Text, Image, TouchableOpacity } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
 import { icons } from 'images'
@@ -25,6 +26,28 @@ class PickupLocation extends PureComponent {
     address: ''
   }
 
+  handleCurrentLocationPress = () => {
+    const { onFilterUpdate, navigation } = this.props
+
+    BackgroundGeolocation.getCurrentLocation(
+      location => {
+        console.log('BackgroundGeolocation', location)
+        const choosenLocation = {
+          address: 'My location',
+          lat: location.latitude,
+          lng: location.longitude
+        }
+
+        onFilterUpdate('location', choosenLocation)
+        navigation.goBack()
+      },
+      err => {
+        console.log('location error', err)
+      },
+      { enableHighAccuracy: false, timeout: 10000 }
+    )
+  }
+
   onLocationPress = (fetchDetails, loc) => {
     fetchDetails(loc.place_id).then(address => {
       console.log('address', address)
@@ -32,18 +55,40 @@ class PickupLocation extends PureComponent {
 
       const {
         formatted_address: addressText,
-        geometry: { location }
+        geometry: { location },
+        address_components: addressComponents
       } = address
 
-      onFilterUpdate('location', {
+      if (addressComponents[2].short_name !== 'NY') {
+        Alert.alert(
+          '',
+          'Car Flow is currently available only in New York City.'
+        )
+
+        return
+      }
+
+      const choosenLocation = {
+        id: loc.place_id,
         address: addressText,
         lat: location.lat,
-        lon: location.lon
-      })
-      onChooseAddress(addressText)
+        lng: location.lng
+      }
+
+      onFilterUpdate('location', choosenLocation)
+      onChooseAddress(choosenLocation)
 
       navigation.goBack()
     })
+  }
+
+  onHistoryLocationPres = loc => {
+    const { onFilterUpdate, onChooseAddress, navigation } = this.props
+
+    onFilterUpdate('location', loc)
+    onChooseAddress(loc)
+
+    navigation.goBack()
   }
 
   renderSearchResults = (locationResults, fetchDetails) => {
@@ -87,7 +132,7 @@ class PickupLocation extends PureComponent {
                     source={icons.mapMarker}
                     style={{ width: 15, height: 20 }}
                   />
-                  <Text style={styles.resultRowText}>{el}</Text>
+                  <Text style={styles.resultRowText}>{el.address}</Text>
                 </View>
               </TouchableOpacity>
             ))}
@@ -102,15 +147,17 @@ class PickupLocation extends PureComponent {
 
     return (
       <View>
-        <View style={styles.resultsContainer}>
-          <View style={[styles.resultRow]}>
-            <Image
-              source={icons.geolocation}
-              style={{ width: 20, height: 20 }}
-            />
-            <Text style={styles.resultRowText}>Current Location</Text>
+        <TouchableOpacity onPress={this.handleCurrentLocationPress}>
+          <View style={styles.resultsContainer}>
+            <View style={[styles.resultRow]}>
+              <Image
+                source={icons.geolocation}
+                style={{ width: 20, height: 20 }}
+              />
+              <Text style={styles.resultRowText}>Current Location</Text>
+            </View>
           </View>
-        </View>
+        </TouchableOpacity>
         {!!history.length && this.renderRecentsList(history, fetchDetails)}
       </View>
     )

@@ -18,5 +18,8 @@ module.exports = {
   recurring: require('./recurring.png'),
   navFiltersBtn: require('./navFilterBtn.png'),
   geolocation: require('./geolocation.png'),
-  mapMarker: require('./map-marker.png')
+  mapMarker: require('./map-marker.png'),
+  selected: require('./selected.png'),
+  cancelGray: require('./cancel-gray.png'),
+  arowRightGray: require('./arrow-right-gray.png')
 }
