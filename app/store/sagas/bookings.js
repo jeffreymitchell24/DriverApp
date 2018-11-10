@@ -18,6 +18,7 @@ import {
   HELP_RIDE_MALFUNCTIONED,
   START_RIDE
 } from 'store/actions/bookings'
+import { LOAD_CAR_CATEGORIES } from 'store/actions/newBooking'
 
 function* fetchUserBookings(action) {
   let state = yield select()
@@ -488,6 +489,26 @@ async function transformPhotoArray(photos) {
   return transformedPhotos
 }
 
+function* fetchCarCategories() {
+  let state = yield select()
+  let { token } = state.auth
+  try {
+    let response = yield call(Api.fetchCarCategories, token)
+    yield put({ type: LOAD_CAR_CATEGORIES.SUCCESS, payload: response })
+  } catch (error) {
+    console.log('error response', error.response)
+    console.log('error message', error.message)
+    yield put({
+      type: LOAD_CAR_CATEGORIES.FAILURE,
+      payload: error.response.data.error.message
+    })
+  }
+}
+
+function* fetchNewBookingDataFlow() {
+  yield takeLatest(LOAD_CAR_CATEGORIES.REQUEST, fetchCarCategories)
+}
+
 export default [
   fetchUserBookingsFlow,
   fetchAvailableCarsFlow,
@@ -501,5 +522,6 @@ export default [
   submitRideReceiptFlow,
   rideEndFlow,
   sendRideLateNotificationFlow,
-  rideStartFlow
+  rideStartFlow,
+  fetchNewBookingDataFlow
 ]

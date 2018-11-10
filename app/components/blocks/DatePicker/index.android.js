@@ -69,7 +69,11 @@ class DatePicker extends PureComponent {
         >
           <CustomDatePicker
             initDate={new Date(value)}
-            startDate={startDate ? new Date(startDate) : new Date()}
+            startDate={
+              startDate
+                ? new Date(startDate).toISOString()
+                : new Date().toISOString()
+            }
             style={{
               width: '100%',
               height: 216

@@ -3,6 +3,7 @@ package com.carflo.carflow;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.marianhello.bgloc.react.BackgroundGeolocationPackage;
 import com.wheelpicker.WheelPickerPackage;
 // import com.zyu.ReactNativeWheelPickerPackage;
 import com.rnfs.RNFSPackage;
@@ -37,6 +38,7 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new BackgroundGeolocationPackage(),
             new WheelPickerPackage(),
             // new ReactNativeWheelPickerPackage(),
             new RNFSPackage(),
