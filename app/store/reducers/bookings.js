@@ -19,6 +19,8 @@ import {
   SUBMIT_RECEIPT
 } from 'store/actions/bookings'
 
+import moment from 'moment'
+
 const initialState = {
   pending: false,
   upcoming: {
@@ -296,6 +298,8 @@ const handlers = {
     }
   },
   [END_RIDE.SUCCESS]: (state, { payload }) => {
+    const date = moment(payload.booking_ended_at).format('dddd D MMM')
+
     return {
       ...state,
       upcoming: {
@@ -305,7 +309,13 @@ const handlers = {
           book => book.id !== payload.id
         )
       },
-      history: [payload, ...state.history],
+      history: {
+        ...(state.history || {}),
+        [date]: {
+          ...((state.history || {})[date] || []),
+          payload
+        }
+      },
       selectedRide: payload,
       rideEndPending: false
     }
