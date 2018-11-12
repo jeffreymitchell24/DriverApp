@@ -5,7 +5,7 @@ import { GOOGLE_API_KEY } from 'config/apiKeys'
 
 import { GoogleAutoComplete } from 'react-native-google-autocomplete'
 import BackgroundGeolocation from 'react-native-mauron85-background-geolocation'
-
+import _ from 'lodash'
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import { SearchBar } from 'react-native-elements'
 
@@ -59,7 +59,12 @@ class PickupLocation extends PureComponent {
         address_components: addressComponents
       } = address
 
-      if (addressComponents[2].short_name !== 'NY') {
+      const isGhotamCity = _.some(
+        Object.values(addressComponents),
+        item => item.long_name === 'New York'
+      )
+
+      if (!isGhotamCity) {
         Alert.alert(
           '',
           'Car Flow is currently available only in New York City.'

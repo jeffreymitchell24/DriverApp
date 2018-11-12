@@ -14,12 +14,8 @@ import Spinner from 'react-native-loading-spinner-overlay'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
 import { Button } from 'components/ui'
-import {
-  BookingDetail,
-  CarImage,
-  SectionTitle,
-  DatePicker
-} from 'components/blocks'
+import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
+import DatePicker from '../../../blocks/DatePicker'
 import { BookingConfirmed, CarLocation } from 'navigation/routeNames'
 
 import { icons } from 'images'
