@@ -17,7 +17,8 @@ import {
   ActivityIndicator,
   TouchableWithoutFeedback,
   Keyboard,
-  Alert
+  Alert,
+  TouchableOpacity
 } from 'react-native'
 import { colors } from 'theme'
 
@@ -74,7 +75,8 @@ class Filters extends PureComponent {
   state = {
     address: '',
     addressSelected: false,
-    showAddressResults: false
+    showAddressResults: false,
+    isNext7Days: false
   }
 
   componentDidMount() {
@@ -145,9 +147,32 @@ class Filters extends PureComponent {
     onFilterUpdate('location', nextLocation)
   }
 
+  handleNext7DaysBtnPress = () => {
+    const { onFilterUpdate } = this.props
+
+    const now = moment()
+
+    const nextStartDate =
+      now.minute() || now.second() || now.millisecond()
+        ? now.add(1, 'hour').startOf('hour')
+        : now.startOf('hour')
+
+    onFilterUpdate('startDate', nextStartDate.format())
+
+    const nextEndDate = nextStartDate.add({ days: 7 })
+
+    onFilterUpdate('endDate', nextEndDate.format())
+
+    this.setState({
+      isNext7Days: true
+    })
+  }
+
   handleDateChange = (nextDate, type) => {
     const { onFilterUpdate } = this.props
-    const nextState = {}
+    const nextState = {
+      isNext7Days: false
+    }
 
     if (type === 'Start') {
       onFilterUpdate('startDate', nextDate)
@@ -198,6 +223,8 @@ class Filters extends PureComponent {
       navigation
     } = this.props
 
+    const { isNext7Days } = this.state
+
     if (isFetchingCarCategories) {
       return (
         <View style={styles.spinnerContainer}>
@@ -206,12 +233,35 @@ class Filters extends PureComponent {
       )
     }
 
-    console.log(this.getVehicleOptionsString())
-
     return (
       <View style={styles.container}>
         <DatePicker
+          ExpandedHeader={() => (
+            <View
+              style={[
+                styles.filterRow,
+                {
+                  borderBottomWidth: 0,
+                  borderTopWidth: 0,
+                  justifyContent: 'flex-end'
+                }
+              ]}
+            >
+              <TouchableOpacity onPress={this.handleNext7DaysBtnPress}>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    fontFamily: 'Helvetica',
+                    color: '#F03E3E'
+                  }}
+                >
+                  Next 7 days
+                </Text>
+              </TouchableOpacity>
+            </View>
+          )}
           formatter="dddd, DD MMM hh:mmA"
+          headerValue={isNext7Days ? 'Next 7 days' : null}
           startDate={new Date().toISOString()}
           style={{ marginTop: 20 }}
           type="Start"
@@ -219,7 +269,9 @@ class Filters extends PureComponent {
           onChange={this.handleDateChange}
         />
         <DatePicker
+          disabled={isNext7Days}
           formatter="dddd, DD MMM hh:mmA"
+          headerValue={isNext7Days ? 'Next 7 days' : null}
           startDate={moment(startDate)
             .add({ hours: 1 })
             .toDate()

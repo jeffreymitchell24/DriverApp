@@ -20,6 +20,12 @@ class DatePicker extends PureComponent {
     animation: new Animated.Value(0)
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (nextProps.disabled && this.state.isOpen) {
+      this.handleOpen()
+    }
+  }
+
   handleOpen = () => {
     const { isOpen, animation } = this.state
 
@@ -47,15 +53,26 @@ class DatePicker extends PureComponent {
   render() {
     const { animation } = this.state
 
-    const { value, type, formatter, style, startDate } = this.props
+    const {
+      value,
+      type,
+      formatter,
+      style,
+      startDate,
+      ExpandedHeader,
+      headerValue,
+      disabled
+    } = this.props
 
     return (
       <View style={[styles.container, style]}>
         <TouchableWithoutFeedback onPress={this.handleOpen}>
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>{type}</Text>
-            <Text style={styles.headerDate}>
-              {moment(value).format(formatter)}
+            <Text
+              style={disabled ? styles.headerDisabledText : styles.headerDate}
+            >
+              {headerValue || moment(value).format(formatter)}
             </Text>
           </View>
         </TouchableWithoutFeedback>
@@ -67,6 +84,11 @@ class DatePicker extends PureComponent {
             zIndex: 0
           }}
         >
+          {!!ExpandedHeader && (
+            <TouchableWithoutFeedback onPress={this.handleOpen}>
+              <ExpandedHeader />
+            </TouchableWithoutFeedback>
+          )}
           <CustomDatePicker
             initDate={new Date(value)}
             startDate={
@@ -87,12 +109,19 @@ class DatePicker extends PureComponent {
 }
 
 DatePicker.propTypes = {
+  ExpandedHeader: PropTypes.element,
+  disabled: PropTypes.bool,
   formatter: PropTypes.string,
+  headerValue: PropTypes.oneOf([PropTypes.string, null]),
   startDate: PropTypes.string,
   style: PropTypes.object,
   type: PropTypes.string,
   value: PropTypes.string,
   onChange: PropTypes.func
+}
+
+DatePicker.defaultProps = {
+  disabled: false
 }
 
 export default DatePicker
