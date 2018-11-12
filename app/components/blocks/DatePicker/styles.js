@@ -18,6 +18,11 @@ export default StyleSheet.create({
     fontFamily: 'SFProText-Regular',
     color: '#212529'
   },
+  headerDisabledText: {
+    fontSize: 17,
+    fontFamily: 'SFProText-Regular',
+    color: '#868E96'
+  },
   headerDate: {
     fontSize: 17,
     fontFamily: 'Helvetica',
