@@ -1,8 +1,6 @@
 import { createReducer } from '../../helpers/redux'
 
-import {
-  VALIDATE_EMAIL
-} from 'store/actions/email'
+import { VALIDATE_EMAIL } from 'store/actions/email'
 
 const initialState = {
   isEmailValidating: false,

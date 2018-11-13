@@ -191,6 +191,7 @@ function* checkRideLicenseFlow() {
   )
 }
 function* rideCancel({ payload }) {
+  console.log('rideCancel', payload)
   const { carId: id } = payload
   let state = yield select()
   let { token } = state.auth

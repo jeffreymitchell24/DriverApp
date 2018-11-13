@@ -208,7 +208,7 @@ export const cancelRide = async ({ token, id }) => {
     config
   )
   console.log('cancelRide response', response)
-  return response.data.data
+  return response.data
 }
 
 export const rideDamaged = async ({ token, id, data }) => {

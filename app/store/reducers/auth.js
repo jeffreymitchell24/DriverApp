@@ -11,7 +11,7 @@ import {
   UPDATE_USER_IMAGE,
   UPDATE_USER_PROFILE
 } from 'store/actions/auth'
-import {SIGN_UP} from 'store/actions/registration'
+import { SIGN_UP } from 'store/actions/registration'
 const REHYDRATE = 'persist/REHYDRATE'
 
 const initialState = {
@@ -51,7 +51,7 @@ const handlers = {
     }
   },
   [SIGN_IN.SUCCESS]: (state, { payload }) => {
-    const {user = null, token} = payload
+    const { user = null, token } = payload
     return {
       ...state,
       user,
@@ -74,7 +74,7 @@ const handlers = {
     }
   },
   [SIGN_UP.SUCCESS]: (state, { payload }) => {
-    const {user = null, token} = payload
+    const { user = null, token } = payload
     return {
       ...state,
       user,

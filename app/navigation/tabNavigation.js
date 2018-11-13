@@ -39,19 +39,23 @@ HomeTabStack.navigationOptions = ({ navigation }) => {
   return {
     headerLeft: (
       <ProfileButton
-        onPress={() => navigation.navigate(Profile, {
-          backKey: HomeTabStack
-        })}
+        onPress={() =>
+          navigation.navigate(Profile, {
+            backKey: HomeTabStack
+          })
+        }
       />
     ),
     headerRight: (
       <HistoryButton
-        onPress={() => navigation.navigate(HistoryRoute, {
-          backKey: HomeTabStack
-        })}
+        onPress={() =>
+          navigation.navigate(HistoryRoute, {
+            backKey: HomeTabStack
+          })
+        }
       />
     )
   }
 }
 
-export {HomeTabStack}
+export { HomeTabStack }

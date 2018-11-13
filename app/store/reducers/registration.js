@@ -35,7 +35,7 @@ const initialState = {
 
 const handlers = {
   [SAVE_SIGNUP_STEP_DATA]: (state, { payload }) => {
-    const {step, stepData} = payload
+    const { step, stepData } = payload
     return {
       ...state,
       signUpData: {
@@ -64,7 +64,7 @@ const handlers = {
     }
   },
   [UPDATE_LICENSE]: (state, { payload }) => {
-    const {type, side, imageUri} = payload
+    const { type, side, imageUri } = payload
     return {
       ...state,
       documents: {

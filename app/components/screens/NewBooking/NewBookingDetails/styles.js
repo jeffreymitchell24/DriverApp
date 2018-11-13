@@ -132,5 +132,22 @@ export default StyleSheet.create({
   recurringImageContainer: {
     width: 24,
     height: 24
+  },
+
+  datePickerContainer: {
+    width: '100%',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingVertical: 12
+  },
+  datePickerText: {
+    fontSize: 17,
+    fontFamily: 'SFProText-Regular',
+    color: '#212529'
+  },
+  datePickerDate: {
+    fontSize: 17,
+    fontFamily: 'Helvetica',
+    color: '#F03E3E'
   }
 })

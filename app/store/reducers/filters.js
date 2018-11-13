@@ -17,7 +17,7 @@ const initialState = {
   location: {
     address: '',
     lat: null,
-    lon: null
+    lng: null
   },
   range: 3,
   categories: [],

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
-import {RideLateDescription, BookingDetail} from 'navigation/routeNames'
+import { RideLateDescription, BookingDetail } from 'navigation/routeNames'
 import { HelpCenterSection, NavButton } from 'components/ui'
 import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
@@ -12,20 +12,26 @@ import styles from './styles'
 class HelpCenter extends PureComponent {
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(BookingDetail)} />
+      headerLeft: (
+        <NavButton
+          icon="arrowLeft"
+          imageStyle={{ height: 14, width: 16 }}
+          onPress={() => navigation.navigate(BookingDetail)}
+        />
+      )
     }
   }
-  componentDidUpdate (prevProps) {
-    const {error, requestPending} = this.props
+  componentDidUpdate(prevProps) {
+    const { error, requestPending } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error)Alert.alert('Error', error)
+      if (error) Alert.alert('Error', error)
       else {
         Alert.alert(
           'Thank you for notifying us',
           'Our administrator has been notified. You can add more details about why you are being late (optional).',
           [
-            {text: 'OK', onPress: () => this.onOkPress()},
-            {text: 'More', onPress: () => this.onMorePress()}
+            { text: 'OK', onPress: () => this.onOkPress() },
+            { text: 'More', onPress: () => this.onMorePress() }
           ],
           { cancelable: false }
         )
@@ -39,15 +45,16 @@ class HelpCenter extends PureComponent {
     this.props.navigation.navigate(RideLateDescription)
   }
   onLatePress = () => {
-    const {onSendLateNotification, ride} = this.props
-    onSendLateNotification({carId: ride.id})
+    const { onSendLateNotification, ride } = this.props
+
+    onSendLateNotification({ carId: ride.id })
   }
 
   keyExtractor = (item, index) => item.id
   renderSeparator = () => <View style={styles.listSeparator} />
 
-  renderListItem = ({item}) => {
-    let {text, routeName, id} = item
+  renderListItem = ({ item }) => {
+    let { text, routeName, id } = item
     let onPress = () => this.props.navigation.navigate(routeName)
     if (id === 'late') {
       onPress = this.onLatePress
@@ -55,12 +62,12 @@ class HelpCenter extends PureComponent {
     return (
       <TouchableOpacity style={styles.listItem} onPress={onPress}>
         <Text style={styles.listItemText}>{text}</Text>
-        <Icon color={colors.gray25} name='ios-arrow-forward' size={22} />
+        <Icon color={colors.gray25} name="ios-arrow-forward" size={22} />
       </TouchableOpacity>
     )
   }
 
-  render () {
+  render() {
     return (
       <HelpCenterSection>
         <FlatList

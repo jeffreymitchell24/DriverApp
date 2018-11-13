@@ -1,9 +1,13 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import {signOut, updateUserImage, profileUpdateCheck} from 'store/actions/auth'
+import {
+  signOut,
+  updateUserImage,
+  profileUpdateCheck
+} from 'store/actions/auth'
 import { getUpdateError, getAuthStatus } from 'store/selectors/auth'
 import ProfileMain from './ProfileMain'
-import {getUserData} from 'store/selectors'
+import { getUserData } from 'store/selectors'
 
 const selector = createStructuredSelector({
   user: getUserData,
