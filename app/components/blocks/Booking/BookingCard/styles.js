@@ -9,7 +9,7 @@ export default StyleSheet.create({
     borderRadius: 5,
     marginTop: metrics.contentMarginSmall / 2,
     marginBottom: metrics.contentMarginSmall / 2,
-    padding: 8,
+    padding: 5,
 
     flexDirection: 'row',
     alignItems: 'center'
@@ -23,11 +23,12 @@ export default StyleSheet.create({
   },
   cardImage: {
     backgroundColor: colors.white,
-    height: 110,
-    width: '100%'
+    height: 80,
+    width: 80,
+    borderRadius: 5,
+    alignSelf: 'center'
   },
-  cardContent: {
-  },
+  cardContent: {},
   cardTitle: {
     color: colors.black,
     fontFamily: 'SFProText-Regular',

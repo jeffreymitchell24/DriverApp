@@ -1,20 +1,15 @@
-import React from 'react'
-import { Image, TouchableOpacity } from 'react-native'
-import PropTypes from 'prop-types'
-import {icons} from 'images'
+import Upcoming from './ProfileButton'
+import { createStructuredSelector } from 'reselect'
+import { connect } from 'react-redux'
+import { getUserData } from 'store/selectors'
 
-import styles from './styles'
+const selector = createStructuredSelector({
+  user: getUserData
+})
 
-const ProfileButton = ({onPress}) => {
-  return (
-    <TouchableOpacity onPress={onPress}>
-      <Image source={icons['user']} style={styles.image} />
-    </TouchableOpacity>
-  )
-}
+const actions = {}
 
-ProfileButton.propTypes = {
-  onPress: PropTypes.func
-}
-
-export { ProfileButton }
+export const ProfileButton = connect(
+  selector,
+  actions
+)(Upcoming)

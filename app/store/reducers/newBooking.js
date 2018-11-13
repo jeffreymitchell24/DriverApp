@@ -2,15 +2,21 @@ import { createReducer } from '../../helpers/redux'
 
 import {
   ADD_ADDRESS_TO_HISTORY,
-  LOAD_CAR_CATEGORIES
+  LOAD_CAR_CATEGORIES,
+  SET_DATE,
+  RESET_DATES
 } from '../actions/newBooking'
+
+import { UNSELECT_CAR } from 'store/actions/bookings'
 
 import _ from 'lodash'
 
 const initialState = {
   addressHistory: [],
   carCategories: [],
-  isFetchingCarCategories: false
+  isFetchingCarCategories: false,
+  startDate: null,
+  endDate: null
 }
 
 const handlers = {
@@ -39,6 +45,23 @@ const handlers = {
       ...state,
       isFetchingCarCategories: false,
       carCategories: payload.categories
+    }
+  },
+  [SET_DATE]: (state, { payload }) => {
+    const { type, date } = payload
+    return {
+      startDate: type === 'start' ? date : state.startDate,
+      endDate: type === 'start' ? state.endDate : date
+    }
+  },
+  [RESET_DATES]: (state, { payload }) => {
+    return initialState
+  },
+  [UNSELECT_CAR]: (state, { payload }) => {
+    return {
+      ...state,
+      startDate: null,
+      endDate: null
     }
   }
 }

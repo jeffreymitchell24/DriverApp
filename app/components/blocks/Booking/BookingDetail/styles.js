@@ -1,5 +1,4 @@
-
-import {StyleSheet} from 'react-native'
+import { StyleSheet } from 'react-native'
 import { colors, metrics } from 'theme'
 
 export default StyleSheet.create({
@@ -7,7 +6,8 @@ export default StyleSheet.create({
   carPhoto: {
     backgroundColor: colors.gray100,
     alignSelf: 'stretch',
-    height: 200
+    height: 200,
+    borderRadius: 5
   },
   // Booking Detail
   bookingDetail: {

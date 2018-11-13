@@ -26,12 +26,10 @@ class History extends Component {
   render() {
     const { bookings } = this.props
 
-    const sections = _.orderBy(Object.keys(bookings), item => item, [
-      'desc'
-    ]).map(key => {
+    const sections = Object.keys(bookings).map(key => {
       return {
         title: key,
-        data: _.orderBy(bookings[key], 'ended_report.created_at', ['asc'])
+        data: _.orderBy(bookings[key], 'ended_report.created_at', ['desc'])
       }
     })
 

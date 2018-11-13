@@ -172,7 +172,7 @@ class BookingDetail extends Component {
           />
           <SectionContent style={styles.photoList}>
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Front</Text>
+              <Text style={styles.photoLabel}>Front</Text> 
               <Photo imageUri={report.photo_front_s3_link} touchable={false} />
             </View>
             <View style={styles.photoBlock}>

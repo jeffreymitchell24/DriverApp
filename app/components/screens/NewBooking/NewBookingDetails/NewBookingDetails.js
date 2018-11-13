@@ -6,7 +6,8 @@ import {
   Alert,
   ScrollView,
   ActivityIndicator,
-  Image
+  Image,
+  TouchableWithoutFeedback
 } from 'react-native'
 import { Switch } from 'react-native-switch'
 import moment from 'moment'
@@ -16,7 +17,13 @@ import PropTypes from 'prop-types'
 import { Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
 import DatePicker from '../../../blocks/DatePicker'
-import { BookingConfirmed, CarLocation } from 'navigation/routeNames'
+import {
+  BookingConfirmed,
+  CarLocation,
+  BookingCalendar
+} from 'navigation/routeNames'
+
+import { getMaxDate } from 'helpers/date'
 
 import { icons } from 'images'
 
@@ -55,39 +62,29 @@ class NewBookingDetails extends PureComponent {
         carName: `${car.manufacturer.name} ${car.model}`
       })
     }
-
-    const now = moment()
-    const start =
-      now.minute() || now.second() || now.millisecond()
-        ? now.add(1, 'hour').startOf('hour')
-        : now.startOf('hour')
-
-    this.setState({
-      startDate: start.format(),
-      endDate: start.add({ hours: 12 }).format()
-    })
   }
 
   componentDidUpdate(prevProps) {
-    let { bookingError, bookingPending } = this.props
-    const { startDate, endDate, isRecurring } = this.state
+    let {
+      bookingError,
+      bookingPending,
+      startDate,
+      endDate,
+      navigation
+    } = this.props
+    const { isRecurring } = this.state
 
     if (!bookingPending && prevProps.bookingPending) {
       if (!bookingError) {
         const { manufacturer, model } = this.props.car.car
         let bookingData = {
           car: `${manufacturer.name} ${model}`,
-          endDate: moment(endDate)
-            // .unix(endDate)
-            // .tz('America/New_York')
-            .subtract(1, 'hours')
-            .minutes(59),
-          startDate: moment(startDate),
-          // .unix(startDate)
-          // .tz('America/New_York'),
+          startDate: moment.unix(startDate.timestamp).tz('America/New_York'),
+          endDate: moment.unix(endDate.timestamp).tz('America/New_York'),
           isRecurring: isRecurring
         }
-        return this.props.navigation.navigate(BookingConfirmed, { bookingData })
+
+        return navigation.navigate(BookingConfirmed, { bookingData })
       } else {
         Alert.alert('', bookingError)
       }
@@ -109,44 +106,57 @@ class NewBookingDetails extends PureComponent {
     }
   }
 
+  onStartDatePress = () => {
+    this.setState({ endDate: null })
+    this.props.navigation.navigate(BookingCalendar, {
+      bookDateType: 'start',
+      bookedHours: this.props.car.booked
+    })
+  }
+  onEndDatePress = () => {
+    if (!this.props.startDate) Alert.alert('', 'Select start date first')
+    else {
+      let maxDate = getMaxDate(this.props.startDate, this.props.car.booked)
+      console.log('maxDate', maxDate)
+      // Alert.alert('', maxDate)
+      this.props.navigation.navigate(BookingCalendar, {
+        bookDateType: 'end',
+        bookedHours: this.props.car.booked,
+        maxDate,
+        minDate: this.props.startDate,
+        startHour: moment
+          .unix(this.props.startDate)
+          .tz('America/New_York')
+          .hour()
+      })
+    }
+  }
+
   handleToogleRecurringSwitch = () => {
     this.setState({
       isRecurring: !this.state.isRecurring
     })
   }
 
-  handleDateChange = (nextDate, type) => {
-    const nextState = {}
-
-    if (type === 'Start') {
-      nextState.startDate = nextDate
-      nextState.endDate = moment(nextDate)
-        .add({ hours: 12 })
-        .format()
-    } else {
-      nextState.endDate = nextDate
-    }
-
-    this.setState(nextState)
-  }
-
   onConfirmPress = () => {
     const {
-      car: { car }
+      car: { car },
+      startDate,
+      endDate
     } = this.props
-    const { startDate, endDate, isRecurring } = this.state
+    const { isRecurring } = this.state
 
     console.log(startDate, endDate)
     let timeStamps = {
-      booking_ending_at: moment(endDate)
-        // .unix(endDate)
-        // .tz('America/New_York')
+      booking_ending_at: moment
+        .unix(endDate.timestamp)
+        .tz('America/New_York')
         .subtract(1, 'hours')
         .minutes(59)
         .format('YYYY-MM-DD HH:mm'),
-      booking_starting_at: moment(startDate)
-        // .unix(startDate)
-        // .tz('America/New_York')
+      booking_starting_at: moment
+        .unix(startDate.timestamp)
+        .tz('America/New_York')
         .format('YYYY-MM-DD HH:mm'),
       is_recurring: 0 + isRecurring
     }
@@ -221,7 +231,7 @@ class NewBookingDetails extends PureComponent {
 
   render() {
     const { isRecurring } = this.state
-    const { isFetchingCar, navigation } = this.props
+    const { isFetchingCar, navigation, startDate, endDate } = this.props
     if (isFetchingCar) {
       return (
         <View style={styles.spinnerContainer}>
@@ -245,7 +255,6 @@ class NewBookingDetails extends PureComponent {
       color = '',
       year = ''
     } = car
-    const { startDate, endDate } = this.state
     let isButtonActive = startDate && endDate
     return (
       <React.Fragment>
@@ -293,25 +302,39 @@ class NewBookingDetails extends PureComponent {
             <View style={styles.scheduleContainer}>
               <SectionTitle title="SCHEDULE" />
               {!!car['allowed_recurring'] && this.renderRecurringBlock()}
-              <DatePicker
-                formatter={
-                  isRecurring ? '[Every] dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'
-                }
-                style={{ marginTop: 20 }}
-                type="Start"
-                value={startDate}
-                onChange={this.handleDateChange}
-              />
-              <DatePicker
-                formatter={isRecurring ? 'dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'}
-                startDate={moment(startDate)
-                  .add({ hours: 1 })
-                  .format()}
-                style={{ marginBottom: 20 }}
-                type="End"
-                value={endDate}
-                onChange={this.handleDateChange}
-              />
+              <TouchableWithoutFeedback onPress={this.onStartDatePress}>
+                <View style={styles.datePickerContainer}>
+                  <Text style={styles.datePickerText}>Start</Text>
+                  <Text style={styles.datePickerDate}>
+                    {(startDate &&
+                      moment
+                        .unix(startDate.timestamp)
+                        .tz('America/New_York')
+                        .format(
+                          isRecurring
+                            ? '[Every] dddd, hh:mmA'
+                            : 'dddd, DD MMM hh:mmA'
+                        )) ||
+                      '--:--'}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
+
+              <TouchableWithoutFeedback onPress={this.onEndDatePress}>
+                <View style={styles.datePickerContainer}>
+                  <Text style={styles.datePickerText}>End</Text>
+                  <Text style={styles.datePickerDate}>
+                    {(endDate &&
+                      moment
+                        .unix(endDate.timestamp)
+                        .tz('America/New_York')
+                        .format(
+                          isRecurring ? 'dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'
+                        )) ||
+                      '--:--'}
+                  </Text>
+                </View>
+              </TouchableWithoutFeedback>
             </View>
           </View>
           <Button
@@ -330,8 +353,10 @@ NewBookingDetails.propTypes = {
   bookingError: PropTypes.string,
   bookingPending: PropTypes.bool,
   car: PropTypes.object,
+  endDate: PropTypes.object,
   isFetchingCar: PropTypes.bool,
   navigation: PropTypes.object,
+  startDate: PropTypes.object,
   onBookCar: PropTypes.func,
   onUnselectCar: PropTypes.func
 }

@@ -44,7 +44,7 @@ class AvailableBookings extends PureComponent {
         booking={car}
         bookingEnd={bookingEnd.format()}
         bookingStart={bookingStart.format()}
-        extraDetail={`Available ${availability}`}
+        // extraDetail={`Available ${availability}`}
         isRecurring={!!car['allowed_recurring']}
         onPress={this.onBookingPress}
       />
