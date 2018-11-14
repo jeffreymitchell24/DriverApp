@@ -11,7 +11,11 @@ import {
 } from 'store/selectors'
 
 import { endRide, checkLicense } from 'store/actions/bookings'
-import { selectPhoto, clearReceiptPhoto } from 'store/actions/ride'
+import {
+  selectPhoto,
+  clearReceiptPhoto,
+  saveRidePhoto
+} from 'store/actions/ride'
 
 const selector = createStructuredSelector({
   error: getRideEndError,
@@ -26,7 +30,8 @@ const actions = {
   onUnlockRide: checkLicense,
   onSelectPhoto: selectPhoto,
   onEndRide: endRide,
-  onClearReceiptPhoto: clearReceiptPhoto
+  onClearReceiptPhoto: clearReceiptPhoto,
+  onPhotoSave: saveRidePhoto
 }
 
 export default connect(

@@ -16,7 +16,7 @@ import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { CheckBox } from 'react-native-elements'
-import { RegisterReview, DocumentsCamera } from 'navigation/routeNames'
+import { RegisterReview } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import { colors } from 'theme'
 import {
@@ -229,15 +229,13 @@ class Documentation extends Component {
   onPhotoPress = async (licenseSide, licenseType) => {
     let granted = await requestMainPermissions(true)
     if (granted) {
-      const { onSelectLicense, navigation } = this.props
+      this.showImagePicker(licenseSide, licenseType)
 
-      // this.showImagePicker(licenseSide, licenseType)
+      // onSelectLicense({ type: licenseType, side: licenseSide.toLowerCase() })
 
-      onSelectLicense({ type: licenseType, side: licenseSide.toLowerCase() })
-
-      navigation.navigate(DocumentsCamera, {
-        title: licenseSide
-      })
+      // navigation.navigate(DocumentsCamera, {
+      //   title: licenseSide
+      // })
     }
   }
 

@@ -1,9 +1,17 @@
 import React, { Component } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from 'react-native'
 import PropTypes from 'prop-types'
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
-import { ReceiptCamera, BookingDetail } from 'navigation/routeNames'
+import { BookingDetail } from 'navigation/routeNames'
+import ImagePicker from 'react-native-image-picker'
 import Spinner from 'react-native-loading-spinner-overlay'
 import {
   Photo,
@@ -14,6 +22,31 @@ import {
 } from 'components/ui'
 import { colors } from 'theme'
 import styles from './styles'
+
+let androidOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true
+    // path: 'images'
+  },
+  noData: true
+}
+let iosOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  noData: true,
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
+}
 
 class RideEnd extends Component {
   isHiddenNotes = true
@@ -92,10 +125,19 @@ class RideEnd extends Component {
   onPhotoPress = async (type, index) => {
     let granted = await requestMainPermissions(true)
     if (granted) {
-      const { onSelectPhoto, navigation } = this.props
-      onSelectPhoto({ type, index })
+      const { onPhotoSave } = this.props
+      // onSelectPhoto({ type, index })
 
-      navigation.navigate(ReceiptCamera)
+      ImagePicker.launchCamera(
+        Platform.OS === 'android' ? androidOptions : iosOptions,
+        response => {
+          console.log(response)
+          if (!response.didCancel)
+            onPhotoSave({ type, index, photoUri: response.uri })
+        }
+      )
+
+      // navigation.navigate(ReceiptCamera)
     }
   }
 
@@ -239,7 +281,8 @@ RideEnd.propTypes = {
   ride: PropTypes.object,
   onClearReceiptPhoto: PropTypes.func,
   onEndRide: PropTypes.func,
-  onUnlockRide: PropTypes.func
+  onUnlockRide: PropTypes.func,
+  onPhotoSave: PropTypes.func
 }
 
 export default RideEnd

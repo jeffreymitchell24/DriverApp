@@ -21,11 +21,23 @@ class HelpCenter extends PureComponent {
       )
     }
   }
-  componentDidUpdate(prevProps) {
+
+  state = {
+    isLateAlertShow: false
+  }
+
+  UNSAFE_componentWillReceiveProps(prevProps) {
     const { error, requestPending } = this.props
-    if (prevProps.requestPending && !requestPending) {
+    if (
+      (prevProps.requestPending && !requestPending) ||
+      !this.state.isLateAlertShow
+    ) {
       if (error) Alert.alert('Error', error)
       else {
+        this.setState({
+          isLateAlertShow: true
+        })
+
         Alert.alert(
           'Thank you for notifying us',
           'Our administrator has been notified. You can add more details about why you are being late (optional).',
@@ -38,6 +50,7 @@ class HelpCenter extends PureComponent {
       }
     }
   }
+
   onOkPress = () => {
     this.props.navigation.navigate(BookingDetail)
   }
@@ -68,6 +81,8 @@ class HelpCenter extends PureComponent {
   }
 
   render() {
+    const { requestPending } = this.props
+    console.log('props', this.props, requestPending)
     return (
       <HelpCenterSection>
         <FlatList
@@ -76,7 +91,9 @@ class HelpCenter extends PureComponent {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderListItem}
         />
-        <Spinner color={colors.red} visible={this.props.requestPending} />
+        {requestPending && (
+          <Spinner color={colors.red} visible={requestPending} />
+        )}
       </HelpCenterSection>
     )
   }
