@@ -16,7 +16,7 @@ import Spinner from 'react-native-loading-spinner-overlay'
 import PropTypes from 'prop-types'
 import { Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
-import DatePicker from '../../../blocks/DatePicker'
+
 import {
   BookingConfirmed,
   CarLocation,
@@ -160,6 +160,7 @@ class NewBookingDetails extends PureComponent {
         .format('YYYY-MM-DD HH:mm'),
       is_recurring: 0 + isRecurring
     }
+
     this.props.onBookCar({
       id: car.id,
       timeStamps

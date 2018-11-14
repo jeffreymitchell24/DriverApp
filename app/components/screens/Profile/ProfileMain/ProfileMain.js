@@ -27,7 +27,7 @@ import {
   PrivacyPolicy,
   Home,
   Auth,
-  ProfileCamera
+  // ProfileCamera
 } from 'navigation/routeNames'
 import {
   Section,
@@ -129,8 +129,8 @@ class ProfileMain extends Component {
   onPhotoPress = async () => {
     let granted = await requestMainPermissions(true)
     if (granted) {
-      // this.showImagePicker()
-      this.props.navigation.navigate(ProfileCamera)
+      this.showImagePicker()
+      // this.props.navigation.navigate(ProfileCamera)
     }
   }
 

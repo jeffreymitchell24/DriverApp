@@ -1,8 +1,14 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import {selectPhoto, resetPhotos} from 'store/actions/helpCenter'
+import { selectPhoto, resetPhotos, savePhoto } from 'store/actions/helpCenter'
+
 import { helpRideDamaged } from 'store/actions/bookings'
-import {getRideDamagedPhotos, getSelectedRide, getRideHelpRequestStatus, getRideHelpRequestError} from 'store/selectors'
+import {
+  getRideDamagedPhotos,
+  getSelectedRide,
+  getRideHelpRequestStatus,
+  getRideHelpRequestError
+} from 'store/selectors'
 import RideDamaged from './RideDamaged'
 
 const selector = createStructuredSelector({
@@ -15,7 +21,8 @@ const selector = createStructuredSelector({
 const actions = {
   onSubmitReport: helpRideDamaged,
   onSelectPhoto: selectPhoto,
-  onResetPhotos: resetPhotos
+  onResetPhotos: resetPhotos,
+  onSavePhoto: savePhoto
 }
 
 export default connect(

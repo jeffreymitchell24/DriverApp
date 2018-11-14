@@ -39,12 +39,15 @@ const handlers = {
       selectedPhoto: null
     }
   },
-  [SAVE_PHOTO]: (state, {payload}) => {
-    const {type: photosType, index, photoUri} = payload
+  [SAVE_PHOTO]: (state, { payload }) => {
+    const { type: photosType, index, photoUri } = payload
     let updatedPhotos = []
     if (index > state[photosType].length - 1) {
       updatedPhotos = [...state[photosType], photoUri]
-    } else updatedPhotos = state[photosType].map((photo, i) => index === i ? photoUri : photo)
+    } else
+      updatedPhotos = state[photosType].map((photo, i) =>
+        index === i ? photoUri : photo
+      )
 
     return {
       ...state,
@@ -52,13 +55,13 @@ const handlers = {
       selectedPhoto: null
     }
   },
-  [RESET_PHOTOS]: (state, {payload}) => {
+  [RESET_PHOTOS]: (state, { payload }) => {
     return {
       ...state,
       [payload.type]: []
     }
   },
-  [SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_NOTIFICATION.REQUEST]: (state, { payload }) => {
     return {
       ...state,
       lateNotifRequestPending: true,
@@ -66,7 +69,7 @@ const handlers = {
       notification: {}
     }
   },
-  [SEND_LATE_FOR_RIDE_NOTIFICATION.SUCCESS]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_NOTIFICATION.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
       lateNotifRequestError: null,
@@ -74,70 +77,70 @@ const handlers = {
       notification: payload
     }
   },
-  [SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE]: (state, { payload }) => {
     return {
       ...state,
       lateNotifRequestError: payload,
       lateNotifRequestPending: false
     }
   },
-  [SEND_LATE_FOR_RIDE_DETAILS.REQUEST]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_DETAILS.REQUEST]: (state, { payload }) => {
     return {
       ...state,
       requestPending: true,
       error: null
     }
   },
-  [SEND_LATE_FOR_RIDE_DETAILS.SUCCESS]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_DETAILS.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
       error: null,
       requestPending: false
     }
   },
-  [SEND_LATE_FOR_RIDE_DETAILS.FAILURE]: (state, {payload}) => {
+  [SEND_LATE_FOR_RIDE_DETAILS.FAILURE]: (state, { payload }) => {
     return {
       ...state,
       error: payload,
       requestPending: false
     }
   },
-  [HELP_RIDE_DAMAGED.REQUEST]: (state, {payload}) => {
+  [HELP_RIDE_DAMAGED.REQUEST]: (state, { payload }) => {
     return {
       ...state,
       requestPending: true,
       error: null
     }
   },
-  [HELP_RIDE_DAMAGED.SUCCESS]: (state, {payload}) => {
+  [HELP_RIDE_DAMAGED.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
       error: null,
       requestPending: false
     }
   },
-  [HELP_RIDE_DAMAGED.FAILURE]: (state, {payload}) => {
+  [HELP_RIDE_DAMAGED.FAILURE]: (state, { payload }) => {
     return {
       ...state,
       error: payload,
       requestPending: false
     }
   },
-  [HELP_RIDE_MALFUNCTIONED.REQUEST]: (state, {payload}) => {
+  [HELP_RIDE_MALFUNCTIONED.REQUEST]: (state, { payload }) => {
     return {
       ...state,
       requestPending: true,
       error: null
     }
   },
-  [HELP_RIDE_MALFUNCTIONED.SUCCESS]: (state, {payload}) => {
+  [HELP_RIDE_MALFUNCTIONED.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
       error: null,
       requestPending: false
     }
   },
-  [HELP_RIDE_MALFUNCTIONED.FAILURE]: (state, {payload}) => {
+  [HELP_RIDE_MALFUNCTIONED.FAILURE]: (state, { payload }) => {
     return {
       ...state,
       error: payload,

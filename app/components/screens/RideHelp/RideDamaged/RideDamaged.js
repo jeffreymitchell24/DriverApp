@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Alert } from 'react-native'
+import { View, ScrollView, Alert, Platform } from 'react-native'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import { TextInputView } from 'components/blocks'
@@ -10,39 +10,88 @@ import { HelpCamera, HelpCenter } from 'navigation/routeNames'
 import Spinner from 'react-native-loading-spinner-overlay'
 import { colors } from 'theme'
 import { Formik } from 'formik'
+import ImagePicker from 'react-native-image-picker'
 import styles from './styles'
 
 const validationSchema = Yup.object().shape({
-  'description': Yup.string().trim().required('This field is required.')
+  description: Yup.string()
+    .trim()
+    .required('This field is required.')
 })
+
+let androidOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true
+    // path: 'images'
+  },
+  noData: true
+}
+let iosOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  noData: true,
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
+}
+
 class RideDamaged extends Component {
   inputRefs = {}
-  componentDidUpdate (prevProps) {
-    const {error, requestPending, navigation} = this.props
+  componentDidUpdate(prevProps) {
+    const { error, requestPending, navigation } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error)Alert.alert('Error', error)
+      if (error) Alert.alert('Error', error)
       else navigation.navigate(HelpCenter)
     }
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onResetPhotos('rideDamagedPhotos')
   }
-  onSubmit = (values) => {
-    const {description} = values
-    const {onSubmitReport, ride = {}, photos} = this.props
-    onSubmitReport({data: {photos, description}, carId: ride.id})
+  onSubmit = values => {
+    const { description } = values
+    const { onSubmitReport, ride = {}, photos } = this.props
+    onSubmitReport({ data: { photos, description }, carId: ride.id })
   }
-  onPhotoPress = async (index) => {
+
+  onPhotoPress = async index => {
     let granted = await requestMainPermissions(true)
     if (granted) {
-      const {onSelectPhoto, navigation} = this.props
-      onSelectPhoto({type: 'rideDamagedPhotos', index})
+      const { onSavePhoto } = this.props
+      // onSelectPhoto({ type: 'rideDamagedPhotos', index })
 
-      navigation.navigate(HelpCamera)
+      ImagePicker.showImagePicker(
+        Platform.OS === 'android' ? androidOptions : iosOptions,
+        response => {
+          if (!response.didCancel)
+            onSavePhoto({
+              type: 'rideDamagedPhotos',
+              index,
+              photoUri: response.uri
+            })
+        }
+      )
+
+      // navigation.navigate(HelpCamera)
     }
   }
 
-  renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched }) => {
+  renderForm = ({
+    setFieldTouched,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched
+  }) => {
     let buttonActive = isEmpty(errors) && touched.description
     return (
       <ScrollView
@@ -51,9 +100,7 @@ class RideDamaged extends Component {
       >
         <View style={styles.form}>
           <View style={styles.photoListContainer}>
-            <SectionHeader
-              title='Upload photo (optional)'
-            />
+            <SectionHeader title="Upload photo (optional)" />
             <View style={styles.photoList}>
               <View style={styles.photoContainer}>
                 <Photo
@@ -80,18 +127,19 @@ class RideDamaged extends Component {
                 />
               </View>
             </View>
-
           </View>
           <TextInputView
             blurOnSubmit
             error={touched.description && errors.description}
-            inputRef={(input) => { this.inputRefs['description'] = input }}
-            keyboardType='default'
-            label='Description'
+            inputRef={input => {
+              this.inputRefs['description'] = input
+            }}
+            keyboardType="default"
+            label="Description"
             maxLength={1000}
             multiline
-            name='description'
-            placeholder='What’s wrong with the car?'
+            name="description"
+            placeholder="What’s wrong with the car?"
             showLimit
             value={values.description}
             onBlur={() => setFieldTouched('description')}
@@ -100,17 +148,17 @@ class RideDamaged extends Component {
         </View>
         <Button
           disabled={!buttonActive}
-          title='SUBMIT REPORT'
+          title="SUBMIT REPORT"
           onPress={handleSubmit}
         />
       </ScrollView>
     )
   }
-  render () {
+  render() {
     return (
       <HelpCenterSection>
         <Formik
-          initialValues={{description: ''}}
+          initialValues={{ description: '' }}
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur
@@ -131,6 +179,7 @@ RideDamaged.propTypes = {
   requestPending: PropTypes.bool,
   ride: PropTypes.object,
   onResetPhotos: PropTypes.func,
+  onSavePhoto: PropTypes.func,
   onSelectPhoto: PropTypes.func,
   onSubmitReport: PropTypes.func
 }

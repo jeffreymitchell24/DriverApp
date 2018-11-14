@@ -1,8 +1,8 @@
 import HelpPhotoPreview from './HelpPhotoPreview'
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import {savePhoto} from 'store/actions/helpCenter'
-import {getSelectedPhotoData} from 'store/selectors'
+import { savePhoto } from 'store/actions/helpCenter'
+import { getSelectedPhotoData } from 'store/selectors'
 
 const selector = createStructuredSelector({
   selectedPhoto: getSelectedPhotoData

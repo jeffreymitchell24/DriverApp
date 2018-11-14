@@ -1,5 +1,12 @@
 import React, { PureComponent } from 'react'
-import { View, Text, ScrollView, TouchableOpacity, Alert } from 'react-native'
+import {
+  View,
+  Text,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Platform
+} from 'react-native'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import * as Yup from 'yup'
@@ -7,95 +14,160 @@ import { Formik } from 'formik'
 import { TextInputView } from 'components/blocks'
 import { HelpCamera, HelpCenter } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
-import { Photo, Button, SectionHeader, HelpCenterSection, RadioButton } from 'components/ui'
+import {
+  Photo,
+  Button,
+  SectionHeader,
+  HelpCenterSection,
+  RadioButton
+} from 'components/ui'
 import Spinner from 'react-native-loading-spinner-overlay'
+import ImagePicker from 'react-native-image-picker'
 import { colors } from 'theme'
 import styles from './styles'
 
 const validationSchema = Yup.object().shape({
-  'reason': Yup.string().trim().required('This field is required.')
+  reason: Yup.string()
+    .trim()
+    .required('This field is required.')
 })
+
+let androidOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true
+    // path: 'images'
+  },
+  noData: true
+}
+let iosOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  noData: true,
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
+}
 
 class RideLateDescription extends PureComponent {
   state = {
     delay: null
   }
-  componentDidUpdate (prevProps) {
-    const {error, requestPending, navigation} = this.props
+  componentDidUpdate(prevProps) {
+    const { error, requestPending, navigation } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error)Alert.alert('Error', error)
+      if (error) Alert.alert('Error', error)
       else navigation.navigate(HelpCenter)
     }
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onResetPhotos('rideLatePhotos')
   }
   onPhotoPress = async () => {
     let granted = await requestMainPermissions(true)
     if (granted) {
-      const {onSelectPhoto, navigation} = this.props
-      onSelectPhoto({type: 'rideLatePhotos', index: 0})
+      const { onSavePhoto } = this.props
+      // onSelectPhoto({ type: 'rideLatePhotos', index: 0 })
 
-      navigation.navigate(HelpCamera)
+      // navigation.navigate(HelpCamera)
+
+      ImagePicker.showImagePicker(
+        Platform.OS === 'android' ? androidOptions : iosOptions,
+        response => {
+          if (!response.didCancel)
+            onSavePhoto({
+              type: 'rideLatePhotos',
+              index: 0,
+              photoUri: response.uri
+            })
+        }
+      )
     }
   }
-  onSubmit = (values) => {
-    const {reason} = values
-    const {onSubmitReport, ride = {}, photos, notification} = this.props
-    onSubmitReport({data: {photos, reason, delay: this.state.delay}, carId: ride.id, notificationId: notification.id})
+  onSubmit = values => {
+    const { reason } = values
+    const { onSubmitReport, ride = {}, photos, notification } = this.props
+    onSubmitReport({
+      data: { photos, reason, delay: this.state.delay },
+      carId: ride.id,
+      notificationId: notification.id
+    })
   }
-  renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched }) => {
-    const {reason} = values
+  renderForm = ({
+    setFieldTouched,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched
+  }) => {
+    const { reason } = values
     let buttonActive = isEmpty(errors) && touched.reason && this.state.delay
     return (
       <ScrollView
         contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps="always"
       >
         <View style={styles.form}>
           <View style={styles.delayContainer}>
-            <SectionHeader
-              title='Delaying'
-            />
+            <SectionHeader title="Delaying" />
             <View>
-              <TouchableOpacity style={styles.checkboxContainer} onPress={() => this.setState({'delay': 15})}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => this.setState({ delay: 15 })}
+              >
                 <RadioButton
                   checked={this.state.delay === 15}
-                  checkedIcon='md-radio-button-on'
-                  onPress={() => this.setState({'delay': 15})}
+                  checkedIcon="md-radio-button-on"
+                  onPress={() => this.setState({ delay: 15 })}
                 />
                 <Text style={styles.checkboxTitle}>15 minutes</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.checkboxContainer} onPress={() => this.setState({'delay': 30})}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => this.setState({ delay: 30 })}
+              >
                 <RadioButton
                   checked={this.state.delay === 30}
-                  checkedIcon='md-radio-button-on'
-                  onPress={() => this.setState({'delay': 30})}
+                  checkedIcon="md-radio-button-on"
+                  onPress={() => this.setState({ delay: 30 })}
                 />
                 <Text style={styles.checkboxTitle}>30 minutes</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.checkboxContainer} onPress={() => this.setState({'delay': 45})}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => this.setState({ delay: 45 })}
+              >
                 <RadioButton
                   checked={this.state.delay === 45}
-                  checkedIcon='md-radio-button-on'
-                  onPress={() => this.setState({'delay': 45})}
+                  checkedIcon="md-radio-button-on"
+                  onPress={() => this.setState({ delay: 45 })}
                 />
                 <Text style={styles.checkboxTitle}>45 minutes</Text>
               </TouchableOpacity>
-              <TouchableOpacity style={styles.checkboxContainer} onPress={() => this.setState({'delay': 60})}>
+              <TouchableOpacity
+                style={styles.checkboxContainer}
+                onPress={() => this.setState({ delay: 60 })}
+              >
                 <RadioButton
                   checked={this.state.delay === 60}
-                  checkedIcon='md-radio-button-on'
-                  onPress={() => this.setState({'delay': 60})}
+                  checkedIcon="md-radio-button-on"
+                  onPress={() => this.setState({ delay: 60 })}
                 />
                 <Text style={styles.checkboxTitle}>1 hour</Text>
               </TouchableOpacity>
             </View>
           </View>
           <View style={styles.photoUploadContainer}>
-            <SectionHeader
-              title='Upload photo'
-            />
+            <SectionHeader title="Upload photo" />
             <View style={styles.photoContainer}>
               <Photo
                 imageUri={this.props.photos[0]}
@@ -106,12 +178,12 @@ class RideLateDescription extends PureComponent {
           <TextInputView
             blurOnSubmit
             error={touched.reason && errors.reason}
-            keyboardType='default'
-            label='Reason'
+            keyboardType="default"
+            label="Reason"
             maxLength={1000}
             multiline
-            name='reason'
-            placeholder='Why are you late?'
+            name="reason"
+            placeholder="Why are you late?"
             showLimit
             value={reason}
             onBlur={() => setFieldTouched('reason')}
@@ -120,18 +192,18 @@ class RideLateDescription extends PureComponent {
         </View>
         <Button
           disabled={!buttonActive}
-          title='SUBMIT REPORT'
+          title="SUBMIT REPORT"
           onPress={handleSubmit}
         />
       </ScrollView>
     )
   }
 
-  render () {
+  render() {
     return (
       <HelpCenterSection>
         <Formik
-          initialValues={{reason: ''}}
+          initialValues={{ reason: '' }}
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur
@@ -152,6 +224,7 @@ RideLateDescription.propTypes = {
   requestPending: PropTypes.bool,
   ride: PropTypes.object,
   onResetPhotos: PropTypes.func,
+  onSavePhoto: PropTypes.func,
   onSelectPhoto: PropTypes.func,
   onSubmitReport: PropTypes.func
 }

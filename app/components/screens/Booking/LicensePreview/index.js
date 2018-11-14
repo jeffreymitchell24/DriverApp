@@ -1,8 +1,13 @@
 import LicensePreview from './LicensePreview'
 import { createStructuredSelector } from 'reselect'
 import { connect } from 'react-redux'
-import {getSelectedRide, getLicenseCheckRequestStatus, getLicenseCheckError, getLicenseCheckStatus} from 'store/selectors'
-import {checkLicense} from 'store/actions/bookings'
+import {
+  getSelectedRide,
+  getLicenseCheckRequestStatus,
+  getLicenseCheckError,
+  getLicenseCheckStatus
+} from 'store/selectors'
+import { checkLicense } from 'store/actions/bookings'
 
 const selector = createStructuredSelector({
   licenseChecked: getLicenseCheckStatus,
