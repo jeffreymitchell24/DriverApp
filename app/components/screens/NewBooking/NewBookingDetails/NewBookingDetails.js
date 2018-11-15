@@ -116,18 +116,9 @@ class NewBookingDetails extends PureComponent {
   onEndDatePress = () => {
     if (!this.props.startDate) Alert.alert('', 'Select start date first')
     else {
-      let maxDate = getMaxDate(this.props.startDate, this.props.car.booked)
-      console.log('maxDate', maxDate)
-      // Alert.alert('', maxDate)
       this.props.navigation.navigate(BookingCalendar, {
         bookDateType: 'end',
-        bookedHours: this.props.car.booked,
-        maxDate,
-        minDate: this.props.startDate,
-        startHour: moment
-          .unix(this.props.startDate)
-          .tz('America/New_York')
-          .hour()
+        minDate: this.props.startDate
       })
     }
   }
@@ -148,15 +139,13 @@ class NewBookingDetails extends PureComponent {
 
     console.log(startDate, endDate)
     let timeStamps = {
-      booking_ending_at: moment
-        .unix(endDate.timestamp)
-        .tz('America/New_York')
+      booking_ending_at: moment(endDate)
+        // .tz('America/New_York')
         .subtract(1, 'hours')
         .minutes(59)
         .format('YYYY-MM-DD HH:mm'),
-      booking_starting_at: moment
-        .unix(startDate.timestamp)
-        .tz('America/New_York')
+      booking_starting_at: moment(startDate)
+        // .tz('America/New_York')
         .format('YYYY-MM-DD HH:mm'),
       is_recurring: 0 + isRecurring
     }
@@ -308,14 +297,11 @@ class NewBookingDetails extends PureComponent {
                   <Text style={styles.datePickerText}>Start</Text>
                   <Text style={styles.datePickerDate}>
                     {(startDate &&
-                      moment
-                        .unix(startDate.timestamp)
-                        .tz('America/New_York')
-                        .format(
-                          isRecurring
-                            ? '[Every] dddd, hh:mmA'
-                            : 'dddd, DD MMM hh:mmA'
-                        )) ||
+                      moment(startDate).format(
+                        isRecurring
+                          ? '[Every] dddd, hh:mmA'
+                          : 'dddd, DD MMM hh:mmA'
+                      )) ||
                       '--:--'}
                   </Text>
                 </View>
@@ -326,12 +312,9 @@ class NewBookingDetails extends PureComponent {
                   <Text style={styles.datePickerText}>End</Text>
                   <Text style={styles.datePickerDate}>
                     {(endDate &&
-                      moment
-                        .unix(endDate.timestamp)
-                        .tz('America/New_York')
-                        .format(
-                          isRecurring ? 'dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'
-                        )) ||
+                      moment(endDate).format(
+                        isRecurring ? 'dddd, hh:mmA' : 'dddd, DD MMM hh:mmA'
+                      )) ||
                       '--:--'}
                   </Text>
                 </View>

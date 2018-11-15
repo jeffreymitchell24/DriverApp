@@ -8,11 +8,13 @@ import {
   getFetchingCarsStatus,
   getFetchCarsError
 } from 'store/selectors'
+import { getFilters } from 'store/selectors/filters'
 
 const selector = createStructuredSelector({
   cars: getAvailableCars,
   isFetchingPending: getFetchingCarsStatus,
-  fetchError: getFetchCarsError
+  fetchError: getFetchCarsError,
+  filters: getFilters
 })
 
 const actions = {

@@ -10,23 +10,23 @@ import Icon from 'react-native-vector-icons/Ionicons'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
 import { Calendar } from 'react-native-calendars'
-import {
-  get24hours,
-  getDisabledDays,
-  convertTo12h,
-  formatBookedHours
-} from 'helpers/date'
 import { NewBookingDetails } from 'navigation/routeNames'
 import { NavButton, Button } from 'components/ui'
 import { colors } from 'theme'
 import styles, { pickerHeight } from './styles'
-// var PickerItem = Picker.Item
+import _ from 'lodash'
 
 class PickerItem extends PureComponent {
   onPress = () => {
-    this.props.onPress(this.props.time)
+    const { onPress } = this.props
+
+    if (onPress) {
+      onPress(this.props.time)
+    }
   }
+
   render() {
+    console.log(this.props)
     const { time, slotType } = this.props
     let backgroundColor = colors.gray50
     let textColor = colors.gray300
@@ -80,59 +80,60 @@ class BookingCalendar extends Component {
       )
     }
   }
+
   disableRestHours = false
   isHiddenPicker = true
+
   constructor(props) {
     super(props)
     let { params = {} } = this.props.navigation.state
     let {
-      startHour = -1,
-      bookedHours = {},
       bookDateType = 'start',
       maxDate = null,
       minDate = moment()
         .tz('America/New_York')
         .format('YYYY-MM-DD')
     } = params
-    this.bookedHours = formatBookedHours(bookedHours)
+
     this.bookDateType = bookDateType
-    this.startHour = startHour
-    let disabledDays = getDisabledDays(this.bookedHours)
-    // this.currentDate = moment()
-    // this.minStartHour = this.currentDate.hour() + 1
-    let hourList = get24hours()
+    let hourList = []
     this.minDate = minDate
 
     this.state = {
       maxDate,
       bounceValue: new Animated.Value(pickerHeight),
-      disabledDays,
       hourList,
       selectedDate: null,
-      selectedTime: -1,
-      minStartHour: null
+      selectedTime: -1
     }
   }
 
   onConfirmPress = () => {
     let bookDateType = this.props.navigation.getParam('bookDateType', 'start')
-    const { selectedDate, selectedTime } = this.state
-    console.log('selectedDate', selectedDate)
-    let fullDate = { ...selectedDate }
-    let [hour] = this.state.hourList[selectedTime].split(':')
-    let date = moment(selectedDate.dateString, 'YYYY-MM-DD')
-      .set('hour', +hour)
-      .utcOffset('-04:00', true)
-    fullDate.timestamp = date.unix()
-    console.log('fullDate', fullDate)
+    const { selectedDate, selectedTime: selectedTimeID, hourList } = this.state
+    const selectedTime = hourList[selectedTimeID].time
+
+    const dateString = `${selectedDate.dateString} ${selectedTime}`
+
+    console.log(dateString)
+
+    // let fullDate = { ...selectedDate }
+    // let date = moment(
+    //   `${selectedDate.dateString} ${selectedTime}`,
+    //   'YYYY-MM-DD hh:mm A'
+    // ).subtract({ hours: 4 })
+
+    // fullDate.timestamp = date.toDate()
+    // console.log('fullDate', fullDate)
     // console.log(moment(selectedDate.dateString, 'YYYY-MM-DD').set('hour', +hour).utcOffset('-04:00', true).hour())
-    this.props.onSetBookingDate({ type: bookDateType, date: fullDate })
+    this.props.onSetBookingDate({ type: bookDateType, date: dateString })
     this.props.navigation.navigate(NewBookingDetails, {
       bookDateType,
       selectedDate,
       selectedTime
     })
   }
+
   _toggleTimePicker = () => {
     var toValue = pickerHeight
 
@@ -153,28 +154,62 @@ class BookingCalendar extends Component {
   }
 
   onDateSelect = selectedDate => {
-    // if ((startDate && endDate) || !startDate) {
-    //   let maxDate = moment(selectedDate.dateString).add(1, 'days').format('YYYY-MM-DD')
-    //   this.setState({startDate: selectedDate.dateString, endDate: null, maxDate})
-    //   !this.isHiddenPicker && this._toggleTimePicker()
-    // } else if (startDate && !endDate) {
-    //   if (moment(selectedDate.dateString).isSameOrAfter(startDate, 'day')) {
-    //     this.setState({endDate: selectedDate.dateString, maxDate: null})
-    //     this.isHiddenPicker && this._toggleTimePicker()
-    //   } else {
-    //     let maxDate = moment(selectedDate.dateString).add(1, 'days').format('YYYY-MM-DD')
-    //     this.setState({startDate: selectedDate.dateString, endDate: null, maxDate})
-    //     !this.isHiddenPicker && this._toggleTimePicker()
-    //   }
-    // }
-    console.log('selected', selectedDate)
-    let minStartHour = null
-    if (this.bookDateType === 'start') {
-      let currentDate = moment().tz('America/New_York')
-      if (selectedDate.day === currentDate.date())
-        minStartHour = currentDate.hour() + 1
+    const {
+      selectedCar: { calendar }
+    } = this.props
+
+    console.log('selectedDate', selectedDate)
+
+    const selectedDayHours = calendar[selectedDate.dateString]
+    console.log(this.state.hourList, selectedDayHours)
+
+    let availableHours = []
+
+    const startHour = parseInt(moment(this.minDate).format('H'), 10)
+    console.log(startHour)
+    for (let i = 0, j = 0; i < 24; i++) {
+      let newItem = {
+        key: i,
+        slotType: 'disabled',
+        time: moment(i, 'H').format('hh:mm A')
+      }
+
+      if (j < selectedDayHours.length) {
+        console.log('j < selectedDayHours.length', j, i)
+        if (this.bookDateType === 'end') {
+          if (selectedDayHours[j] === i) {
+            console.log('selectedDayHours[j] === i', i, j)
+            if (i > startHour) {
+              console.log('i > startHour', j)
+              console.log(
+                'selectedDayHours[j] - selectedDate[j - 1] ',
+                selectedDayHours[j] - (selectedDayHours[j - 1] || 25)
+              )
+              if (selectedDayHours[j] - (selectedDayHours[j - 1] || 25) === 1) {
+                console.log('fffff')
+                newItem.slotType = 'default'
+                newItem.onPress = () => this.onTimeSelect(i)
+
+                j++
+              }
+            } else j++
+          }
+        } else {
+          if (selectedDayHours[j] === i) {
+            newItem.slotType = 'default'
+            newItem.onPress = () => this.onTimeSelect(i)
+
+            j++
+          }
+        }
+      }
+
+      availableHours.push(newItem)
     }
-    this.setState({ selectedDate, minStartHour, selectedTime: -1 })
+
+    console.log('availableHours', availableHours)
+
+    this.setState({ selectedDate, selectedTime: -1, hourList: availableHours })
     this.isHiddenPicker && this._toggleTimePicker()
   }
 
@@ -183,12 +218,22 @@ class BookingCalendar extends Component {
   }
 
   render() {
+    const {
+      selectedCar: { calendar }
+    } = this.props
+
     this.disableRestHours = false
-    const { disabledDays, selectedDate, selectedTime } = this.state
+
+    const { selectedDate, selectedTime, hourList } = this.state
     let isButtonActive = selectedDate && selectedTime > -1
-    let markedDates = { ...disabledDays }
-    // if (startDate) markedDates[startDate] = {startingDay: true, color: colors.red, selected: true}
-    // if (endDate) markedDates[endDate] = {endingDay: true, color: colors.red, selected: true}
+    let markedDates = { ...Object.keys(calendar) }
+
+    const startDate = _.first(Object.keys(calendar))
+    let endDate = _.last(Object.keys(calendar))
+
+    if (this.bookDateType === 'end') {
+      endDate = moment(this.minDate).format('Y-M-D')
+    }
 
     if (selectedDate)
       markedDates[selectedDate.dateString] = {
@@ -196,14 +241,17 @@ class BookingCalendar extends Component {
         selected: true,
         selectedColor: colors.red
       }
+
+    console.log(this.state)
+
     return (
       <View style={styles.container}>
         <Calendar
           contentContainerStyle={styles.calendar}
           markedDates={markedDates}
           // markingType={'period'}
-          maxDate={this.state.maxDate}
-          minDate={this.minDate}
+          maxDate={endDate}
+          minDate={startDate}
           // pastScrollRange={0}
           // futureScrollRange={50}
           renderArrow={direction => <Arrow direction={direction} />}
@@ -231,69 +279,13 @@ class BookingCalendar extends Component {
                 showsVerticalScrollIndicator={false}
                 style={styles.timePicker}
               >
-                {this.state.hourList.map((timeString, i) => {
-                  let type = 'default'
-                  let dayForCheck = this.bookedHours[
-                    (selectedDate && selectedDate.dateString) || null
-                  ]
-                  let hour = +timeString.split(':')[0]
-                  if (this.state.selectedTime === i) type = 'selected'
-                  else if (this.bookDateType === 'start') {
-                    if (
-                      dayForCheck &&
-                      dayForCheck !== false &&
-                      dayForCheck.includes(timeString)
-                    )
-                      type = 'disabled'
-                    if (
-                      this.state.minStartHour &&
-                      hour < this.state.minStartHour
-                    )
-                      type = 'disabled'
-                  } else if (this.bookDateType === 'end') {
-                    if (
-                      selectedDate &&
-                      selectedDate.dateString === this.minDate
-                    ) {
-                      if (hour <= this.startHour) type = 'disabled'
-                      else if (hour - this.startHour === 1) type = 'default'
-                      else {
-                        let isBookedHour =
-                          dayForCheck && dayForCheck.includes(timeString)
-                        if (isBookedHour) {
-                          type = 'disabled'
-                          this.disableRestHours = true
-                        } else if (
-                          this.disableRestHours ||
-                          hour - this.startHour > 12
-                        )
-                          type = 'disabled'
-                      }
-                    } else if (
-                      selectedDate &&
-                      selectedDate.dateString === this.state.maxDate &&
-                      this.minDate !== this.state.maxDate
-                    ) {
-                      if (i === 0) type = 'default'
-                      else if (
-                        dayForCheck &&
-                        dayForCheck.includes(timeString)
-                      ) {
-                        type = 'disabled'
-                        this.disableRestHours = true
-                      } else if (
-                        this.disableRestHours ||
-                        hour + 24 - this.startHour > 12
-                      )
-                        type = 'disabled'
-                    }
-                  }
+                {(hourList || []).map((timeSlot, i) => {
                   return (
                     <PickerItem
-                      key={i}
-                      slotType={type}
-                      time={convertTo12h(timeString)}
-                      onPress={() => this.onTimeSelect(i)}
+                      {...timeSlot}
+                      slotType={
+                        i === selectedTime ? 'selected' : timeSlot.slotType
+                      }
                     />
                   )
                 })}
@@ -314,6 +306,7 @@ class BookingCalendar extends Component {
 
 BookingCalendar.propTypes = {
   navigation: PropTypes.object,
+  selectedCar: PropTypes.object,
   onSetBookingDate: PropTypes.func
 }
 

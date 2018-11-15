@@ -139,12 +139,16 @@ export const fetchAvailableCars = async (params, token) => {
   return response.data.data
 }
 
-export const fetchCarDetails = async ({ token, id }) => {
+export const fetchCarDetails = async ({ token, id, body }) => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
 
-  let response = await axios.get(`${URL}/api/cars/${id}/book`, config)
+  let response = await axios.post(
+    `${URL}/api/cars/${id}/book-preview`,
+    body,
+    config
+  )
   console.log('fetchCarDetails response', response)
   return response.data.data
 }
