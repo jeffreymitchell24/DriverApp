@@ -107,13 +107,13 @@ class Filters extends PureComponent {
     const req = {
       available_to: moment(endDate)
         // .unix(endDate)
-        // .tz('America/New_York')
+        .tz('America/New_York')
         .subtract(1, 'hours')
         .minutes(59)
         .format('YYYY-MM-DD HH:mm'),
       available_from: moment(startDate)
         // .unix(startDate)
-        // .tz('America/New_York')
+        .tz('America/New_York')
         .format('YYYY-MM-DD HH:mm'),
       categories: categories.map(item => item.id)
     }

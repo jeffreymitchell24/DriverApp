@@ -97,11 +97,11 @@ function* fetchAvailableCarsFlow() {
   )
 }
 
-function* fetchCarDetails({ payload: id }) {
+function* fetchCarDetails({ payload: { id, body } }) {
   let state = yield select()
   let { token } = state.auth
   try {
-    let response = yield call(Api.fetchCarDetails, { token, id })
+    let response = yield call(Api.fetchCarDetails, { token, id, body })
     yield put({ type: FETCH_SELECTED_CAR.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)

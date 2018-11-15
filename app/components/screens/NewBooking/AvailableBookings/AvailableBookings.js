@@ -27,8 +27,27 @@ class AvailableBookings extends PureComponent {
   }
 
   onBookingPress = car => {
-    this.props.onSelectCar(car.id)
-    this.props.navigation.navigate(NewBookingDetails)
+    const { filters, onSelectCar, navigation } = this.props
+
+    const { startDate, endDate } = filters
+
+    const body = {
+      calendar_date_to: moment(endDate)
+        // .unix(endDate)
+        .tz('America/New_York')
+        .subtract(1, 'hours')
+        .minutes(59)
+        .format('Y-M-D'),
+      calendar_date_from: moment(startDate)
+        // .unix(startDate)
+        .tz('America/New_York')
+        .format('Y-M-D')
+    }
+
+    console.log(body)
+
+    onSelectCar({ id: car.id, body })
+    navigation.navigate(NewBookingDetails)
   }
 
   keyExtractor = (item, index) => item.car.id.toString()
@@ -79,6 +98,7 @@ class AvailableBookings extends PureComponent {
 AvailableBookings.propTypes = {
   cars: PropTypes.array,
   // fetchError: PropTypes.string,
+  filters: PropTypes.object,
   isFetchingPending: PropTypes.bool,
   navigation: PropTypes.object,
   // onFetchAvailableCars: PropTypes.func,
@@ -86,8 +106,8 @@ AvailableBookings.propTypes = {
 }
 
 AvailableBookings.defaultProps = {
-  isFetchingPending: false,
-  cars: []
+  cars: [],
+  isFetchingPending: false
 }
 
 export default AvailableBookings

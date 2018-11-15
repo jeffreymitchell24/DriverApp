@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { View, Text, TouchableOpacity, Image } from 'react-native'
 
 import { icons } from 'images'
-import moment from 'moment'
+// import moment from 'moment'
 
 import PropTypes from 'prop-types'
 import styles from './styles'
@@ -16,8 +16,8 @@ class BookingCard extends PureComponent {
     const {
       booking,
       extraDetail,
-      bookingEnd,
-      bookingStart,
+      // bookingEnd,
+      // bookingStart,
       isRecurring
     } = this.props
     const {
@@ -28,8 +28,8 @@ class BookingCard extends PureComponent {
       model = ''
     } = booking
 
-    const bookingStartTime = moment(bookingStart).format('hh:mm a')
-    const bookingEndTime = moment(bookingEnd).format('hh:mm a')
+    // const bookingStartTime = moment(bookingStart).format('hh:mm a')
+    // const bookingEndTime = moment(bookingEnd).format('hh:mm a')
 
     return (
       <View style={styles.cardContainer}>
@@ -49,9 +49,9 @@ class BookingCard extends PureComponent {
                 manufacturer.name
               } ${model}`}</Text>
             </TouchableOpacity>
-            <Text
+            {/* <Text
               style={styles.detailText}
-            >{`${bookingStartTime} –– ${bookingEndTime}`}</Text>
+            >{`${bookingStartTime} –– ${bookingEndTime}`}</Text> */}
             <Text style={styles.detailText}>Pickup: {pickupLocation}</Text>
             <Text style={styles.detailText}>Dropoff: {returnLocation}</Text>
             <Text style={styles.extraDetailText}>{extraDetail}</Text>
@@ -67,8 +67,8 @@ class BookingCard extends PureComponent {
 
 BookingCard.propTypes = {
   booking: PropTypes.object,
-  bookingEnd: PropTypes.string,
-  bookingStart: PropTypes.string,
+  // bookingEnd: PropTypes.string,
+  // bookingStart: PropTypes.string,
   extraDetail: PropTypes.string,
   isRecurring: PropTypes.bool,
   onPress: PropTypes.func
