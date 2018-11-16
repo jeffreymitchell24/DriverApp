@@ -11,7 +11,7 @@ import {
 } from 'react-native'
 import { Switch } from 'react-native-switch'
 import moment from 'moment'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 // import Switch from 'react-native-switch-pro'
 import PropTypes from 'prop-types'
 import { Button } from 'components/ui'
@@ -229,7 +229,7 @@ class NewBookingDetails extends PureComponent {
         </View>
       )
     }
-
+    console.warn(startDate, endDate)
     if (!this.props.car) return navigation.goBack()
 
     const {

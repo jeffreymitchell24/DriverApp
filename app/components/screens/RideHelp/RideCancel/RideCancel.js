@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react'
 import { View, Text, Alert } from 'react-native'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import PropTypes from 'prop-types'
 import { NavButton, HelpCenterSection, Button } from 'components/ui'
 import {HelpCenter, Home} from 'navigation/routeNames'

@@ -12,7 +12,7 @@ import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import { BookingDetail } from 'navigation/routeNames'
 import ImagePicker from 'react-native-image-picker'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import {
   Photo,
   Button,
@@ -132,7 +132,7 @@ class RideEnd extends Component {
         Platform.OS === 'android' ? androidOptions : iosOptions,
         response => {
           console.log(response)
-          if (!response.didCancel)
+          if (!response.didCancel || response.error)
             onPhotoSave({ type, index, photoUri: response.uri })
         }
       )

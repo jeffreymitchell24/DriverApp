@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { View, ScrollView, TouchableOpacity, Keyboard, Text } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import forEach from 'lodash/forEach'
 import isEmpty from 'lodash/isEmpty'
 import PropTypes from 'prop-types'

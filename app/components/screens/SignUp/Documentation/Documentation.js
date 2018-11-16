@@ -14,9 +14,9 @@ import ImagePicker from 'react-native-image-picker'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import { CheckBox } from 'react-native-elements'
-import { RegisterReview } from 'navigation/routeNames'
+import { RegisterReview, DocumentsCamera } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import { colors } from 'theme'
 import {
@@ -36,8 +36,8 @@ let androidOptions = {
   mediaType: 'photo',
   storageOptions: {
     skipBackup: true,
-    cameraRoll: true
-    // path: 'images'
+    cameraRoll: true,
+    path: 'images'
   },
   noData: true
 }
@@ -230,6 +230,7 @@ class Documentation extends Component {
     let granted = await requestMainPermissions(true)
     if (granted) {
       this.showImagePicker(licenseSide, licenseType)
+      // const { onSelectLicense, navigation } = this.props
 
       // onSelectLicense({ type: licenseType, side: licenseSide.toLowerCase() })
 
@@ -245,7 +246,7 @@ class Documentation extends Component {
       response => {
         console.log('Response = ', response)
         this.pickerIsOpened = false
-        if (response.didCancel) {
+        if (response.didCancel || response.error) {
           // this.props.navigation.goBack()
         } else {
           this.props.onUpdateLicense({

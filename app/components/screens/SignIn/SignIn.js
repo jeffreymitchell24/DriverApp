@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import { View, Text, ScrollView, Keyboard, Alert } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import PropTypes from 'prop-types'
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'

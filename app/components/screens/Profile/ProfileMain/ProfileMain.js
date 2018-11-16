@@ -14,7 +14,7 @@ import {
   NavigationActions,
   NavigationEvents
 } from 'react-navigation'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
 import ImagePicker from 'react-native-image-picker'
@@ -26,7 +26,7 @@ import {
   TermsConditions,
   PrivacyPolicy,
   Home,
-  Auth,
+  Auth
   // ProfileCamera
 } from 'navigation/routeNames'
 import {
@@ -140,9 +140,10 @@ class ProfileMain extends Component {
       response => {
         console.log('Response = ', response)
         this.pickerIsOpened = false
-        if (response.didCancel) {
+        if (response.didCancel || response.error) {
           // this.props.navigation.goBack()
         } else {
+          console.log('Response = ', response)
           this.props.onUpdateUserImage(response.uri)
           // this.props.navigation.navigate(PicturePreview, {
           //   photoUri: response.uri

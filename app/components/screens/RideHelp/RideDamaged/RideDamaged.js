@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import { requestMainPermissions } from 'helpers/permission'
 import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
 import { HelpCamera, HelpCenter } from 'navigation/routeNames'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import { colors } from 'theme'
 import { Formik } from 'formik'
 import ImagePicker from 'react-native-image-picker'
@@ -71,7 +71,7 @@ class RideDamaged extends Component {
       ImagePicker.showImagePicker(
         Platform.OS === 'android' ? androidOptions : iosOptions,
         response => {
-          if (!response.didCancel)
+          if (!response.didCancel || response.error)
             onSavePhoto({
               type: 'rideDamagedPhotos',
               index,

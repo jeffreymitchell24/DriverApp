@@ -3,7 +3,7 @@ import { View, ScrollView, TouchableWithoutFeedback, Alert, Animated, TouchableO
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import * as Yup from 'yup'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import { Formik } from 'formik'
 import moment from 'moment'
 import isEmpty from 'lodash/isEmpty'

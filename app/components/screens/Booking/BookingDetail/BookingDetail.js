@@ -18,7 +18,7 @@ import {
   Photo
 } from 'components/ui'
 import MapView from 'react-native-maps'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import { convertMinsToHrsMins } from 'helpers/date'
 import { colors } from 'theme'
 import { styles, mapStyles } from './styles'

@@ -1,19 +1,18 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import {
-  View,
-  Text,
-  ScrollView,
-  Keyboard,
-  Alert
-} from 'react-native'
+import { View, Text, ScrollView, Keyboard, Alert } from 'react-native'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
-import {PersonalInfo, SignIn, TermsConditions, Intro} from 'navigation/routeNames'
+import {
+  PersonalInfo,
+  SignIn,
+  TermsConditions,
+  Intro
+} from 'navigation/routeNames'
 import { TextInputView } from 'components/blocks'
 import { Button, NavButton } from 'components/ui'
 import styles from './styles'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import * as Yup from 'yup'
 import { colors } from 'theme'
 import { CheckBox } from 'react-native-elements'
@@ -24,38 +23,65 @@ const formIputs = {
   confirmPassword: 'confirmPassword'
 }
 const validationSchema = Yup.object().shape({
-  [formIputs.email]: Yup.string().trim().email('Email format is not correct').required('This field is required.'),
-  [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.'),
-  [formIputs.confirmPassword]: Yup.string().oneOf([Yup.ref('password'), null], "Passwords don't match").required('This field is required.')
+  [formIputs.email]: Yup.string()
+    .trim()
+    .email('Email format is not correct')
+    .required('This field is required.'),
+  [formIputs.password]: Yup.string()
+    .min(8, 'Password must be at least 8 characters.')
+    .required('This field is required.'),
+  [formIputs.confirmPassword]: Yup.string()
+    .oneOf([Yup.ref('password'), null], "Passwords don't match")
+    .required('This field is required.')
 })
-class Account extends Component {
+class Account extends PureComponent {
   inputRefs = {}
   values = {}
   static navigationOptions = ({ navigation }) => {
     return {
-      headerLeft: <NavButton icon='arrowLeft' imageStyle={{height: 14, width: 16}} onPress={() => navigation.navigate(Intro)} />
+      headerLeft: (
+        <NavButton
+          icon="arrowLeft"
+          imageStyle={{ height: 14, width: 16 }}
+          onPress={() => navigation.navigate(Intro)}
+        />
+      )
     }
   }
 
-  componentDidUpdate (prevProps) {
-    const {isEmailValidating, emailError} = this.props.emailValidation
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    console.log('nextProps', nextProps)
+    const prevProps = this.props
+
+    const { isEmailValidating, emailError } = nextProps.emailValidation
     if (!isEmailValidating && prevProps.emailValidation.isEmailValidating) {
-      if (emailError) Alert.alert('Email already exists', 'If you already registered, try logging in with your email and password.')
-      else {
-        this.props.onSaveCredentials(this.values)
-        this.props.navigation.navigate(PersonalInfo)
+      if (emailError) {
+        // Alert.alert(
+        //   'Email already exists',
+        //   'If you already registered, try logging in with your email and password.',
+        //   [
+        //     {
+        //       text: 'OK'
+        //     }
+        //   ],
+        //   { cancelable: false }
+        // )
+      } else {
+        nextProps.onSaveCredentials(this.values)
+        nextProps.navigation.navigate(PersonalInfo)
       }
     }
   }
-  onSubmit = (values, {setErrors}) => {
-    const {email, password, confirmPassword} = values
+
+  onSubmit = (values, { setErrors }) => {
+    const { email, password, confirmPassword } = values
     let stepData = {
       password,
       confirmPassword,
       email: email.trim()
     }
     this.values = stepData
-    this.props.onValidateEmail({email: email.trim()})
+    this.props.onValidateEmail({ email: email.trim() })
     Keyboard.dismiss()
   }
 
@@ -63,14 +89,22 @@ class Account extends Component {
     this.props.navigation.navigate(TermsConditions)
   }
 
-  handleCheckboxPress = (val) => {
-    this.setState((state) => ({termsChecked: !state.termsChecked}))
+  handleCheckboxPress = val => {
+    this.setState(state => ({ termsChecked: !state.termsChecked }))
   }
   handleSignInPress = () => {
-    this.props.navigation.navigate(SignIn, {showFromBottom: true})
+    this.props.navigation.navigate(SignIn, { showFromBottom: true })
   }
 
-  renderForm = ({ setFieldTouched, setFieldValue, handleChange, handleSubmit, errors, values, touched }) => {
+  renderForm = ({
+    setFieldTouched,
+    setFieldValue,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched
+  }) => {
     let buttonDisabled = true
     if (isEmpty(errors) && values.termsChecked) buttonDisabled = false
     // console.log('values', values)
@@ -78,17 +112,24 @@ class Account extends Component {
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.formContainer}
-          keyboardShouldPersistTaps='always'
+          keyboardShouldPersistTaps="always"
           ref={this.setListRef}
-          style={{}}>
+          style={{}}
+        >
           <View style={styles.form}>
             <TextInputView
               blurOnSubmit={false}
-              error={touched.email && errors.email}
-              keyboardType='email-address'
-              label='EMAIL'
-              name='email'
-              placeholder=''
+              error={
+                this.props.emailValidation.emailError ||
+                (touched.email && errors.email)
+              }
+              inputRef={input => {
+                this.inputRefs['email'] = input
+              }}
+              keyboardType="email-address"
+              label="EMAIL"
+              name="email"
+              placeholder=""
               returnKeyType={'next'}
               value={values.email.trim()}
               onBlur={() => setFieldTouched('email')}
@@ -98,10 +139,12 @@ class Account extends Component {
             <TextInputView
               blurOnSubmit={false}
               error={touched.password && errors.password}
-              inputRef={(input) => { this.inputRefs['password'] = input }}
-              label='PASSWORD'
-              name='password'
-              placeholder=''
+              inputRef={input => {
+                this.inputRefs['password'] = input
+              }}
+              label="PASSWORD"
+              name="password"
+              placeholder=""
               returnKeyType={'next'}
               secureTextEntry
               value={values.password}
@@ -111,10 +154,12 @@ class Account extends Component {
             />
             <TextInputView
               error={touched.confirmPassword && errors.confirmPassword}
-              inputRef={(input) => { this.inputRefs['confirmPassword'] = input }}
-              label='CONFIRM PASSWORD'
-              name='confirmPassword'
-              placeholder=''
+              inputRef={input => {
+                this.inputRefs['confirmPassword'] = input
+              }}
+              label="CONFIRM PASSWORD"
+              name="confirmPassword"
+              placeholder=""
               secureTextEntry
               value={values.confirmPassword}
               onBlur={() => setFieldTouched('confirmPassword')}
@@ -123,21 +168,25 @@ class Account extends Component {
             <View style={styles.checkboxContainer}>
               <CheckBox
                 checked={values.termsChecked}
-                checkedColor='rgb(240,62,62)'
-                checkedIcon='ios-checkbox'
+                checkedColor="rgb(240,62,62)"
+                checkedIcon="ios-checkbox"
                 containerStyle={styles.checkBox}
-                iconType='ionicon'
-                name='termsChecked'
+                iconType="ionicon"
+                name="termsChecked"
                 size={30}
-                uncheckedIcon='md-square-outline'
-                onPress={() => setFieldValue('termsChecked', !values.termsChecked)}
+                uncheckedIcon="md-square-outline"
+                onPress={() =>
+                  setFieldValue('termsChecked', !values.termsChecked)
+                }
               />
               <Text style={styles.checkboxTitle}>
                 Accept
                 <Text
                   style={styles.termsButton}
                   onPress={this.handleTermsPress}
-                > Terms and Conditions
+                >
+                  {' '}
+                  Terms and Conditions
                 </Text>
               </Text>
             </View>
@@ -146,7 +195,7 @@ class Account extends Component {
             <Button
               containerStyle={styles.nextButton}
               disabled={buttonDisabled}
-              title='NEXT'
+              title="NEXT"
               onPress={handleSubmit}
             />
             <Text style={styles.mainText}>
@@ -154,7 +203,9 @@ class Account extends Component {
               <Text
                 style={styles.signInButtonText}
                 onPress={this.handleSignInPress}
-              > Sign in
+              >
+                {' '}
+                Sign in
               </Text>
             </Text>
           </View>
@@ -163,19 +214,29 @@ class Account extends Component {
     )
   }
 
-  render () {
-    const {isEmailValidating} = this.props.emailValidation
+  render() {
+    const { isEmailValidating } = this.props.emailValidation
+
+    console.log(isEmailValidating)
+
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Formik
-          initialValues={{email: '', password: '', confirmPassword: '', termsChecked: false}}
+          initialValues={{
+            email: '',
+            password: '',
+            confirmPassword: '',
+            termsChecked: false
+          }}
           render={this.renderForm}
           validateOnBlur
           // validateOnChange
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
-        <Spinner color={colors.red} visible={isEmailValidating} />
+        {isEmailValidating && (
+          <Spinner color={colors.red} visible={isEmailValidating} />
+        )}
       </View>
     )
   }

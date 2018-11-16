@@ -1,6 +1,6 @@
 import React, {PureComponent} from 'react'
 import { View, ScrollView, Text, Alert, Keyboard } from 'react-native'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import PropTypes from 'prop-types'
 import { TextInputView } from 'components/blocks'
 import { Button } from 'components/ui'

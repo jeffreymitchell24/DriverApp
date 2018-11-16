@@ -59,7 +59,7 @@ class PictureGallery extends Component {
   //     ImagePicker.showImagePicker(options, (response) => {
   //       console.log('Response = ', response)
   //       this.pickerIsOpened = false
-  //       if (response.didCancel) {
+  //       if (response.didCancel || response.error) {
   //         this.props.navigation.goBack()
   //       } else {
   //         this.props.navigation.navigate(PicturePreview, {

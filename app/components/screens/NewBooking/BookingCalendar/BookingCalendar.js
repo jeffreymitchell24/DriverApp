@@ -118,15 +118,15 @@ class BookingCalendar extends Component {
     console.log(dateString)
 
     // let fullDate = { ...selectedDate }
-    // let date = moment(
-    //   `${selectedDate.dateString} ${selectedTime}`,
-    //   'YYYY-MM-DD hh:mm A'
-    // ).subtract({ hours: 4 })
+    let date = moment(
+      `${selectedDate.dateString} ${selectedTime}`,
+      'YYYY-MM-DD hh:mm A'
+    ).format()
 
     // fullDate.timestamp = date.toDate()
     // console.log('fullDate', fullDate)
     // console.log(moment(selectedDate.dateString, 'YYYY-MM-DD').set('hour', +hour).utcOffset('-04:00', true).hour())
-    this.props.onSetBookingDate({ type: bookDateType, date: dateString })
+    this.props.onSetBookingDate({ type: bookDateType, date })
     this.props.navigation.navigate(NewBookingDetails, {
       bookDateType,
       selectedDate,
@@ -228,11 +228,23 @@ class BookingCalendar extends Component {
     let isButtonActive = selectedDate && selectedTime > -1
     let markedDates = { ...Object.keys(calendar) }
 
-    const startDate = _.first(Object.keys(calendar))
+    let startDate = _.first(Object.keys(calendar))
     let endDate = _.last(Object.keys(calendar))
 
     if (this.bookDateType === 'end') {
-      endDate = moment(this.minDate).format('Y-M-D')
+      startDate = moment(this.minDate).format('Y-M-D')
+      const tomorrow = moment(this.minDate)
+        .add({ days: 1 })
+        .format('Y-M-D')
+
+      if (
+        _.last(calendar[selectedDate] || []) === 23 &&
+        _.first(calendar[tomorrow] || []) === 0
+      ) {
+        endDate = tomorrow
+      } else {
+        endDate = moment(this.minDate).format('Y-M-D')
+      }
     }
 
     if (selectedDate)

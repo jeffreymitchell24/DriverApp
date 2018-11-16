@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Alert } from 'react-native'
 import { PicturePreviewView } from 'components/blocks'
 import { BookingDetail } from 'navigation/routeNames'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import { colors } from 'theme'
 
 class LicensePreview extends Component {

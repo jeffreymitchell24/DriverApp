@@ -21,7 +21,7 @@ import {
   HelpCenterSection,
   RadioButton
 } from 'components/ui'
-import Spinner from 'react-native-loading-spinner-overlay'
+import { Spinner } from 'components/ui'
 import ImagePicker from 'react-native-image-picker'
 import { colors } from 'theme'
 import styles from './styles'
@@ -82,7 +82,7 @@ class RideLateDescription extends PureComponent {
       ImagePicker.showImagePicker(
         Platform.OS === 'android' ? androidOptions : iosOptions,
         response => {
-          if (!response.didCancel)
+          if (!response.didCancel || response.error)
             onSavePhoto({
               type: 'rideLatePhotos',
               index: 0,
