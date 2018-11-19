@@ -5,9 +5,14 @@ import isEmpty from 'lodash/isEmpty'
 import { TextInputView } from 'components/blocks'
 import * as Yup from 'yup'
 import { requestMainPermissions } from 'helpers/permission'
-import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
-import { HelpCamera, HelpCenter } from 'navigation/routeNames'
-import { Spinner } from 'components/ui'
+import {
+  Photo,
+  Button,
+  SectionHeader,
+  HelpCenterSection,
+  Spinner
+} from 'components/ui'
+import { HelpCenter } from 'navigation/routeNames'
 import { colors } from 'theme'
 import { Formik } from 'formik'
 import ImagePicker from 'react-native-image-picker'

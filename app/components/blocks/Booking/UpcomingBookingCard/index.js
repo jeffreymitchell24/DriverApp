@@ -29,16 +29,18 @@ class UpcomingBookingCard extends PureComponent {
   getTime = () => {
     const now = moment().tz('America/New_York')
 
-    if (now.isAfter(this.startingAt)) {
-      clearInterval(this.timer)
+    if (this.props.booking.status === 'pending') {
+      if (now.isAfter(this.startingAt)) {
+        clearInterval(this.timer)
 
-      this.setState({
-        extraDetail: 'You can unlock the car now'
-      })
-    } else {
-      this.setState({
-        extraDetail: `Starting in ${now.to(this.startingAt, true)}`
-      })
+        this.setState({
+          extraDetail: 'You can unlock the car now'
+        })
+      } else {
+        this.setState({
+          extraDetail: `Starting in ${now.to(this.startingAt, true)}`
+        })
+      }
     }
   }
 

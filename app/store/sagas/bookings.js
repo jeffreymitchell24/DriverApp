@@ -84,7 +84,7 @@ function* fetchAvailableCars(action) {
     console.log('error message', error.message)
     yield put({
       type: FETCH_AVAILABLE_CARS.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -108,7 +108,7 @@ function* fetchCarDetails({ payload: { id, body } }) {
     console.log('error message', error.message)
     yield put({
       type: FETCH_SELECTED_CAR.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -137,7 +137,7 @@ function* bookCar({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: BOOK_CAR.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -178,7 +178,7 @@ function* checkRideLicense({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: CHECK_LICENSE.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -204,7 +204,7 @@ function* rideCancel({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: CANCEL_RIDE.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -252,7 +252,7 @@ function* rideStart() {
     console.log('error message', error.message)
     yield put({
       type: END_RIDE.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -288,7 +288,7 @@ function* rideEnd({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: END_RIDE.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -324,7 +324,7 @@ function* rideDamaged({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: HELP_RIDE_DAMAGED.FAILURE,
-      payload: (error.response && error.response.data.error.message) || ''
+      payload: (error.response && error.message) || ''
     })
   }
 }
@@ -360,7 +360,7 @@ function* rideMalfunction({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: HELP_RIDE_MALFUNCTIONED.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -389,7 +389,7 @@ function* sendRideLateNotification({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -426,7 +426,7 @@ function* rideLate({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: SEND_LATE_FOR_RIDE_DETAILS.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -466,7 +466,7 @@ function* submitRideReceipt({ payload }) {
     console.log('error message', error.message)
     yield put({
       type: SUBMIT_RECEIPT.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }
@@ -501,7 +501,7 @@ function* fetchCarCategories() {
     console.log('error message', error.message)
     yield put({
       type: LOAD_CAR_CATEGORIES.FAILURE,
-      payload: error.response.data.error.message
+      payload: error.message
     })
   }
 }

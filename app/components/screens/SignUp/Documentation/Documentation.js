@@ -14,9 +14,8 @@ import ImagePicker from 'react-native-image-picker'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
-import { Spinner } from 'components/ui'
 import { CheckBox } from 'react-native-elements'
-import { RegisterReview, DocumentsCamera } from 'navigation/routeNames'
+import { RegisterReview } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import { colors } from 'theme'
 import {
@@ -25,7 +24,8 @@ import {
   SectionHeader,
   SectionContent,
   Photo,
-  RadioButton
+  RadioButton,
+  Spinner
 } from 'components/ui'
 import styles from './styles'
 import { APP_CONFIG } from './config'
@@ -36,8 +36,8 @@ let androidOptions = {
   mediaType: 'photo',
   storageOptions: {
     skipBackup: true,
-    cameraRoll: true,
-    path: 'images'
+    cameraRoll: true
+    // path: 'images'
   },
   noData: true
 }
@@ -230,9 +230,7 @@ class Documentation extends Component {
     let granted = await requestMainPermissions(true)
     if (granted) {
       this.showImagePicker(licenseSide, licenseType)
-      // const { onSelectLicense, navigation } = this.props
-
-      // onSelectLicense({ type: licenseType, side: licenseSide.toLowerCase() })
+      // onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})
 
       // navigation.navigate(DocumentsCamera, {
       //   title: licenseSide
@@ -246,8 +244,10 @@ class Documentation extends Component {
       response => {
         console.log('Response = ', response)
         this.pickerIsOpened = false
-        if (response.didCancel || response.error) {
+        if (response.didCancel) {
           // this.props.navigation.goBack()
+        } else if (response.error) {
+          console.warn('camera error', response.error)
         } else {
           this.props.onUpdateLicense({
             type: licenseType,

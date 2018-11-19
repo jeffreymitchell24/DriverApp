@@ -1,5 +1,14 @@
 import React, { Component } from 'react'
-import { View, ScrollView, TouchableWithoutFeedback, Alert, Animated, TouchableOpacity, Text } from 'react-native'
+import {
+  View,
+  ScrollView,
+  TouchableWithoutFeedback,
+  Alert,
+  Animated,
+  TouchableOpacity,
+  Text,
+  Platform
+} from 'react-native'
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import * as Yup from 'yup'
@@ -9,26 +18,71 @@ import moment from 'moment'
 import isEmpty from 'lodash/isEmpty'
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
-import {getCurrentDateAndTime, formatDate, formatTime} from 'helpers/date'
-import {ReceiptCamera} from 'navigation/routeNames'
+import { getCurrentDateAndTime, formatDate, formatTime } from 'helpers/date'
+import { ReceiptCamera } from 'navigation/routeNames'
+import ImagePicker from 'react-native-image-picker'
 import { colors } from 'theme'
-import { Button, Section, SectionHeader, SectionContent, Photo } from 'components/ui'
+import {
+  Button,
+  Section,
+  SectionHeader,
+  SectionContent,
+  Photo
+} from 'components/ui'
 import styles from './styles'
 
-const RECEIPT_TYPES = ['Gas bill', 'Parking ticket', 'Traffic ticket', 'Repair bill', 'Toll', 'Proof of damage']
+const RECEIPT_TYPES = [
+  'Gas bill',
+  'Parking ticket',
+  'Traffic ticket',
+  'Repair bill',
+  'Toll',
+  'Proof of damage'
+]
+
+let androidOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true
+    // path: 'images'
+  },
+  noData: true
+}
+let iosOptions = {
+  cancelButtonTitle: 'Cancel',
+  title: 'License Photo',
+  mediaType: 'photo',
+  noData: true,
+  quality: 0.5,
+  storageOptions: {
+    skipBackup: true,
+    cameraRoll: true,
+    waitUntilSaved: true
+    // path: 'images'
+  }
+}
 
 const validationSchema = Yup.object().shape({
-  'title': Yup.string().trim().required('This field is required.'),
-  'price': Yup.string().trim().required('This field is required.'),
-  'location': Yup.string().trim().required('This field is required.')
+  title: Yup.string()
+    .trim()
+    .required('This field is required.'),
+  price: Yup.string()
+    .trim()
+    .required('This field is required.'),
+  location: Yup.string()
+    .trim()
+    .required('This field is required.')
 })
 
 class ReceiptSubmit extends Component {
   inputRefs = {}
   isHiddenPicker = true
-  constructor (props) {
+  constructor(props) {
     super(props)
-    const {time, date} = getCurrentDateAndTime()
+    const { time, date } = getCurrentDateAndTime()
     console.log(time, date)
     this.state = {
       showPicker: false,
@@ -41,16 +95,16 @@ class ReceiptSubmit extends Component {
     }
   }
 
-  componentDidUpdate (prevProps) {
-    const {error, requestPending, navigation} = this.props
+  componentDidUpdate(prevProps) {
+    const { error, requestPending, navigation } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error)Alert.alert('Error', error)
+      if (error) Alert.alert('Error', error)
       else navigation.goBack()
     }
   }
 
-  onReceiptTypeSelect = (type) => {
-    this.setState({receiptType: type}, () => this.toggle())
+  onReceiptTypeSelect = type => {
+    this.setState({ receiptType: type }, () => this.toggle())
   }
 
   toggle = () => {
@@ -62,15 +116,12 @@ class ReceiptSubmit extends Component {
 
     // This will animate the transalteY of the subview between 0 & 100 depending on its current state
     // 100 comes from the style below, which is the height of the subview.
-    Animated.spring(
-      this.state.animation,
-      {
-        toValue: toValue,
-        velocity: 3,
-        tension: 2,
-        friction: 8
-      }
-    ).start()
+    Animated.spring(this.state.animation, {
+      toValue: toValue,
+      velocity: 3,
+      tension: 2,
+      friction: 8
+    }).start()
 
     this.isHiddenPicker = !this.isHiddenPicker
   }
@@ -78,50 +129,90 @@ class ReceiptSubmit extends Component {
   onPhotoPress = async () => {
     let granted = await requestMainPermissions(true)
     if (granted) {
-      const {onSelectPhoto, navigation} = this.props
-      onSelectPhoto({type: 'receiptPhoto', index: 0})
+      // const { onSelectPhoto } = this.props
+      // onSelectPhoto({ type: 'receiptPhoto', index: 0 })
 
-      navigation.navigate(ReceiptCamera)
+      // navigation.navigate(ReceiptCamera)
+      let granted = await requestMainPermissions(true)
+      if (granted) {
+        const { onSavePhoto } = this.props
+
+        ImagePicker.showImagePicker(
+          Platform.OS === 'android' ? androidOptions : iosOptions,
+          response => {
+            if (response.didCancel) {
+            } else if (response.error) {
+              console.warn(response.error)
+              Alert.alert('', "Can't pick a photo")
+            }
+            onSavePhoto({
+              type: 'receiptPhoto',
+              index: 0,
+              photoUri: response.uri
+            })
+          }
+        )
+      }
     }
   }
   onHideDateTimePicker = () => {
-    this.setState({showPicker: false})
+    this.setState({ showPicker: false })
   }
-  onDateTimePicked = (date) => {
+  onDateTimePicked = date => {
     console.log('date', date)
     if (this.state.pickerMode === 'time') {
-      this.setState({showPicker: false, time: formatTime(date)})
+      this.setState({ showPicker: false, time: formatTime(date) })
     } else {
-      this.setState({showPicker: false, date: formatDate(date)})
+      this.setState({ showPicker: false, date: formatDate(date) })
     }
   }
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onClearReceiptPhoto()
   }
   onDatePress = () => {
-    this.setState({showPicker: true, pickerMode: 'date'})
+    this.setState({ showPicker: true, pickerMode: 'date' })
   }
   onTimePress = () => {
-    this.setState({showPicker: true, pickerMode: 'time'})
+    this.setState({ showPicker: true, pickerMode: 'time' })
   }
 
-  onSubmit = (values) => {
-    const {title, location, price} = values
-    const {date, time} = this.state
-    const {onSubmitReceipt, ride = {}, receiptPhoto} = this.props
+  onSubmit = values => {
+    const { title, location, price } = values
+    const { date, time } = this.state
+    const { onSubmitReceipt, ride = {}, receiptPhoto } = this.props
     let dateObject = moment(date, 'MM/DD/YYYY')
-    onSubmitReceipt({data: {location, title, price, date: dateObject.format('YYYY-MM-DD'), time, photo: receiptPhoto}, carId: ride.id})
+    onSubmitReceipt({
+      data: {
+        location,
+        title,
+        price,
+        date: dateObject.format('YYYY-MM-DD'),
+        time,
+        photo: receiptPhoto
+      },
+      carId: ride.id
+    })
   }
 
-  renderDropDown = (setFieldValue) => {
+  renderDropDown = setFieldValue => {
     return (
-      <Animated.View style={[styles.dropdown, {height: this.state.animation}]}>
+      <Animated.View
+        style={[styles.dropdown, { height: this.state.animation }]}
+      >
         {RECEIPT_TYPES.map((type, i) => {
           let extraStyle = {}
-          if (i === RECEIPT_TYPES.length - 1) extraStyle = { borderBottomWidth: 2 }
-          else if (i === 0)extraStyle = { borderTopWidth: 0 }
+          if (i === RECEIPT_TYPES.length - 1)
+            extraStyle = { borderBottomWidth: 2 }
+          else if (i === 0) extraStyle = { borderTopWidth: 0 }
           return (
-            <TouchableOpacity key={i} style={[styles.dropdownItem, extraStyle]} onPress={() => { setFieldValue('title', type); this.toggle() }}>
+            <TouchableOpacity
+              key={i}
+              style={[styles.dropdownItem, extraStyle]}
+              onPress={() => {
+                setFieldValue('title', type)
+                this.toggle()
+              }}
+            >
               <Text style={styles.dropdownItemText}>{type}</Text>
             </TouchableOpacity>
           )
@@ -129,23 +220,36 @@ class ReceiptSubmit extends Component {
       </Animated.View>
     )
   }
-  renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched, setFieldValue }) => {
-    const {price, location, title} = values
-    let isButtonActive = isEmpty(errors) && touched.location && touched.price && values.title && this.props.receiptPhoto
+  renderForm = ({
+    setFieldTouched,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched,
+    setFieldValue
+  }) => {
+    const { price, location, title } = values
+    let isButtonActive =
+      isEmpty(errors) &&
+      touched.location &&
+      touched.price &&
+      values.title &&
+      this.props.receiptPhoto
     return (
       <ScrollView
         contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps='always'
+        keyboardShouldPersistTaps="always"
       >
         <View style={styles.form}>
           <TouchableWithoutFeedback onPress={this.toggle}>
-            <View pointerEvents='box-only'>
+            <View pointerEvents="box-only">
               <TextInputView
-                containerStyle={{marginBottom: 0}}
-                keyboardType='default'
-                label='TITLE'
-                name='title'
-                placeholder=''
+                containerStyle={{ marginBottom: 0 }}
+                keyboardType="default"
+                label="TITLE"
+                name="title"
+                placeholder=""
                 value={title}
               />
             </View>
@@ -154,10 +258,10 @@ class ReceiptSubmit extends Component {
           <TextInputView
             blurOnSubmit={false}
             error={touched.location && errors.location}
-            keyboardType='default'
-            label='LOCATION'
-            name='location'
-            placeholder=''
+            keyboardType="default"
+            label="LOCATION"
+            name="location"
+            placeholder=""
             returnKeyType={'next'}
             value={location}
             onBlur={() => setFieldTouched('location')}
@@ -166,40 +270,42 @@ class ReceiptSubmit extends Component {
           />
           <TextInputView
             error={touched.price && errors.price}
-            keyboardType='number-pad'
-            label='PRICE'
+            keyboardType="number-pad"
+            label="PRICE"
             mask={'[999990].[99]'}
-            name='price'
-            placeholder=''
-            refInput={(input) => { this.inputRefs['price'] = input }}
+            name="price"
+            placeholder=""
+            refInput={input => {
+              this.inputRefs['price'] = input
+            }}
             value={price}
             onBlur={() => setFieldTouched('price')}
             onChangeText={handleChange('price')}
           />
           <TouchableWithoutFeedback onPress={this.onDatePress}>
-            <View pointerEvents='box-only'>
+            <View pointerEvents="box-only">
               <TextInputView
-                keyboardType='default'
-                label='DATE'
-                name='date'
-                placeholder=''
+                keyboardType="default"
+                label="DATE"
+                name="date"
+                placeholder=""
                 value={this.state.date}
               />
             </View>
           </TouchableWithoutFeedback>
           <TouchableWithoutFeedback onPress={this.onTimePress}>
-            <View pointerEvents='box-only'>
+            <View pointerEvents="box-only">
               <TextInputView
-                keyboardType='default'
-                label='TIME'
-                name='time'
-                placeholder=''
+                keyboardType="default"
+                label="TIME"
+                name="time"
+                placeholder=""
                 value={this.state.time}
               />
             </View>
           </TouchableWithoutFeedback>
           <Section style={styles.photoUploadSection}>
-            <SectionHeader title='RECEIPT PHOTO' />
+            <SectionHeader title="RECEIPT PHOTO" />
             <SectionContent>
               <Photo
                 imageUri={this.props.receiptPhoto}
@@ -211,7 +317,7 @@ class ReceiptSubmit extends Component {
         <Button
           // containerStyle={styles.nextButton}
           disabled={!isButtonActive}
-          title='SUBMIT'
+          title="SUBMIT"
           onPress={handleSubmit}
         />
         <DateTimePicker
@@ -224,11 +330,11 @@ class ReceiptSubmit extends Component {
     )
   }
 
-  render () {
+  render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Formik
-          initialValues={{title: '', price: '', location: ''}}
+          initialValues={{ title: '', price: '', location: '' }}
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur

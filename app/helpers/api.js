@@ -198,6 +198,14 @@ export const endRide = async ({ token, id, data }) => {
   let config = {
     headers: { Authorization: `Bearer ${token}` }
   }
+
+  console.log(
+    'endRide data',
+    `${URL}/api/bookings/${id}/end`,
+    data,
+    data.toString()
+  )
+
   let response = await axios.post(`${URL}/api/bookings/${id}/end`, data, config)
   console.log('endRide response', response)
   return response.data

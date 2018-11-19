@@ -4,7 +4,6 @@ import { NavFilterImg } from 'components/ui'
 import { GOOGLE_API_KEY } from 'config/apiKeys'
 
 import { GoogleAutoComplete } from 'react-native-google-autocomplete'
-import BackgroundGeolocation from 'react-native-mauron85-background-geolocation'
 import _ from 'lodash'
 import { View, Text, Image, TouchableOpacity, Alert } from 'react-native'
 import { SearchBar } from 'react-native-elements'
@@ -29,7 +28,7 @@ class PickupLocation extends PureComponent {
   handleCurrentLocationPress = () => {
     const { onFilterUpdate, navigation } = this.props
 
-    BackgroundGeolocation.getCurrentLocation(
+    navigator.geolocation.getCurrentLocation(
       location => {
         console.log('BackgroundGeolocation', location)
         const choosenLocation = {
@@ -43,6 +42,7 @@ class PickupLocation extends PureComponent {
       },
       err => {
         console.log('location error', err)
+        Alert.alert('Geolocation Error', "Can't get your location")
       },
       { enableHighAccuracy: false, timeout: 10000 }
     )

@@ -2,8 +2,8 @@ import React, { PureComponent } from 'react'
 import { View, Text, FlatList, TouchableOpacity, Alert } from 'react-native'
 import Icon from 'react-native-vector-icons/Ionicons'
 import { RideLateDescription, BookingDetail } from 'navigation/routeNames'
-import { HelpCenterSection, NavButton } from 'components/ui'
-import { Spinner } from 'components/ui'
+import { HelpCenterSection, NavButton, Spinner } from 'components/ui'
+
 import PropTypes from 'prop-types'
 import CONFIG from './config'
 import { colors } from 'theme'
@@ -26,27 +26,36 @@ class HelpCenter extends PureComponent {
     isLateAlertShow: false
   }
 
-  UNSAFE_componentWillReceiveProps(prevProps) {
+  isLateReq = false
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
     const { error, requestPending } = this.props
-    if (
-      (prevProps.requestPending && !requestPending) ||
-      !this.state.isLateAlertShow
-    ) {
+    const { isLateAlertShow } = this.state
+
+    console.log('HELP_CENTER_STATE', { isLateAlertShow, ff: this.isLateReq })
+    if (requestPending && !nextProps.requestPending) {
+      console.log('req end')
       if (error) Alert.alert('Error', error)
       else {
-        this.setState({
-          isLateAlertShow: true
-        })
+        console.log('else')
+        if (!isLateAlertShow && this.isLateReq) {
+          console.log('show alert')
+          this.setState({
+            isLateAlertShow: true
+          })
 
-        Alert.alert(
-          'Thank you for notifying us',
-          'Our administrator has been notified. You can add more details about why you are being late (optional).',
-          [
-            { text: 'OK', onPress: () => this.onOkPress() },
-            { text: 'More', onPress: () => this.onMorePress() }
-          ],
-          { cancelable: false }
-        )
+          Alert.alert(
+            'Thank you for notifying us',
+            'Our administrator has been notified. You can add more details about why you are being late (optional).',
+            [
+              { text: 'OK', onPress: () => this.onOkPress() },
+              { text: 'More', onPress: () => this.onMorePress() }
+            ],
+            { cancelable: false }
+          )
+
+          this.isLateReq = false
+        }
       }
     }
   }
@@ -58,6 +67,10 @@ class HelpCenter extends PureComponent {
     this.props.navigation.navigate(RideLateDescription)
   }
   onLatePress = () => {
+    this.setState({ isLateReq: true })
+    this.isLateReq = true
+    console.log('dispatch action', this.state)
+
     const { onSendLateNotification, ride } = this.props
 
     onSendLateNotification({ carId: ride.id })
@@ -91,9 +104,7 @@ class HelpCenter extends PureComponent {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderListItem}
         />
-        {requestPending && (
-          <Spinner color={colors.red} visible={requestPending} />
-        )}
+        <Spinner color={colors.red} visible={requestPending} />
       </HelpCenterSection>
     )
   }
