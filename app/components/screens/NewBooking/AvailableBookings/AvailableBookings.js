@@ -37,11 +37,11 @@ class AvailableBookings extends PureComponent {
         .tz('America/New_York')
         .subtract(1, 'hours')
         .minutes(59)
-        .format('Y-M-D h:m'),
+        .format('Y-M-D HH:mm'),
       calendar_date_from: moment(startDate)
         // .unix(startDate)
         .tz('America/New_York')
-        .format('Y-M-D h:m')
+        .format('Y-M-D HH:mm')
     }
 
     console.log(body)
