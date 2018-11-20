@@ -6,7 +6,8 @@ import {
   Easing,
   TouchableWithoutFeedback
 } from 'react-native'
-import { DatePicker as CustomDatePicker } from 'react-native-wheel-picker-android'
+// import { DatePicker as CustomDatePicker } from 'react-native-wheel-picker-android'
+import CustomDatePicker from 'react-native-date-picker'
 import PropTypes from 'prop-types'
 
 import moment from 'moment'
@@ -17,7 +18,16 @@ class DatePicker extends PureComponent {
   state = {
     isOpen: false,
 
-    animation: new Animated.Value(0)
+    animation: new Animated.Value(0),
+    selectedDate: new Date()
+  }
+
+  constructor(props) {
+    super(props)
+
+    const { value } = props
+
+    this.state.selectedDate = value
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -47,7 +57,12 @@ class DatePicker extends PureComponent {
   handleChange = nextDate => {
     const { onChange, type } = this.props
 
-    onChange(moment(nextDate).format(), type)
+    onChange(
+      moment(nextDate)
+        .tz('America/New_York')
+        .format(),
+      type
+    )
   }
 
   render() {
@@ -64,6 +79,23 @@ class DatePicker extends PureComponent {
       disabled
     } = this.props
 
+    console.log('datepicker props', this.props)
+
+    const initDate = moment(value)
+      .tz('America/New_York')
+      .toDate()
+
+    const minDate = startDate
+      ? moment(startDate)
+          .tz('America/New_York')
+          .toDate()
+      : moment()
+          .tz('America/New_York')
+          .toDate()
+
+    console.log('initDate', initDate)
+    console.log('minDate', minDate)
+
     return (
       <View style={[styles.container, style]}>
         <TouchableWithoutFeedback onPress={this.handleOpen}>
@@ -72,7 +104,10 @@ class DatePicker extends PureComponent {
             <Text
               style={disabled ? styles.headerDisabledText : styles.headerDate}
             >
-              {headerValue || moment(value).format(formatter)}
+              {headerValue ||
+                moment(value)
+                  .tz('America/New_York')
+                  .format(formatter)}
             </Text>
           </View>
         </TouchableWithoutFeedback>
@@ -90,17 +125,14 @@ class DatePicker extends PureComponent {
             </TouchableWithoutFeedback>
           )}
           <CustomDatePicker
-            initDate={new Date(value)}
-            startDate={
-              startDate
-                ? new Date(startDate).toISOString()
-                : new Date().toISOString()
-            }
+            date={initDate}
+            minimumDate={minDate}
             style={{
               width: '100%',
               height: 216
             }}
-            onDateSelected={this.handleChange}
+            onDateChange={this.handleChange}
+            timeZoneOffsetInMinutes={-5 * 60}
           />
         </Animated.View>
       </View>

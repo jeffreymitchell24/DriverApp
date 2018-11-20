@@ -54,7 +54,7 @@ class RideDamaged extends Component {
   componentDidUpdate(prevProps) {
     const { error, requestPending, navigation } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error) Alert.alert('Error', error)
+      if (error) setTimeout(() => Alert.alert('Error', error), 200)
       else navigation.navigate(HelpCenter)
     }
   }

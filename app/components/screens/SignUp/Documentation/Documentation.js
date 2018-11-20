@@ -281,7 +281,14 @@ class Documentation extends Component {
   onDisabledPress = () => {
     const { ridesharingApproved } = this.state
     if (ridesharingApproved === false) {
-      Alert.alert('', 'You have to be approved to work for Ridesharing apps.')
+      setTimeout(
+        () =>
+          Alert.alert(
+            '',
+            'You have to be approved to work for Ridesharing apps.'
+          ),
+        200
+      )
     }
   }
 

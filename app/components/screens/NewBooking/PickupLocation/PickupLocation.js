@@ -28,7 +28,7 @@ class PickupLocation extends PureComponent {
   handleCurrentLocationPress = () => {
     const { onFilterUpdate, navigation } = this.props
 
-    navigator.geolocation.getCurrentLocation(
+    navigator.geolocation.getCurrentPosition(
       location => {
         console.log('BackgroundGeolocation', location)
         const choosenLocation = {
@@ -42,7 +42,10 @@ class PickupLocation extends PureComponent {
       },
       err => {
         console.log('location error', err)
-        Alert.alert('Geolocation Error', "Can't get your location")
+        setTimeout(
+          () => Alert.alert('Geolocation Error', "Can't get your location"),
+          200
+        )
       },
       { enableHighAccuracy: false, timeout: 10000 }
     )
@@ -65,9 +68,13 @@ class PickupLocation extends PureComponent {
       )
 
       if (!isGhotamCity) {
-        Alert.alert(
-          '',
-          'Car Flow is currently available only in New York City.'
+        setTimeout(
+          () =>
+            Alert.alert(
+              '',
+              'Car Flow is currently available only in New York City.'
+            ),
+          200
         )
 
         return
@@ -130,7 +137,7 @@ class PickupLocation extends PureComponent {
             {history.map((el, i) => (
               <TouchableOpacity
                 key={i}
-                onPress={() => this.onLocationPress(fetchDetails, el)}
+                onPress={() => this.onHistoryLocationPres(el)}
               >
                 <View style={[styles.resultRow, styles.bottomBorder]}>
                   <Image

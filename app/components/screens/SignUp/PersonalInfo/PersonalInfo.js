@@ -78,7 +78,14 @@ class PersonalInfo extends Component {
   }
 
   onCityPress = () => {
-    Alert.alert('', 'Car Flow is currently available only in New York City.')
+    setTimeout(
+      () =>
+        Alert.alert(
+          '',
+          'Car Flow is currently available only in New York City.'
+        ),
+      200
+    )
   }
 
   onEditField = (value, type) => {

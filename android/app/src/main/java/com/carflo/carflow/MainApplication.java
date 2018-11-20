@@ -3,7 +3,8 @@ package com.carflo.carflow;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.wheelpicker.WheelPickerPackage;
+import com.henninghall.date_picker.DatePickerPackage;
+// import com.wheelpicker.WheelPickerPackage;
 // import com.zyu.ReactNativeWheelPickerPackage;
 import com.rnfs.RNFSPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -37,7 +38,8 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new WheelPickerPackage(),
+            new DatePickerPackage(),
+            // new WheelPickerPackage(),
             // new ReactNativeWheelPickerPackage(),
             new RNFSPackage(),
             new ImagePickerPackage(),

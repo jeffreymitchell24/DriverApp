@@ -110,7 +110,7 @@ class BookingDetail extends Component {
   componentDidUpdate(prevProps) {
     const { error, requestPending } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error) Alert.alert('Error', error)
+      if (error) setTimeout(() => Alert.alert('Error', error), 200)
     }
   }
   onSubmitReceiptPress = () => {
@@ -172,7 +172,7 @@ class BookingDetail extends Component {
           />
           <SectionContent style={styles.photoList}>
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Front</Text> 
+              <Text style={styles.photoLabel}>Front</Text>
               <Photo imageUri={report.photo_front_s3_link} touchable={false} />
             </View>
             <View style={styles.photoBlock}>

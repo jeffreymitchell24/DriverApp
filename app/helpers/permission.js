@@ -8,12 +8,9 @@ import forEach from 'lodash/forEach'
 //   PermissionsAndroid.PERMISSIONS.CAMERA
 // ]
 
-let permissions = [
-  'camera',
-  'photo'
-]
+let permissions = ['camera', 'photo']
 
-const requestPermission = async (permissionType) => {
+const requestPermission = async permissionType => {
   if (Platform.OS === 'android') {
     try {
       let granted = await PermissionsAndroid.request(permissionType)
@@ -23,7 +20,7 @@ const requestPermission = async (permissionType) => {
     }
   } else return true
 }
-const requestMultiplePermissions = async (permissions) => {
+const requestMultiplePermissions = async permissions => {
   // try {
   //   let results = await Promise.all(permissions.map((type) => {
   //     console.log('type', type)
@@ -41,12 +38,16 @@ const requestMultiplePermissions = async (permissions) => {
 }
 
 export const requestReadStoragePermission = async () => {
-  let result = await requestPermission(PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE)
+  let result = await requestPermission(
+    PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE
+  )
   return result
 }
 
 export const requestWriteStoragePermission = async () => {
-  let result = await requestPermission(PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE)
+  let result = await requestPermission(
+    PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
+  )
   return result
 }
 
@@ -60,8 +61,11 @@ export const requestMainPermissions = async (showAlert = false) => {
   let granted = await Permissions.request('camera')
     .then(res => {
       results.camera = res
-      return (Permissions.request(Platform.OS === 'android' ? 'storage' : 'photo'))
-    }).then(res => {
+      return Permissions.request(
+        Platform.OS === 'android' ? 'storage' : 'photo'
+      )
+    })
+    .then(res => {
       results[Platform.OS === 'android' ? 'storage' : 'photo'] = res
       console.log('results', results)
       let granted = true
@@ -74,7 +78,14 @@ export const requestMainPermissions = async (showAlert = false) => {
           } else if (result === 'denied') granted = false
         })
         if (restricted.length > 0 && showAlert) {
-          Alert.alert('Permissions', 'We need access to your camera and storage')
+          setTimeout(
+            () =>
+              Alert.alert(
+                'Permissions',
+                'We need access to your camera and storage'
+              ),
+            200
+          )
         }
       } else {
         let denied = []
@@ -85,17 +96,17 @@ export const requestMainPermissions = async (showAlert = false) => {
           } else if (result === 'restricted') granted = false
         })
         if (denied.length > 0 && showAlert) {
-          Alert.alert(
-            'Permissions',
-            'We need access to your camera',
-            [
-              {
-                text: 'No way',
-                onPress: () => console.log('Permission denied'),
-                style: 'cancel'
-              },
-              { text: 'Open Settings', onPress: Permissions.openSettings }
-            ]
+          setTimeout(
+            () =>
+              Alert.alert('Permissions', 'We need access to your camera', [
+                {
+                  text: 'No way',
+                  onPress: () => console.log('Permission denied'),
+                  style: 'cancel'
+                },
+                { text: 'Open Settings', onPress: Permissions.openSettings }
+              ]),
+            200
           )
         }
       }

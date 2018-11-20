@@ -86,7 +86,7 @@ class NewBookingDetails extends PureComponent {
 
         return navigation.navigate(BookingConfirmed, { bookingData })
       } else {
-        Alert.alert('', bookingError)
+        setTimeout(() => Alert.alert('', bookingError), 200)
       }
     }
   }
@@ -114,7 +114,8 @@ class NewBookingDetails extends PureComponent {
     })
   }
   onEndDatePress = () => {
-    if (!this.props.startDate) Alert.alert('', 'Select start date first')
+    if (!this.props.startDate)
+      setTimeout(() => Alert.alert('', 'Select start date first'), 200)
     else {
       this.props.navigation.navigate(BookingCalendar, {
         bookDateType: 'end',

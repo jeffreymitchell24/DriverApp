@@ -4,7 +4,7 @@ import moment from 'moment'
 import { UPDATE_FILTER } from '../actions/newBookingsFilters'
 import { LOAD_CAR_CATEGORIES } from '../actions/newBooking'
 
-const now = moment()
+const now = moment().tz('America/New_York')
 const startDate =
   now.minute() || now.second() || now.millisecond()
     ? now.add(1, 'hour').startOf('hour')

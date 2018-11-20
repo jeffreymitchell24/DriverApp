@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
+import { Alert } from 'react-native'
 import PropTypes from 'prop-types'
-import {PicturePreviewView} from 'components/blocks'
-import {Documentation} from 'navigation/routeNames'
+import { PicturePreviewView } from 'components/blocks'
+import { Documentation } from 'navigation/routeNames'
 
 class PicturePreview extends Component {
   state = {
@@ -12,8 +13,8 @@ class PicturePreview extends Component {
   }
 
   onConfirmPress = () => {
-    const {onUpdateLicense, selectedLicense, navigation} = this.props
-    const {type, side} = selectedLicense
+    const { onUpdateLicense, selectedLicense, navigation } = this.props
+    const { type, side } = selectedLicense
     const imageUri = navigation.getParam('photoUri', null)
     // Alert.alert('photoUri', imageUri)
     onUpdateLicense({
@@ -25,22 +26,22 @@ class PicturePreview extends Component {
   }
   onError = () => {
     console.log('onError')
-    const {key} = this.state
+    const { key } = this.state
     if (key === 0) {
-      this.setState({key: 1})
-      Alert.alert('onError', 'onError')
+      this.setState({ key: 1 })
+      setTimeout(() => Alert.alert('onError', 'onError'), 200)
     }
   }
-  onLoadEnd = (e) => {
+  onLoadEnd = e => {
     console.log('onLoadEnd', e)
-    const {key} = this.state
+    const { key } = this.state
     if (key === 0) {
-      this.setState({key: 1})
-      Alert.alert('onLoadEnd', 'onLoadEnd')
+      this.setState({ key: 1 })
+      setTimeout(() => Alert.alert('onLoadEnd', 'onLoadEnd'), 200)
     }
   }
 
-  render () {
+  render() {
     const photoUri = this.props.navigation.getParam('photoUri', null)
     console.log(this.state.key)
     return (

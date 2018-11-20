@@ -35,7 +35,7 @@ class HelpCenter extends PureComponent {
     console.log('HELP_CENTER_STATE', { isLateAlertShow, ff: this.isLateReq })
     if (requestPending && !nextProps.requestPending) {
       console.log('req end')
-      if (error) Alert.alert('Error', error)
+      if (error) setTimeout(() => Alert.alert('Error', error), 200)
       else {
         console.log('else')
         if (!isLateAlertShow && this.isLateReq) {
@@ -44,14 +44,18 @@ class HelpCenter extends PureComponent {
             isLateAlertShow: true
           })
 
-          Alert.alert(
-            'Thank you for notifying us',
-            'Our administrator has been notified. You can add more details about why you are being late (optional).',
-            [
-              { text: 'OK', onPress: () => this.onOkPress() },
-              { text: 'More', onPress: () => this.onMorePress() }
-            ],
-            { cancelable: false }
+          setTimeout(
+            () =>
+              Alert.alert(
+                'Thank you for notifying us',
+                'Our administrator has been notified. You can add more details about why you are being late (optional).',
+                [
+                  { text: 'OK', onPress: () => this.onOkPress() },
+                  { text: 'More', onPress: () => this.onMorePress() }
+                ],
+                { cancelable: false }
+              ),
+            200
           )
 
           this.isLateReq = false

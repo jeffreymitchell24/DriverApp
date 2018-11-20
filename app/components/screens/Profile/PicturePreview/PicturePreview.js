@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import {Alert} from 'react-native'
-import {PicturePreviewView} from 'components/blocks'
-import {ProfileMain} from 'navigation/routeNames'
+import { Alert } from 'react-native'
+import { PicturePreviewView } from 'components/blocks'
+import { ProfileMain } from 'navigation/routeNames'
 import { Spinner } from 'components/ui'
 import { colors } from 'theme'
 
 class PicturePreview extends Component {
-  componentDidUpdate (prevProps) {
-    const {error, requestPending, navigation} = this.props
+  componentDidUpdate(prevProps) {
+    const { error, requestPending, navigation } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error)Alert.alert('Error', error)
+      if (error) setTimeout(() => Alert.alert('Error', error), 200)
       else navigation.navigate(ProfileMain)
     }
   }
@@ -18,12 +18,12 @@ class PicturePreview extends Component {
     this.props.navigation.goBack()
   }
 
-  onConfirmPress = (photoUri) => {
-    const {onUpdateUserImage} = this.props
+  onConfirmPress = photoUri => {
+    const { onUpdateUserImage } = this.props
     onUpdateUserImage(photoUri)
   }
 
-  render () {
+  render() {
     const photoUri = this.props.navigation.getParam('photoUri', null)
     return (
       <React.Fragment>

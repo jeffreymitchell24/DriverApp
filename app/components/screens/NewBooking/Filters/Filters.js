@@ -92,6 +92,7 @@ class Filters extends PureComponent {
       navigation
     } = this.props
 
+    const errors = []
     const selectedCategories = []
 
     categories.forEach(item => {
@@ -99,10 +100,47 @@ class Filters extends PureComponent {
     })
 
     if (selectedCategories.length === 0) {
-      Alert.alert('', 'Choose at least one vehicle option.')
+      errors.push('Choose at least one vehicle option.')
+    }
+
+    if (
+      moment()
+        .tz('America/New_York')
+        .isAfter(moment(startDate).tz('America/New_York'))
+    ) {
+      errors.push('Start date must be after now.')
+    }
+
+    if (
+      moment()
+        .tz('America/New_York')
+        .isAfter(moment(endDate).tz('America/New_York'))
+    ) {
+      errors.push('End date must be after now.')
+    }
+
+    if (
+      moment(startDate)
+        .tz('America/New_York')
+        .isAfter(moment(endDate).tz('America/New_York'))
+    ) {
+      errors.push('End date must be after start date.')
+    }
+
+    if (errors.length > 0) {
+      setTimeout(() => Alert.alert('Errors', _.join(errors, '\n')), 200)
 
       return
     }
+
+    console.log({
+      startDate,
+      endDate,
+      isRecurring,
+      location,
+      range,
+      categories
+    })
 
     const req = {
       available_to: moment(endDate)
@@ -115,10 +153,10 @@ class Filters extends PureComponent {
         // .unix(startDate)
         .tz('America/New_York')
         .format('YYYY-MM-DD HH:mm'),
-      categories: categories.map(item => item.id)
+      categories: selectedCategories
     }
 
-    if (location.lat && location.lon) {
+    if (location.lat && location.lng) {
       req.pickup_location_lat = location.lat
       req.pickup_location_lon = location.lng
       req.allowed_range_miles = RANGES[range].value
@@ -150,7 +188,7 @@ class Filters extends PureComponent {
   handleNext7DaysBtnPress = () => {
     const { onFilterUpdate } = this.props
 
-    const now = moment()
+    const now = moment().tz('America/New_York')
 
     const nextStartDate =
       now.minute() || now.second() || now.millisecond()
@@ -169,9 +207,23 @@ class Filters extends PureComponent {
   }
 
   handleDateChange = (nextDate, type) => {
-    const { onFilterUpdate } = this.props
+    const {
+      onFilterUpdate,
+      filters: { startDate }
+    } = this.props
     const nextState = {
       isNext7Days: false
+    }
+
+    if (
+      moment()
+        .tz('America/New_York')
+        .isAfter(moment(nextDate).tz('America/New_York'))
+    ) {
+      setTimeout(
+        () => Alert.alert('Invalid date', 'The date must be after now.'),
+        200
+      )
     }
 
     if (type === 'Start') {
@@ -179,10 +231,25 @@ class Filters extends PureComponent {
       onFilterUpdate(
         'endDate',
         moment(nextDate)
+          .tz('America/New_York')
           .add({ hours: 12 })
           .format()
       )
     } else {
+      if (
+        moment(startDate)
+          .tz('America/New_York')
+          .isAfter(moment(nextDate).tz('America/New_York'))
+      ) {
+        setTimeout(
+          () =>
+            Alert.alert('Invalid date', 'End date must be after start date.'),
+          200
+        )
+
+        return
+      }
+
       onFilterUpdate('endDate', nextDate)
     }
 
@@ -233,6 +300,13 @@ class Filters extends PureComponent {
       )
     }
 
+    console.log('filters props', this.props.filters)
+    const now = moment().tz('America/New_York')
+    const minDate =
+      now.minute() || now.second() || now.millisecond()
+        ? now.add(1, 'hour').startOf('hour')
+        : now.startOf('hour')
+
     return (
       <View style={styles.container}>
         <DatePicker
@@ -262,7 +336,7 @@ class Filters extends PureComponent {
           )}
           formatter="dddd, DD MMM hh:mmA"
           headerValue={isNext7Days ? 'Next 7 days' : null}
-          startDate={new Date().toISOString()}
+          startDate={minDate.format()}
           style={{ marginTop: 20 }}
           type="Start"
           value={startDate}
@@ -272,10 +346,7 @@ class Filters extends PureComponent {
           disabled={isNext7Days}
           formatter="dddd, DD MMM hh:mmA"
           headerValue={isNext7Days ? 'Next 7 days' : null}
-          startDate={moment(startDate)
-            .add({ hours: 1 })
-            .toDate()
-            .toISOString()}
+          startDate={minDate.add({ hours: 1 }).format()}
           type="End"
           value={endDate}
           onChange={this.handleDateChange}

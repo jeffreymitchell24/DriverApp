@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React, { Component } from 'react'
 import { View, Text, ScrollView, Keyboard, Alert } from 'react-native'
 import { StackActions, NavigationActions } from 'react-navigation'
 import { Spinner } from 'components/ui'
@@ -8,7 +8,13 @@ import { Button } from 'components/ui'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import isEmpty from 'lodash/isEmpty'
-import {ResetPassword, Account, RegisterReview, PersonalInfo, Home} from 'navigation/routeNames'
+import {
+  ResetPassword,
+  Account,
+  RegisterReview,
+  PersonalInfo,
+  Home
+} from 'navigation/routeNames'
 import { colors } from 'theme'
 // import PropTypes from 'prop-types'
 import styles from './styles'
@@ -18,8 +24,13 @@ const formIputs = {
   password: 'password'
 }
 const validationSchema = Yup.object().shape({
-  [formIputs.email]: Yup.string().trim().email('Email format is not correct.').required('This field is required.'),
-  [formIputs.password]: Yup.string().min(8, 'Password must be at least 8 characters.').required('This field is required.')
+  [formIputs.email]: Yup.string()
+    .trim()
+    .email('Email format is not correct.')
+    .required('This field is required.'),
+  [formIputs.password]: Yup.string()
+    .min(8, 'Password must be at least 8 characters.')
+    .required('This field is required.')
 })
 
 class SignIn extends Component {
@@ -40,20 +51,28 @@ class SignIn extends Component {
     }
   }
   inputRefs = {}
-  componentWillUnmount () {
+  componentWillUnmount() {
     this.props.onDiscardSigninError()
   }
-  componentDidUpdate (prevProps) {
-    const {user, prevRejected} = this.props
+  componentDidUpdate(prevProps) {
+    const { user, prevRejected } = this.props
     if (user && !prevProps.user) {
       if (user.status === 'approved') {
         this.props.navigation.navigate(Home)
       } else if (user.status === 'pending') {
         this.onResetTo(RegisterReview)
       } else if (user.status === 'rejected') {
-        if (prevRejected !== user.id) Alert.alert('Account was rejected', 'Please sign in and re-submit your documents')
+        if (prevRejected !== user.id)
+          setTimeout(
+            () =>
+              Alert.alert(
+                'Account was rejected',
+                'Please sign in and re-submit your documents'
+              ),
+            200
+          )
         this.props.onSaveResubmitStatus(true)
-        this.props.navigation.navigate(PersonalInfo, {signoutOnBack: true})
+        this.props.navigation.navigate(PersonalInfo, { signoutOnBack: true })
       }
     }
     // if (this.props.error && !prevProps.error) {
@@ -64,7 +83,7 @@ class SignIn extends Component {
     // }
   }
 
-  onResetTo = (route) => {
+  onResetTo = route => {
     const resetAction = StackActions.reset({
       index: 0,
       actions: [NavigationActions.navigate({ routeName: route })]
@@ -72,14 +91,14 @@ class SignIn extends Component {
     this.props.navigation.dispatch(resetAction)
   }
 
-  onSubmit = (values, {setErrors}) => {
-    const {onSignIn} = this.props
+  onSubmit = (values, { setErrors }) => {
+    const { onSignIn } = this.props
     Keyboard.dismiss()
     onSignIn(values)
   }
 
   handleRegisterPress = () => {
-    this.props.navigation.navigate(Account, {showFromTop: true})
+    this.props.navigation.navigate(Account, { showFromTop: true })
   }
 
   handleResetPassPress = () => {
@@ -90,25 +109,33 @@ class SignIn extends Component {
     this.inputRefs['password'].focus()
   }
 
-  renderForm = ({ setFieldTouched, handleChange, handleSubmit, errors, values, touched }) => {
-    const {error, isSigninPending} = this.props
+  renderForm = ({
+    setFieldTouched,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched
+  }) => {
+    const { error, isSigninPending } = this.props
     let buttonDisabled = true
     if (isEmpty(errors) && touched.email) buttonDisabled = false
     return (
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.formContainer}
-          keyboardShouldPersistTaps='always'
+          keyboardShouldPersistTaps="always"
           ref={this.setListRef}
-          style={{}}>
+          style={{}}
+        >
           <View style={styles.form}>
             <TextInputView
               blurOnSubmit={false}
               error={touched.email && errors.email}
-              keyboardType='email-address'
-              label='EMAIL'
-              name='email'
-              placeholder=''
+              keyboardType="email-address"
+              label="EMAIL"
+              name="email"
+              placeholder=""
               returnKeyType={'next'}
               value={values.email.trim()}
               onBlur={() => setFieldTouched('email')}
@@ -117,10 +144,12 @@ class SignIn extends Component {
             />
             <TextInputView
               error={touched.password && errors.password}
-              inputRef={(input) => { this.inputRefs['password'] = input }}
-              label='PASSWORD'
-              name='password'
-              placeholder=''
+              inputRef={input => {
+                this.inputRefs['password'] = input
+              }}
+              label="PASSWORD"
+              name="password"
+              placeholder=""
               secureTextEntry
               value={values.password}
               onBlur={() => setFieldTouched('password')}
@@ -128,19 +157,22 @@ class SignIn extends Component {
               // onSubmitEditing={Keyboard.dismiss}
             />
 
-            {error && !isSigninPending &&
-              <Text style={styles.mainErrorText}>
-                {error}
-              </Text>
-            }
+            {error && !isSigninPending && (
+              <Text style={styles.mainErrorText}>{error}</Text>
+            )}
 
-            <Text style={styles.resetButton} onPress={this.handleResetPassPress}>Forgot password?</Text>
+            <Text
+              style={styles.resetButton}
+              onPress={this.handleResetPassPress}
+            >
+              Forgot password?
+            </Text>
           </View>
           <View style={styles.footer}>
             <Button
               containerStyle={styles.button}
               disabled={buttonDisabled}
-              title='SIGN IN'
+              title="SIGN IN"
               onPress={handleSubmit}
             />
             <Text style={styles.mainText}>
@@ -149,7 +181,8 @@ class SignIn extends Component {
               <Text
                 style={styles.registerButtonText}
                 onPress={this.handleRegisterPress}
-              >Register
+              >
+                Register
               </Text>
             </Text>
           </View>
@@ -157,11 +190,11 @@ class SignIn extends Component {
       </View>
     )
   }
-  render () {
+  render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={{ flex: 1 }}>
         <Formik
-          initialValues={{email: '', password: ''}}
+          initialValues={{ email: '', password: '' }}
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur

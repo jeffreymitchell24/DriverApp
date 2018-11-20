@@ -54,7 +54,6 @@
 		74C3C4A670314FE29E55AE9F /* SFProText-Bold.otf in Resources */ = {isa = PBXBuildFile; fileRef = 15E6F8EE5B0F4A4897EAE77E /* SFProText-Bold.otf */; };
 		7AAB8144D85582FED7FE07C4 /* libPods-carflow.a in Frameworks */ = {isa = PBXBuildFile; fileRef = DF79BEAF0C3C3A42AEDFACF6 /* libPods-carflow.a */; };
 		7B2C35E415134E8FA3CF448F /* SF-Pro-Text-Medium.otf in Resources */ = {isa = PBXBuildFile; fileRef = 47B8ECC391FD484C91C0F86B /* SF-Pro-Text-Medium.otf */; };
-		7E16B47CD886487FA6EAA01B /* libRCTBackgroundGeolocation.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EB263557B2174704B64584BD /* libRCTBackgroundGeolocation.a */; };
 		7F6F207FC94449F6BCC0102D /* SFProDisplay-Regular.otf in Resources */ = {isa = PBXBuildFile; fileRef = 551F667836144746B0B92825 /* SFProDisplay-Regular.otf */; };
 		80408AF99AB347BA90B95FD9 /* Ionicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 29C54AB7E47D4BADA5F17423 /* Ionicons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
@@ -610,7 +609,6 @@
 				9C7260F19E3342FA80C7F6D7 /* libRNVersionNumber.a in Frameworks */,
 				7AAB8144D85582FED7FE07C4 /* libPods-carflow.a in Frameworks */,
 				267B33A7406342E2AF9BEDCA /* libRNTextInputMask.a in Frameworks */,
-				7E16B47CD886487FA6EAA01B /* libRCTBackgroundGeolocation.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

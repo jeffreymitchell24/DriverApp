@@ -57,7 +57,10 @@ function* fetchUserBookings(action) {
     })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: FETCH_USER_BOOKINGS.FAILURE,
       payload: error.response.data.message
@@ -81,10 +84,15 @@ function* fetchAvailableCars(action) {
     yield put({ type: FETCH_AVAILABLE_CARS.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: FETCH_AVAILABLE_CARS.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -105,10 +113,15 @@ function* fetchCarDetails({ payload: { id, body } }) {
     yield put({ type: FETCH_SELECTED_CAR.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: FETCH_SELECTED_CAR.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -134,10 +147,15 @@ function* bookCar({ payload }) {
     })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: BOOK_CAR.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -175,10 +193,15 @@ function* checkRideLicense({ payload }) {
     yield put({ type: CHECK_LICENSE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: CHECK_LICENSE.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -201,10 +224,15 @@ function* rideCancel({ payload }) {
     yield put({ type: CANCEL_RIDE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: CANCEL_RIDE.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -249,10 +277,13 @@ function* rideStart() {
     yield put({ type: START_RIDE.SUCCESS, payload: {} })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: END_RIDE.FAILURE,
-      payload: error.message
+      payload: error.response.data.error.message
     })
   }
 }
@@ -285,10 +316,15 @@ function* rideEnd({ payload }) {
     yield put({ type: END_RIDE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: END_RIDE.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -321,10 +357,16 @@ function* rideDamaged({ payload }) {
     console.log('error', error)
     console.log('error.request._response', error.request._response)
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: HELP_RIDE_DAMAGED.FAILURE,
-      payload: (error.response && error.message) || ''
+      payload:
+        (error.response && error.response
+          ? error.response.data.error.message
+          : error.message) || ''
     })
   }
 }
@@ -357,10 +399,15 @@ function* rideMalfunction({ payload }) {
     yield put({ type: HELP_RIDE_MALFUNCTIONED.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: HELP_RIDE_MALFUNCTIONED.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -386,10 +433,15 @@ function* sendRideLateNotification({ payload }) {
     })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: SEND_LATE_FOR_RIDE_NOTIFICATION.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -423,10 +475,15 @@ function* rideLate({ payload }) {
     yield put({ type: SEND_LATE_FOR_RIDE_DETAILS.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: SEND_LATE_FOR_RIDE_DETAILS.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -463,10 +520,15 @@ function* submitRideReceipt({ payload }) {
     yield put({ type: SUBMIT_RECEIPT.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: SUBMIT_RECEIPT.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }
@@ -498,10 +560,15 @@ function* fetchCarCategories() {
     yield put({ type: LOAD_CAR_CATEGORIES.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log(
+      'error message',
+      error.response ? error.response.data.error.message : error.message
+    )
     yield put({
       type: LOAD_CAR_CATEGORIES.FAILURE,
-      payload: error.message
+      payload: error.response
+        ? error.response.data.error.message
+        : error.message
     })
   }
 }

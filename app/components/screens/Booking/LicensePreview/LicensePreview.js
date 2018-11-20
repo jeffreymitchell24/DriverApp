@@ -11,18 +11,22 @@ class LicensePreview extends Component {
     const { error, requestPending, navigation, licenseChecked } = this.props
     if (prevProps.requestPending && !requestPending) {
       if (error) {
-        Alert.alert(
-          '',
-          error,
-          [
-            {
-              text: 'Cancel',
-              onPress: () => navigation.navigate(BookingDetail),
-              style: 'cancel'
-            },
-            { text: 'Try Again', onPress: () => this.onCancelPress() }
-          ],
-          { cancelable: false }
+        setTimeout(
+          () =>
+            Alert.alert(
+              '',
+              error,
+              [
+                {
+                  text: 'Cancel',
+                  onPress: () => navigation.navigate(BookingDetail),
+                  style: 'cancel'
+                },
+                { text: 'Try Again', onPress: () => this.onCancelPress() }
+              ],
+              { cancelable: false }
+            ),
+          200
         )
       } else if (!error && licenseChecked) navigation.navigate(BookingDetail)
     }

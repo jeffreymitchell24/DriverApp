@@ -1,14 +1,12 @@
 rootProject.name = 'carflow'
-include ':react-native-mauron85-background-geolocation-common'
-project(':react-native-mauron85-background-geolocation-common').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mauron85-background-geolocation/android/common')
-include ':react-native-mauron85-background-geolocation'
-project(':react-native-mauron85-background-geolocation').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-mauron85-background-geolocation/android/lib')
+include ':react-native-date-picker'
+project(':react-native-date-picker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-date-picker/android')
 
-include ':react-native-wheel-picker-android'
-project(':react-native-wheel-picker-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wheel-picker-android/android')
+// include ':react-native-wheel-picker-android'
+// project(':react-native-wheel-picker-android').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wheel-picker-android/android')
 
-include ':react-native-wheel-datepicker'
-project(':react-native-wheel-datepicker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wheel-datepicker/android')
+// include ':react-native-wheel-datepicker'
+// project(':react-native-wheel-datepicker').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-wheel-datepicker/android')
 
 include ':react-native-fs'
 project(':react-native-fs').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-fs/android')

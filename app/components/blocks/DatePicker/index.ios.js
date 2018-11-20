@@ -47,7 +47,12 @@ class DatePicker extends PureComponent {
   handleChange = nextDate => {
     const { onChange, type } = this.props
 
-    onChange(moment(nextDate).format(), type)
+    onChange(
+      moment(nextDate)
+        .tz('America/New_York')
+        .format(),
+      type
+    )
   }
 
   render() {
@@ -64,6 +69,8 @@ class DatePicker extends PureComponent {
       disabled
     } = this.props
 
+    console.log('datepicker props', this.props)
+
     return (
       <View style={[styles.container, style]}>
         <TouchableWithoutFeedback disabled={disabled} onPress={this.handleOpen}>
@@ -72,7 +79,10 @@ class DatePicker extends PureComponent {
             <Text
               style={disabled ? styles.headerDisabledText : styles.headerDate}
             >
-              {headerValue || moment(value).format(formatter)}
+              {headerValue ||
+                moment(value)
+                  .tz('America/New_York')
+                  .format(formatter)}
             </Text>
           </View>
         </TouchableWithoutFeedback>
@@ -90,10 +100,21 @@ class DatePicker extends PureComponent {
             </TouchableWithoutFeedback>
           )}
           <DatePickerIOS
-            date={new Date(value)}
-            minimumDate={startDate ? new Date(startDate) : new Date()}
+            date={moment(value)
+              .tz('America/New_York')
+              .toDate()}
+            minimumDate={
+              startDate
+                ? moment(startDate)
+                    .tz('America/New_York')
+                    .toDate()
+                : moment()
+                    .tz('America/New_York')
+                    .toDate()
+            }
             mode="datetime"
             style={{ width: '100%' }}
+            timeZoneOffsetInMinutes={-5 * 60}
             onDateChange={this.handleChange}
           />
         </Animated.View>

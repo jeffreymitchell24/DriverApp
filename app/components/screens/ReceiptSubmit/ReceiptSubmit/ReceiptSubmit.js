@@ -98,7 +98,7 @@ class ReceiptSubmit extends Component {
   componentDidUpdate(prevProps) {
     const { error, requestPending, navigation } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error) Alert.alert('Error', error)
+      if (error) setTimeout(() => Alert.alert('Error', error), 200)
       else navigation.goBack()
     }
   }
@@ -143,7 +143,7 @@ class ReceiptSubmit extends Component {
             if (response.didCancel) {
             } else if (response.error) {
               console.warn(response.error)
-              Alert.alert('', "Can't pick a photo")
+              setTimeout(() => Alert.alert('', "Can't pick a photo"), 200)
             }
             onSavePhoto({
               type: 'receiptPhoto',
