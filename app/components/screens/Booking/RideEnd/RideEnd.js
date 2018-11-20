@@ -12,13 +12,14 @@ import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import { BookingDetail } from 'navigation/routeNames'
 import ImagePicker from 'react-native-image-picker'
-import { Spinner } from 'components/ui'
+import _ from 'lodash'
 import {
   Photo,
   Button,
   SectionHeader,
   Section,
-  SectionContent
+  SectionContent,
+  Spinner
 } from 'components/ui'
 import { colors } from 'theme'
 import styles from './styles'
@@ -142,15 +143,11 @@ class RideEnd extends Component {
   }
 
   isButtonActive = () => {
-    let active = true
     const { gasTankPhotos, carPhotos, mileagePhotos } = this.props
-    carPhotos.forEach(photo => {
-      active = !!photo
-    })
-    active = !!gasTankPhotos[0]
-    active = !!mileagePhotos[0]
-
-    return active
+    return _.every(
+      [...carPhotos, gasTankPhotos[0], mileagePhotos[0]],
+      item => !!item
+    )
   }
 
   render() {
