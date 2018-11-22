@@ -32,35 +32,36 @@ class BookingCard extends PureComponent {
     // const bookingEndTime = moment(bookingEnd).format('hh:mm a')
 
     return (
-      <View style={styles.cardContainer}>
-        <View style={styles.leftBlock}>
-          <TouchableOpacity onPress={this.onPress}>
+      <TouchableOpacity onPress={this.onPress}>
+        <View style={styles.cardContainer}>
+          <View style={styles.leftBlock}>
             <Image
               resizeMode={'cover'}
               source={{ uri: image }}
               style={styles.cardImage}
             />
-          </TouchableOpacity>
-        </View>
-        <View style={styles.rightBlock}>
-          <View style={styles.cardContent}>
-            <TouchableOpacity onPress={this.onPress}>
+          </View>
+          <View style={styles.rightBlock}>
+            <View style={styles.cardContent}>
               <Text style={styles.cardTitle}>{`${
                 manufacturer.name
               } ${model}`}</Text>
-            </TouchableOpacity>
-            {/* <Text
+              {/* <Text
               style={styles.detailText}
             >{`${bookingStartTime} –– ${bookingEndTime}`}</Text> */}
-            <Text style={styles.detailText}>Pickup: {pickupLocation}</Text>
-            <Text style={styles.detailText}>Dropoff: {returnLocation}</Text>
-            <Text style={styles.extraDetailText}>{extraDetail}</Text>
+              <Text style={styles.detailText}>Pickup: {pickupLocation}</Text>
+              <Text style={styles.detailText}>Dropoff: {returnLocation}</Text>
+              <Text style={styles.extraDetailText}>{extraDetail}</Text>
+            </View>
+            {isRecurring && (
+              <Image
+                source={icons.recurring}
+                style={styles.recurringContainer}
+              />
+            )}
           </View>
-          {isRecurring && (
-            <Image source={icons.recurring} style={styles.recurringContainer} />
-          )}
         </View>
-      </View>
+      </TouchableOpacity>
     )
   }
 }

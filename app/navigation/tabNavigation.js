@@ -5,7 +5,7 @@ import OneTime from 'components/screens/Home/OneTime'
 import Recurring from 'components/screens/Home/Recurring'
 import { Profile, History as HistoryRoute } from 'navigation/routeNames'
 import { ProfileButton, HistoryButton } from 'components/ui'
-import { colors } from 'theme'
+import { colors, metrics } from 'theme'
 
 const HomeTabStack = createMaterialTopTabNavigator(
   {
@@ -28,7 +28,7 @@ const HomeTabStack = createMaterialTopTabNavigator(
       },
       tabStyle: {},
       labelStyle: {
-        fontSize: 13,
+        fontSize: metrics.heightPercentageToDP(2),
         fontFamily: 'SFProText-Medium'
       }
     }
