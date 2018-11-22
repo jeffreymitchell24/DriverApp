@@ -244,7 +244,8 @@ class NewBookingDetails extends PureComponent {
       manufacturer = {},
       model = '',
       color = '',
-      year = ''
+      year = '',
+      category = {}
     } = car
     let isButtonActive = startDate && endDate
     return (
@@ -258,12 +259,22 @@ class NewBookingDetails extends PureComponent {
           <View>
             <CarImage imageUri={image} />
             <View style={styles.bookingDetailsList}>
-              <View style={[styles.row, { marginBottom: 16 }]}>
+              <View style={[styles.row, { marginBottom: 24 }]}>
                 <View style={{ flex: 1 }}>
-                  <View style={{ marginBottom: 16 }}>
+                  <View>
                     <BookingDetail
                       label="CAR"
                       text={`${manufacturer.name} ${model}, ${color}, ${year}`}
+                    />
+                  </View>
+                </View>
+              </View>
+              <View style={[styles.row, { marginBottom: 24 }]}>
+                <View style={{ flex: 1 }}>
+                  <View>
+                    <BookingDetail
+                      label="VEHICLE TYPE"
+                      text={`${category.name}`}
                     />
                   </View>
                 </View>

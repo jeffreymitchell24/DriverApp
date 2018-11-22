@@ -36,7 +36,7 @@ class BookingCard extends PureComponent {
         <View style={styles.leftBlock}>
           <TouchableOpacity onPress={this.onPress}>
             <Image
-              resizeMode={'contain'}
+              resizeMode={'cover'}
               source={{ uri: image }}
               style={styles.cardImage}
             />

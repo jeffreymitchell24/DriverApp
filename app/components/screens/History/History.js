@@ -37,6 +37,7 @@ class History extends Component {
       <HomeView
         bookings={sections}
         isFetching={this.props.isFetchingPending}
+        isHistory
         renderItem={this.renderItem}
         withoutNewBtn
         onBookingPress={this.onBookingPress}
