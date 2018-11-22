@@ -17,7 +17,18 @@ class HomeView extends PureComponent {
   keyExtractor = (item, index) => `${item.id}${index}`
 
   renderEmptyList = () => {
-    const { onNewPress } = this.props
+    const { onNewPress, isHistory } = this.props
+
+    if (isHistory) {
+      return (
+        <View style={styles.emptyListContainer}>
+          <Text style={styles.emptyListText}>
+            You don't have any book histories.
+          </Text>
+        </View>
+      )
+    }
+
     return (
       <View style={styles.emptyListContainer}>
         <Text style={styles.emptyListText}>
@@ -87,6 +98,7 @@ class HomeView extends PureComponent {
 HomeView.propTypes = {
   bookings: PropTypes.array,
   isFetching: PropTypes.bool,
+  isHistory: PropTypes.bool,
   renderItem: PropTypes.func,
   withoutNewBtn: PropTypes.bool,
   onBookingPress: PropTypes.func,
@@ -95,6 +107,7 @@ HomeView.propTypes = {
 
 HomeView.defaultProps = {
   isFetching: false,
+  isHistory: false,
   bookings: []
 }
 

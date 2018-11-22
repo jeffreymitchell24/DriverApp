@@ -47,7 +47,7 @@ export default StyleSheet.create({
   },
   recurringContainer: {
     position: 'absolute',
-    top: -2,
-    right: 4
+    top: 0,
+    right: 0
   }
 })
