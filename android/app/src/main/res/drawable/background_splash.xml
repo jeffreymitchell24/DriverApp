@@ -5,7 +5,7 @@
         android:drawable="@color/pink"/>
 
     <item
-        android:width="168dp"
+        android:width="134dp"
         android:height="24dp"
         android:drawable="@mipmap/splash_icon"
         android:gravity="center" />
