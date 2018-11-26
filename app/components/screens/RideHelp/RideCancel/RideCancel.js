@@ -58,7 +58,7 @@ class RideCancel extends PureComponent {
   }
 
   render() {
-    let cancelLoss = '100'
+    let cancelLoss = '50'
     return (
       <HelpCenterSection>
         <View style={styles.container}>
