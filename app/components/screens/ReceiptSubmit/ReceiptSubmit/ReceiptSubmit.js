@@ -137,7 +137,7 @@ class ReceiptSubmit extends Component {
       if (granted) {
         const { onSavePhoto } = this.props
 
-        ImagePicker.showImagePicker(
+        ImagePicker.launchCamera(
           Platform.OS === 'android' ? androidOptions : iosOptions,
           response => {
             if (response.didCancel) {
