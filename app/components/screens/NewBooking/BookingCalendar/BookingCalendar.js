@@ -260,6 +260,7 @@ class BookingCalendar extends Component {
       <View style={styles.container}>
         <Calendar
           contentContainerStyle={styles.calendar}
+          current={startDate}
           markedDates={markedDates}
           // markingType={'period'}
           maxDate={endDate}
