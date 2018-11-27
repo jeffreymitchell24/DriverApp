@@ -1,5 +1,5 @@
 import React, { PureComponent } from 'react'
-import { View, Text, TouchableOpacity, Image } from 'react-native'
+import { View, Text, TouchableHighlight, Image } from 'react-native'
 
 import { icons } from 'images'
 // import moment from 'moment'
@@ -32,7 +32,7 @@ class BookingCard extends PureComponent {
     // const bookingEndTime = moment(bookingEnd).format('hh:mm a')
 
     return (
-      <TouchableOpacity onPress={this.onPress}>
+      <TouchableHighlight onPress={this.onPress}>
         <View style={styles.cardContainer}>
           <View style={styles.leftBlock}>
             <Image
@@ -61,7 +61,7 @@ class BookingCard extends PureComponent {
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </TouchableHighlight>
     )
   }
 }

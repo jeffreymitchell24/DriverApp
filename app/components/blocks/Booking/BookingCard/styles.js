@@ -4,7 +4,7 @@ import { colors, metrics } from 'theme'
 
 export default StyleSheet.create({
   cardContainer: {
-    borderWidth: 1,
+    borderWidth: 3,
     borderColor: colors.gray50,
     borderRadius: 5,
     marginTop: metrics.contentMarginSmall / 2,
@@ -23,8 +23,8 @@ export default StyleSheet.create({
   },
   cardImage: {
     backgroundColor: colors.white,
-    height: 80,
-    width: 80,
+    height: 83,
+    width: 83,
     borderRadius: 5,
     alignSelf: 'center'
   },
@@ -32,8 +32,10 @@ export default StyleSheet.create({
   cardTitle: {
     color: colors.black,
     fontFamily: 'SFProText-Regular',
+    fontWeight: '600',
     fontSize: 15,
-    marginBottom: 4
+    marginBottom: 6,
+    marginTop: 6
   },
   detailText: {
     color: colors.gray200,
