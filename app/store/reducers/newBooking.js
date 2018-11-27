@@ -51,7 +51,7 @@ const handlers = {
     const { type, date } = payload
     return {
       startDate: type === 'start' ? date : state.startDate,
-      endDate: type === 'start' ? state.endDate : date
+      endDate: type === 'start' ? null : date
     }
   },
   [RESET_DATES]: (state, { payload }) => {

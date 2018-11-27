@@ -79,8 +79,8 @@ class NewBookingDetails extends PureComponent {
         const { manufacturer, model } = this.props.car.car
         let bookingData = {
           car: `${manufacturer.name} ${model}`,
-          startDate: moment.unix(startDate.timestamp).tz('America/New_York'),
-          endDate: moment.unix(endDate.timestamp).tz('America/New_York'),
+          startDate: moment(startDate).tz('America/New_York'),
+          endDate: moment(endDate).tz('America/New_York'),
           isRecurring: isRecurring
         }
 

@@ -97,7 +97,7 @@ class RideDamaged extends Component {
     values,
     touched
   }) => {
-    let buttonActive = isEmpty(errors) && touched.description
+    let buttonActive = isEmpty(errors) && touched.description && this.props.photos.length === 4 && !this.props.photos.includes(undefined)
     return (
       <ScrollView
         contentContainerStyle={styles.container}

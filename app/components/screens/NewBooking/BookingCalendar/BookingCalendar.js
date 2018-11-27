@@ -26,7 +26,6 @@ class PickerItem extends PureComponent {
   }
 
   render() {
-    console.log(this.props)
     const { time, slotType } = this.props
     let backgroundColor = colors.gray50
     let textColor = colors.gray300
@@ -153,20 +152,36 @@ class BookingCalendar extends Component {
     this.isHiddenPicker = !this.isHiddenPicker
   }
 
+  filterHours = (hourList, startHour) => {
+    const filteredList = []
+
+    for (let i = 0; i < hourList.length; i++) {
+      if (hourList[i] > startHour) {
+        if (i > 0 && hourList[i] - (hourList[i - 1] || 25) !== 1) break
+
+        filteredList.push(hourList[i])
+      }
+    }
+
+    return filteredList
+  }
+
   onDateSelect = selectedDate => {
     const {
       selectedCar: { calendar }
     } = this.props
-
-    console.log('selectedDate', selectedDate)
-
+˝
     const selectedDayHours = calendar[selectedDate.dateString]
-    console.log(this.state.hourList, selectedDayHours)
+
 
     let availableHours = []
 
     const startHour = parseInt(moment(this.minDate).format('H'), 10)
-    console.log(startHour)
+
+    const filteredHours = this.filterHours(selectedDayHours, startHour)
+
+    const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
+
     for (let i = 0, j = 0; i < 24; i++) {
       let newItem = {
         key: i,
@@ -174,27 +189,22 @@ class BookingCalendar extends Component {
         time: moment(i, 'H').format('hh:mm A')
       }
 
-      if (j < selectedDayHours.length) {
-        console.log('j < selectedDayHours.length', j, i)
-        if (this.bookDateType === 'end') {
-          if (selectedDayHours[j] === i) {
-            console.log('selectedDayHours[j] === i', i, j)
-            if (i > startHour) {
-              console.log('i > startHour', j)
-              console.log(
-                'selectedDayHours[j] - selectedDate[j - 1] ',
-                selectedDayHours[j] - (selectedDayHours[j - 1] || 25)
-              )
-              if (selectedDayHours[j] - (selectedDayHours[j - 1] || 25) === 1) {
-                console.log('fffff')
-                newItem.slotType = 'default'
-                newItem.onPress = () => this.onTimeSelect(i)
-
-                j++
-              }
-            } else j++
+      if (this.bookDateType === 'end') {
+        if (j < filteredHours.length + 1) {
+          if (endHour + 1 === i) {
+            newItem.slotType = 'default'
+            newItem.onPress = () => this.onTimeSelect(i)
           }
-        } else {
+
+          if (filteredHours[j] === i) {
+            newItem.slotType = 'default'
+            newItem.onPress = () => this.onTimeSelect(i)
+
+            j++
+          }
+        }
+      } else {
+        if (j < selectedDayHours.length + 1) {
           if (selectedDayHours[j] === i) {
             newItem.slotType = 'default'
             newItem.onPress = () => this.onTimeSelect(i)
@@ -232,18 +242,16 @@ class BookingCalendar extends Component {
     let endDate = _.last(Object.keys(calendar))
 
     if (this.bookDateType === 'end') {
-      startDate = moment(this.minDate).format('Y-M-D')
-      const tomorrow = moment(this.minDate)
-        .add({ days: 1 })
-        .format('Y-M-D')
+      startDate = moment(this.minDate).format('YYYY-MM-DD')
+      const tomorrow = moment(this.minDate).add({ days: 1 })
 
       if (
         _.last(calendar[selectedDate] || []) === 23 &&
-        _.first(calendar[tomorrow] || []) === 0
+        _.first(calendar[tomorrow.format('Y-M-D')] || []) === 0
       ) {
-        endDate = tomorrow
+        endDate = tomorrow.format('YYYY-MM-DD')
       } else {
-        endDate = moment(this.minDate).format('Y-M-D')
+        endDate = moment(this.minDate).format('YYYY-MM-DD')
       }
     }
 

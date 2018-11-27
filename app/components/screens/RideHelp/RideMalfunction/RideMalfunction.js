@@ -94,7 +94,7 @@ class RideMalfunction extends Component {
     values,
     touched
   }) => {
-    let buttonActive = isEmpty(errors) && touched.plate && touched.description
+    let buttonActive = isEmpty(errors) && touched.plate && touched.description && this.props.photos.length === 4 && !this.props.photos.includes(undefined)
     return (
       <ScrollView
         contentContainerStyle={styles.container}
@@ -120,7 +120,7 @@ class RideMalfunction extends Component {
             // onChangeText={handleChange('email')}
           />
           <View style={styles.photoListContainer}>
-            <SectionHeader title="Upload photo (optional)" />
+            <SectionHeader title="Upload photo (mandatory)" />
             <View style={styles.photoList}>
               <View style={styles.photoContainer}>
                 <Photo
@@ -177,6 +177,7 @@ class RideMalfunction extends Component {
   }
 
   render() {
+    console.log(this.props.photos)
     return (
       <HelpCenterSection>
         <Formik

@@ -29,7 +29,9 @@ class AvailableBookings extends PureComponent {
   onBookingPress = car => {
     const { filters, onSelectCar, navigation } = this.props
 
-    const { startDate, endDate } = filters
+    const { startDate } = filters
+    const endDateMonth = moment(startDate).add(1, 'M')
+    const endDate = moment(endDateMonth).endOf('month')
 
     const body = {
       calendar_date_to: moment(endDate)
