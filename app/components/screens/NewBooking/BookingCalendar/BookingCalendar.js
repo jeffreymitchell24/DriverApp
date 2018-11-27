@@ -170,7 +170,7 @@ class BookingCalendar extends Component {
     const {
       selectedCar: { calendar }
     } = this.props
-˝
+
     const selectedDayHours = calendar[selectedDate.dateString]
 
 
