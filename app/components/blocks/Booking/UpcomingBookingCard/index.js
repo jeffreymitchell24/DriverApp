@@ -46,10 +46,10 @@ class UpcomingBookingCard extends PureComponent {
         })
       }
     } else {
-      this.minutesRemaining = Math.floor((this.endsAt.unit() - now.unix()) / 60)
-      let diffString = convertMinsToHrsMins(this.minutesRemaining)
+      console.log('this.endsAt', this.endsAt)
+      // Started ${this.startingAt.to(now, true)} ago\n
       this.setState({
-        extraDetail: `Started ${this.startingAt.to(now, true)} ago\nYour booking will expire in ${diffString}`
+        extraDetail: `Your booking will expire in ${now.to(this.endsAt, true)}`
       })
     }
   }
