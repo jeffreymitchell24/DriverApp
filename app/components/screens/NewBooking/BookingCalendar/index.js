@@ -3,6 +3,7 @@ import { createStructuredSelector } from 'reselect'
 
 import { setBookingDate } from 'store/actions/newBooking'
 import { getSelectedCar } from 'store/selectors'
+import { getFilters } from 'store/selectors/filters'
 
 import BookingCalendar from './BookingCalendar'
 
@@ -11,7 +12,8 @@ const actions = {
 }
 
 const selector = createStructuredSelector({
-  selectedCar: getSelectedCar
+  selectedCar: getSelectedCar,
+  filters: getFilters
 })
 
 export default connect(

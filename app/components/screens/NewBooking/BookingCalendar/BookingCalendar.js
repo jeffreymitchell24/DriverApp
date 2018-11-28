@@ -6,6 +6,7 @@ import {
   Animated,
   ScrollView
 } from 'react-native'
+import isEmpty from 'lodash/isEmpty'
 import Icon from 'react-native-vector-icons/Ionicons'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
@@ -58,8 +59,9 @@ PickerItem.propTypes = {
 }
 
 const Arrow = ({ direction }) => {
-  if (direction === 'left')
+  if (direction === 'left') {
     return <Icon color={colors.red} name="ios-arrow-back" size={22} />
+  }
   return <Icon color={colors.red} name="ios-arrow-forward" size={22} />
 }
 
@@ -173,7 +175,6 @@ class BookingCalendar extends Component {
 
     const selectedDayHours = calendar[selectedDate.dateString]
 
-
     let availableHours = []
 
     const startHour = parseInt(moment(this.minDate).format('H'), 10)
@@ -218,9 +219,14 @@ class BookingCalendar extends Component {
     }
 
     console.log('availableHours', availableHours)
-
-    this.setState({ selectedDate, selectedTime: -1, hourList: availableHours })
-    this.isHiddenPicker && this._toggleTimePicker()
+    if (!isEmpty(calendar[selectedDate.dateString])) {
+      this.setState({
+        selectedDate,
+        selectedTime: -1,
+        hourList: availableHours
+      })
+      this.isHiddenPicker && this._toggleTimePicker()
+    }
   }
 
   onTimeSelect = index => {
@@ -229,14 +235,25 @@ class BookingCalendar extends Component {
 
   render() {
     const {
-      selectedCar: { calendar }
+      selectedCar: { calendar },
+      filters
     } = this.props
 
     this.disableRestHours = false
 
     const { selectedDate, selectedTime, hourList } = this.state
     let isButtonActive = selectedDate && selectedTime > -1
-    let markedDates = { ...Object.keys(calendar) }
+    let markedDates = {}
+
+    for (var key in calendar) {
+      if (calendar.hasOwnProperty(key)) {
+        if (isEmpty(calendar[key])) {
+          markedDates[key] = {
+            disabled: true
+          }
+        }
+      }
+    }
 
     let startDate = _.first(Object.keys(calendar))
     let endDate = _.last(Object.keys(calendar))
@@ -255,20 +272,23 @@ class BookingCalendar extends Component {
       }
     }
 
-    if (selectedDate)
+    if (selectedDate) {
       markedDates[selectedDate.dateString] = {
         color: colors.red,
         selected: true,
         selectedColor: colors.red
       }
+    }
 
     console.log(this.state)
+
+    const currentDate = moment(filters.startDate).format('YYYY-MM-DD')
 
     return (
       <View style={styles.container}>
         <Calendar
           contentContainerStyle={styles.calendar}
-          current={startDate}
+          current={selectedDate || currentDate}
           markedDates={markedDates}
           // markingType={'period'}
           maxDate={endDate}

@@ -2,16 +2,20 @@ import React, { PureComponent } from 'react'
 import { BookingCard } from '../BookingCard'
 import moment from 'moment-timezone'
 import PropTypes from 'prop-types'
+import { convertMinsToHrsMins } from 'helpers/date'
 
 class UpcomingBookingCard extends PureComponent {
   constructor(props) {
     super(props)
-
+    console.log(props.booking)
     this.startingAt = moment.tz(
       props.booking['booking_starting_at'].object.date,
       'America/New_York'
     )
-
+    this.endsAt = moment.tz(
+      props.booking['booking_ending_at'].object.date,
+      'America/New_York'
+    )
     this.state = {
       extraDetail: ''
     }
@@ -41,6 +45,12 @@ class UpcomingBookingCard extends PureComponent {
           extraDetail: `Starting in ${now.to(this.startingAt, true)}`
         })
       }
+    } else {
+      this.minutesRemaining = Math.floor((this.endsAt.unit() - now.unix()) / 60)
+      let diffString = convertMinsToHrsMins(this.minutesRemaining)
+      this.setState({
+        extraDetail: `Started ${this.startingAt.to(now, true)} ago\nYour booking will expire in ${diffString}`
+      })
     }
   }
 

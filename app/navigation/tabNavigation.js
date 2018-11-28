@@ -28,7 +28,7 @@ const HomeTabStack = createMaterialTopTabNavigator(
       },
       tabStyle: {},
       labelStyle: {
-        fontSize: metrics.heightPercentageToDP(2),
+        fontSize: metrics.heightPercentageToDP(1.8),
         fontFamily: 'SFProText-Medium'
       }
     }

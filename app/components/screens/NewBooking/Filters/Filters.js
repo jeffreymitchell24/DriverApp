@@ -346,7 +346,7 @@ class Filters extends PureComponent {
           disabled={isNext7Days}
           formatter="dddd, DD MMM hh:mmA"
           headerValue={isNext7Days ? 'Next 7 days' : null}
-          startDate={minDate.add({ hours: 1 }).format()}
+          startDate={moment(startDate).add({ hours: 1 }).format()}
           type="End"
           value={endDate}
           onChange={this.handleDateChange}

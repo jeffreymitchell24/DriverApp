@@ -6,11 +6,15 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.white,
-    padding: metrics.contentMarginSmall,
-    paddingBottom: metrics.contentMargin,
     justifyContent: 'space-between'
   },
-
+  flatList: {
+    paddingTop: metrics.contentMarginSmall,
+    marginHorizontal: metrics.contentMarginSmall,
+    paddingBottom: metrics.contentMargin,
+    borderColor: '#F1F3F5',
+    borderTopWidth: 1
+  },
   spinnerContainer: {
     flex: 1,
     backgroundColor: colors.white,

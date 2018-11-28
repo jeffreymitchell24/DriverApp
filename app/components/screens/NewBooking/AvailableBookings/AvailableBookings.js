@@ -29,8 +29,13 @@ class AvailableBookings extends PureComponent {
   onBookingPress = car => {
     const { filters, onSelectCar, navigation } = this.props
 
-    const { startDate } = filters
-    const endDateMonth = moment(startDate).add(1, 'M')
+    const now = moment().tz('America/New_York')
+    const startDate =
+      now.minute() || now.second() || now.millisecond()
+        ? now.add(1, 'hour').startOf('hour')
+        : now.startOf('hour')
+
+    const endDateMonth = startDate.clone().add(1, 'M')
     const endDate = moment(endDateMonth).endOf('month')
 
     const body = {
@@ -40,7 +45,7 @@ class AvailableBookings extends PureComponent {
         .subtract(1, 'hours')
         .minutes(59)
         .format('YYYY-MM-DD HH:mm'),
-      calendar_date_from: moment(startDate)
+      calendar_date_from: startDate
         // .unix(startDate)
         .tz('America/New_York')
         .format('YYYY-MM-DD HH:mm')
@@ -92,6 +97,7 @@ class AvailableBookings extends PureComponent {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderItem}
           showsVerticalScrollIndicator={false}
+          style={styles.flatList}
         />
       </View>
     )
