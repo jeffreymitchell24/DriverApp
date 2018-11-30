@@ -76,7 +76,8 @@ class DatePicker extends PureComponent {
       startDate,
       ExpandedHeader,
       headerValue,
-      disabled
+      disabled,
+      isDatePickerShow
     } = this.props
 
     console.log('datepicker props', this.props)
@@ -92,9 +93,6 @@ class DatePicker extends PureComponent {
       : moment()
           .tz('America/New_York')
           .toDate()
-
-    console.log('initDate', initDate)
-    console.log('minDate', minDate)
 
     return (
       <View style={[styles.container, style]}>
@@ -112,29 +110,31 @@ class DatePicker extends PureComponent {
           </View>
         </TouchableWithoutFeedback>
 
-        <Animated.View
-          style={{
-            height: animation,
-            overflow: 'hidden',
-            zIndex: 0
-          }}
-        >
-          {!!ExpandedHeader && (
-            <TouchableWithoutFeedback onPress={this.handleOpen}>
-              <ExpandedHeader />
-            </TouchableWithoutFeedback>
-          )}
-          <CustomDatePicker
-            date={initDate}
-            minimumDate={minDate}
+        {isDatePickerShow && (
+          <Animated.View
             style={{
-              width: '100%',
-              height: 216
+              height: animation,
+              overflow: 'hidden',
+              zIndex: 0
             }}
-            onDateChange={this.handleChange}
-            timeZoneOffsetInMinutes={-5 * 60}
-          />
-        </Animated.View>
+          >
+            {!!ExpandedHeader && (
+              <TouchableWithoutFeedback onPress={this.handleOpen}>
+                <ExpandedHeader />
+              </TouchableWithoutFeedback>
+            )}
+            <CustomDatePicker
+              date={initDate}
+              minimumDate={minDate}
+              style={{
+                width: '100%',
+                height: 216
+              }}
+              timeZoneOffsetInMinutes={-5 * 60}
+              onDateChange={this.handleChange}
+            />
+          </Animated.View>
+        )}
       </View>
     )
   }
@@ -145,6 +145,7 @@ DatePicker.propTypes = {
   disabled: PropTypes.bool,
   formatter: PropTypes.string,
   headerValue: PropTypes.oneOf([PropTypes.string, null]),
+  isDatePickerShow: PropTypes.bool,
   startDate: PropTypes.string,
   style: PropTypes.object,
   type: PropTypes.string,

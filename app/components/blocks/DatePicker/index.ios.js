@@ -66,10 +66,9 @@ class DatePicker extends PureComponent {
       startDate,
       ExpandedHeader,
       headerValue,
-      disabled
+      disabled,
+      isDatePickerShow
     } = this.props
-
-    console.log('datepicker props', this.props)
 
     return (
       <View style={[styles.container, style]}>
@@ -87,37 +86,39 @@ class DatePicker extends PureComponent {
           </View>
         </TouchableWithoutFeedback>
 
-        <Animated.View
-          style={{
-            height: animation,
-            overflow: 'hidden',
-            zIndex: 0
-          }}
-        >
-          {!!ExpandedHeader && (
-            <TouchableWithoutFeedback onPress={this.handleOpen}>
-              <ExpandedHeader />
-            </TouchableWithoutFeedback>
-          )}
-          <DatePickerIOS
-            date={moment(value)
-              .tz('America/New_York')
-              .toDate()}
-            minimumDate={
-              startDate
-                ? moment(startDate)
-                    .tz('America/New_York')
-                    .toDate()
-                : moment()
-                    .tz('America/New_York')
-                    .toDate()
-            }
-            mode="datetime"
-            style={{ width: '100%' }}
-            timeZoneOffsetInMinutes={-5 * 60}
-            onDateChange={this.handleChange}
-          />
-        </Animated.View>
+        {isDatePickerShow && (
+          <Animated.View
+            style={{
+              height: animation,
+              overflow: 'hidden',
+              zIndex: 0
+            }}
+          >
+            {!!ExpandedHeader && (
+              <TouchableWithoutFeedback onPress={this.handleOpen}>
+                <ExpandedHeader />
+              </TouchableWithoutFeedback>
+            )}
+            <DatePickerIOS
+              date={moment(value)
+                .tz('America/New_York')
+                .toDate()}
+              minimumDate={
+                startDate
+                  ? moment(startDate)
+                      .tz('America/New_York')
+                      .toDate()
+                  : moment()
+                      .tz('America/New_York')
+                      .toDate()
+              }
+              mode="datetime"
+              style={{ width: '100%' }}
+              timeZoneOffsetInMinutes={-5 * 60}
+              onDateChange={this.handleChange}
+            />
+          </Animated.View>
+        )}
       </View>
     )
   }
@@ -128,6 +129,7 @@ DatePicker.propTypes = {
   disabled: PropTypes.bool,
   formatter: PropTypes.string,
   headerValue: PropTypes.oneOf([PropTypes.string, null]),
+  isDatePickerShow: PropTypes.bool,
   startDate: PropTypes.string,
   style: PropTypes.object,
   type: PropTypes.string,
