@@ -76,13 +76,25 @@ class Filters extends PureComponent {
     address: '',
     addressSelected: false,
     showAddressResults: false,
-    isNext7Days: false
+    isNext7Days: false,
+    isDatePickerShow: false
   }
 
   componentDidMount() {
     const { onCarCategoriesLoad } = this.props
 
     onCarCategoriesLoad()
+  }
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      !nextProps.isFetchingCarCategories &&
+      this.props.isFetchingCarCategories
+    ) {
+      this.setState({
+        isDatePickerShow: true
+      })
+    }
   }
 
   onConfirmPress = () => {
@@ -290,7 +302,7 @@ class Filters extends PureComponent {
       navigation
     } = this.props
 
-    const { isNext7Days } = this.state
+    const { isNext7Days, isDatePickerShow } = this.state
 
     if (isFetchingCarCategories) {
       return (
@@ -336,6 +348,7 @@ class Filters extends PureComponent {
           )}
           formatter="dddd, DD MMM hh:mmA"
           headerValue={isNext7Days ? 'Next 7 days' : null}
+          isDatePickerShow={isDatePickerShow}
           startDate={minDate.format()}
           style={{ marginTop: 20 }}
           type="Start"
@@ -346,7 +359,10 @@ class Filters extends PureComponent {
           disabled={isNext7Days}
           formatter="dddd, DD MMM hh:mmA"
           headerValue={isNext7Days ? 'Next 7 days' : null}
-          startDate={moment(startDate).add({ hours: 1 }).format()}
+          isDatePickerShow={isDatePickerShow}
+          startDate={moment(startDate)
+            .add({ hours: 1 })
+            .format()}
           type="End"
           value={endDate}
           onChange={this.handleDateChange}
