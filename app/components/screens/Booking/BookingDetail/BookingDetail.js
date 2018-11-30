@@ -15,10 +15,10 @@ import {
   Section,
   SectionHeader,
   SectionContent,
-  Photo
+  Photo,
+  Spinner
 } from 'components/ui'
 import MapView from 'react-native-maps'
-import { Spinner } from 'components/ui'
 import { convertMinsToHrsMins } from 'helpers/date'
 import { colors } from 'theme'
 import { styles, mapStyles } from './styles'
@@ -225,6 +225,7 @@ class BookingDetail extends Component {
     console.log('ride', ride)
     let buttonDisabled = true
     let buttonText = 'UNLOCK CAR'
+    if (!ride) return null
     if (ride.status === 'driving') {
       buttonText = 'END DRIVE'
       buttonDisabled = false
@@ -234,7 +235,6 @@ class BookingDetail extends Component {
     } else if (ride.status === 'pending' && !this.isMoreThan30Minutes()) {
       buttonDisabled = false
     }
-    if (!ride) return null
     const {
       booking_starting_at: bookindStartingAt,
       booking_ending_at: bookindEndingAt,

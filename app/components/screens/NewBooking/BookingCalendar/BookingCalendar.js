@@ -99,13 +99,21 @@ class BookingCalendar extends Component {
     this.bookDateType = bookDateType
     let hourList = []
     this.minDate = minDate
-
     this.state = {
       maxDate,
       bounceValue: new Animated.Value(pickerHeight),
       hourList,
       selectedDate: null,
       selectedTime: -1
+    }
+    if (bookDateType === 'end') {
+      this.state = {
+        maxDate,
+        bounceValue: new Animated.Value(pickerHeight),
+        hourList,
+        selectedDate: {dateString: moment(minDate).format('YYYY-MM-DD')},
+        selectedTime: moment(minDate).hour()
+      }
     }
   }
 
@@ -167,21 +175,39 @@ class BookingCalendar extends Component {
 
     return filteredList
   }
+  isTommorowAvailable = (selectedDate, startDateHourList, selectedHour) => {
+    const {
+      selectedCar: { calendar }
+    } = this.props
+    for (let i = selectedHour + 1; i < 24; i++) {
+      if (startDateHourList[i].slotType === 'disabled') {
+        return false
+      }
+    }
+    const nextDayHours = calendar[moment(selectedDate.dateString).add({days: 1}).format('YYYY-MM-DD')]
+    if (nextDayHours[0] !== 0) {
+      return false
+    }
+    return true
+  }
 
   onDateSelect = selectedDate => {
     const {
       selectedCar: { calendar }
     } = this.props
-
     const selectedDayHours = calendar[selectedDate.dateString]
 
     let availableHours = []
-
+    let filteredHours
     const startHour = parseInt(moment(this.minDate).format('H'), 10)
-
-    const filteredHours = this.filterHours(selectedDayHours, startHour)
+    if (selectedDate.dateString === moment(this.minDate).format('YYYY-MM-DD')) {
+      filteredHours = this.filterHours(selectedDayHours, startHour)
+    } else {
+      filteredHours = selectedDayHours
+    }
 
     const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
+    console.log(selectedDayHours, selectedDate.dateString, filteredHours)
 
     for (let i = 0, j = 0; i < 24; i++) {
       let newItem = {
@@ -229,6 +255,59 @@ class BookingCalendar extends Component {
     }
   }
 
+  prevDateHourList = selectedDate => {
+    const {
+      selectedCar: { calendar }
+    } = this.props
+    const selectedDayHours = calendar[selectedDate.dateString]
+    let availableHours = []
+    const startHour = parseInt(moment(this.minDate).format('H'), 10)
+
+    const filteredHours = this.filterHours(selectedDayHours, startHour)
+
+    const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
+
+    for (let i = 0, j = 0; i < 24; i++) {
+      let newItem = {
+        key: i,
+        slotType: 'disabled',
+        time: moment(i, 'H').format('hh:mm A')
+      }
+
+      if (this.bookDateType === 'end') {
+        if (j < filteredHours.length + 1) {
+          if (endHour + 1 === i) {
+            newItem.slotType = 'default'
+            newItem.onPress = () => this.onTimeSelect(i)
+          }
+
+          if (filteredHours[j] === i) {
+            newItem.slotType = 'default'
+            newItem.onPress = () => this.onTimeSelect(i)
+
+            j++
+          }
+        }
+      } else {
+        if (j < selectedDayHours.length + 1) {
+          if (selectedDayHours[j] === i) {
+            newItem.slotType = 'default'
+            newItem.onPress = () => this.onTimeSelect(i)
+
+            j++
+          }
+        }
+      }
+
+      availableHours.push(newItem)
+    }
+
+    console.log('availableHours', availableHours)
+    if (!isEmpty(calendar[selectedDate.dateString])) {
+      return availableHours
+    }
+  }
+
   onTimeSelect = index => {
     this.setState({ selectedTime: index })
   }
@@ -257,15 +336,11 @@ class BookingCalendar extends Component {
 
     let startDate = _.first(Object.keys(calendar))
     let endDate = _.last(Object.keys(calendar))
-
     if (this.bookDateType === 'end') {
       startDate = moment(this.minDate).format('YYYY-MM-DD')
       const tomorrow = moment(this.minDate).add({ days: 1 })
-
-      if (
-        _.last(calendar[selectedDate] || []) === 23 &&
-        _.first(calendar[tomorrow.format('Y-M-D')] || []) === 0
-      ) {
+      const alailableHoursPrevDay = this.prevDateHourList(selectedDate)
+      if (this.isTommorowAvailable(selectedDate, alailableHoursPrevDay, selectedTime)) {
         endDate = tomorrow.format('YYYY-MM-DD')
       } else {
         endDate = moment(this.minDate).format('YYYY-MM-DD')

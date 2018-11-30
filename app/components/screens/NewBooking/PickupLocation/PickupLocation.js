@@ -33,8 +33,8 @@ class PickupLocation extends PureComponent {
         console.log('BackgroundGeolocation', location)
         const choosenLocation = {
           address: 'My location',
-          lat: location.latitude,
-          lng: location.longitude
+          lat: location.coords.latitude,
+          lng: location.coords.longitude
         }
 
         onFilterUpdate('location', choosenLocation)
