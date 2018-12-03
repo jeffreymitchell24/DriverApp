@@ -91,9 +91,11 @@ class Filters extends PureComponent {
       !nextProps.isFetchingCarCategories &&
       this.props.isFetchingCarCategories
     ) {
-      this.setState({
-        isDatePickerShow: true
-      })
+      setTimeout(() => {
+        this.setState({
+          isDatePickerShow: true
+        })
+      }, 150)
     }
   }
 
@@ -304,7 +306,7 @@ class Filters extends PureComponent {
 
     const { isNext7Days, isDatePickerShow } = this.state
 
-    if (isFetchingCarCategories) {
+    if (isFetchingCarCategories || !isDatePickerShow) {
       return (
         <View style={styles.spinnerContainer}>
           <ActivityIndicator color={colors.red} size="large" />
@@ -312,7 +314,6 @@ class Filters extends PureComponent {
       )
     }
 
-    console.log('filters props', this.props.filters)
     const now = moment().tz('America/New_York')
     const minDate =
       now.minute() || now.second() || now.millisecond()

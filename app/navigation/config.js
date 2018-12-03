@@ -201,7 +201,7 @@ export const Root = createStackNavigator(
         route.routeName === 'NewBooking' ||
         (backRoute === 'NewBooking' && isBack)
       ) {
-        return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+        // return { screenInterpolator: CardStackStyleInterpolator.forVertical }
       }
       return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
     }
