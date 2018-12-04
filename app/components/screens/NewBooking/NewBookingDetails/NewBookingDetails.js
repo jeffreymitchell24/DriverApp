@@ -49,15 +49,15 @@ class NewBookingDetails extends PureComponent {
   }
 
   componentWillUnmount() {
-    this.props.onUnselectCar()
+    // this.props.onUnselectCar()
   }
 
   componentDidMount() {
     const { car: carData } = this.props
-    console.log('carData', carData)
+
     if (carData && carData.car) {
       const { car } = carData
-      console.log('car', car)
+
       this.props.navigation.setParams({
         carName: `${car.manufacturer.name} ${car.model}`
       })
@@ -113,6 +113,7 @@ class NewBookingDetails extends PureComponent {
       bookedHours: this.props.car.booked
     })
   }
+
   onEndDatePress = () => {
     if (!this.props.startDate)
       setTimeout(() => Alert.alert('', 'Select start date first'), 200)
@@ -138,7 +139,6 @@ class NewBookingDetails extends PureComponent {
     } = this.props
     const { isRecurring } = this.state
 
-    console.log(startDate, endDate)
     let timeStamps = {
       booking_ending_at: moment(endDate)
         // .tz('America/New_York')
@@ -230,7 +230,7 @@ class NewBookingDetails extends PureComponent {
         </View>
       )
     }
-    console.warn(startDate, endDate)
+
     if (!this.props.car) return navigation.goBack()
 
     const {

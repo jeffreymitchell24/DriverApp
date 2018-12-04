@@ -11,7 +11,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   text: {
-    color: colors.black,
+    color: '#000',
     fontFamily: 'SFProText-Regular',
     fontSize: metrics.fontSizeBig
   }

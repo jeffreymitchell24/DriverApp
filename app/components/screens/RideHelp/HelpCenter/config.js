@@ -1,4 +1,10 @@
-import {RideMalfunction, RideDamaged, RideAccident, BookingDetail, RideCancel} from 'navigation/routeNames'
+import {
+  RideMalfunction,
+  RideDamaged,
+  RideAccident,
+  BookingDetail,
+  RideCancel
+} from 'navigation/routeNames'
 
 export default [
   {
@@ -20,10 +26,11 @@ export default [
     id: 'late',
     text: 'I’m late',
     routeName: BookingDetail
-  },
-  {
-    id: 'cancel',
-    text: 'I need to cancel my booking',
-    routeName: RideCancel
   }
 ]
+
+export const CancelRide = {
+  id: 'cancel',
+  text: 'I need to cancel my booking',
+  routeName: RideCancel
+}

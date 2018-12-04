@@ -5,7 +5,7 @@ import { RideLateDescription, BookingDetail } from 'navigation/routeNames'
 import { HelpCenterSection, NavButton, Spinner } from 'components/ui'
 
 import PropTypes from 'prop-types'
-import CONFIG from './config'
+import CONFIG, { CancelRide } from './config'
 import { colors } from 'theme'
 import styles from './styles'
 
@@ -98,13 +98,20 @@ class HelpCenter extends PureComponent {
   }
 
   render() {
-    const { requestPending } = this.props
-    console.log('props', this.props, requestPending)
+    const { requestPending, ride } = this.props
+
+    const data = [...CONFIG]
+
+    if (ride.status === 'pending') {
+      data.push(CancelRide)
+    }
+
     return (
       <HelpCenterSection>
         <FlatList
           ItemSeparatorComponent={this.renderSeparator}
-          data={CONFIG}
+          data={data}
+          extraData={data.length}
           keyExtractor={this.keyExtractor}
           renderItem={this.renderListItem}
         />

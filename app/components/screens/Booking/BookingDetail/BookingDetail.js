@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { PureComponent } from 'react'
 import { View, ScrollView, Text, TouchableOpacity, Alert } from 'react-native'
 import PropTypes from 'prop-types'
 import moment from 'moment-timezone'
@@ -23,7 +23,7 @@ import { convertMinsToHrsMins } from 'helpers/date'
 import { colors } from 'theme'
 import { styles, mapStyles } from './styles'
 
-class Countdown extends Component {
+class Countdown extends PureComponent {
   intervalHandle = null
 
   constructor(props) {
@@ -99,14 +99,16 @@ Countdown.propTypes = {
   type: PropTypes.string
 }
 
-class BookingDetail extends Component {
+class BookingDetail extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
   }
+
   componentWillUnmount() {
-    this.props.onUnselectRide()
+    // this.props.onUnselectRide()
   }
+
   componentDidUpdate(prevProps) {
     const { error, requestPending } = this.props
     if (prevProps.requestPending && !requestPending) {
@@ -152,9 +154,6 @@ class BookingDetail extends Component {
     let date = moment.tz(bookindStartingAt.object.date, 'America/New_York')
     let now = moment().tz('America/New_York')
 
-    console.log(date.diff(now, 'minutes') > 30)
-    console.log('date', date.format())
-    console.log('now', now.format())
     return date.diff(now, 'minutes') > 30
   }
 

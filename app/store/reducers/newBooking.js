@@ -7,7 +7,7 @@ import {
   RESET_DATES
 } from '../actions/newBooking'
 
-import { UNSELECT_CAR } from 'store/actions/bookings'
+import { UNSELECT_CAR, FETCH_SELECTED_CAR } from 'store/actions/bookings'
 
 import _ from 'lodash'
 
@@ -58,6 +58,14 @@ const handlers = {
     return initialState
   },
   [UNSELECT_CAR]: (state, { payload }) => {
+    console.log(UNSELECT_CAR)
+    return {
+      ...state,
+      startDate: null,
+      endDate: null
+    }
+  },
+  [FETCH_SELECTED_CAR.REQUEST]: state => {
     return {
       ...state,
       startDate: null,

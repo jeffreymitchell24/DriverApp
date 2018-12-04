@@ -10,6 +10,7 @@ import {
 } from 'navigation/routeNames'
 import { Slider } from 'react-native-elements'
 import {
+  ScrollView,
   View,
   Text,
   Image,
@@ -321,7 +322,7 @@ class Filters extends PureComponent {
         : now.startOf('hour')
 
     return (
-      <View style={styles.container}>
+      <ScrollView contentContainerStyle={styles.container}>
         <DatePicker
           ExpandedHeader={() => (
             <View
@@ -485,7 +486,7 @@ class Filters extends PureComponent {
             onPress={this.onConfirmPress}
           />
         </View>
-      </View>
+      </ScrollView>
     )
   }
 }
