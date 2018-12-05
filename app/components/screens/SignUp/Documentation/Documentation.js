@@ -15,7 +15,7 @@ import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
 import { CheckBox } from 'react-native-elements'
-import { RegisterReview } from 'navigation/routeNames'
+import { RegisterReview, DriverTerms } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import { colors } from 'theme'
 import {
@@ -201,7 +201,8 @@ class Documentation extends Component {
       apps: {
         main: [],
         other: []
-      }
+      },
+      termsAgree: false
     }
     this.modalRenderKey = 0
   }
@@ -215,6 +216,10 @@ class Documentation extends Component {
   onSubmit = () => {
     const { onSignUp, apps, licences, credentials, personalInfo } = this.props
     onSignUp({ licences, apps, credentials, personalInfo })
+  }
+
+  handleTermsPress = () => {
+    this.props.navigation.navigate(DriverTerms)
   }
 
   onApprove = () => {
@@ -307,7 +312,7 @@ class Documentation extends Component {
   }
 
   render() {
-    const { ridesharingApproved } = this.state
+    const { ridesharingApproved, termsAgree } = this.state
     const { apps } = this.props
     const { tlc, driving } = this.props.licences
     let appsCount = apps.main.length + apps.other.length
@@ -318,7 +323,9 @@ class Documentation extends Component {
       driving.front &&
       driving.back &&
       appsCount > 0 &&
-      ridesharingApproved
+      ridesharingApproved &&
+      termsAgree
+
     return (
       <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
         <Text style={styles.screenTitle}>
@@ -402,6 +409,28 @@ class Documentation extends Component {
             </TouchableOpacity>
           </SectionContent>
         </Section>
+        <View style={styles.checkboxContainer}>
+          <CheckBox
+            checked={termsAgree}
+            checkedColor="rgb(240,62,62)"
+            checkedIcon="ios-checkbox"
+            containerStyle={styles.checkBox}
+            iconType="ionicon"
+            name="termsChecked"
+            size={30}
+            uncheckedIcon="md-square-outline"
+            onPress={() =>
+              this.setState({ termsAgree: !termsAgree })
+            }
+          />
+          <Text style={styles.checkboxTitle}>
+            Accept
+            <Text style={styles.termsButton} onPress={this.handleTermsPress}>
+              {' '}
+              Drivers Contract
+            </Text>
+          </Text>
+        </View>
         <View style={styles.footer}>
           <Button
             containerStyle={styles.button}

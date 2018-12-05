@@ -11,6 +11,7 @@ export const DocumentsCamera = 'DocumentsCamera'
 export const PicturePreview = 'PicturePreview'
 export const PictureGallery = 'PictureGallery'
 export const RegisterReview = 'RegisterReview'
+export const DriverTerms = 'DriverTerms'
 
 // Sign In
 export const Auth = 'Auth'

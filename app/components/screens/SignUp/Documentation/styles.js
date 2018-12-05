@@ -1,7 +1,10 @@
 import { StyleSheet, Platform, Dimensions } from 'react-native'
 import { colors, metrics } from 'theme'
 
-let screenHeight = Platform.OS === 'android' ? Dimensions.get('screen').height : metrics.screenHeight
+let screenHeight =
+  Platform.OS === 'android'
+    ? Dimensions.get('screen').height
+    : metrics.screenHeight
 
 export default StyleSheet.create({
   container: {
@@ -164,5 +167,18 @@ export default StyleSheet.create({
     borderBottomColor: colors.gray50,
     marginBottom: 8,
     marginTop: 5
+  },
+
+  checkBox: {
+    margin: 0,
+    marginRight: -13,
+    marginLeft: 0,
+    padding: 0,
+    paddingRight: 0,
+    backgroundColor: colors.white,
+    borderWidth: 0
+  },
+  termsButton: {
+    color: colors.red
   }
 })

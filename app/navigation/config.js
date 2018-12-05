@@ -188,21 +188,21 @@ export const Root = createStackNavigator(
     initialRouteName: 'Auth',
     headerLayoutPreset: 'center',
     transitionConfig: (toTransitionProps, fromTransitionProps) => {
-      let isBack = false
-      let backRoute = null
-      if (fromTransitionProps) {
-        isBack =
-          fromTransitionProps.navigation.state.index >=
-          toTransitionProps.navigation.state.index
-        backRoute = fromTransitionProps.scene.route.routeName
-      }
-      const route = toTransitionProps.scene.route
-      if (
-        route.routeName === 'NewBooking' ||
-        (backRoute === 'NewBooking' && isBack)
-      ) {
-        // return { screenInterpolator: CardStackStyleInterpolator.forVertical }
-      }
+      // let isBack = false
+      // let backRoute = null
+      // if (fromTransitionProps) {
+      //   isBack =
+      //     fromTransitionProps.navigation.state.index >=
+      //     toTransitionProps.navigation.state.index
+      //   backRoute = fromTransitionProps.scene.route.routeName
+      // }
+      // const route = toTransitionProps.scene.route
+      // if (
+      //   route.routeName === 'NewBooking' ||
+      //   (backRoute === 'NewBooking' && isBack)
+      // ) {
+      // return { screenInterpolator: CardStackStyleInterpolator.forVertical }
+      // }
       return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
     }
   }
