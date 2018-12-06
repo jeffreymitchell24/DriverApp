@@ -101,10 +101,7 @@ class HelpCenter extends PureComponent {
     const { requestPending, ride } = this.props
 
     const data = [...CONFIG]
-
-    if (ride.status === 'pending') {
-      data.push(CancelRide)
-    }
+    data.push(CancelRide)
 
     return (
       <HelpCenterSection>

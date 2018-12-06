@@ -32,24 +32,28 @@ class Countdown extends PureComponent {
     this.intervalHandle = null
     this.minutesRemaining = 0
     let countdownMessage = ''
+
     this.now = moment()
       .tz('America/New_York')
       .unix()
+
     if (type === 'pending') {
-      this.start = moment
-        .tz(startTime.date, 'America/New_York')
-        .add(1, 'm')
-        .unix()
-      this.minutesRemaining = Math.floor((this.start - this.now) / 60)
-      let diffString = convertMinsToHrsMins(this.minutesRemaining)
+      this.start = moment.tz(startTime.date, 'America/New_York').add(1, 'm')
+
+      this.minutesRemaining = Math.floor(
+        (this.start.unix() - this.now) / 60
+      )
+      let diffString = this.getDiffString(this.start)
+
       countdownMessage = `Starting in ${diffString}`
     } else if (type === 'driving') {
-      this.end = moment
-        .tz(endTime.date, 'America/New_York')
-        .add(1, 'm')
-        .unix()
-      this.minutesRemaining = Math.floor((this.end - this.now) / 60)
-      let diffString = convertMinsToHrsMins()
+      this.end = moment.tz(endTime.date, 'America/New_York').add(1, 'm')
+
+      this.minutesRemaining = Math.floor(
+        (this.end.unix() - this.now) / 60
+      )
+      let diffString = this.getDiffString(this.end)
+
       countdownMessage = `Ending in ${diffString}`
     }
     this.state = {
@@ -65,10 +69,24 @@ class Countdown extends PureComponent {
   startCountdown = () => {
     this.intervalHandle = setInterval(this.tick, 1000 * 60)
   }
+
+  getDiffString(date) {
+    const now = moment().tz('America/New_York')
+    const diffString = now.to(moment(date), true)
+
+    console.log('getDiffString', date, now, diffString)
+
+    return diffString
+  }
+
   tick = () => {
     this.minutesRemaining--
 
-    let diffString = convertMinsToHrsMins(this.minutesRemaining)
+    const now = moment().tz('America/New_York')
+    let diffString = now.to(this.start, true)
+
+    console.log(this.start, now, diffString)
+
     if (this.props.type === 'pending') {
       let countdownMessage = `Starting in ${diffString}`
       this.setState({
@@ -80,6 +98,7 @@ class Countdown extends PureComponent {
         countdownMessage
       })
     }
+    diffString = this.getDiffString(this.end)
     if (this.minutesRemaining === 0) {
       clearInterval(this.intervalHandle)
     }

@@ -1,5 +1,11 @@
 import React, { PureComponent } from 'react'
-import { View, FlatList, ActivityIndicator } from 'react-native'
+import {
+  View,
+  FlatList,
+  ActivityIndicator,
+  Text,
+  TouchableOpacity
+} from 'react-native'
 import { NewBookingDetails } from 'navigation/routeNames'
 import { NavFilterImg } from 'components/ui'
 import { BookingCard } from 'components/blocks'
@@ -76,6 +82,20 @@ class AvailableBookings extends PureComponent {
       />
     )
   }
+
+  renderEmptyList = () => {
+    const { navigation } = this.props
+
+    return (
+      <View style={styles.emptyListContainer}>
+        <Text style={styles.emptyListText}>No results found.</Text>
+        <TouchableOpacity onPress={() => navigation.goBack()}>
+          <Text style={[styles.emptyListText, { color: colors.red }]}>OK</Text>
+        </TouchableOpacity>
+      </View>
+    )
+  }
+
   render() {
     const { isFetchingPending, cars } = this.props
 
@@ -91,14 +111,18 @@ class AvailableBookings extends PureComponent {
 
     return (
       <View style={styles.container}>
-        <FlatList
-          data={ordered}
-          extraData={cars}
-          keyExtractor={this.keyExtractor}
-          renderItem={this.renderItem}
-          showsVerticalScrollIndicator={false}
-          style={styles.flatList}
-        />
+        {ordered.length ? (
+          <FlatList
+            data={ordered}
+            extraData={cars}
+            keyExtractor={this.keyExtractor}
+            renderItem={this.renderItem}
+            showsVerticalScrollIndicator={false}
+            style={styles.flatList}
+          />
+        ) : (
+          this.renderEmptyList()
+        )}
       </View>
     )
   }

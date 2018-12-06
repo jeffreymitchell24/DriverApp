@@ -170,13 +170,15 @@ class PickupLocation extends PureComponent {
             </View>
           </View>
         </TouchableOpacity>
-        {!!history.length && this.renderRecentsList(history, fetchDetails)}
+        {!!history && !!history.length && this.renderRecentsList(history, fetchDetails)}
       </View>
     )
   }
 
   render() {
     const { address } = this.state
+
+    console.log(GOOGLE_API_KEY)
 
     return (
       <GoogleAutoComplete

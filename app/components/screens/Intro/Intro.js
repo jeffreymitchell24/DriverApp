@@ -6,10 +6,7 @@ import { backgrounds } from 'images'
 import { Button } from 'components/ui'
 import { requestMainPermissions } from 'helpers/permission'
 import {
-  Account,
-  Documentation,
   SignIn,
-  PersonalInfo,
   Home,
   RegisterReview
 } from 'navigation/routeNames'
@@ -36,9 +33,9 @@ class Intro extends Component {
     const { isCheckingStatus, user } = this.props
     if (prevProps.isCheckingStatus && !isCheckingStatus) {
       if (user.status === 'pending') this.onResetTo(RegisterReview)
-      else if (user.status === 'approved')
+      else if (user.status === 'approved') {
         this.props.navigation.navigate(Home, { hideSplash: true })
-      else if (user.status === 'rejected') {
+      } else if (user.status === 'rejected') {
         SplashScreen.hide()
         Keyboard.dismiss()
         setTimeout(
@@ -138,18 +135,20 @@ class Intro extends Component {
         <View style={styles.footer}>
           <Button
             containerStyle={styles.startButton}
-            title="START"
-            onPress={this.handleStartPress}
+            title="Log In"
+            onPress={this.handleSignInPress}
           />
           <Text style={styles.mainText}>
-            Already have an account?
+            Don’t have an account?
             <Text
               style={styles.signInButtonText}
-              onPress={this.handleSignInPress}
+              onPress={this.handleStartPress}
             >
               {' '}
-              Sign in
+              Sign up
+              {' '}
             </Text>
+            to book TLC car rentals
           </Text>
         </View>
       </SafeAreaView>

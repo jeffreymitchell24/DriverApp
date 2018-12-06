@@ -20,5 +20,15 @@ export default StyleSheet.create({
     backgroundColor: colors.white,
     alignItems: 'center',
     justifyContent: 'center'
+  },
+  emptyListContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  emptyListText: {
+    fontSize: 15,
+    fontFamily: 'SFProText-Regular',
+    color: colors.gray100
   }
 })

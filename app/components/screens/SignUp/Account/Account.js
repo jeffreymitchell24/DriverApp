@@ -1,18 +1,18 @@
 import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
-import { View, Text, ScrollView, Keyboard, Alert } from 'react-native'
+import { View, Text, ScrollView, Keyboard } from 'react-native'
 import isEmpty from 'lodash/isEmpty'
 import { Formik } from 'formik'
 import {
   PersonalInfo,
   SignIn,
   TermsConditions,
-  Intro
+  Intro,
+  DriverTerms
 } from 'navigation/routeNames'
 import { TextInputView } from 'components/blocks'
-import { Button, NavButton } from 'components/ui'
+import { Button, NavButton, Spinner } from 'components/ui'
 import styles from './styles'
-import { Spinner } from 'components/ui'
 import * as Yup from 'yup'
 import { colors } from 'theme'
 import { CheckBox } from 'react-native-elements'
@@ -37,6 +37,9 @@ const validationSchema = Yup.object().shape({
 class Account extends PureComponent {
   inputRefs = {}
   values = {}
+  state = {
+    termsAgree: false
+  }
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: (
@@ -72,7 +75,9 @@ class Account extends PureComponent {
       }
     }
   }
-
+  handleDriverTermsPress = () => {
+    this.props.navigation.navigate(DriverTerms)
+  }
   onSubmit = (values, { setErrors }) => {
     const { email, password, confirmPassword } = values
     let stepData = {
@@ -106,7 +111,8 @@ class Account extends PureComponent {
     touched
   }) => {
     let buttonDisabled = true
-    if (isEmpty(errors) && values.termsChecked) buttonDisabled = false
+    const { termsAgree } = this.state
+    if (isEmpty(errors) && values.termsChecked && termsAgree) buttonDisabled = false
     // console.log('values', values)
     return (
       <View style={styles.container}>
@@ -187,6 +193,28 @@ class Account extends PureComponent {
                 >
                   {' '}
                   Terms and Conditions
+                </Text>
+              </Text>
+            </View>
+            <View style={styles.checkboxContainer}>
+              <CheckBox
+                checked={termsAgree}
+                checkedColor="rgb(240,62,62)"
+                checkedIcon="ios-checkbox"
+                containerStyle={styles.checkBox}
+                iconType="ionicon"
+                name="termsChecked"
+                size={30}
+                uncheckedIcon="md-square-outline"
+                onPress={() =>
+                  this.setState({ termsAgree: !termsAgree })
+                }
+              />
+              <Text style={styles.checkboxTitle}>
+                  Accept
+                <Text style={styles.termsButton} onPress={this.handleDriverTermsPress}>
+                  {' '}
+                  Drivers Contract
                 </Text>
               </Text>
             </View>

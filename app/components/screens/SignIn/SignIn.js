@@ -62,7 +62,7 @@ class SignIn extends Component {
       } else if (user.status === 'pending') {
         this.onResetTo(RegisterReview)
       } else if (user.status === 'rejected') {
-        if (prevRejected !== user.id)
+        if (prevRejected !== user.id) {
           setTimeout(
             () =>
               Alert.alert(
@@ -71,8 +71,9 @@ class SignIn extends Component {
               ),
             200
           )
-        this.props.onSaveResubmitStatus(true)
-        this.props.navigation.navigate(PersonalInfo, { signoutOnBack: true })
+          this.props.onSaveResubmitStatus(true)
+          this.props.navigation.navigate(PersonalInfo, { signoutOnBack: true })
+        }
       }
     }
     // if (this.props.error && !prevProps.error) {

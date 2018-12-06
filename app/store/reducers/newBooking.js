@@ -55,7 +55,11 @@ const handlers = {
     }
   },
   [RESET_DATES]: (state, { payload }) => {
-    return initialState
+    return {
+      ...state,
+      startDate: null,
+      endDate: null
+    }
   },
   [UNSELECT_CAR]: (state, { payload }) => {
     console.log(UNSELECT_CAR)

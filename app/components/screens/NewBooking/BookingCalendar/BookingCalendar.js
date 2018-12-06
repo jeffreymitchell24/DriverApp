@@ -111,7 +111,7 @@ class BookingCalendar extends Component {
         maxDate,
         bounceValue: new Animated.Value(pickerHeight),
         hourList,
-        selectedDate: {dateString: moment(minDate).format('YYYY-MM-DD')},
+        selectedDate: { dateString: moment(minDate).format('YYYY-MM-DD') },
         selectedTime: moment(minDate).hour()
       }
     }
@@ -164,10 +164,17 @@ class BookingCalendar extends Component {
 
   filterHours = (hourList, startHour) => {
     const filteredList = []
+    console.log(hourList)
 
     for (let i = 0; i < hourList.length; i++) {
       if (hourList[i] > startHour) {
-        if (i > 0 && hourList[i] - (hourList[i - 1] || 25) !== 1) break
+        const isBreak =
+          hourList[i] - (_.isNumber(hourList[i - 1]) ? hourList[i - 1] : 25) !==
+          1
+
+        console.log(i > 0 && isBreak, i, hourList[i])
+
+        if (i > 0 && isBreak) break
 
         filteredList.push(hourList[i])
       }
@@ -184,7 +191,12 @@ class BookingCalendar extends Component {
         return false
       }
     }
-    const nextDayHours = calendar[moment(selectedDate.dateString).add({days: 1}).format('YYYY-MM-DD')]
+    const nextDayHours =
+      calendar[
+        moment(selectedDate.dateString)
+          .add({ days: 1 })
+          .format('YYYY-MM-DD')
+      ]
     if (nextDayHours[0] !== 0) {
       return false
     }
@@ -265,6 +277,8 @@ class BookingCalendar extends Component {
 
     const filteredHours = this.filterHours(selectedDayHours, startHour)
 
+    console.log('filteredHours', filteredHours, startHour)
+
     const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
 
     for (let i = 0, j = 0; i < 24; i++) {
@@ -340,7 +354,13 @@ class BookingCalendar extends Component {
       startDate = moment(this.minDate).format('YYYY-MM-DD')
       const tomorrow = moment(this.minDate).add({ days: 1 })
       const alailableHoursPrevDay = this.prevDateHourList(selectedDate)
-      if (this.isTommorowAvailable(selectedDate, alailableHoursPrevDay, selectedTime)) {
+      if (
+        this.isTommorowAvailable(
+          selectedDate,
+          alailableHoursPrevDay,
+          selectedTime
+        )
+      ) {
         endDate = tomorrow.format('YYYY-MM-DD')
       } else {
         endDate = moment(this.minDate).format('YYYY-MM-DD')

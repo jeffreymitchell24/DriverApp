@@ -32,10 +32,10 @@ export const isBetweenLimits = (start, end, time) => {
 }
 
 export const getCurrentDateAndTime = () => {
-  let currentDate = moment()
-  let time = currentDate.format('HH:mm')
+  let currentDate = moment().tz('America/New_York')
+  let time = currentDate.format('hh:mm A')
   let date = currentDate.format('MM/DD/YYYY')
-  return { time, date }
+  return { time, date, currentDate }
 }
 
 export const formatDate = date => {

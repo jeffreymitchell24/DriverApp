@@ -1,8 +1,14 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
-import {signIn, discardSigninError} from 'store/actions/auth'
-import {saveResubmitStatus} from 'store/actions/registration'
-import {getAuthStatus, getSigninError, getIsAuthed, getUserData, getPrevRejectedId} from 'store/selectors'
+import { signIn, discardSigninError } from 'store/actions/auth'
+import { saveResubmitStatus } from 'store/actions/registration'
+import {
+  getAuthStatus,
+  getSigninError,
+  getIsAuthed,
+  getUserData,
+  getPrevRejectedId
+} from 'store/selectors'
 import SignIn from './SignIn'
 
 const selector = createStructuredSelector({

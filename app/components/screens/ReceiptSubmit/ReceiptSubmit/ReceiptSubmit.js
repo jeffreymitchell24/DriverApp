@@ -83,7 +83,6 @@ class ReceiptSubmit extends Component {
   constructor(props) {
     super(props)
     const { time, date } = getCurrentDateAndTime()
-    console.log(time, date)
     this.state = {
       showPicker: false,
       pickerMode: 'time',
@@ -229,6 +228,8 @@ class ReceiptSubmit extends Component {
     touched,
     setFieldValue
   }) => {
+    const currentDate = moment().tz('America/New_York')
+    console.log(currentDate.toDate().setUTCHours(-5), currentDate, currentDate.format())
     const { price, location, title } = values
     let isButtonActive =
       isEmpty(errors) &&
@@ -321,6 +322,8 @@ class ReceiptSubmit extends Component {
           onPress={handleSubmit}
         />
         <DateTimePicker
+          date={currentDate.toDate()}
+          is24Hour={false}
           isVisible={this.state.showPicker}
           mode={this.state.pickerMode}
           onCancel={this.onHideDateTimePicker}
