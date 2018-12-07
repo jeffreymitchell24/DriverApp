@@ -112,7 +112,8 @@ class Account extends PureComponent {
   }) => {
     let buttonDisabled = true
     const { termsAgree } = this.state
-    if (isEmpty(errors) && values.termsChecked && termsAgree) buttonDisabled = false
+    if (isEmpty(errors) && values.termsChecked && termsAgree)
+      buttonDisabled = false
     // console.log('values', values)
     return (
       <View style={styles.container}>
@@ -206,13 +207,14 @@ class Account extends PureComponent {
                 name="termsChecked"
                 size={30}
                 uncheckedIcon="md-square-outline"
-                onPress={() =>
-                  this.setState({ termsAgree: !termsAgree })
-                }
+                onPress={() => this.setState({ termsAgree: !termsAgree })}
               />
               <Text style={styles.checkboxTitle}>
-                  Accept
-                <Text style={styles.termsButton} onPress={this.handleDriverTermsPress}>
+                Accept
+                <Text
+                  style={styles.termsButton}
+                  onPress={this.handleDriverTermsPress}
+                >
                   {' '}
                   Drivers Contract
                 </Text>

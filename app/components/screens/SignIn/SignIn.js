@@ -54,9 +54,11 @@ class SignIn extends Component {
   componentWillUnmount() {
     this.props.onDiscardSigninError()
   }
-  componentDidUpdate(prevProps) {
-    const { user, prevRejected } = this.props
-    if (user && !prevProps.user) {
+
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const { user, prevRejected } = nextProps
+
+    if (user && !this.props.user) {
       if (user.status === 'approved') {
         this.props.navigation.navigate(Home)
       } else if (user.status === 'pending') {
@@ -71,8 +73,8 @@ class SignIn extends Component {
               ),
             200
           )
-          this.props.onSaveResubmitStatus(true)
-          this.props.navigation.navigate(PersonalInfo, { signoutOnBack: true })
+          nextProps.onSaveResubmitStatus(true)
+          nextProps.navigation.navigate(PersonalInfo, { signoutOnBack: true })
         }
       }
     }

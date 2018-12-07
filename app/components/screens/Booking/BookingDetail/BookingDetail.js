@@ -40,18 +40,14 @@ class Countdown extends PureComponent {
     if (type === 'pending') {
       this.start = moment.tz(startTime.date, 'America/New_York').add(1, 'm')
 
-      this.minutesRemaining = Math.floor(
-        (this.start.unix() - this.now) / 60
-      )
+      this.minutesRemaining = Math.floor((this.start.unix() - this.now) / 60)
       let diffString = this.getDiffString(this.start)
 
       countdownMessage = `Starting in ${diffString}`
     } else if (type === 'driving') {
       this.end = moment.tz(endTime.date, 'America/New_York').add(1, 'm')
 
-      this.minutesRemaining = Math.floor(
-        (this.end.unix() - this.now) / 60
-      )
+      this.minutesRemaining = Math.floor((this.end.unix() - this.now) / 60)
       let diffString = this.getDiffString(this.end)
 
       countdownMessage = `Ending in ${diffString}`

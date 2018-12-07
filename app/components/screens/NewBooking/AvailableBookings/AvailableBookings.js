@@ -1,13 +1,7 @@
 import React, { PureComponent } from 'react'
-import {
-  View,
-  FlatList,
-  ActivityIndicator,
-  Text,
-  TouchableOpacity
-} from 'react-native'
+import { View, FlatList, ActivityIndicator, Alert } from 'react-native'
 import { NewBookingDetails } from 'navigation/routeNames'
-import { NavFilterImg } from 'components/ui'
+import { NavFilterImg, Button } from 'components/ui'
 import { BookingCard } from 'components/blocks'
 import moment from 'moment'
 import _ from 'lodash'
@@ -32,8 +26,27 @@ class AvailableBookings extends PureComponent {
     // this.props.onFetchAvailableCars()
   }
 
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    if (
+      !nextProps.isFetchingPending &&
+      this.props.isFetchingPending &&
+      !nextProps.cars.length
+    ) {
+      setTimeout(
+        () =>
+          Alert.alert(
+            '',
+            'No results found',
+            [{ text: 'OK', onPress: () => nextProps.navigation.goBack() }],
+            { cancelable: false }
+          ),
+        200
+      )
+    }
+  }
+
   onBookingPress = car => {
-    const { filters, onSelectCar, navigation } = this.props
+    const { onSelectCar, navigation } = this.props
 
     const now = moment().tz('America/New_York')
     const startDate =
@@ -83,19 +96,6 @@ class AvailableBookings extends PureComponent {
     )
   }
 
-  renderEmptyList = () => {
-    const { navigation } = this.props
-
-    return (
-      <View style={styles.emptyListContainer}>
-        <Text style={styles.emptyListText}>No results found.</Text>
-        <TouchableOpacity onPress={() => navigation.goBack()}>
-          <Text style={[styles.emptyListText, { color: colors.red }]}>OK</Text>
-        </TouchableOpacity>
-      </View>
-    )
-  }
-
   render() {
     const { isFetchingPending, cars } = this.props
 
@@ -111,18 +111,14 @@ class AvailableBookings extends PureComponent {
 
     return (
       <View style={styles.container}>
-        {ordered.length ? (
-          <FlatList
-            data={ordered}
-            extraData={cars}
-            keyExtractor={this.keyExtractor}
-            renderItem={this.renderItem}
-            showsVerticalScrollIndicator={false}
-            style={styles.flatList}
-          />
-        ) : (
-          this.renderEmptyList()
-        )}
+        <FlatList
+          data={ordered}
+          extraData={cars}
+          keyExtractor={this.keyExtractor}
+          renderItem={this.renderItem}
+          showsVerticalScrollIndicator={false}
+          style={styles.flatList}
+        />
       </View>
     )
   }
