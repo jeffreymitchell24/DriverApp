@@ -42,6 +42,15 @@ subprojects {
             }
         }
     }
+
+    if (project.name.contains('react-native-vector-icons')) {
+        buildscript {
+            repositories {
+                jcenter()
+                maven { url "https://dl.bintray.com/android/android-tools/"  }
+            }
+        }
+    }
 }
 
 ext {

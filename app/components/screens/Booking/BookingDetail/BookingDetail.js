@@ -36,21 +36,26 @@ class Countdown extends PureComponent {
     this.now = moment()
       .tz('America/New_York')
       .unix()
+    this.start = moment.tz(startTime.date, 'America/New_York').add(1, 'm')
+    this.end = moment.tz(endTime.date, 'America/New_York').add(1, 'm')
 
-    if (type === 'pending') {
-      this.start = moment.tz(startTime.date, 'America/New_York').add(1, 'm')
-
-      this.minutesRemaining = Math.floor((this.start.unix() - this.now) / 60)
-      let diffString = this.getDiffString(this.start)
-
-      countdownMessage = `Starting in ${diffString}`
-    } else if (type === 'driving') {
-      this.end = moment.tz(endTime.date, 'America/New_York').add(1, 'm')
-
-      this.minutesRemaining = Math.floor((this.end.unix() - this.now) / 60)
+    if (moment().isAfter(this.end)) {
+      this.minutesRemaining = Math.floor((this.now - this.end.unix()) / 60)
       let diffString = this.getDiffString(this.end)
 
-      countdownMessage = `Ending in ${diffString}`
+      countdownMessage = `Late by ${diffString}`
+    } else {
+      if (type === 'pending') {
+        this.minutesRemaining = Math.floor((this.start.unix() - this.now) / 60)
+        let diffString = this.getDiffString(this.start)
+
+        countdownMessage = `Starting in ${diffString}`
+      } else if (type === 'driving') {
+        this.minutesRemaining = Math.floor((this.end.unix() - this.now) / 60)
+        let diffString = this.getDiffString(this.end)
+
+        countdownMessage = `Ending in ${diffString}`
+      }
     }
     this.state = {
       countdownMessage
@@ -82,20 +87,29 @@ class Countdown extends PureComponent {
     let diffString = now.to(this.start, true)
 
     console.log(this.start, now, diffString)
+    let countdownMessage = ''
+    const isLate = moment().isAfter(this.end)
+    if (isLate) {
+      this.minutesRemaining = Math.floor((this.now - this.end.unix()) / 60)
+      let diffString = this.getDiffString(this.end)
 
-    if (this.props.type === 'pending') {
-      let countdownMessage = `Starting in ${diffString}`
-      this.setState({
-        countdownMessage
-      })
-    } else if (this.props.type === 'driving') {
-      let countdownMessage = `Ending in ${diffString}`
-      this.setState({
-        countdownMessage
-      })
+      countdownMessage = `Late by ${diffString}`
+    } else {
+      if (this.props.type === 'pending') {
+        countdownMessage = `Starting in ${diffString}`
+        this.setState({
+          countdownMessage
+        })
+      } else if (this.props.type === 'driving') {
+        diffString = this.getDiffString(this.end)
+        let countdownMessage = `Ending in ${diffString}`
+        this.setState({
+          countdownMessage
+        })
+      }
     }
-    diffString = this.getDiffString(this.end)
-    if (this.minutesRemaining === 0) {
+
+    if (this.minutesRemaining === 0 && !isLate) {
       clearInterval(this.intervalHandle)
     }
   }

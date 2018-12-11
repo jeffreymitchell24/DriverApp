@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react'
 import { BookingCard } from '../BookingCard'
 import moment from 'moment-timezone'
 import PropTypes from 'prop-types'
-import { convertMinsToHrsMins } from 'helpers/date'
+// import { convertMinsToHrsMins } from 'helpers/date'
 
 class UpcomingBookingCard extends PureComponent {
   constructor(props) {
@@ -33,24 +33,33 @@ class UpcomingBookingCard extends PureComponent {
   getTime = () => {
     const now = moment().tz('America/New_York')
 
-    if (this.props.booking.status === 'pending') {
-      if (now.isAfter(this.startingAt)) {
-        clearInterval(this.timer)
+    if (moment().isAfter(this.endsAt)) {
+      this.setState({
+        extraDetail: `Late by ${now.to(this.endsAt, true)}`
+      })
+    } else {
+      if (this.props.booking.status === 'pending') {
+        if (now.isAfter(this.startingAt)) {
+          clearInterval(this.timer)
 
-        this.setState({
-          extraDetail: 'You can unlock the car now'
-        })
+          this.setState({
+            extraDetail: 'You can unlock the car now'
+          })
+        } else {
+          this.setState({
+            extraDetail: `Starting in ${now.to(this.startingAt, true)}`
+          })
+        }
       } else {
+        console.log('this.endsAt', this.endsAt)
+        // Started ${this.startingAt.to(now, true)} ago\n
         this.setState({
-          extraDetail: `Starting in ${now.to(this.startingAt, true)}`
+          extraDetail: `Your booking will expire in ${now.to(
+            this.endsAt,
+            true
+          )}`
         })
       }
-    } else {
-      console.log('this.endsAt', this.endsAt)
-      // Started ${this.startingAt.to(now, true)} ago\n
-      this.setState({
-        extraDetail: `Your booking will expire in ${now.to(this.endsAt, true)}`
-      })
     }
   }
 
