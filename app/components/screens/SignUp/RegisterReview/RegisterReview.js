@@ -20,29 +20,29 @@ class RegisterReview extends Component {
     AppState.addEventListener('change', this.onAppStateChange)
   }
 
-  componentDidUpdate(prevProps) {
-    if (
-      prevProps.user &&
-      prevProps.user.status !== 'approved' &&
-      this.props.user.status === 'approved'
-    ) {
-      this.props.navigation.navigate(Home)
-    } else if (
-      prevProps.user &&
-      prevProps.user.status !== 'rejected' &&
-      this.props.user.status === 'rejected'
-    ) {
-      setTimeout(
-        () =>
+  UNSAFE_componentWillReceiveProps(nextProps) {
+    const prevProps = this.props
+
+    if (prevProps.user && nextProps.user) {
+      if (
+        prevProps.user.status !== 'approved' &&
+        nextProps.user.status === 'approved'
+      ) {
+        nextProps.navigation.navigate(Home)
+      } else if (
+        prevProps.user.status !== 'rejected' &&
+        nextProps.user.status === 'rejected'
+      ) {
+        setTimeout(() => {
           Alert.alert(
             'Account was rejected',
             'Please sign in and re-submit your documents'
-          ),
-        200
-      )
-      this.props.onSaveRejectedId(this.props.user.id)
-      this.props.onSignOut()
-      this.onResetTo(Intro)
+          )
+          this.onResetTo(Intro)
+          this.props.onSaveRejectedId(nextProps.user.id)
+          this.props.onSignOut()
+        }, 200)
+      }
     }
   }
 
