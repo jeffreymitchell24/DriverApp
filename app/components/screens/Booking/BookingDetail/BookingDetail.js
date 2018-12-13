@@ -300,7 +300,7 @@ class BookingDetail extends PureComponent {
               <View>
                 <View style={styles.row}>
                   <View style={{ flex: 1 }}>
-                    <Detail label="Car Maker" text={manufacturer.name} />
+                    <Detail label="Car Make" text={manufacturer.name} />
                   </View>
                   <View style={{ flex: 1 }}>
                     <Detail label="Model" text={model} />
@@ -415,7 +415,7 @@ class BookingDetail extends PureComponent {
                   <Text style={styles.linkButtonText}>Open help center</Text>
                 </TouchableOpacity>
               </Section>
-              <Section style={{ borderBottomWidth: 0 }}>
+              {/* <Section style={{ borderBottomWidth: 0 }}>
                 <SectionHeader title="RECEIPT" />
                 <TouchableOpacity
                   style={styles.linkButton}
@@ -425,7 +425,7 @@ class BookingDetail extends PureComponent {
                     Submit expense receipt
                   </Text>
                 </TouchableOpacity>
-              </Section>
+              </Section> */}
             </React.Fragment>
           )}
           {ride.status === 'ended' && this.renderEndedRideDetails()}

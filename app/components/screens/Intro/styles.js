@@ -18,9 +18,8 @@ export default StyleSheet.create({
   },
 
   paginationStyle: {
-    position: 'absolute',
-    top: 0,
-    alignItems: 'flex-start'
+    alignItems: 'flex-start',
+    marginTop: 10
   },
   imageContainer: {
     width: metrics.screenWidth,
@@ -40,11 +39,20 @@ export default StyleSheet.create({
     fontFamily: 'SFProDisplay-Heavy',
     fontSize: 24,
     color: colors.red,
-    marginBottom: 16
+    marginBottom: 16,
+    textAlign: 'center'
   },
   mainText: {
     fontFamily: 'SFProText-Regular',
-    fontSize: 12,
+    fontWeight: '400',
+    fontSize: 17,
+    color: colors.gray100,
+    textAlign: 'center'
+  },
+  bottomText: {
+    fontFamily: 'SFProText-Regular',
+    fontWeight: '400',
+    fontSize: 15,
     color: colors.gray100
   },
   footer: {

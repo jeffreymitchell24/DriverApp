@@ -5,11 +5,7 @@ import SplashScreen from 'react-native-splash-screen'
 import { backgrounds } from 'images'
 import { Button } from 'components/ui'
 import { requestMainPermissions } from 'helpers/permission'
-import {
-  SignIn,
-  Home,
-  RegisterReview
-} from 'navigation/routeNames'
+import { SignIn, Home, RegisterReview } from 'navigation/routeNames'
 import { StackActions, NavigationActions, SafeAreaView } from 'react-navigation'
 import Swiper from 'react-native-swiper'
 import { CONFIG } from './config'
@@ -104,11 +100,11 @@ class Intro extends Component {
             <View
               style={{
                 backgroundColor: 'rgb(222,71,71)',
-                width: height * 0.0156,
-                height: height * 0.0156,
+                width: height * 0.0063,
+                height: height * 0.0063,
                 borderRadius: 100,
-                marginLeft: 3,
-                marginRight: 3
+                marginLeft: 15,
+                marginRight: 15
               }}
             />
           }
@@ -117,12 +113,12 @@ class Intro extends Component {
           dot={
             <View
               style={{
-                backgroundColor: 'rgb(248, 226, 226)',
-                width: height * 0.0156,
-                height: height * 0.0156,
+                backgroundColor: 'rgb(rgb(88, 92, 97))',
+                width: height * 0.0063,
+                height: height * 0.0063,
                 borderRadius: 100,
-                marginLeft: 3,
-                marginRight: 3
+                marginLeft: 15,
+                marginRight: 15
               }}
             />
           }
@@ -135,18 +131,17 @@ class Intro extends Component {
         <View style={styles.footer}>
           <Button
             containerStyle={styles.startButton}
-            title="Log In"
+            title="LOGIN"
             onPress={this.handleSignInPress}
           />
-          <Text style={styles.mainText}>
-            Don’t have an account?
+          <Text style={styles.bottomText}>Don’t have an account?</Text>
+          <Text style={styles.bottomText}>
             <Text
-              style={styles.signInButtonText}
+              style={[styles.signInButtonText, { fontWeight: '700' }]}
               onPress={this.handleStartPress}
             >
               {' '}
-              Sign up
-              {' '}
+              Sign up{' '}
             </Text>
             to book TLC car rentals
           </Text>
