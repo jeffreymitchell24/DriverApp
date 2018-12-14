@@ -26,6 +26,8 @@ let androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
+  quality: 0.6,
+  maxHeight: 800,
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
@@ -38,7 +40,8 @@ let iosOptions = {
   title: 'License Photo',
   mediaType: 'photo',
   noData: true,
-  quality: 0.5,
+  quality: 0.6,
+  maxHeight: 800,
   storageOptions: {
     skipBackup: true,
     cameraRoll: true,

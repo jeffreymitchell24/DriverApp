@@ -28,6 +28,8 @@ let androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
+  quality: 0.6,
+  maxHeight: 800,
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
@@ -40,7 +42,8 @@ let iosOptions = {
   title: 'License Photo',
   mediaType: 'photo',
   noData: true,
-  quality: 0.5,
+  quality: 0.6,
+  maxHeight: 800,
   storageOptions: {
     skipBackup: true,
     cameraRoll: true,
@@ -76,7 +79,7 @@ class RideDamaged extends Component {
       ImagePicker.showImagePicker(
         Platform.OS === 'android' ? androidOptions : iosOptions,
         response => {
-          if (!response.didCancel || response.error)
+          if (!response.didCancel && !response.error)
             onSavePhoto({
               type: 'rideDamagedPhotos',
               index,
@@ -97,7 +100,11 @@ class RideDamaged extends Component {
     values,
     touched
   }) => {
-    let buttonActive = isEmpty(errors) && touched.description && this.props.photos.length === 4 && !this.props.photos.includes(undefined)
+    let buttonActive =
+      isEmpty(errors) &&
+      touched.description &&
+      this.props.photos.length === 4 &&
+      !this.props.photos.includes(undefined)
     return (
       <ScrollView
         contentContainerStyle={styles.container}
