@@ -2,7 +2,7 @@ export const CONFIG = [
   {
     image: 'preview-1',
     title: 'Car Flo puts you in control.',
-    text: "Think you're missing out the gig economy because you don't want to own or lease a car? Think again. All you need is Car Flo to start working for Uber, Lyft or any rideshare today."
+    text: "Think you're missing out on the gig economy because you don't want to own or lease a car? Think again. All you need is Car Flo to start working for Uber, Lyft or any rideshare today."
   },
   {
     image: 'preview-2',
