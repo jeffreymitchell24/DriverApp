@@ -73,6 +73,7 @@ class HomeView extends PureComponent {
       <View style={styles.container}>
         {bookings.length > 0 ? (
           <SectionList
+            contentContainerStyle={styles.sectionListContainer}
             extraData={bookings}
             keyExtractor={this.keyExtractor}
             renderItem={this.props.renderItem || this.renderItem}
