@@ -85,6 +85,8 @@ class Filters extends PureComponent {
     const { onCarCategoriesLoad } = this.props
 
     onCarCategoriesLoad()
+
+    this.setDefaultLocation()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -98,6 +100,30 @@ class Filters extends PureComponent {
         })
       }, 150)
     }
+  }
+
+  setDefaultLocation = () => {
+    const { onFilterUpdate } = this.props
+
+    navigator.geolocation.getCurrentPosition(
+      location => {
+        const choosenLocation = {
+          address: 'My location',
+          lat: location.coords.latitude,
+          lng: location.coords.longitude
+        }
+
+        onFilterUpdate('location', choosenLocation)
+      },
+      err => {
+        console.log('location error', err)
+        setTimeout(
+          () => Alert.alert('Geolocation Error', "Can't get your location"),
+          200
+        )
+      },
+      { enableHighAccuracy: false, timeout: 10000 }
+    )
   }
 
   onConfirmPress = () => {

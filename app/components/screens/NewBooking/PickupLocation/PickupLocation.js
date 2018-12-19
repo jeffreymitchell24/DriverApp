@@ -30,7 +30,6 @@ class PickupLocation extends PureComponent {
 
     navigator.geolocation.getCurrentPosition(
       location => {
-        console.log('BackgroundGeolocation', location)
         const choosenLocation = {
           address: 'My location',
           lat: location.coords.latitude,
