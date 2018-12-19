@@ -33,7 +33,7 @@ const requestMultiplePermissions = async permissions => {
   //   })
   //   return granted
   // } catch (err) {
-  //   return false
+  //   return false]
   // }
 }
 
@@ -58,7 +58,11 @@ export const requestCameraPermission = async () => {
 
 export const requestMainPermissions = async (showAlert = false) => {
   let results = {}
-  let granted = await Permissions.request('camera')
+  let granted = await Permissions.request('location')
+    .then(res => {
+      results.location = res
+      return Permissions.request('camera')
+    })
     .then(res => {
       results.camera = res
       return Permissions.request(
