@@ -85,11 +85,13 @@ class HomeView extends PureComponent {
           this.renderEmptyList()
         )}
         {!withoutNewBtn && (
-          <Button
-            containerStyle={styles.button}
-            title="NEW BOOKING"
-            onPress={onNewPress}
-          />
+          <View style={styles.footer}>
+            <Button
+              containerStyle={styles.button}
+              title="NEW BOOKING"
+              onPress={onNewPress}
+            />
+          </View>
         )}
       </View>
     )

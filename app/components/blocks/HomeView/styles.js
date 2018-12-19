@@ -10,7 +10,8 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
   sectionListContainer: {
-    padding: metrics.contentMarginSmall
+    paddingTop: metrics.contentMarginSmall,
+    paddingHorizontal: metrics.contentMarginSmall
   },
   emptyListContainer: {
     flex: 1,
@@ -31,7 +32,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center'
   },
-
+  footer: {
+    paddingHorizontal: metrics.contentMarginSmall
+  },
   sectionTitle: {
     fontSize: 13,
     fontFamily: 'SFProText-Regular',

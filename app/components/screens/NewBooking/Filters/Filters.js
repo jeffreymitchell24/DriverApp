@@ -322,20 +322,72 @@ class Filters extends PureComponent {
         : now.startOf('hour')
 
     return (
-      <ScrollView contentContainerStyle={styles.container}>
-        <DatePicker
-          ExpandedHeader={() => (
+      <ScrollView
+        contentContainerStyle={styles.container}
+        style={{
+          flex: 1
+        }}
+      >
+        <View>
+          <DatePicker
+            ExpandedHeader={() => (
+              <View
+                style={[
+                  styles.filterRow,
+                  {
+                    borderBottomWidth: 0,
+                    borderTopWidth: 0,
+                    justifyContent: 'flex-end'
+                  }
+                ]}
+              >
+                <TouchableOpacity onPress={this.handleNext7DaysBtnPress}>
+                  <Text
+                    style={{
+                      fontSize: 17,
+                      fontFamily: 'Helvetica',
+                      color: '#F03E3E'
+                    }}
+                  >
+                    Next 7 days
+                  </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+            formatter="dddd, DD MMM hh:mmA"
+            headerValue={isNext7Days ? 'Next 7 days' : null}
+            isDatePickerShow={isDatePickerShow}
+            startDate={minDate.format()}
+            style={{ marginTop: 20 }}
+            type="Start"
+            value={startDate}
+            onChange={this.handleDateChange}
+          />
+          <DatePicker
+            disabled={isNext7Days}
+            formatter="dddd, DD MMM hh:mmA"
+            headerValue={isNext7Days ? 'Next 7 days' : null}
+            isDatePickerShow={isDatePickerShow}
+            startDate={moment(startDate)
+              .add({ hours: 1 })
+              .format()}
+            type="End"
+            value={endDate}
+            onChange={this.handleDateChange}
+          />
+          <TouchableWithoutFeedback
+            onPress={() => navigation.navigate(VehicleOptions)}
+          >
             <View
-              style={[
-                styles.filterRow,
-                {
-                  borderBottomWidth: 0,
-                  borderTopWidth: 0,
-                  justifyContent: 'flex-end'
-                }
-              ]}
+              style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
             >
-              <TouchableOpacity onPress={this.handleNext7DaysBtnPress}>
+              <Text style={[styles.fieldName]}>Vehicle options</Text>
+              <View
+                style={{
+                  flexDirection: 'row',
+                  alignItems: 'center'
+                }}
+              >
                 <Text
                   style={{
                     fontSize: 17,
@@ -343,139 +395,94 @@ class Filters extends PureComponent {
                     color: '#F03E3E'
                   }}
                 >
-                  Next 7 days
+                  {this.getVehicleOptionsString()}
                 </Text>
-              </TouchableOpacity>
+                <Image
+                  source={icons.arowRightGray}
+                  style={{ width: 8, height: 13, marginLeft: 10 }}
+                />
+              </View>
             </View>
-          )}
-          formatter="dddd, DD MMM hh:mmA"
-          headerValue={isNext7Days ? 'Next 7 days' : null}
-          isDatePickerShow={isDatePickerShow}
-          startDate={minDate.format()}
-          style={{ marginTop: 20 }}
-          type="Start"
-          value={startDate}
-          onChange={this.handleDateChange}
-        />
-        <DatePicker
-          disabled={isNext7Days}
-          formatter="dddd, DD MMM hh:mmA"
-          headerValue={isNext7Days ? 'Next 7 days' : null}
-          isDatePickerShow={isDatePickerShow}
-          startDate={moment(startDate)
-            .add({ hours: 1 })
-            .format()}
-          type="End"
-          value={endDate}
-          onChange={this.handleDateChange}
-        />
-        <TouchableWithoutFeedback
-          onPress={() => navigation.navigate(VehicleOptions)}
-        >
-          <View
-            style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
-          >
-            <Text style={[styles.fieldName]}>Vehicle options</Text>
-            <View
-              style={{
-                flexDirection: 'row',
-                alignItems: 'center'
+          </TouchableWithoutFeedback>
+          <View style={styles.filterRow}>
+            <TextInput
+              placeholder="Pickup location"
+              style={{ flex: 1, fontSize: 18, fontFamily: 'Helvetica' }}
+              value={location.address || ''}
+              onFocus={() => {
+                Keyboard.dismiss()
+
+                this.props.navigation.navigate(PickupLocation)
               }}
-            >
-              <Text
-                style={{
-                  fontSize: 17,
-                  fontFamily: 'Helvetica',
-                  color: '#F03E3E'
-                }}
-              >
-                {this.getVehicleOptionsString()}
-              </Text>
+            />
+            <TouchableWithoutFeedback onPress={this.handleClearLocation}>
               <Image
-                source={icons.arowRightGray}
-                style={{ width: 8, height: 13, marginLeft: 10 }}
+                source={icons.cancelGray}
+                style={{ width: 12, height: 12, marginLeft: 10 }}
+              />
+            </TouchableWithoutFeedback>
+          </View>
+          <View style={[styles.filterRow, { flexDirection: 'column' }]}>
+            <View
+              style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
+            >
+              <Text style={[styles.fieldName]}>Range from location</Text>
+              <Text style={styles.fieldValue}>{RANGES[range].title}</Text>
+            </View>
+            <Slider
+              maximumTrackTintColor="#A4AAB3"
+              maximumValue={5}
+              minimumTrackTintColor="#F03E3E"
+              minimumValue={0}
+              step={1}
+              style={{ width: '100%' }}
+              thumbStyle={{
+                backgroundColor: '#fff',
+                height: 28,
+                width: 28,
+                borderRadius: 100,
+                shadowOffset: { width: 3, height: 3 },
+                shadowColor: 'black',
+                shadowOpacity: 0.5,
+                borderColor: '#F1F3F5',
+                borderWidth: 1
+              }}
+              thumbTintColor="#000"
+              trackStyle={{
+                height: 2
+              }}
+              value={range}
+              onValueChange={value => onFilterUpdate('range', value)}
+            />
+          </View>
+          <View style={styles.filterRow}>
+            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+              <Image
+                source={icons.recurring}
+                style={styles.recurringImageContainer}
+              />
+              <Text
+                numberOfLines={2}
+                style={[styles.fieldName, { width: '70%', marginLeft: 10 }]}
+              >
+                Show only cars avaliable for recurring bookin
+              </Text>
+            </View>
+            <View>
+              <Switch
+                backgroundActive="#F03E3E"
+                backgroundInactive={'#DEE2E6'}
+                barHeight={30}
+                circleBorderWidth={2}
+                circleSize={27}
+                innerCircleStyle={{
+                  borderColor: isRecurring ? '#F03E3E' : '#DEE2E6'
+                }}
+                switchWidthMultiplier={2}
+                value={isRecurring}
+                onValueChange={this.handleToogleRecurringSwitch}
               />
             </View>
-          </View>
-        </TouchableWithoutFeedback>
-        <View style={styles.filterRow}>
-          <TextInput
-            placeholder="Pickup location"
-            style={{ flex: 1, fontSize: 18, fontFamily: 'Helvetica' }}
-            value={location.address || ''}
-            onFocus={() => {
-              Keyboard.dismiss()
-
-              this.props.navigation.navigate(PickupLocation)
-            }}
-          />
-          <TouchableWithoutFeedback onPress={this.handleClearLocation}>
-            <Image
-              source={icons.cancelGray}
-              style={{ width: 12, height: 12, marginLeft: 10 }}
-            />
-          </TouchableWithoutFeedback>
-        </View>
-        <View style={[styles.filterRow, { flexDirection: 'column' }]}>
-          <View
-            style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
-          >
-            <Text style={[styles.fieldName]}>Range from location</Text>
-            <Text style={styles.fieldValue}>{RANGES[range].title}</Text>
-          </View>
-          <Slider
-            maximumTrackTintColor="#A4AAB3"
-            maximumValue={5}
-            minimumTrackTintColor="#F03E3E"
-            minimumValue={0}
-            step={1}
-            style={{ width: '100%' }}
-            thumbStyle={{
-              backgroundColor: '#fff',
-              height: 28,
-              width: 28,
-              borderRadius: 100,
-              shadowOffset: { width: 3, height: 3 },
-              shadowColor: 'black',
-              shadowOpacity: 0.5,
-              borderColor: '#F1F3F5',
-              borderWidth: 1
-            }}
-            thumbTintColor="#000"
-            trackStyle={{
-              height: 2
-            }}
-            value={range}
-            onValueChange={value => onFilterUpdate('range', value)}
-          />
-        </View>
-        <View style={styles.filterRow}>
-          <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-            <Image
-              source={icons.recurring}
-              style={styles.recurringImageContainer}
-            />
-            <Text
-              numberOfLines={2}
-              style={[styles.fieldName, { width: '70%', marginLeft: 10 }]}
-            >
-              Show only cars avaliable for recurring bookin
-            </Text>
-          </View>
-          <View>
-            <Switch
-              backgroundActive="#F03E3E"
-              backgroundInactive={'#DEE2E6'}
-              barHeight={30}
-              circleBorderWidth={2}
-              circleSize={27}
-              innerCircleStyle={{
-                borderColor: isRecurring ? '#F03E3E' : '#DEE2E6'
-              }}
-              switchWidthMultiplier={2}
-              value={isRecurring}
-              onValueChange={this.handleToogleRecurringSwitch}
-            />
           </View>
         </View>
         <View style={{ marginTop: 15 }}>

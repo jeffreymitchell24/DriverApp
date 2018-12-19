@@ -1,11 +1,13 @@
 import { StyleSheet } from 'react-native'
-import { colors } from 'theme'
+import { colors, metrics } from 'theme'
 
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingHorizontal: 10,
-    backgroundColor: '#fff'
+    paddingHorizontal: metrics.contentMarginSmall,
+    paddingBottom: metrics.contentMargin,
+    backgroundColor: '#fff',
+    justifyContent: 'space-between'
   },
   filterRow: {
     width: '100%',
