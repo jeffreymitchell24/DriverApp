@@ -5,10 +5,9 @@ import * as Yup from 'yup'
 import isEmpty from 'lodash/isEmpty'
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
-import { HelpCamera, HelpCenter } from 'navigation/routeNames'
-import { Photo, Button, SectionHeader, HelpCenterSection } from 'components/ui'
+import { HelpCamera, HelpCenter, Home } from 'navigation/routeNames'
+import { Photo, Button, SectionHeader, HelpCenterSection, Spinner } from 'components/ui'
 import { Formik } from 'formik'
-import { Spinner } from 'components/ui'
 import { colors } from 'theme'
 import ImagePicker from 'react-native-image-picker'
 import styles from './styles'
@@ -54,15 +53,25 @@ class RideMalfunction extends Component {
   inputRefs = {}
 
   componentDidUpdate(prevProps) {
-    const { error, requestPending, navigation } = this.props
+    const { error, requestPending } = this.props
     if (prevProps.requestPending && !requestPending) {
-      if (error) setTimeout(() => Alert.alert('Error', error), 200)
-      else navigation.navigate(HelpCenter)
+      if (error) {
+        setTimeout(() => Alert.alert('Error', error), 200)
+      } else {
+        setTimeout(() => Alert.alert('', 'Your report has been submitted',
+          [{ text: 'OK', onPress: this.onConfirm }], { cancelable: false }), 200)
+      }
     }
   }
   componentWillUnmount() {
     this.props.onResetPhotos('rideMalfunctionPhotos')
   }
+
+  onConfirm = () => {
+    const { navigation } = this.props
+    navigation.navigate(Home)
+  }
+
   onSubmit = values => {
     const { plate, description } = values
     const { onSubmitReport, ride = {}, photos } = this.props

@@ -1,6 +1,7 @@
 import createSagaMiddleware from 'redux-saga'
 import { createStore, applyMiddleware, compose } from 'redux'
 import thunk from 'redux-thunk'
+import { createLogger } from 'redux-logger'
 import { persistStore, persistReducer } from 'redux-persist'
 import { composeWithDevTools } from 'redux-devtools-extension'
 // import createSensitiveStorage from 'redux-persist-sensitive-storage'
@@ -12,6 +13,18 @@ export default (rootReducer, rootSaga) => {
   //   keychainService: 'CarflowKeychain',
   //   sharedPreferencesName: 'CarflowPrefs'
   // })
+
+  if (process.env.NODE_ENV === 'development') {
+    global.XMLHttpRequest = global.originalXMLHttpRequest
+      ? global.originalXMLHttpRequest
+      : global.XMLHttpRequest
+    global.FormData = global.originalFormData
+      ? global.originalFormData
+      : global.FormData
+
+    middlewares.push(createLogger())
+  }
+
   const persistConfig = {
     key: 'root',
     storage,
