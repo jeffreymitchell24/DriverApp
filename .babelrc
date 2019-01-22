@@ -20,7 +20,8 @@
           "images": "./app/images",
           "navigation": "./app/navigation",
           "store": "./app/store",
-          "theme": "./app/theme"
+          "theme": "./app/theme",
+          "utils": "./app/utils"
         },
         "extensions": [
           ".ios.js",
