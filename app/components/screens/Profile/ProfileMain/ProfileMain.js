@@ -14,7 +14,6 @@ import {
   NavigationActions,
   NavigationEvents
 } from 'react-navigation'
-import { Spinner } from 'components/ui'
 import VersionNumber from 'react-native-version-number'
 import PropTypes from 'prop-types'
 import ImagePicker from 'react-native-image-picker'
@@ -33,9 +32,11 @@ import {
   Section,
   SectionHeader,
   SectionContent,
-  NavButton
+  NavButton,
+  Spinner
 } from 'components/ui'
 import { colors } from 'theme'
+import { isIOS } from 'utils'
 import styles from './styles'
 
 let androidOptions = {
@@ -210,7 +211,7 @@ class ProfileMain extends Component {
           <Section>
             <SectionHeader title="ABOUT US" />
             <SectionContent style={styles.socialList}>
-              <ListItem icon="star" text="Rate us on the App Store" />
+              <ListItem icon="star" text={`Rate us on ${isIOS ? 'App Store' : 'Play Store'}`} />
               <ListItem
                 icon="instagram"
                 text="Follow us on Instagram"
