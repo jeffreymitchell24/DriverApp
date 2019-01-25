@@ -1740,7 +1740,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-carflow/Pods-carflow-resources.sh",
+				"${SRCROOT}/Pods/Target Support Files/Pods-carflow/Pods-carflow-resources.sh",
 				"${PODS_ROOT}/GoogleMaps/Maps/Frameworks/GoogleMaps.framework/Resources/GoogleMaps.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
@@ -1749,7 +1749,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-carflow/Pods-carflow-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-carflow/Pods-carflow-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		676026977A674D6A3B9B39F7 /* [CP] Check Pods Manifest.lock */ = {

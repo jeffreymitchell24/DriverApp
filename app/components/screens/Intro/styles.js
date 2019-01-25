@@ -7,14 +7,14 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: colors.lightPink,
-    padding: metrics.contentMargin,
     paddingBottom: 32,
     paddingTop: metrics.contentMargin + extraPadding
   },
 
   slide: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: metrics.contentMargin
   },
 
   paginationStyle: {
@@ -56,7 +56,8 @@ export default StyleSheet.create({
     color: colors.gray100
   },
   footer: {
-    alignItems: 'center'
+    alignItems: 'center',
+    paddingHorizontal: metrics.contentMargin
   },
 
   startButton: {

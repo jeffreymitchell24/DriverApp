@@ -78,7 +78,7 @@ class Intro extends Component {
         <View key={index} style={styles.slide}>
           <View style={styles.imageContainer}>
             <Image
-              resizeMode="contain"
+              resizeMode={'contain'}
               source={backgrounds[image]}
               style={styles.previewImage}
             />
@@ -131,19 +131,18 @@ class Intro extends Component {
         <View style={styles.footer}>
           <Button
             containerStyle={styles.startButton}
-            title="LOGIN"
+            title={'LOGIN'}
             onPress={this.handleSignInPress}
           />
-          <Text style={styles.bottomText}>Don’t have an account?</Text>
+          <Text style={styles.bottomText}>{'Don’t have an account?'}</Text>
           <Text style={styles.bottomText}>
             <Text
               style={[styles.signInButtonText, { fontWeight: '700' }]}
               onPress={this.handleStartPress}
             >
-              {' '}
-              Sign up{' '}
+              {' Sign up '}
             </Text>
-            to book TLC car rentals
+            {'to book TLC car rentals'}
           </Text>
         </View>
       </SafeAreaView>
