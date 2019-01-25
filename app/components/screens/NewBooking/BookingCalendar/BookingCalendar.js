@@ -4,7 +4,9 @@ import {
   TouchableOpacity,
   Text,
   Animated,
-  ScrollView
+  ScrollView,
+  StyleSheet,
+  Platform
 } from 'react-native'
 import isEmpty from 'lodash/isEmpty'
 import Icon from 'react-native-vector-icons/Ionicons'
@@ -13,8 +15,7 @@ import moment from 'moment-timezone'
 import { Calendar } from 'react-native-calendars'
 import { NewBookingDetails } from 'navigation/routeNames'
 import { NavButton, Button } from 'components/ui'
-import { colors } from 'theme'
-import styles, { pickerHeight } from './styles'
+import { colors, metrics } from 'theme'
 import _ from 'lodash'
 
 class PickerItem extends PureComponent {
@@ -31,14 +32,19 @@ class PickerItem extends PureComponent {
     let backgroundColor = colors.gray50
     let textColor = colors.gray300
     let Wrapper = TouchableOpacity
-    if (slotType === 'selected') {
-      backgroundColor = colors.red
-      textColor = colors.white
-    } else if (slotType === 'disabled') {
-      backgroundColor = colors.gray75
-      textColor = colors.gray50
-      Wrapper = View
+
+    switch (slotType) {
+      case 'selected':
+        backgroundColor = colors.red
+        textColor = colors.white
+        break
+      case 'disabled':
+        backgroundColor = colors.gray75
+        textColor = colors.gray50
+        Wrapper = View
+        break
     }
+
     return (
       <Wrapper
         style={[styles.pickerItem, { backgroundColor }]}
@@ -60,9 +66,9 @@ PickerItem.propTypes = {
 
 const Arrow = ({ direction }) => {
   if (direction === 'left') {
-    return <Icon color={colors.red} name="ios-arrow-back" size={22} />
+    return <Icon color={colors.red} name={'ios-arrow-back'} size={22} />
   }
-  return <Icon color={colors.red} name="ios-arrow-forward" size={22} />
+  return <Icon color={colors.red} name={'ios-arrow-forward'} size={22} />
 }
 
 Arrow.propTypes = {
@@ -74,7 +80,7 @@ class BookingCalendar extends Component {
     return {
       headerLeft: (
         <NavButton
-          icon="cancel"
+          icon={'cancel'}
           imageStyle={{ height: 12, width: 12 }}
           onPress={() => navigation.goBack()}
         />
@@ -186,20 +192,24 @@ class BookingCalendar extends Component {
     const {
       selectedCar: { calendar }
     } = this.props
+
     for (let i = selectedHour + 1; i < 24; i++) {
       if (startDateHourList[i].slotType === 'disabled') {
         return false
       }
     }
+
     const nextDayHours =
       calendar[
         moment(selectedDate.dateString)
           .add({ days: 1 })
           .format('YYYY-MM-DD')
       ]
+
     if (nextDayHours[0] !== 0) {
       return false
     }
+
     return true
   }
 
@@ -212,6 +222,7 @@ class BookingCalendar extends Component {
     let availableHours = []
     let filteredHours
     const startHour = parseInt(moment(this.minDate).format('H'), 10)
+
     if (selectedDate.dateString === moment(this.minDate).format('YYYY-MM-DD')) {
       filteredHours = this.filterHours(selectedDayHours, startHour)
     } else {
@@ -219,6 +230,7 @@ class BookingCalendar extends Component {
     }
 
     const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
+
     console.log(selectedDayHours, selectedDate.dateString, filteredHours)
 
     for (let i = 0, j = 0; i < 24; i++) {
@@ -243,13 +255,11 @@ class BookingCalendar extends Component {
           }
         }
       } else {
-        if (j < selectedDayHours.length + 1) {
-          if (selectedDayHours[j] === i) {
-            newItem.slotType = 'default'
-            newItem.onPress = () => this.onTimeSelect(i)
+        if (j < selectedDayHours.length + 1 && selectedDayHours[j] === i) {
+          newItem.slotType = 'default'
+          newItem.onPress = () => this.onTimeSelect(i)
 
-            j++
-          }
+          j++
         }
       }
 
@@ -257,12 +267,14 @@ class BookingCalendar extends Component {
     }
 
     console.log('availableHours', availableHours)
+
     if (!isEmpty(calendar[selectedDate.dateString])) {
       this.setState({
         selectedDate,
         selectedTime: -1,
         hourList: availableHours
       })
+
       this.isHiddenPicker && this._toggleTimePicker()
     }
   }
@@ -271,6 +283,7 @@ class BookingCalendar extends Component {
     const {
       selectedCar: { calendar }
     } = this.props
+
     const selectedDayHours = calendar[selectedDate.dateString]
     let availableHours = []
     const startHour = parseInt(moment(this.minDate).format('H'), 10)
@@ -303,13 +316,11 @@ class BookingCalendar extends Component {
           }
         }
       } else {
-        if (j < selectedDayHours.length + 1) {
-          if (selectedDayHours[j] === i) {
-            newItem.slotType = 'default'
-            newItem.onPress = () => this.onTimeSelect(i)
+        if (j < selectedDayHours.length + 1 && selectedDayHours[j] === i) {
+          newItem.slotType = 'default'
+          newItem.onPress = () => this.onTimeSelect(i)
 
-            j++
-          }
+          j++
         }
       }
 
@@ -317,6 +328,7 @@ class BookingCalendar extends Component {
     }
 
     console.log('availableHours', availableHours)
+
     if (!isEmpty(calendar[selectedDate.dateString])) {
       return availableHours
     }
@@ -339,21 +351,21 @@ class BookingCalendar extends Component {
     let markedDates = {}
 
     for (var key in calendar) {
-      if (calendar.hasOwnProperty(key)) {
-        if (isEmpty(calendar[key])) {
-          markedDates[key] = {
-            disabled: true
-          }
+      if (calendar.hasOwnProperty(key) && isEmpty(calendar[key])) {
+        markedDates[key] = {
+          disabled: true
         }
       }
     }
 
     let startDate = _.first(Object.keys(calendar))
     let endDate = _.last(Object.keys(calendar))
+
     if (this.bookDateType === 'end') {
       startDate = moment(this.minDate).format('YYYY-MM-DD')
       const tomorrow = moment(this.minDate).add({ days: 1 })
       const alailableHoursPrevDay = this.prevDateHourList(selectedDate)
+
       if (
         this.isTommorowAvailable(
           selectedDate,
@@ -400,41 +412,49 @@ class BookingCalendar extends Component {
           }}
           onDayPress={this.onDateSelect}
         />
-        <Animated.View
-          style={[
-            styles.timePickers,
-            { transform: [{ translateY: this.state.bounceValue }] }
-          ]}
+
+        <View
+          style={{
+            flex: 1
+          }}
         >
-          <View style={styles.timePickerRow}>
-            <View style={styles.timePickerContainer}>
-              <Text style={styles.timePickerLabel}>
-                {this.bookDateType === 'end' ? 'DROPOFF' : 'PICKUP'}
-              </Text>
-              <ScrollView
-                showsVerticalScrollIndicator={false}
-                style={styles.timePicker}
-              >
-                {(hourList || []).map((timeSlot, i) => {
-                  return (
-                    <PickerItem
-                      {...timeSlot}
-                      slotType={
-                        i === selectedTime ? 'selected' : timeSlot.slotType
-                      }
-                    />
-                  )
-                })}
-              </ScrollView>
+          <Animated.View
+            style={[
+              styles.timePickers,
+              { transform: [{ translateY: this.state.bounceValue }] }
+            ]}
+          >
+            <View style={styles.timePickerRow}>
+              <View style={styles.timePickerContainer}>
+                <Text style={styles.timePickerLabel}>
+                  {this.bookDateType === 'end' ? 'DROPOFF' : 'PICKUP'}
+                </Text>
+
+                <ScrollView
+                  showsVerticalScrollIndicator={false}
+                  style={styles.timePicker}
+                >
+                  {(hourList || []).map((timeSlot, i) => {
+                    return (
+                      <PickerItem
+                        {...timeSlot}
+                        slotType={
+                          i === selectedTime ? 'selected' : timeSlot.slotType
+                        }
+                      />
+                    )
+                  })}
+                </ScrollView>
+              </View>
             </View>
-          </View>
-          <Button
-            containerStyle={styles.button}
-            disabled={!isButtonActive}
-            title="CONFIRM"
-            onPress={this.onConfirmPress}
-          />
-        </Animated.View>
+            <Button
+              containerStyle={styles.button}
+              disabled={!isButtonActive}
+              title="CONFIRM"
+              onPress={this.onConfirmPress}
+            />
+          </Animated.View>
+        </View>
       </View>
     )
   }
@@ -447,3 +467,67 @@ BookingCalendar.propTypes = {
 }
 
 export default BookingCalendar
+
+const extraPadding = Platform.OS === 'ios' ? 70 : 0
+export const pickerHeight = (metrics.screenHeight - extraPadding) / 2.1
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: colors.white,
+    paddingHorizontal: metrics.contentMarginSmall,
+    paddingTop: 5
+  },
+
+  calendar: {},
+
+  timePickers: {
+    borderTopColor: colors.gray50,
+    borderTopWidth: 2,
+    paddingBottom: metrics.contentMarginSmall,
+    height: '100%',
+    alignSelf: 'stretch',
+    position: 'absolute',
+    bottom: 0,
+    left: metrics.contentMarginSmall,
+    right: metrics.contentMarginSmall
+  },
+  timePickerRow: {
+    flex: 1,
+    flexDirection: 'row'
+  },
+  timePickerContainer: {
+    // alignItems: 'center',
+    flex: 1
+  },
+  timePickerLabel: {
+    // backgroundColor: colors.red,
+    paddingVertical: 8,
+    textAlign: 'center',
+    fontSize: metrics.fontSizeBig,
+    color: colors.gray200,
+    fontFamily: 'SFProText-Regular'
+  },
+
+  timePicker: {
+    flex: 1
+  },
+
+  pickerItem: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: colors.red,
+    borderRadius: 5,
+    marginBottom: 4,
+    paddingVertical: 5
+  },
+
+  pickerItemText: {
+    fontSize: metrics.fontSizeBig,
+    fontFamily: 'SFProText-Regular'
+  },
+
+  button: {
+    marginTop: 13
+  }
+})
