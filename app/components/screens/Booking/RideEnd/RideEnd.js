@@ -132,13 +132,17 @@ class RideEnd extends Component {
       const { onPhotoSave } = this.props
       // onSelectPhoto({ type, index })
 
+      const getResponseFunction = (index1, type1) => response => {
+        console.log(response)
+
+        if (!response.didCancel || response.error) {
+          onPhotoSave({ type1, index1, photoUri: response.uri })
+        }
+      }
+
       ImagePicker.launchCamera(
         Platform.OS === 'android' ? androidOptions : iosOptions,
-        response => {
-          console.log(response)
-          if (!response.didCancel || response.error)
-            onPhotoSave({ type, index, photoUri: response.uri })
-        }
+        getResponseFunction(index, type)
       )
 
       // navigation.navigate(ReceiptCamera)
