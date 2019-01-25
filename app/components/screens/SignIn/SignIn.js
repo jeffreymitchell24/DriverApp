@@ -121,13 +121,13 @@ class SignIn extends Component {
     touched
   }) => {
     const { error, isSigninPending } = this.props
-    let buttonDisabled = true
-    if (isEmpty(errors) && touched.email) buttonDisabled = false
+    const buttonDisabled = !(isEmpty(errors) && touched.email)
+
     return (
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.formContainer}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps={'always'}
           ref={this.setListRef}
           style={{}}
         >
@@ -135,10 +135,10 @@ class SignIn extends Component {
             <TextInputView
               blurOnSubmit={false}
               error={touched.email && errors.email}
-              keyboardType="email-address"
-              label="EMAIL"
-              name="email"
-              placeholder=""
+              keyboardType={'email-address'}
+              label={'EMAIL'}
+              name={'email'}
+              placeholder={''}
               returnKeyType={'next'}
               value={values.email.trim()}
               onBlur={() => setFieldTouched('email')}
@@ -150,9 +150,9 @@ class SignIn extends Component {
               inputRef={input => {
                 this.inputRefs['password'] = input
               }}
-              label="PASSWORD"
-              name="password"
-              placeholder=""
+              label={'PASSWORD'}
+              name={'password'}
+              placeholder={''}
               secureTextEntry
               value={values.password}
               onBlur={() => setFieldTouched('password')}
@@ -168,24 +168,24 @@ class SignIn extends Component {
               style={styles.resetButton}
               onPress={this.handleResetPassPress}
             >
-              Forgot password?
+              {'Forgot password?'}
             </Text>
           </View>
           <View style={styles.footer}>
             <Button
               containerStyle={styles.button}
               disabled={buttonDisabled}
-              title="SIGN IN"
+              title={'SIGN IN'}
               onPress={handleSubmit}
             />
             <Text style={styles.mainText}>
-              Don’t have an account, yet?
+              {'Don’t have an account, yet?'}
               <Text>{'\t'}</Text>
               <Text
                 style={styles.registerButtonText}
                 onPress={this.handleRegisterPress}
               >
-                Register
+                {'Register'}
               </Text>
             </Text>
           </View>
@@ -193,6 +193,7 @@ class SignIn extends Component {
       </View>
     )
   }
+
   render() {
     return (
       <View style={{ flex: 1 }}>
