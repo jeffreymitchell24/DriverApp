@@ -25,28 +25,32 @@ const handlers = {
       selectedPhoto: payload
     }
   },
+
   [SAVE_RIDE_PHOTO]: (state, { payload }) => {
     const { type: photoType, index, photoUri } = payload
+
     if (photoType === 'receiptPhoto') {
       return {
         receiptPhoto: photoUri,
         selectedPhoto: null
       }
     }
-    let updatedPhotos = []
-    updatedPhotos = state[photoType].map((photo, i) => {
+
+    let updatedPhotos = (state[photoType] || []).map((photo, i) => {
       return index === i ? photoUri : photo
     })
 
     return {
       ...state,
-      [photoType]: updatedPhotos,
+      [photoType]: updatedPhotos || [],
       selectedPhoto: null
     }
   },
+
   [CLEAR_RECEIPT_PHOTO]: (state, { payload }) => {
     return initialState
   },
+
   [SUBMIT_RECEIPT.REQUEST]: (state, { payload }) => {
     return {
       ...state,
@@ -54,6 +58,7 @@ const handlers = {
       receiptSubmitError: null
     }
   },
+
   [SUBMIT_RECEIPT.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
@@ -61,6 +66,7 @@ const handlers = {
       receiptSubmitPending: false
     }
   },
+
   [SUBMIT_RECEIPT.FAILURE]: (state, { payload }) => {
     return {
       ...state,

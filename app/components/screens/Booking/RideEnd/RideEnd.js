@@ -76,9 +76,13 @@ class RideEnd extends Component {
 
   componentDidUpdate(prevProps) {
     const { error, requestPending, navigation } = this.props
+
     if (prevProps.requestPending && !requestPending) {
-      if (error) setTimeout(() => Alert.alert('Error', error), 200)
-      else navigation.navigate(BookingDetail)
+      if (error) {
+        setTimeout(() => Alert.alert('Error', error), 200)
+      } else {
+        navigation.navigate(BookingDetail)
+      }
     }
   }
 
@@ -109,9 +113,10 @@ class RideEnd extends Component {
       onUnlockRide
     } = this.props
     const { notes, isEndRide } = this.state
-    console.log(gasTankPhotos, carPhotos, notes)
 
+    console.log(gasTankPhotos, carPhotos, notes)
     console.log('onConfirmPress', isEndRide)
+
     if (isEndRide) {
       this.props.onEndRide({
         carId: ride.id,
@@ -122,21 +127,27 @@ class RideEnd extends Component {
         carId: ride.id,
         data: { carPhotos, gasTankPhotos, notes, mileagePhotos }
       })
+
       this.props.navigation.goBack()
     }
   }
 
   onPhotoPress = async (type, index) => {
     let granted = await requestMainPermissions(true)
+
     if (granted) {
       const { onPhotoSave } = this.props
       // onSelectPhoto({ type, index })
 
-      const getResponseFunction = (index1, type1) => response => {
+      const getResponseFunction = (indexCopy, typeCopy) => response => {
         console.log(response)
 
         if (!response.didCancel || response.error) {
-          onPhotoSave({ type1, index1, photoUri: response.uri })
+          onPhotoSave({
+            type: typeCopy,
+            index: indexCopy,
+            photoUri: response.uri
+          })
         }
       }
 
@@ -174,32 +185,40 @@ class RideEnd extends Component {
           <Section>
             <SectionHeader
               style={styles.sectionHeader}
-              title="Car is not damaged"
+              title={'Car is not damaged'}
             />
+
             <SectionContent style={styles.photoList}>
               <View style={styles.photoBlock}>
-                <Text style={styles.photoLabel}>Front</Text>
+                <Text style={styles.photoLabel}>{'Front'}</Text>
+
                 <Photo
                   imageUri={carPhotos[0]}
                   onPress={() => this.onPhotoPress('carPhotos', 0)}
                 />
               </View>
+
               <View style={styles.photoBlock}>
-                <Text style={styles.photoLabel}>Back</Text>
+                <Text style={styles.photoLabel}>{'Back'}</Text>
+
                 <Photo
                   imageUri={carPhotos[1]}
                   onPress={() => this.onPhotoPress('carPhotos', 1)}
                 />
               </View>
+
               <View style={styles.photoBlock}>
-                <Text style={styles.photoLabel}>Right side</Text>
+                <Text style={styles.photoLabel}>{'Right side'}</Text>
+
                 <Photo
                   imageUri={carPhotos[2]}
                   onPress={() => this.onPhotoPress('carPhotos', 2)}
                 />
               </View>
+
               <View style={styles.photoBlock}>
-                <Text style={styles.photoLabel}>Left side</Text>
+                <Text style={styles.photoLabel}>{'Left side'}</Text>
+
                 <Photo
                   imageUri={carPhotos[3]}
                   onPress={() => this.onPhotoPress('carPhotos', 3)}
@@ -207,14 +226,17 @@ class RideEnd extends Component {
               </View>
             </SectionContent>
           </Section>
+
           <Section>
             <SectionHeader
               style={styles.sectionHeader}
-              title="Gas tank is full"
+              title={'Gas tank is full'}
             />
+
             <SectionContent>
               <View style={styles.photoBlock}>
-                <Text style={styles.photoLabel}>Gas tank indicator</Text>
+                <Text style={styles.photoLabel}>{'Gas tank indicator'}</Text>
+
                 <Photo
                   imageUri={gasTankPhotos[0]}
                   onPress={() => this.onPhotoPress('gasTankPhotos', 0)}
@@ -222,11 +244,14 @@ class RideEnd extends Component {
               </View>
             </SectionContent>
           </Section>
+
           <Section>
-            <SectionHeader style={styles.sectionHeader} title="Mileage" />
+            <SectionHeader style={styles.sectionHeader} title={'Mileage'} />
+
             <SectionContent>
               <View style={styles.photoBlock}>
-                <Text style={styles.photoLabel}>Mileage indicator</Text>
+                <Text style={styles.photoLabel}>{'Mileage indicator'}</Text>
+
                 <Photo
                   imageUri={mileagePhotos[0]}
                   onPress={() => this.onPhotoPress('mileagePhotos', 0)}
@@ -234,41 +259,47 @@ class RideEnd extends Component {
               </View>
             </SectionContent>
           </Section>
+
           <View style={{ marginTop: 16 }}>
             {this.state.showPlusButton ? (
               <TouchableOpacity
                 hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                 onPress={this.toggleNotes}
               >
-                <Text style={styles.additionalButtonText}>+ Additional</Text>
+                <Text style={styles.additionalButtonText}>
+                  {'+ Additional'}
+                </Text>
               </TouchableOpacity>
             ) : (
               <View style={[styles.additionalInputContainer]}>
                 <TextInputView
                   containerStyle={{ marginBottom: 0 }}
-                  keyboardType="default"
-                  label="Notes"
-                  name="notes"
-                  placeholder="Add notes"
+                  keyboardType={'default'}
+                  label={'Notes'}
+                  name={'notes'}
+                  placeholder={'Add notes'}
                   value={this.state.notes}
                   onChangeText={this.onEditNotes}
                 />
+
                 <TouchableOpacity
                   hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
                   style={styles.closeButton}
                   onPress={this.toggleNotes}
                 >
-                  <Text style={styles.closeButtonText}>Close</Text>
+                  <Text style={styles.closeButtonText}>{'Close'}</Text>
                 </TouchableOpacity>
               </View>
             )}
           </View>
         </View>
+
         <Button
           disabled={!buttonActive}
-          title="CONFIRM"
+          title={'CONFIRM'}
           onPress={this.onConfirmPress}
         />
+
         <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )

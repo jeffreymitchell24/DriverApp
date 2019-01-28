@@ -108,6 +108,7 @@ class NewBookingDetails extends PureComponent {
 
   onStartDatePress = () => {
     this.setState({ endDate: null })
+
     this.props.navigation.navigate(BookingCalendar, {
       bookDateType: 'start',
       bookedHours: this.props.car.booked
@@ -115,9 +116,9 @@ class NewBookingDetails extends PureComponent {
   }
 
   onEndDatePress = () => {
-    if (!this.props.startDate)
+    if (!this.props.startDate) {
       setTimeout(() => Alert.alert('', 'Select start date first'), 200)
-    else {
+    } else {
       this.props.navigation.navigate(BookingCalendar, {
         bookDateType: 'end',
         minDate: this.props.startDate
@@ -187,22 +188,29 @@ class NewBookingDetails extends PureComponent {
             source={icons.recurring}
             style={styles.recurringImageContainer}
           />
+
           <Text style={styles.recurringBannerText}>
-            Available for recurring bookings
+            {'Available for recurring bookings'}
           </Text>
         </View>
+
         <View style={styles.createRecurringBlockContainer}>
           <View style={styles.recurringLeftBlock}>
-            <Text style={styles.recurringText}>Create recurring booking</Text>
+            <Text style={styles.recurringText}>
+              {'Create recurring booking'}
+            </Text>
+
             <Text style={styles.recurringDescription}>
-              Book this car automatically on every{' '}
-              {moment(startDate).format('dddd [from] hh:mmA')} to{' '}
+              {'Book this car automatically on every '}
+              {moment(startDate).format('dddd [from] hh:mmA')}
+              {' to '}
               {moment(endDate).format('hh:mmA')}
             </Text>
           </View>
+
           <View style={styles.recurringRightBlock}>
             <Switch
-              backgroundActive="#F03E3E"
+              backgroundActive={'#F03E3E'}
               backgroundInactive={'#DEE2E6'}
               barHeight={30}
               circleBorderWidth={2}
@@ -223,19 +231,23 @@ class NewBookingDetails extends PureComponent {
   render() {
     const { isRecurring } = this.state
     const { isFetchingCar, navigation, startDate, endDate } = this.props
+
     if (isFetchingCar) {
       return (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator color={colors.red} size="large" />
+          <ActivityIndicator color={colors.red} size={'large'} />
         </View>
       )
     }
 
-    if (!this.props.car) return navigation.goBack()
+    if (!this.props.car) {
+      return navigation.goBack()
+    }
 
     const {
       car: { car }
     } = this.props
+
     const {
       image_s3_url: image,
       full_pickup_location: pickupLocation,
@@ -247,7 +259,9 @@ class NewBookingDetails extends PureComponent {
       year = '',
       category = {}
     } = car
-    let isButtonActive = startDate && endDate
+
+    let isButtonActive = !!(startDate && endDate)
+
     return (
       <React.Fragment>
         <ScrollView
@@ -258,55 +272,65 @@ class NewBookingDetails extends PureComponent {
         >
           <View>
             <CarImage imageUri={image} />
+
             <View style={styles.bookingDetailsList}>
               <View style={[styles.row, { marginBottom: 24 }]}>
                 <View style={{ flex: 1 }}>
                   <View>
                     <BookingDetail
-                      label="CAR"
+                      label={'CAR'}
                       text={`${manufacturer.name} ${model}, ${color}, ${year}`}
                     />
                   </View>
                 </View>
               </View>
+
               <View style={[styles.row, { marginBottom: 24 }]}>
                 <View style={{ flex: 1 }}>
                   <View>
                     <BookingDetail
-                      label="VEHICLE TYPE"
+                      label={'VEHICLE TYPE'}
                       text={`${category.name}`}
                     />
                   </View>
                 </View>
               </View>
+
               <View style={[styles.row, { marginBottom: 16 }]}>
                 <View style={{ flex: 1 }}>
                   <View style={{ width: '80%' }}>
-                    <BookingDetail label="PICKUP" text={pickupLocation} />
+                    <BookingDetail label={'PICKUP'} text={pickupLocation} />
                   </View>
+
                   <TouchableOpacity onPress={() => this.onMapPress('pickup')}>
-                    <Text style={styles.mapButtonText}>Open in Maps</Text>
+                    <Text style={styles.mapButtonText}>{'Open in Maps'}</Text>
                   </TouchableOpacity>
                 </View>
+
                 <View style={{ flex: 1 }}>
                   <View style={{ width: '80%' }}>
                     <BookingDetail
-                      label="RETURN"
+                      label={'RETURN'}
                       text={`${returnLocation}, ${plate}`}
                     />
                   </View>
+
                   <TouchableOpacity onPress={() => this.onMapPress('return')}>
-                    <Text style={styles.mapButtonText}>Open in Maps</Text>
+                    <Text style={styles.mapButtonText}>{'Open in Maps'}</Text>
                   </TouchableOpacity>
                 </View>
               </View>
             </View>
+
             <View style={styles.scheduleContainer}>
-              <SectionTitle title="SCHEDULE" />
-              {!!car['allowed_recurring'] && this.renderRecurringBlock()}
+              <SectionTitle title={'SCHEDULE'} />
+
+              {car['allowed_recurring'] ? this.renderRecurringBlock() : null}
+
               <TouchableWithoutFeedback onPress={this.onStartDatePress}>
                 <View style={styles.datePickerContainer}>
-                  <Text style={styles.datePickerText}>Start</Text>
+                  <Text style={styles.datePickerText}>{'Start'}</Text>
+
                   <Text style={styles.datePickerDate}>
                     {(startDate &&
                       moment(startDate).format(
@@ -321,7 +345,7 @@ class NewBookingDetails extends PureComponent {
 
               <TouchableWithoutFeedback onPress={this.onEndDatePress}>
                 <View style={styles.datePickerContainer}>
-                  <Text style={styles.datePickerText}>End</Text>
+                  <Text style={styles.datePickerText}>{'End'}</Text>
                   <Text style={styles.datePickerDate}>
                     {(endDate &&
                       moment(endDate).format(
@@ -333,18 +357,21 @@ class NewBookingDetails extends PureComponent {
               </TouchableWithoutFeedback>
             </View>
           </View>
+
           <Button
             containerStyle={styles.button}
             disabled={!isButtonActive}
-            title="CONFIRM"
+            title={'CONFIRM'}
             onPress={this.onConfirmPress}
           />
         </ScrollView>
+
         <Spinner color={colors.red} visible={this.props.bookingPending} />
       </React.Fragment>
     )
   }
 }
+
 NewBookingDetails.propTypes = {
   bookingError: PropTypes.string,
   bookingPending: PropTypes.bool,
