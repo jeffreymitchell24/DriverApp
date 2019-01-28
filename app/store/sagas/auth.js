@@ -1,5 +1,4 @@
 import { take, put, call, cancelled, select, fork } from 'redux-saga/effects'
-import { delay } from 'redux-saga'
 import { Alert } from 'react-native'
 import NavigationService from 'navigation/NavigationService'
 import { Auth } from 'navigation/routeNames'
@@ -21,8 +20,6 @@ function* authorize({ payload }) {
   const { email, password } = payload
   try {
     console.log(email, password)
-
-    // yield call(delay, 3000) //WHY?! I can not get any reasonable answer
 
     const response = yield call(Api.authorize, email, password)
 

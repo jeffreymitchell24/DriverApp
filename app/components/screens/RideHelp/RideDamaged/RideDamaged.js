@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Alert, Platform } from 'react-native'
+import { View, ScrollView, Alert, Platform, StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import isEmpty from 'lodash/isEmpty'
 import { TextInputView } from 'components/blocks'
@@ -13,10 +13,9 @@ import {
   Spinner
 } from 'components/ui'
 import { HelpCenter } from 'navigation/routeNames'
-import { colors } from 'theme'
 import { Formik } from 'formik'
 import ImagePicker from 'react-native-image-picker'
-import styles from './styles'
+import { colors, metrics } from 'theme'
 
 const validationSchema = Yup.object().shape({
   description: Yup.string()
@@ -112,7 +111,7 @@ class RideDamaged extends Component {
   }) => {
     let buttonActive =
       isEmpty(errors) &&
-      touched.description &&
+      values.description &&
       this.props.photos.length === 4 &&
       !this.props.photos.includes(undefined)
 
@@ -216,3 +215,32 @@ RideDamaged.propTypes = {
 }
 
 export default RideDamaged
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    backgroundColor: colors.white,
+    justifyContent: 'space-between'
+  },
+
+  form: {},
+
+  textInput: {
+    marginBottom: 0
+  },
+
+  photoListContainer: {
+    paddingTop: metrics.contentMargin,
+    paddingBottom: metrics.contentMarginSmall
+  },
+
+  photoList: {
+    paddingTop: metrics.contentMarginSmall,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+  },
+  photoContainer: {
+    marginBottom: 8
+  }
+})
