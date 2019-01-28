@@ -21,17 +21,20 @@ function* authorize({ payload }) {
   const { email, password } = payload
   try {
     console.log(email, password)
-    yield call(delay, 3000)
-    const { user, auth_token: token } = yield call(
-      Api.authorize,
-      email,
-      password
-    )
+
+    // yield call(delay, 3000) //WHY?! I can not get any reasonable answer
+
+    const response = yield call(Api.authorize, email, password)
+
+    console.log('authorize response', response)
+
+    const { user, auth_token: token } = response
+
     yield put({ type: SIGN_IN.SUCCESS, payload: { user, token } })
     // yield call(Api.storeItem, {token})
   } catch (error) {
-    console.log('error response', error.response)
-    console.log('error message', error.message)
+    console.log('authorize error', error)
+
     yield put({
       type: SIGN_IN.FAILURE,
       payload: error.response.data.error.message
