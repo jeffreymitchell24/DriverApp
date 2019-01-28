@@ -15,11 +15,14 @@ class Upcoming extends Component {
     if (hideSplash) SplashScreen.hide()
     this.props.onFetchUserBookings('upcoming')
   }
+
   onBookingPress = booking => {
     this.props.onSelectRide(booking)
     this.props.navigation.navigate(BookingDetail)
   }
+
   onBackButtonPressAndroid = () => true
+
   onNewPress = () => {
     this.props.navigation.navigate(NewBooking)
     // this.props.navigation.navigate(BookingDetail)
@@ -28,19 +31,20 @@ class Upcoming extends Component {
   renderItem = ({ item, index }) => {
     return <UpcomingBookingCard booking={item} onPress={this.onBookingPress} />
   }
+
   render() {
     const { bookings } = this.props
+
     console.log(bookings)
 
     const grouped = _.groupBy(bookings, item =>
       moment(item.booking_ending_at.object.date).format('dddd, D MMM')
     )
-    const sections = Object.keys(grouped).map(key => {
-      return {
-        title: key,
-        data: _.sortBy(grouped[key], 'booking_ending_at.formatted')
-      }
-    })
+
+    const sections = Object.keys(grouped).map(key => ({
+      title: key,
+      data: _.sortBy(grouped[key], 'booking_ending_at.formatted')
+    }))
 
     return (
       <AndroidBackHandler onBackPress={this.onBackButtonPressAndroid}>

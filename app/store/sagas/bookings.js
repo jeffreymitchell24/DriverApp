@@ -213,14 +213,18 @@ function* checkRideLicenseFlow() {
     checkRideLicense
   )
 }
+
 function* rideCancel({ payload }) {
   console.log('rideCancel', payload)
+
   const { carId: id } = payload
   let state = yield select()
   let { token } = state.auth
   try {
     let response = yield call(Api.cancelRide, { id, token })
+
     console.log('response', response)
+
     yield put({ type: CANCEL_RIDE.SUCCESS, payload: response })
   } catch (error) {
     console.log('error response', error.response)
@@ -228,6 +232,7 @@ function* rideCancel({ payload }) {
       'error message',
       error.response ? error.response.data.error.message : error.message
     )
+
     yield put({
       type: CANCEL_RIDE.FAILURE,
       payload: error.response
@@ -252,6 +257,7 @@ async function transformLicenses({ carPhotos, gasTankPhotos, mileagePhotos }) {
 function* rideStartFlow() {
   yield takeLatest(START_RIDE.REQUEST, checkUserStatusWrapper, rideStart)
 }
+
 function* rideStart() {
   const {
     carId: id,
@@ -291,6 +297,7 @@ function* rideStart() {
 function* rideCancelFlow() {
   yield takeLatest(CANCEL_RIDE.REQUEST, checkUserStatusWrapper, rideCancel)
 }
+
 function* rideEnd({ payload }) {
   const {
     carId: id,
@@ -335,23 +342,33 @@ function* rideEndFlow() {
 
 function* rideDamaged({ payload }) {
   console.log('payload', payload)
+
   const {
     carId: id,
     data: { photos, description }
   } = payload
+
   let query = { description }
-  if (photos.length > 0) {
+
+  if (photos && photos.length > 0) {
     let transformedPhotos = yield transformPhotoArray(photos)
     query['car_photos'] = transformedPhotos
   }
+
   console.log('query', query)
+
   let data = Api.toFormData(query)
+
   console.log('data', data)
+
   let state = yield select()
   let { token } = state.auth
+
   try {
     let response = yield call(Api.rideDamaged, { id, token, data })
+
     console.log('response', response)
+
     yield put({ type: HELP_RIDE_DAMAGED.SUCCESS, payload: response })
   } catch (error) {
     console.log('error', error)
@@ -361,6 +378,7 @@ function* rideDamaged({ payload }) {
       'error message',
       error.response ? error.response.data.error.message : error.message
     )
+
     yield put({
       type: HELP_RIDE_DAMAGED.FAILURE,
       payload:

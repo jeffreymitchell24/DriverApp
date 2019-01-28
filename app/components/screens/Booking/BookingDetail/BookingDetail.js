@@ -57,16 +57,20 @@ class Countdown extends PureComponent {
         countdownMessage = `Ending in ${diffString}`
       }
     }
+
     this.state = {
       countdownMessage
     }
   }
+
   componentDidMount = () => {
     this.startCountdown()
   }
+
   componentWillUnmount = () => {
     clearInterval(this.intervalHandle)
   }
+
   startCountdown = () => {
     this.intervalHandle = setInterval(this.tick, 1000 * 60)
   }
@@ -87,8 +91,10 @@ class Countdown extends PureComponent {
     let diffString = now.to(this.start, true)
 
     console.log(this.start, now, diffString)
+
     let countdownMessage = ''
     const isLate = moment().isAfter(this.end)
+
     if (isLate) {
       this.minutesRemaining = Math.floor((this.now - this.end.unix()) / 60)
       let diffString = this.getDiffString(this.end)
@@ -97,12 +103,14 @@ class Countdown extends PureComponent {
     } else {
       if (this.props.type === 'pending') {
         countdownMessage = `Starting in ${diffString}`
+
         this.setState({
           countdownMessage
         })
       } else if (this.props.type === 'driving') {
         diffString = this.getDiffString(this.end)
         let countdownMessage = `Ending in ${diffString}`
+
         this.setState({
           countdownMessage
         })
@@ -113,11 +121,16 @@ class Countdown extends PureComponent {
       clearInterval(this.intervalHandle)
     }
   }
+
   render() {
     const { type } = this.props
-    if (type === 'ended' || type === 'cancelled') return null
+
+    if (type === 'ended' || type === 'cancelled') {
+      return null
+    }
+
     const { countdownMessage } = this.state
-    console.log('countdownMessage', countdownMessage)
+
     return <Text style={styles.timer}>{countdownMessage}</Text>
   }
 }
@@ -140,16 +153,19 @@ class BookingDetail extends PureComponent {
 
   componentDidUpdate(prevProps) {
     const { error, requestPending } = this.props
-    if (prevProps.requestPending && !requestPending) {
-      if (error) setTimeout(() => Alert.alert('Error', error), 200)
+
+    if (prevProps.requestPending && !requestPending && error) {
+      setTimeout(() => Alert.alert('Error', error), 200)
     }
   }
+
   onSubmitReceiptPress = () => {
     this.props.navigation.navigate(ReceiptSubmit)
   }
 
   onButtonPress = () => {
     const { ride = {} } = this.props
+
     if (ride.status === 'driving') {
       this.props.navigation.navigate(RideEnd, { isEnd: true })
     } else if (ride.status === 'ended') {
@@ -163,6 +179,7 @@ class BookingDetail extends PureComponent {
   onHelpPress = () => {
     this.props.navigation.navigate(RideHelp)
   }
+
   onMapPress = locationType => {
     let geo = {}
     const {
@@ -190,41 +207,52 @@ class BookingDetail extends PureComponent {
     const {
       ride: { ended_report: report }
     } = this.props
+
     return (
       <View style={styles.endedRideDetails}>
-        <SectionHeader title="RETURN CHECK" />
+        <SectionHeader title={'RETURN CHECK'} />
         <Section>
           <SectionHeader
             style={styles.sectionHeader}
-            title="Car is not damaged"
+            title={'Car is not damaged'}
           />
+
           <SectionContent style={styles.photoList}>
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Front</Text>
+              <Text style={styles.photoLabel}>{'Front'}</Text>
+
               <Photo imageUri={report.photo_front_s3_link} touchable={false} />
             </View>
+
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Back</Text>
+              <Text style={styles.photoLabel}>{'Back'}</Text>
+
               <Photo imageUri={report.photo_back_s3_link} touchable={false} />
             </View>
+
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Right side</Text>
+              <Text style={styles.photoLabel}>{'Right side'}</Text>
+
               <Photo imageUri={report.photo_right_s3_link} touchable={false} />
             </View>
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Left side</Text>
+              <Text style={styles.photoLabel}>{'Left side'}</Text>
+
               <Photo imageUri={report.photo_left_s3_link} touchable={false} />
             </View>
           </SectionContent>
         </Section>
+
         <Section>
           <SectionHeader
             style={styles.sectionHeader}
-            title="Gas tank is full"
+            title={'Gas tank is full'}
           />
+
           <SectionContent>
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Gas tank indicator</Text>
+              <Text style={styles.photoLabel}>{'Gas tank indicator'}</Text>
+
               <Photo
                 imageUri={report.photo_gas_tank_s3_link}
                 touchable={false}
@@ -232,11 +260,14 @@ class BookingDetail extends PureComponent {
             </View>
           </SectionContent>
         </Section>
+
         <Section>
-          <SectionHeader style={styles.sectionHeader} title="Mileage" />
+          <SectionHeader style={styles.sectionHeader} title={'Mileage'} />
+
           <SectionContent>
             <View style={styles.photoBlock}>
-              <Text style={styles.photoLabel}>Mileage</Text>
+              <Text style={styles.photoLabel}>{'Mileage'}</Text>
+
               <Photo
                 imageUri={report.photo_mileage_s3_link}
                 touchable={false}
@@ -250,10 +281,14 @@ class BookingDetail extends PureComponent {
 
   render() {
     const { ride } = this.props
-    console.log('ride', ride)
+
     let buttonDisabled = true
     let buttonText = 'UNLOCK CAR'
-    if (!ride) return null
+
+    if (!ride) {
+      return null
+    }
+
     if (ride.status === 'driving') {
       buttonText = 'END DRIVE'
       buttonDisabled = false
@@ -263,11 +298,13 @@ class BookingDetail extends PureComponent {
     } else if (ride.status === 'pending' && !this.isMoreThan30Minutes()) {
       buttonDisabled = false
     }
+
     const {
       booking_starting_at: bookindStartingAt,
       booking_ending_at: bookindEndingAt,
       car
     } = ride
+
     const {
       image_s3_url: image,
       pickup_location_lat: pickupLat,
@@ -288,64 +325,78 @@ class BookingDetail extends PureComponent {
         moment(bookindStartingAt.object.date),
         'hours'
       ) + 1
+
     return (
       <ScrollView contentContainerStyle={styles.container}>
         <View>
           <View style={styles.carImageContainer}>
             <CarImage imageUri={image} />
           </View>
+
           <Section>
-            <SectionHeader title="VEHICLE" />
+            <SectionHeader title={'VEHICLE'} />
+
             <SectionContent style={{ flexDirection: 'column' }}>
               <View>
                 <View style={styles.row}>
                   <View style={{ flex: 1 }}>
-                    <Detail label="Car Make" text={manufacturer.name} />
+                    <Detail label={'Car Make'} text={manufacturer.name} />
                   </View>
+
                   <View style={{ flex: 1 }}>
-                    <Detail label="Model" text={model} />
+                    <Detail label={'Model'} text={model} />
                   </View>
                 </View>
+
                 <View style={[styles.row, { marginVertical: 16 }]}>
                   <View style={{ flex: 1 }}>
-                    <Detail label="Color" text={color} />
+                    <Detail label={'Color'} text={color} />
                   </View>
+
                   <View style={{ flex: 1 }}>
-                    <Detail label="Year" text={year.toString()} />
+                    <Detail label={'Year'} text={year.toString()} />
                   </View>
                 </View>
-                <Detail label="Plate" text={plate} />
+
+                <Detail label={'Plate'} text={plate} />
               </View>
             </SectionContent>
           </Section>
+
           <Section>
-            <SectionHeader title="SCHEDULE" />
+            <SectionHeader title={'SCHEDULE'} />
+
             <SectionContent style={{ flexDirection: 'column' }}>
               <View>
                 <View style={{ marginBottom: 16 }}>
                   <View style={[styles.row]}>
                     <View style={{ flex: 1 }}>
                       <Detail
-                        label="Start"
+                        label={'Start'}
                         text={bookindStartingAt.formatted}
                       />
                     </View>
+
                     <View style={{ flex: 1 }}>
-                      <Detail label="End" text={bookindEndingAt.formatted} />
+                      <Detail label={'End'} text={bookindEndingAt.formatted} />
                     </View>
                   </View>
+
                   <Countdown
                     endTime={bookindEndingAt.object}
                     startTime={bookindStartingAt.object}
                     type={ride.status}
                   />
                 </View>
-                <Detail label="Total" text={`${duration} hours`} />
+
+                <Detail label={'Total'} text={`${duration} hours`} />
               </View>
             </SectionContent>
           </Section>
+
           <Section>
-            <SectionHeader title="PICKUP" />
+            <SectionHeader title={'PICKUP'} />
+
             <SectionContent style={{ flexDirection: 'column' }}>
               <View style={styles.map}>
                 <MapView
@@ -368,14 +419,18 @@ class BookingDetail extends PureComponent {
                   />
                 </MapView>
               </View>
+
               <Text style={styles.address}>{pickupAddress}</Text>
+
               <TouchableOpacity onPress={() => this.onMapPress('pickup')}>
-                <Text style={styles.mapButtonText}>Open in Maps</Text>
+                <Text style={styles.mapButtonText}>{'Open in Maps'}</Text>
               </TouchableOpacity>
             </SectionContent>
           </Section>
+
           <Section>
-            <SectionHeader title="RETURN" />
+            <SectionHeader title={'RETURN'} />
+
             <SectionContent style={{ flexDirection: 'column' }}>
               <View style={styles.map}>
                 <MapView
@@ -398,23 +453,30 @@ class BookingDetail extends PureComponent {
                   />
                 </MapView>
               </View>
+
               <Text style={styles.address}>{returnAddress}</Text>
+
               <TouchableOpacity onPress={() => this.onMapPress('return')}>
-                <Text style={styles.mapButtonText}>Open in Maps</Text>
+                <Text style={styles.mapButtonText}>{'Open in Maps'}</Text>
               </TouchableOpacity>
             </SectionContent>
           </Section>
-          {(ride.status === 'pending' || ride.status === 'driving') && (
+
+          {ride.status === 'pending' || ride.status === 'driving' ? (
             <React.Fragment>
               <Section>
-                <SectionHeader title="DO YOU NEED HELP?" />
+                <SectionHeader title={'DO YOU NEED HELP?'} />
+
                 <TouchableOpacity
                   style={styles.linkButton}
                   onPress={this.onHelpPress}
                 >
-                  <Text style={styles.linkButtonText}>Open help center</Text>
+                  <Text style={styles.linkButtonText}>
+                    {'Open help center'}
+                  </Text>
                 </TouchableOpacity>
               </Section>
+
               {/* <Section style={{ borderBottomWidth: 0 }}>
                 <SectionHeader title="RECEIPT" />
                 <TouchableOpacity
@@ -427,21 +489,25 @@ class BookingDetail extends PureComponent {
                 </TouchableOpacity>
               </Section> */}
             </React.Fragment>
-          )}
-          {ride.status === 'ended' && this.renderEndedRideDetails()}
+          ) : null}
+
+          {ride.status === 'ended' ? this.renderEndedRideDetails() : null}
         </View>
+
         <Button
           containerStyle={styles.button}
           disabled={buttonDisabled}
           title={buttonText}
           onPress={this.onButtonPress}
         />
-        {ride.status === 'pending' && (
+
+        {ride.status === 'pending' ? (
           <Text style={styles.lockedText}>
-            Unlock is available 30 minutes before
-            {'\n'} scheduled start of the ride
+            {
+              'Unlock is available 30 minutes before \n scheduled start of the ride'
+            }
           </Text>
-        )}
+        ) : null}
         <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )

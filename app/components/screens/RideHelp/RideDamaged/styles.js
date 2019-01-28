@@ -9,8 +9,7 @@ export default StyleSheet.create({
     justifyContent: 'space-between'
   },
 
-  form: {
-  },
+  form: {},
 
   textInput: {
     marginBottom: 0

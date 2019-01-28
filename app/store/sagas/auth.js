@@ -205,9 +205,12 @@ function* profileUpdateCheckFlow() {
 export function* checkUserStatusWrapper(cbSaga, action) {
   let state = yield select()
   let { token } = state.auth
+
   try {
     let response = yield call(Api.checkStatus, token)
+
     const { status } = response
+
     if (status === 'rejected') {
       yield put({ type: REJECT_USER })
     } else {
@@ -216,6 +219,7 @@ export function* checkUserStatusWrapper(cbSaga, action) {
   } catch (error) {
     console.log('error response', error.response)
     console.log('error message', error.message)
+
     yield put({
       type: CHECK_STATUS.FAILURE,
       payload: error.response.data.error.message

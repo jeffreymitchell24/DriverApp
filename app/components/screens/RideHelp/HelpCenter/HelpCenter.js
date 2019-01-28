@@ -14,7 +14,7 @@ class HelpCenter extends PureComponent {
     return {
       headerLeft: (
         <NavButton
-          icon="arrowLeft"
+          icon={'arrowLeft'}
           imageStyle={{ height: 14, width: 16 }}
           onPress={() => navigation.navigate(BookingDetail)}
         />
@@ -33,13 +33,18 @@ class HelpCenter extends PureComponent {
     const { isLateAlertShow } = this.state
 
     console.log('HELP_CENTER_STATE', { isLateAlertShow, ff: this.isLateReq })
+
     if (requestPending && !nextProps.requestPending) {
       console.log('req end')
-      if (error) setTimeout(() => Alert.alert('Error', error), 200)
-      else {
+
+      if (error) {
+        setTimeout(() => Alert.alert('Error', error), 200)
+      } else {
         console.log('else')
+
         if (!isLateAlertShow && this.isLateReq) {
           console.log('show alert')
+
           this.setState({
             isLateAlertShow: true
           })
@@ -67,12 +72,15 @@ class HelpCenter extends PureComponent {
   onOkPress = () => {
     this.props.navigation.navigate(BookingDetail)
   }
+
   onMorePress = () => {
     this.props.navigation.navigate(RideLateDescription)
   }
+
   onLatePress = () => {
     this.setState({ isLateReq: true })
     this.isLateReq = true
+
     console.log('dispatch action', this.state)
 
     const { onSendLateNotification, ride } = this.props
@@ -81,18 +89,22 @@ class HelpCenter extends PureComponent {
   }
 
   keyExtractor = (item, index) => item.id
+
   renderSeparator = () => <View style={styles.listSeparator} />
 
   renderListItem = ({ item }) => {
     let { text, routeName, id } = item
+
     let onPress = () => this.props.navigation.navigate(routeName)
     if (id === 'late') {
       onPress = this.onLatePress
     }
+
     return (
       <TouchableOpacity style={styles.listItem} onPress={onPress}>
         <Text style={styles.listItemText}>{text}</Text>
-        <Icon color={colors.gray25} name="ios-arrow-forward" size={22} />
+
+        <Icon color={colors.gray25} name={'ios-arrow-forward'} size={22} />
       </TouchableOpacity>
     )
   }
