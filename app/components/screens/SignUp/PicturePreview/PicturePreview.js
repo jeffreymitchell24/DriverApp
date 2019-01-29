@@ -8,6 +8,7 @@ class PicturePreview extends Component {
   state = {
     key: 0
   }
+
   onCancelPress = () => {
     this.props.navigation.goBack()
   }
@@ -16,34 +17,39 @@ class PicturePreview extends Component {
     const { onUpdateLicense, selectedLicense, navigation } = this.props
     const { type, side } = selectedLicense
     const imageUri = navigation.getParam('photoUri', null)
-    // Alert.alert('photoUri', imageUri)
+
     onUpdateLicense({
       type,
       side,
       imageUri
     })
+
     navigation.navigate(Documentation)
   }
+
   onError = () => {
-    console.log('onError')
     const { key } = this.state
+
     if (key === 0) {
       this.setState({ key: 1 })
+
       setTimeout(() => Alert.alert('onError', 'onError'), 200)
     }
   }
+
   onLoadEnd = e => {
-    console.log('onLoadEnd', e)
     const { key } = this.state
+
     if (key === 0) {
       this.setState({ key: 1 })
+
       setTimeout(() => Alert.alert('onLoadEnd', 'onLoadEnd'), 200)
     }
   }
 
   render() {
     const photoUri = this.props.navigation.getParam('photoUri', null)
-    console.log(this.state.key)
+
     return (
       <PicturePreviewView
         photoUri={photoUri}
@@ -53,6 +59,7 @@ class PicturePreview extends Component {
     )
   }
 }
+
 PicturePreview.propTypes = {
   navigation: PropTypes.object,
   selectedLicense: PropTypes.object,

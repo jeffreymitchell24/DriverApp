@@ -33,6 +33,7 @@ const handlers = {
       ]
     }
   },
+
   [LOAD_CAR_CATEGORIES.REQUEST]: state => {
     return {
       ...state,
@@ -40,6 +41,7 @@ const handlers = {
       carCategories: []
     }
   },
+
   [LOAD_CAR_CATEGORIES.SUCCESS]: (state, { payload }) => {
     return {
       ...state,
@@ -47,6 +49,7 @@ const handlers = {
       carCategories: payload.categories
     }
   },
+
   [SET_DATE]: (state, { payload }) => {
     const { type, date } = payload
     return {
@@ -54,6 +57,7 @@ const handlers = {
       endDate: type === 'start' ? null : date
     }
   },
+
   [RESET_DATES]: (state, { payload }) => {
     return {
       ...state,
@@ -61,14 +65,15 @@ const handlers = {
       endDate: null
     }
   },
+
   [UNSELECT_CAR]: (state, { payload }) => {
-    console.log(UNSELECT_CAR)
     return {
       ...state,
       startDate: null,
       endDate: null
     }
   },
+
   [FETCH_SELECTED_CAR.REQUEST]: state => {
     return {
       ...state,
@@ -77,4 +82,5 @@ const handlers = {
     }
   }
 }
+
 export default createReducer(initialState, handlers)

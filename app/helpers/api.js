@@ -9,8 +9,6 @@ const AWS_DEFAULT_REGION = 'us-west-1'
 const AWS_BUCKET = 'carflow'
 
 export const authorize = async (email, password) => {
-  console.log('credentials', { email, password })
-
   let response = await axios.post(`${URL}/api/login`, { email, password })
 
   console.log('authorize response', response)
@@ -27,8 +25,7 @@ export const resetPassword = async email => {
 }
 
 export const resubmit = async (userData, token) => {
-  console.log('user', userData)
-  console.log('token', token)
+  console.log('resubmit', userData, token)
 
   let config = {
     headers: { Authorization: `Bearer ${token}` },

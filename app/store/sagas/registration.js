@@ -11,6 +11,7 @@ async function transformLicenses({ tlc, driving }) {
   compressed['tlc_license_back'] = await toImageFile(tlc.back)
   compressed['driving_license_front'] = await toImageFile(driving.front)
   compressed['driving_license_back'] = await toImageFile(driving.back)
+
   return compressed
 }
 
@@ -23,7 +24,9 @@ function* resubmit(query, token) {
   delete query.password
   delete query.password_confirmation
   delete query.email
+
   let response = yield call(Api.resubmit, query, token)
+
   return response
 }
 
@@ -31,20 +34,22 @@ function* registrationFlow() {
   while (true) {
     let { payload } = yield take(SIGN_UP.REQUEST)
     let state = yield select()
+
     let { isResubmitting } = state.registration
     let { auth } = state
     let { licences, user: userData } = payload
-    console.log(licences, userData)
+
     try {
       let uploadedLicences = yield transformLicenses(licences)
+
       let query = {
         ...userData,
         ...uploadedLicences
       }
+
       let formattedQuery = Api.toFormData(query)
       let response = {}
 
-      console.log('formattedQuery', formattedQuery)
       if (isResubmitting && auth.user) {
         response = yield call(resubmit, formattedQuery, auth.token)
       } else {
@@ -52,16 +57,20 @@ function* registrationFlow() {
       }
 
       const { user, auth_token: token } = response
-      console.log(user, token)
+
       yield put({
         type: SIGN_UP.SUCCESS,
         payload: { user, token: token || auth.token }
       })
     } catch (error) {
-      console.log('error response', error.response)
-      console.log('error message', error.message)
+      console.log('registrationFlow error', error)
+
       let payload = {}
-      if (error.response) payload = error.response.data.error.message
+
+      if (error.response) {
+        payload = error.response.data.error.message
+      }
+
       yield put({ type: SIGN_UP.FAILURE, payload })
     }
   }
@@ -70,17 +79,20 @@ function* registrationFlow() {
 function* validateEmailFlow() {
   while (true) {
     let { payload } = yield take(VALIDATE_EMAIL.REQUEST)
+
     try {
       yield call(Api.validateEmail, payload.email)
+
       yield put({ type: VALIDATE_EMAIL.SUCCESS, payload })
     } catch (error) {
-      console.log('error response', error.response)
-      console.log('error message', error.message)
+      console.log('validateEmailFlow error', error)
+
       let responseError = error.response.data.error.message
       let errorMsg =
         responseError === 'Email is taken'
           ? 'Email already exists'
           : responseError
+
       yield put({ type: VALIDATE_EMAIL.FAILURE, payload: errorMsg })
     }
   }

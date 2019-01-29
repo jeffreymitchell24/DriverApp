@@ -26,7 +26,6 @@ import AvailableBookings from 'components/screens/NewBooking/AvailableBookings'
 import BookingCalendar from 'components/screens/NewBooking/BookingCalendar'
 import VehicleOptions from 'components/screens/NewBooking/VehicleOptions'
 
-// import TermsConditions from 'components/screens/TermsConditions'
 import ChangePassword from 'components/screens/Profile/ChangePassword'
 import ChangesReview from 'components/screens/Profile/ChangesReview'
 import ProfileDetails from 'components/screens/Profile/ProfileDetails'
@@ -34,7 +33,6 @@ import ProfileMain from 'components/screens/Profile/ProfileMain'
 import PrivacyPolicy from 'components/screens/Profile/PrivacyPolicy'
 import ProfileCamera from 'components/screens/Profile/ProfileCamera'
 import PhotoPreview from 'components/screens/Profile/PicturePreview'
-// import PictureGallery from 'components/screens/SignUp/PictureGallery'
 
 import HelpCenter from 'components/screens/RideHelp/HelpCenter'
 import RideMalfunction from 'components/screens/RideHelp/RideMalfunction'
@@ -58,9 +56,7 @@ let navigationOptions = {
     fontWeight: 'normal',
     color: '#343A40'
   },
-  headerLeftContainerStyle: {
-    // paddingLeft: 16
-  },
+  headerLeftContainerStyle: {},
   headerRightContainerStyle: {
     paddingRight: 16
   }
@@ -188,33 +184,7 @@ export const AuthStack = createStackNavigator(
     initialRouteName: 'Intro',
     headerLayoutPreset: 'center',
     transitionConfig: (toTransitionProps, fromTransitionProps) => {
-      // let isBack = false
-      // let backRoute = null
-      // if (fromTransitionProps) {
-      //   isBack =
-      //     fromTransitionProps.navigation.state.index >=
-      //     toTransitionProps.navigation.state.index
-      //   backRoute = fromTransitionProps.scene.route.routeName
-      // }
-      // const route = toTransitionProps.scene.route
-      // if (
-      //   (route.routeName === 'Intro' || route.routeName === 'Account') &&
-      //   backRoute === 'SignIn'
-      // ) {
-      //   if (route.routeName === 'Account' && !isBack) {
-      //     return fromTop(500)
-      //   }
-      //   return { screenInterpolator: CardStackStyleInterpolator.forVertical }
-      // } else if (
-      //   route.routeName === 'SignIn' &&
-      //   route.params &&
-      //   route.params.showFromBottom &&
-      //   !isBack
-      // ) {
-      //   return { screenInterpolator: CardStackStyleInterpolator.forVertical }
-      // } else {
       return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
-      // }
     }
   }
 )
@@ -233,7 +203,6 @@ export const NewBookingStack = createStackNavigator(
     NewBookingDetails: {
       screen: NewBookingDetails,
       navigationOptions: {
-        // title: 'New booking',
         headerTitle: null,
         headerBackTitle: null,
         headerBackImage: <NavBackImage />,
@@ -317,24 +286,7 @@ export const NewBookingStack = createStackNavigator(
       }
     },
     transitionConfig: (toTransitionProps, fromTransitionProps) => {
-      // let isBack = false
-      // let backRoute = null
-      // if (fromTransitionProps) {
-      //   isBack =
-      //     fromTransitionProps.navigation.state.index >=
-      //     toTransitionProps.navigation.state.index
-      //   backRoute = fromTransitionProps.scene.route.routeName
-      // }
-      // const route = toTransitionProps.scene.route
-      // // console.log(bookingOverlays.includes(route.routeName), bookingOverlays.includes(backRoute), isBack)
-      // if (
-      //   route.routeName === 'BookingCalendar' ||
-      //   (backRoute === 'BookingCalendar' && isBack)
-      // ) {
-      //   return { screenInterpolator: CardStackStyleInterpolator.forVertical }
-      // } else {
       return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
-      // }
     }
   }
 )
@@ -431,12 +383,7 @@ export const ProfileStack = createStackNavigator(
     initialRouteName: 'ProfileMain',
     headerLayoutPreset: 'center',
     transitionConfig: prop => {
-      // const routeName = prop.scene.route.routeName
-      // if (routeName === 'ChangesReview') {
-      //   return { screenInterpolator: CardStackStyleInterpolator.forVertical }
-      // } else {
       return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
-      // }
     }
   }
 )
@@ -532,18 +479,7 @@ export const HelpCenterStack = createStackNavigator(
     initialRouteName: 'HelpCenter',
     headerLayoutPreset: 'center',
     transitionConfig: (toTransitionProps, fromTransitionProps) => {
-      // // let isBack = false
-      // let backRoute = null
-      // if (fromTransitionProps) {
-      //   // isBack = fromTransitionProps.navigation.state.index >= toTransitionProps.navigation.state.index
-      //   backRoute = fromTransitionProps.scene.route.routeName
-      // }
-      // const route = toTransitionProps.scene.route
-      // if (route.routeName === 'RideCancel' || backRoute === 'RideCancel') {
-      //   return { screenInterpolator: CardStackStyleInterpolator.forVertical }
-      // } else {
       return { screenInterpolator: CardStackStyleInterpolator.forHorizontal }
-      // }
     }
   }
 )

@@ -12,43 +12,44 @@ class GalleryView extends PureComponent {
     showGallery: false
   }
 
-  onSelectImage = (data) => {
-    console.log('data', data)
-    this.props.onSelectImage({photoUri: data[0].uri})
-    this.setState({selected: []})
+  onSelectImage = data => {
+    this.props.onSelectImage({ photoUri: data[0].uri })
+
+    this.setState({ selected: [] })
   }
 
   checkPermission = async () => {
     let granted = false
+
     while (!granted) {
       granted = await requestReadStoragePermission()
     }
-    this.setState({showGallery: true})
+
+    this.setState({ showGallery: true })
   }
 
   componentDidMount = () => {
     this.checkPermission()
   }
-  render () {
+
+  render() {
     return (
       <View style={styles.container}>
-        {
-          this.state.showGallery && (
-            <CameraRollPicker
-              assetType='Photos'
-              batchSize={1}
-              callback={this.onSelectImage}
-              groupTypes='SavedPhotos'
-              imageMargin={5}
-              imagesPerRow={3}
-              initialListSize={1}
-              pageSize={3}
-              removeClippedSubviews
-              scrollRenderAheadDistance={500}
-              selected={this.state.selected}
-            />
-          )
-        }
+        {this.state.showGallery ? (
+          <CameraRollPicker
+            assetType={'Photos'}
+            batchSize={1}
+            callback={this.onSelectImage}
+            groupTypes={'SavedPhotos'}
+            imageMargin={5}
+            imagesPerRow={3}
+            initialListSize={1}
+            pageSize={3}
+            removeClippedSubviews
+            scrollRenderAheadDistance={500}
+            selected={this.state.selected}
+          />
+        ) : null}
       </View>
     )
   }
@@ -58,4 +59,4 @@ GalleryView.propTypes = {
   onSelectImage: PropTypes.func
 }
 
-export {GalleryView}
+export { GalleryView }

@@ -6,10 +6,8 @@ import {
   Easing,
   TouchableWithoutFeedback
 } from 'react-native'
-// import { DatePicker as CustomDatePicker } from 'react-native-wheel-picker-android'
 import CustomDatePicker from 'react-native-date-picker'
 import PropTypes from 'prop-types'
-
 import moment from 'moment'
 
 import styles from './styles'
@@ -47,6 +45,7 @@ class DatePicker extends PureComponent {
     })
 
     animation.setValue(initialValue)
+
     Animated.timing(animation, {
       toValue: finalValue,
       duration: 300,
@@ -67,7 +66,6 @@ class DatePicker extends PureComponent {
 
   render() {
     const { animation } = this.state
-
     const {
       value,
       type,
@@ -79,8 +77,6 @@ class DatePicker extends PureComponent {
       disabled,
       isDatePickerShow
     } = this.props
-
-    console.log('datepicker props', this.props)
 
     const initDate = moment(value)
       .tz('America/New_York')
@@ -99,6 +95,7 @@ class DatePicker extends PureComponent {
         <TouchableWithoutFeedback onPress={this.handleOpen}>
           <View style={styles.headerContainer}>
             <Text style={styles.headerText}>{type}</Text>
+
             <Text
               style={disabled ? styles.headerDisabledText : styles.headerDate}
             >
@@ -110,7 +107,7 @@ class DatePicker extends PureComponent {
           </View>
         </TouchableWithoutFeedback>
 
-        {isDatePickerShow && (
+        {isDatePickerShow ? (
           <Animated.View
             style={{
               height: animation,
@@ -118,11 +115,12 @@ class DatePicker extends PureComponent {
               zIndex: 0
             }}
           >
-            {!!ExpandedHeader && (
+            {ExpandedHeader ? (
               <TouchableWithoutFeedback onPress={this.handleOpen}>
                 <ExpandedHeader />
               </TouchableWithoutFeedback>
-            )}
+            ) : null}
+
             <CustomDatePicker
               date={initDate}
               minimumDate={minDate}
@@ -134,7 +132,7 @@ class DatePicker extends PureComponent {
               onDateChange={this.handleChange}
             />
           </Animated.View>
-        )}
+        ) : null}
       </View>
     )
   }
