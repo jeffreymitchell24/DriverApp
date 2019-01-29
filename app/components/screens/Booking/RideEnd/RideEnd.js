@@ -48,7 +48,6 @@ let iosOptions = {
     skipBackup: true,
     cameraRoll: true,
     waitUntilSaved: true
-    // path: 'images'
   }
 }
 
@@ -114,9 +113,6 @@ class RideEnd extends Component {
     } = this.props
     const { notes, isEndRide } = this.state
 
-    console.log(gasTankPhotos, carPhotos, notes)
-    console.log('onConfirmPress', isEndRide)
-
     if (isEndRide) {
       this.props.onEndRide({
         carId: ride.id,
@@ -137,11 +133,8 @@ class RideEnd extends Component {
 
     if (granted) {
       const { onPhotoSave } = this.props
-      // onSelectPhoto({ type, index })
 
       const getResponseFunction = (indexCopy, typeCopy) => response => {
-        console.log(response)
-
         if (!response.didCancel || response.error) {
           onPhotoSave({
             type: typeCopy,

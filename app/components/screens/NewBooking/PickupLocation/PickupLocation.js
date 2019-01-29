@@ -41,6 +41,7 @@ class PickupLocation extends PureComponent {
       },
       err => {
         console.log('location error', err)
+
         setTimeout(
           () => Alert.alert('Geolocation Error', "Can't get your location"),
           200
@@ -52,7 +53,6 @@ class PickupLocation extends PureComponent {
 
   onLocationPress = (fetchDetails, loc) => {
     fetchDetails(loc.place_id).then(address => {
-      console.log('address', address)
       const { onFilterUpdate, onChooseAddress, navigation } = this.props
 
       const {
@@ -116,6 +116,7 @@ class PickupLocation extends PureComponent {
                   source={icons.mapMarker}
                   style={{ width: 15, height: 21 }}
                 />
+
                 <Text style={styles.resultRowText}>{el.description}</Text>
               </View>
             </TouchableOpacity>
@@ -129,8 +130,9 @@ class PickupLocation extends PureComponent {
     return (
       <View>
         <View>
-          <Text style={styles.listHeader}>Recents</Text>
+          <Text style={styles.listHeader}>{'Recents'}</Text>
         </View>
+
         <View style={styles.resultsContainer}>
           <View style={styles.resultsListContainer}>
             {history.map((el, i) => (
@@ -143,6 +145,7 @@ class PickupLocation extends PureComponent {
                     source={icons.mapMarker}
                     style={{ width: 15, height: 20 }}
                   />
+
                   <Text style={styles.resultRowText}>{el.address}</Text>
                 </View>
               </TouchableOpacity>
@@ -165,11 +168,15 @@ class PickupLocation extends PureComponent {
                 source={icons.geolocation}
                 style={{ width: 20, height: 20 }}
               />
-              <Text style={styles.resultRowText}>Current Location</Text>
+
+              <Text style={styles.resultRowText}>{'Current Location'}</Text>
             </View>
           </View>
         </TouchableOpacity>
-        {!!history && !!history.length && this.renderRecentsList(history, fetchDetails)}
+
+        {!!history && !!history.length
+          ? this.renderRecentsList(history, fetchDetails)
+          : null}
       </View>
     )
   }
@@ -177,18 +184,14 @@ class PickupLocation extends PureComponent {
   render() {
     const { address } = this.state
 
-    console.log(GOOGLE_API_KEY)
-
     return (
       <GoogleAutoComplete
         apiKey={GOOGLE_API_KEY}
-        components="country:us"
+        components={'country:us'}
         debounce={500}
-        queryTypes="address"
+        queryTypes={'address'}
       >
         {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
-          console.log('locationResults', locationResults, fetchDetails)
-
           const handleAddressChanged = text => {
             this.setState({
               address: text,
@@ -218,17 +221,19 @@ class PickupLocation extends PureComponent {
                   backgroundColor: '#F1F1F2'
                 }}
                 lightTheme
-                name="address"
-                placeholder="Pickup location"
+                name={'address'}
+                placeholder={'Pickup location'}
                 returnKeyType={'next'}
                 round
                 value={address}
                 onChangeText={handleAddressChanged}
                 onClearText={() => handleAddressChanged('')}
               />
+
               {address.length
-                ? locationResults.length > 0 &&
-                  this.renderSearchResults(locationResults, fetchDetails)
+                ? locationResults.length > 0
+                  ? this.renderSearchResults(locationResults, fetchDetails)
+                  : null
                 : this.renderHistory(fetchDetails)}
             </View>
           )

@@ -22,6 +22,7 @@ const formIputs = {
   password: 'password',
   confirmPassword: 'confirmPassword'
 }
+
 const validationSchema = Yup.object().shape({
   [formIputs.email]: Yup.string()
     .trim()
@@ -34,17 +35,19 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref('password'), null], "Passwords don't match")
     .required('This field is required.')
 })
+
 class Account extends PureComponent {
   inputRefs = {}
   values = {}
   state = {
     termsAgree: false
   }
+
   static navigationOptions = ({ navigation }) => {
     return {
       headerLeft: (
         <NavButton
-          icon="arrowLeft"
+          icon={'arrowLeft'}
           imageStyle={{ height: 14, width: 16 }}
           onPress={() => navigation.navigate(Intro)}
         />
@@ -53,7 +56,6 @@ class Account extends PureComponent {
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
-    console.log('nextProps', nextProps)
     const prevProps = this.props
 
     const { isEmailValidating, emailError } = nextProps.emailValidation
@@ -75,9 +77,11 @@ class Account extends PureComponent {
       }
     }
   }
+
   handleDriverTermsPress = () => {
     this.props.navigation.navigate(DriverTerms)
   }
+
   onSubmit = (values, { setErrors }) => {
     const { email, password, confirmPassword } = values
     let stepData = {
@@ -86,7 +90,9 @@ class Account extends PureComponent {
       email: email.trim()
     }
     this.values = stepData
+
     this.props.onValidateEmail({ email: email.trim() })
+
     Keyboard.dismiss()
   }
 
@@ -97,6 +103,7 @@ class Account extends PureComponent {
   handleCheckboxPress = val => {
     this.setState(state => ({ termsChecked: !state.termsChecked }))
   }
+
   handleSignInPress = () => {
     this.props.navigation.navigate(SignIn, { showFromBottom: true })
   }
@@ -110,18 +117,16 @@ class Account extends PureComponent {
     values,
     touched
   }) => {
-    let buttonDisabled = true
     const { termsAgree } = this.state
-    if (isEmpty(errors) && values.termsChecked && termsAgree)
-      buttonDisabled = false
-    // console.log('values', values)
+
+    let buttonDisabled = !(isEmpty(errors) && values.termsChecked && termsAgree)
+
     return (
       <View style={styles.container}>
         <ScrollView
           contentContainerStyle={styles.formContainer}
-          keyboardShouldPersistTaps="always"
+          keyboardShouldPersistTaps={'always'}
           ref={this.setListRef}
-          style={{}}
         >
           <View style={styles.form}>
             <TextInputView
@@ -133,25 +138,26 @@ class Account extends PureComponent {
               inputRef={input => {
                 this.inputRefs['email'] = input
               }}
-              keyboardType="email-address"
-              label="EMAIL"
-              name="email"
-              placeholder=""
+              keyboardType={'email-address'}
+              label={'EMAIL'}
+              name={'email'}
+              placeholder={''}
               returnKeyType={'next'}
               value={values.email.trim()}
               onBlur={() => setFieldTouched('email')}
               onChangeText={handleChange('email')}
               onSubmitEditing={() => this.inputRefs['password'].focus()}
             />
+
             <TextInputView
               blurOnSubmit={false}
               error={touched.password && errors.password}
               inputRef={input => {
                 this.inputRefs['password'] = input
               }}
-              label="PASSWORD"
-              name="password"
-              placeholder=""
+              label={'PASSWORD'}
+              name={'password'}
+              placeholder={''}
               returnKeyType={'next'}
               secureTextEntry
               value={values.password}
@@ -159,83 +165,90 @@ class Account extends PureComponent {
               onChangeText={handleChange('password')}
               onSubmitEditing={() => this.inputRefs['confirmPassword'].focus()}
             />
+
             <TextInputView
               error={touched.confirmPassword && errors.confirmPassword}
               inputRef={input => {
                 this.inputRefs['confirmPassword'] = input
               }}
-              label="CONFIRM PASSWORD"
-              name="confirmPassword"
-              placeholder=""
+              label={'CONFIRM PASSWORD'}
+              name={'confirmPassword'}
+              placeholder={''}
               secureTextEntry
               value={values.confirmPassword}
               onBlur={() => setFieldTouched('confirmPassword')}
               onChangeText={handleChange('confirmPassword')}
             />
+
             <View style={styles.checkboxContainer}>
               <CheckBox
                 checked={values.termsChecked}
-                checkedColor="rgb(240,62,62)"
-                checkedIcon="ios-checkbox"
+                checkedColor={'rgb(240,62,62)'}
+                checkedIcon={'ios-checkbox'}
                 containerStyle={styles.checkBox}
-                iconType="ionicon"
-                name="termsChecked"
+                iconType={'ionicon'}
+                name={'termsChecked'}
                 size={30}
-                uncheckedIcon="md-square-outline"
+                uncheckedIcon={'md-square-outline'}
                 onPress={() =>
                   setFieldValue('termsChecked', !values.termsChecked)
                 }
               />
+
               <Text style={styles.checkboxTitle}>
-                Accept
+                {'Accept'}
                 <Text
                   style={styles.termsButton}
                   onPress={this.handleTermsPress}
                 >
                   {' '}
-                  Terms and Conditions
+                  {'Terms and Conditions'}
                 </Text>
               </Text>
             </View>
+
             <View style={styles.checkboxContainer}>
               <CheckBox
                 checked={termsAgree}
-                checkedColor="rgb(240,62,62)"
-                checkedIcon="ios-checkbox"
+                checkedColor={'rgb(240,62,62)'}
+                checkedIcon={'ios-checkbox'}
                 containerStyle={styles.checkBox}
-                iconType="ionicon"
-                name="termsChecked"
+                iconType={'ionicon'}
+                name={'termsChecked'}
                 size={30}
-                uncheckedIcon="md-square-outline"
+                uncheckedIcon={'md-square-outline'}
                 onPress={() => this.setState({ termsAgree: !termsAgree })}
               />
+
               <Text style={styles.checkboxTitle}>
-                Accept
+                {'Accept'}
                 <Text
                   style={styles.termsButton}
                   onPress={this.handleDriverTermsPress}
                 >
                   {' '}
-                  Drivers Contract
+                  {'Drivers Contract'}
                 </Text>
               </Text>
             </View>
           </View>
+
           <View style={styles.footer}>
             <Button
               containerStyle={styles.nextButton}
               disabled={buttonDisabled}
-              title="NEXT"
+              title={'NEXT'}
               onPress={handleSubmit}
             />
+
             <Text style={styles.mainText}>
-              Already have an account?
+              {'Already have an account?'}
               <Text
                 style={styles.signInButtonText}
                 onPress={this.handleSignInPress}
               >
                 {' '}
-                Sign in
+                {'Sign in'}
               </Text>
             </Text>
           </View>
@@ -246,8 +259,6 @@ class Account extends PureComponent {
 
   render() {
     const { isEmailValidating } = this.props.emailValidation
-
-    console.log(isEmailValidating)
 
     return (
       <View style={{ flex: 1 }}>
@@ -260,13 +271,13 @@ class Account extends PureComponent {
           }}
           render={this.renderForm}
           validateOnBlur
-          // validateOnChange
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
-        {isEmailValidating && (
+
+        {isEmailValidating ? (
           <Spinner color={colors.red} visible={isEmailValidating} />
-        )}
+        ) : null}
       </View>
     )
   }
@@ -277,7 +288,6 @@ Account.propTypes = {
   navigation: PropTypes.object,
   onSaveCredentials: PropTypes.func,
   onValidateEmail: PropTypes.func
-  // onSignUp: PropTypes.func
 }
 
 export default Account

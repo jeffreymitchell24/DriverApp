@@ -11,10 +11,8 @@ import {
 } from 'react-native'
 import { Switch } from 'react-native-switch'
 import moment from 'moment'
-import { Spinner } from 'components/ui'
-// import Switch from 'react-native-switch-pro'
+import { Spinner, Button } from 'components/ui'
 import PropTypes from 'prop-types'
-import { Button } from 'components/ui'
 import { BookingDetail, CarImage, SectionTitle } from 'components/blocks'
 
 import {
@@ -22,8 +20,6 @@ import {
   CarLocation,
   BookingCalendar
 } from 'navigation/routeNames'
-
-import { getMaxDate } from 'helpers/date'
 
 import { icons } from 'images'
 
@@ -39,8 +35,7 @@ class NewBookingDetails extends PureComponent {
 
   constructor(props) {
     super(props)
-    // let timeSlots = getNext24hours()
-    // console.log(timeSlots)
+
     this.state = {
       startDate: null,
       endDate: null,
@@ -173,8 +168,6 @@ class NewBookingDetails extends PureComponent {
     geo.lat = locationType === 'pickup' ? pickupLat : returnLat
     geo.lon = locationType === 'pickup' ? pickupLon : returnLon
 
-    console.log('onMapPress', this.props.car, geo)
-
     this.props.navigation.navigate(CarLocation, { geo })
   }
 
@@ -266,7 +259,6 @@ class NewBookingDetails extends PureComponent {
       <React.Fragment>
         <ScrollView
           contentContainerStyle={styles.container}
-          // nestedScrollEnabled
           ref={myScroll => (this._myScroll = myScroll)}
           showsVerticalScrollIndicator={false}
         >
@@ -346,6 +338,7 @@ class NewBookingDetails extends PureComponent {
               <TouchableWithoutFeedback onPress={this.onEndDatePress}>
                 <View style={styles.datePickerContainer}>
                   <Text style={styles.datePickerText}>{'End'}</Text>
+
                   <Text style={styles.datePickerDate}>
                     {(endDate &&
                       moment(endDate).format(

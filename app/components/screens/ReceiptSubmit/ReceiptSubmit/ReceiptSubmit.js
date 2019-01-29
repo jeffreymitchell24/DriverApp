@@ -12,14 +12,12 @@ import {
 import PropTypes from 'prop-types'
 import DateTimePicker from 'react-native-modal-datetime-picker'
 import * as Yup from 'yup'
-import { Spinner } from 'components/ui'
 import { Formik } from 'formik'
 import moment from 'moment'
 import isEmpty from 'lodash/isEmpty'
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import { getCurrentDateAndTime, formatDate, formatTime } from 'helpers/date'
-import { ReceiptCamera } from 'navigation/routeNames'
 import ImagePicker from 'react-native-image-picker'
 import { colors } from 'theme'
 import {
@@ -27,7 +25,8 @@ import {
   Section,
   SectionHeader,
   SectionContent,
-  Photo
+  Photo,
+  Spinner
 } from 'components/ui'
 import styles from './styles'
 
@@ -47,7 +46,6 @@ let androidOptions = {
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
-    // path: 'images'
   },
   noData: true
 }
@@ -61,7 +59,6 @@ let iosOptions = {
     skipBackup: true,
     cameraRoll: true,
     waitUntilSaved: true
-    // path: 'images'
   }
 }
 
@@ -80,6 +77,7 @@ const validationSchema = Yup.object().shape({
 class ReceiptSubmit extends Component {
   inputRefs = {}
   isHiddenPicker = true
+
   constructor(props) {
     super(props)
     const { time, date } = getCurrentDateAndTime()
@@ -96,9 +94,13 @@ class ReceiptSubmit extends Component {
 
   componentDidUpdate(prevProps) {
     const { error, requestPending, navigation } = this.props
+
     if (prevProps.requestPending && !requestPending) {
-      if (error) setTimeout(() => Alert.alert('Error', error), 200)
-      else navigation.goBack()
+      if (error) {
+        setTimeout(() => Alert.alert('Error', error), 200)
+      } else {
+        navigation.goBack()
+      }
     }
   }
 
@@ -127,12 +129,10 @@ class ReceiptSubmit extends Component {
 
   onPhotoPress = async () => {
     let granted = await requestMainPermissions(true)
-    if (granted) {
-      // const { onSelectPhoto } = this.props
-      // onSelectPhoto({ type: 'receiptPhoto', index: 0 })
 
-      // navigation.navigate(ReceiptCamera)
+    if (granted) {
       let granted = await requestMainPermissions(true)
+
       if (granted) {
         const { onSavePhoto } = this.props
 
@@ -142,8 +142,10 @@ class ReceiptSubmit extends Component {
             if (response.didCancel) {
             } else if (response.error) {
               console.warn(response.error)
+
               setTimeout(() => Alert.alert('', "Can't pick a photo"), 200)
             }
+
             onSavePhoto({
               type: 'receiptPhoto',
               index: 0,
@@ -154,23 +156,27 @@ class ReceiptSubmit extends Component {
       }
     }
   }
+
   onHideDateTimePicker = () => {
     this.setState({ showPicker: false })
   }
+
   onDateTimePicked = date => {
-    console.log('date', date)
     if (this.state.pickerMode === 'time') {
       this.setState({ showPicker: false, time: formatTime(date) })
     } else {
       this.setState({ showPicker: false, date: formatDate(date) })
     }
   }
+
   componentWillUnmount() {
     this.props.onClearReceiptPhoto()
   }
+
   onDatePress = () => {
     this.setState({ showPicker: true, pickerMode: 'date' })
   }
+
   onTimePress = () => {
     this.setState({ showPicker: true, pickerMode: 'time' })
   }
@@ -229,7 +235,7 @@ class ReceiptSubmit extends Component {
     setFieldValue
   }) => {
     const currentDate = moment().tz('America/New_York')
-    console.log(currentDate.toDate().setUTCHours(-5), currentDate, currentDate.format())
+
     const { price, location, title } = values
     let isButtonActive =
       isEmpty(errors) &&
@@ -237,31 +243,34 @@ class ReceiptSubmit extends Component {
       touched.price &&
       values.title &&
       this.props.receiptPhoto
+
     return (
       <ScrollView
         contentContainerStyle={styles.container}
-        keyboardShouldPersistTaps="always"
+        keyboardShouldPersistTaps={'always'}
       >
         <View style={styles.form}>
           <TouchableWithoutFeedback onPress={this.toggle}>
-            <View pointerEvents="box-only">
+            <View pointerEvents={'box-only'}>
               <TextInputView
                 containerStyle={{ marginBottom: 0 }}
-                keyboardType="default"
-                label="TITLE"
-                name="title"
-                placeholder=""
+                keyboardType={'default'}
+                label={'TITLE'}
+                name={'title'}
+                placeholder={''}
                 value={title}
               />
             </View>
           </TouchableWithoutFeedback>
+
           {this.renderDropDown(setFieldValue)}
+
           <TextInputView
             blurOnSubmit={false}
             error={touched.location && errors.location}
-            keyboardType="default"
-            label="LOCATION"
-            name="location"
+            keyboardType={'default'}
+            label={'LOCATION'}
+            name={'location'}
             placeholder=""
             returnKeyType={'next'}
             value={location}
@@ -269,13 +278,14 @@ class ReceiptSubmit extends Component {
             onChangeText={handleChange('location')}
             onSubmitEditing={() => this.inputRefs['price'].focus()}
           />
+
           <TextInputView
             error={touched.price && errors.price}
-            keyboardType="number-pad"
-            label="PRICE"
+            keyboardType={'number-pad'}
+            label={'PRICE'}
             mask={'[999990].[99]'}
-            name="price"
-            placeholder=""
+            name={'price'}
+            placeholder={''}
             refInput={input => {
               this.inputRefs['price'] = input
             }}
@@ -283,30 +293,34 @@ class ReceiptSubmit extends Component {
             onBlur={() => setFieldTouched('price')}
             onChangeText={handleChange('price')}
           />
+
           <TouchableWithoutFeedback onPress={this.onDatePress}>
-            <View pointerEvents="box-only">
+            <View pointerEvents={'box-only'}>
               <TextInputView
-                keyboardType="default"
-                label="DATE"
-                name="date"
-                placeholder=""
+                keyboardType={'default'}
+                label={'DATE'}
+                name={'date'}
+                placeholder={''}
                 value={this.state.date}
               />
             </View>
           </TouchableWithoutFeedback>
+
           <TouchableWithoutFeedback onPress={this.onTimePress}>
-            <View pointerEvents="box-only">
+            <View pointerEvents={'box-only'}>
               <TextInputView
-                keyboardType="default"
-                label="TIME"
-                name="time"
-                placeholder=""
+                keyboardType={'default'}
+                label={'TIME'}
+                name={'time'}
+                placeholder={''}
                 value={this.state.time}
               />
             </View>
           </TouchableWithoutFeedback>
+
           <Section style={styles.photoUploadSection}>
-            <SectionHeader title="RECEIPT PHOTO" />
+            <SectionHeader title={'RECEIPT PHOTO'} />
+
             <SectionContent>
               <Photo
                 imageUri={this.props.receiptPhoto}
@@ -315,12 +329,13 @@ class ReceiptSubmit extends Component {
             </SectionContent>
           </Section>
         </View>
+
         <Button
-          // containerStyle={styles.nextButton}
           disabled={!isButtonActive}
-          title="SUBMIT"
+          title={'SUBMIT'}
           onPress={handleSubmit}
         />
+
         <DateTimePicker
           date={currentDate.toDate()}
           is24Hour={false}
@@ -341,10 +356,10 @@ class ReceiptSubmit extends Component {
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur
-          // validateOnChange
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
+
         <Spinner color={colors.red} visible={this.props.requestPending} />
       </View>
     )

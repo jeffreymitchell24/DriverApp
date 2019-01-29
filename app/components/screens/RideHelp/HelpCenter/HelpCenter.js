@@ -32,19 +32,11 @@ class HelpCenter extends PureComponent {
     const { error, requestPending } = this.props
     const { isLateAlertShow } = this.state
 
-    console.log('HELP_CENTER_STATE', { isLateAlertShow, ff: this.isLateReq })
-
     if (requestPending && !nextProps.requestPending) {
-      console.log('req end')
-
       if (error) {
         setTimeout(() => Alert.alert('Error', error), 200)
       } else {
-        console.log('else')
-
         if (!isLateAlertShow && this.isLateReq) {
-          console.log('show alert')
-
           this.setState({
             isLateAlertShow: true
           })
@@ -80,8 +72,6 @@ class HelpCenter extends PureComponent {
   onLatePress = () => {
     this.setState({ isLateReq: true })
     this.isLateReq = true
-
-    console.log('dispatch action', this.state)
 
     const { onSendLateNotification, ride } = this.props
 
@@ -124,6 +114,7 @@ class HelpCenter extends PureComponent {
           keyExtractor={this.keyExtractor}
           renderItem={this.renderListItem}
         />
+
         <Spinner color={colors.red} visible={requestPending} />
       </HelpCenterSection>
     )

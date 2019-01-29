@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react'
 import { View, FlatList, ActivityIndicator, Alert } from 'react-native'
 import { NewBookingDetails } from 'navigation/routeNames'
-import { NavFilterImg, Button } from 'components/ui'
+import { NavFilterImg } from 'components/ui'
 import { BookingCard } from 'components/blocks'
 import moment from 'moment'
 import _ from 'lodash'
@@ -20,10 +20,6 @@ class AvailableBookings extends PureComponent {
         />
       )
     }
-  }
-
-  componentDidMount() {
-    // this.props.onFetchAvailableCars()
   }
 
   UNSAFE_componentWillReceiveProps(nextProps) {
@@ -70,9 +66,8 @@ class AvailableBookings extends PureComponent {
         .format('YYYY-MM-DD HH:mm')
     }
 
-    console.log(body)
-
     onSelectCar({ id: car.id, body })
+
     navigation.navigate(NewBookingDetails)
   }
 
@@ -89,7 +84,6 @@ class AvailableBookings extends PureComponent {
         booking={car}
         bookingEnd={bookingEnd.format()}
         bookingStart={bookingStart.format()}
-        // extraDetail={`Available ${availability}`}
         isRecurring={!!car['allowed_recurring']}
         onPress={this.onBookingPress}
       />
@@ -102,7 +96,7 @@ class AvailableBookings extends PureComponent {
     if (isFetchingPending) {
       return (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator color={colors.red} size="large" />
+          <ActivityIndicator color={colors.red} size={'large'} />
         </View>
       )
     }
@@ -125,11 +119,9 @@ class AvailableBookings extends PureComponent {
 }
 AvailableBookings.propTypes = {
   cars: PropTypes.array,
-  // fetchError: PropTypes.string,
   filters: PropTypes.object,
   isFetchingPending: PropTypes.bool,
   navigation: PropTypes.object,
-  // onFetchAvailableCars: PropTypes.func,
   onSelectCar: PropTypes.func
 }
 

@@ -14,8 +14,10 @@ export const getNext24hours = () => {
       label: nextHour.format('hh:mm A'),
       value: nextHourNum++
     })
+
     nextHour.add(1, 'h')
   }
+
   return hours
 }
 
@@ -25,9 +27,9 @@ export const isBetweenLimits = (start, end, time) => {
   if (endHour > startHour) {
     endHour += 12
   }
-  console.log(startHour, endHour)
+
   let isBetween = time > start && time < end
-  console.log('isBetween', isBetween)
+
   return isBetween
 }
 
@@ -42,6 +44,7 @@ export const formatDate = date => {
   let currentDate = moment(date)
   return currentDate.format('MM/DD/YYYY')
 }
+
 export const formatTime = date => {
   let currentDate = moment(date)
   return currentDate.format('HH:mm')
@@ -68,6 +71,7 @@ export const get24hours = () => {
   const end = moment(date).set({ hours: 23, minutes: 59 })
   const range = moment.range(start, end)
   const hours = Array.from(range.by('hour'))
+
   return hours.map(m => m.format('HH:mm'))
 }
 
@@ -78,14 +82,16 @@ export const getCurrentDayHours = () => {
   const end = moment().set({ hours: 23, minutes: 59 })
   const range = moment.range(start, end)
   const hours = Array.from(range.by('hour'))
+
   return hours.map(m => m.format('HH:mm'))
 }
 
 export const getDisabledDays = bookedHours => {
   let disabledDays = {}
   forEach(bookedHours, (value, key) => {
-    if (value === false)
+    if (value === false) {
       disabledDays[key] = { disabled: true, disableTouchEvent: true }
+    }
   })
 
   return disabledDays
@@ -94,19 +100,22 @@ export const getDisabledDays = bookedHours => {
 export const getMaxDate = (startDate, bookedHours) => {
   let startTime = moment.unix(startDate.timestamp)
   let startHour = startTime.hour()
+
   if (startHour === 23) {
     return startTime.add(1, 'd').format('YYYY-MM-DD')
   }
+
   if (startHour < 12) {
     return startDate.dateString
   }
+
   if (bookedHours[startDate.dateString]) {
     let time = bookedHours[startDate.dateString].find(timeString => {
       let [hour] = timeString.split(':')
-      console.log(startHour <= +hour, startHour, +hour)
+
       return startHour <= +hour
     })
-    console.log('time', time)
+
     return !time
       ? startTime.add(1, 'd').format('YYYY-MM-DD')
       : startDate.dateString
@@ -126,18 +135,20 @@ export const convertTo12h = time => {
     time[5] = +time[0] < 12 ? ' AM' : ' PM' // Set AM/PM
     time[0] = +time[0] % 12 || 12 // Adjust hours
   }
+
   return time.join('') // return adjusted time or original string
 }
 
 export const formatBookedHours = bookedHours => {
   let bookedDates = {}
+
   forEach(bookedHours, (value, key) => {
     let date = moment.unix(value).tz('America/New_York')
     let dateString = date.format('YYYY-MM-DD')
     if (!bookedDates[dateString]) bookedDates[dateString] = []
     bookedDates[dateString].push(date.format('HH:mm'))
   })
-  console.log('bookedDates', bookedDates)
+
   return bookedDates
 }
 
@@ -146,5 +157,6 @@ export const convertMinsToHrsMins = mins => {
   let m = mins % 60
   h = h < 10 ? '0' + h : h
   m = m < 10 ? '0' + m : m
+
   return `${h} hours and ${m} minutes`
 }

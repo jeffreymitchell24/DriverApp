@@ -14,10 +14,11 @@ import styles from './styles'
 class Intro extends Component {
   componentDidMount() {
     requestMainPermissions()
+
     const { user } = this.props
+
     Keyboard.dismiss()
-    console.log('user', user)
-    // user && Alert.alert(user.email, user.status)
+
     if (!user) {
       SplashScreen.hide()
     } else {
@@ -27,13 +28,17 @@ class Intro extends Component {
 
   componentDidUpdate(prevProps) {
     const { isCheckingStatus, user } = this.props
+
     if (prevProps.isCheckingStatus && !isCheckingStatus) {
-      if (user.status === 'pending') this.onResetTo(RegisterReview)
-      else if (user.status === 'approved') {
+      if (user.status === 'pending') {
+        this.onResetTo(RegisterReview)
+      } else if (user.status === 'approved') {
         this.props.navigation.navigate(Home, { hideSplash: true })
       } else if (user.status === 'rejected') {
         SplashScreen.hide()
+
         Keyboard.dismiss()
+
         setTimeout(
           () =>
             Alert.alert(
@@ -42,7 +47,9 @@ class Intro extends Component {
             ),
           200
         )
+
         this.props.onSaveRejectedId(user.id)
+
         this.props.onSignOut()
       }
     }
@@ -58,11 +65,12 @@ class Intro extends Component {
         })
       ]
     })
+
     this.props.navigation.dispatch(resetAction)
   }
 
   handleStartPress = () => {
-    this.props.navigation.navigate('Account') // Account
+    this.props.navigation.navigate('Account')
   }
 
   handleSignInPress = () => {
@@ -83,8 +91,10 @@ class Intro extends Component {
               style={styles.previewImage}
             />
           </View>
+
           <View style={styles.slideTextContainer}>
             <Text style={styles.slideTitle}>{title}</Text>
+
             <Text style={styles.mainText}>{text}</Text>
           </View>
         </View>
@@ -124,17 +134,19 @@ class Intro extends Component {
           }
           paginationStyle={styles.paginationStyle}
           removeClippedSubviews={false}
-          style={{}}
         >
           {this.renderSlides()}
         </Swiper>
+
         <View style={styles.footer}>
           <Button
             containerStyle={styles.startButton}
             title={'LOGIN'}
             onPress={this.handleSignInPress}
           />
+
           <Text style={styles.bottomText}>{'Don’t have an account?'}</Text>
+
           <Text style={styles.bottomText}>
             <Text
               style={[styles.signInButtonText, { fontWeight: '700' }]}
@@ -159,6 +171,6 @@ Intro.propTypes = {
   onSignOut: PropTypes.func
 }
 
-const height = Dimensions.get('window').height // full height
+const height = Dimensions.get('window').height
 
 export default Intro

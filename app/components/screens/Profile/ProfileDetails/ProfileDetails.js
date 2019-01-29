@@ -1,24 +1,30 @@
 import React, { Component } from 'react'
-import { View, ScrollView, TouchableOpacity, Keyboard, Text } from 'react-native'
+import {
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Keyboard,
+  Text
+} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5'
-import { Spinner } from 'components/ui'
 import forEach from 'lodash/forEach'
 import isEmpty from 'lodash/isEmpty'
 import PropTypes from 'prop-types'
 import { GoogleAutoComplete } from 'react-native-google-autocomplete'
 import { Formik } from 'formik'
-import { Button } from 'components/ui'
-import {GOOGLE_API_KEY} from 'config/apiKeys'
-import {ChangesReview} from 'navigation/routeNames'
+import { Button, Spinner } from 'components/ui'
+import { GOOGLE_API_KEY } from 'config/apiKeys'
+import { ChangesReview } from 'navigation/routeNames'
 import { TextInputView, LocationItem } from 'components/blocks'
 import { colors } from 'theme'
-import {styles, googleStyles} from './styles'
+import { styles, googleStyles } from './styles'
 
 // eslint-disable-next-line
 let rEmail = /^((([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+(\.([a-z]|\d|[!#\$%&'\*\+\-\/=\?\^_`{\|}~]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])+)*)|((\x22)((((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(([\x01-\x08\x0b\x0c\x0e-\x1f\x7f]|\x21|[\x23-\x5b]|[\x5d-\x7e]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(\\([\x01-\x09\x0b\x0c\x0d-\x7f]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF]))))*(((\x20|\x09)*(\x0d\x0a))?(\x20|\x09)+)?(\x22)))@((([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|\d|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))\.)+(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])|(([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])([a-z]|\d|-|\.|_|~|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])*([a-z]|[\u00A0-\uD7FF\uF900-\uFDCF\uFDF0-\uFFEF])))$/i
 const uuidv4 = require('uuid/v4')
-const customValidate = (values) => {
-  const {fullname, address, phone, email} = values
+
+const customValidate = values => {
+  const { fullname, address, phone, email } = values
   let errors = {}
   if (!fullname) errors.fullname = 'This field is required.'
   if (!address) errors.address = 'This field is required.'
@@ -28,19 +34,27 @@ const customValidate = (values) => {
   else if (phone.length < 15) errors.phone = 'Phone number is not correct.'
   return errors
 }
+
 class ProfileDetails extends Component {
   inputRefs = {}
   showAddressResults = true
-  constructor (props) {
+
+  constructor(props) {
     super(props)
-    const {user} = this.props
-    const {full_name: fullname = '', address = '', phone = '', email = ''} = user
-    this.originalData = {fullname, address, phone, email}
+
+    const { user } = this.props
+    const {
+      full_name: fullname = '',
+      address = '',
+      phone = '',
+      email = ''
+    } = user
+    this.originalData = { fullname, address, phone, email }
     this.data = {
-      fullname: {value: fullname, changed: false},
-      address: {value: address, changed: false},
-      phone: {value: phone, changed: false},
-      email: {value: email, changed: false}
+      fullname: { value: fullname, changed: false },
+      address: { value: address, changed: false },
+      phone: { value: phone, changed: false },
+      email: { value: email, changed: false }
     }
     this.submitVales = {}
     this.addressSelected = true
@@ -48,66 +62,82 @@ class ProfileDetails extends Component {
       editableField: ''
     }
   }
-  componentDidMount () {
+
+  componentDidMount() {
     this.placesAutocompleteToken = uuidv4()
   }
 
-  componentDidUpdate (prevProps) {
-    const {isEmailValidating, emailError} = this.props.emailValidation
+  componentDidUpdate(prevProps) {
+    const { isEmailValidating, emailError } = this.props.emailValidation
+
     if (!isEmailValidating && prevProps.emailValidation.isEmailValidating) {
-      if (!emailError) this.reviewChanges(this.submitVales)
-      else this.formik.setErrors({email: emailError})
+      if (!emailError) {
+        this.reviewChanges(this.submitVales)
+      } else {
+        this.formik.setErrors({ email: emailError })
+      }
     }
   }
 
-  onLocationPress = (address) => {
-    console.log('address', address)
+  onLocationPress = address => {
     this.addressSelected = true
     this.showAddressResults = false
+
     this.data.address = {
       value: address.formatted_address,
       changed: address.formatted_address !== this.originalData['address']
     }
+
     this.formik.setFieldValue('address', address.formatted_address)
   }
 
-  onSaveChanges = (values) => {
+  onSaveChanges = values => {
     Keyboard.dismiss()
-    const {email} = values
+
+    const { email } = values
+
     if (email.trim() !== this.originalData.email) {
-      this.props.onValidateEmail({email: email.trim()})
+      this.props.onValidateEmail({ email: email.trim() })
+
       this.submitVales = values
-    } else this.reviewChanges(values)
+    } else {
+      this.reviewChanges(values)
+    }
   }
 
-  reviewChanges = (values) => {
-    console.log('reviewChanges', values)
+  reviewChanges = values => {
     let profileChanges = []
+
     forEach(this.data, (field, fieldName) => {
       if (field.changed) {
-        profileChanges.push({id: fieldName, previous: this.originalData[fieldName], current: field.value})
+        profileChanges.push({
+          id: fieldName,
+          previous: this.originalData[fieldName],
+          current: field.value
+        })
       }
     })
 
-    this.props.navigation.navigate(ChangesReview, {profileChanges})
+    this.props.navigation.navigate(ChangesReview, { profileChanges })
   }
+
   keyExtractor = (item, index) => index.toString()
 
-  onPenPress = (fieldName) => {
-    this.setState(prevState => {
-      let isEditing = prevState.editableField === fieldName
+  onPenPress = fieldName => {
+    this.setState(
+      prevState => {
+        let isEditing = prevState.editableField === fieldName
 
-      // let value = !isEditing ? prevState[fieldName].value
-      //   : prevState[fieldName].value === '' ? this.originalData[fieldName] : prevState[fieldName].value
-
-      return {
-        editableField: isEditing ? '' : fieldName
-        // [fieldName]: {value, changed: value !== this.originalData[fieldName]}
+        return {
+          editableField: isEditing ? '' : fieldName
+        }
+      },
+      () => {
+        if (this.state.editableField === fieldName) {
+          this.inputRefs[fieldName].focus()
+        }
       }
-    }, () => {
-      console.log(this.state.editableField === fieldName)
-      this.state.editableField === fieldName && this.inputRefs[fieldName].focus()
-    })
+    )
   }
 
   onChangeText = (stateName, text) => {
@@ -122,29 +152,41 @@ class ProfileDetails extends Component {
   }
 
   isSubmitActive = () => {
-    const {fullname, address, phone, email} = this.data
-    return (fullname.changed || address.changed || phone.changed || email.changed) && !this.state.editableField
+    const { fullname, address, phone, email } = this.data
+    return (
+      (fullname.changed || address.changed || phone.changed || email.changed) &&
+      !this.state.editableField
+    )
   }
 
-  renderEditIcon = ({editable}) => {
-    return <Icon color={editable ? colors.red : colors.gray200} name={editable ? 'check' : 'pen'} size={editable ? 25 : 20} />
+  renderEditIcon = ({ editable }) => {
+    return (
+      <Icon
+        color={editable ? colors.red : colors.gray200}
+        name={editable ? 'check' : 'pen'}
+        size={editable ? 25 : 20}
+      />
+    )
   }
 
   validateForm = (values, props) => {
     let errors = {}
-    // console.log('addressSelected', this.addressSelected)
+
     if (!this.addressSelected) {
       errors.address = 'Select address from location list'
     }
     let fieldErrors = customValidate(values)
-    errors = {...errors, ...fieldErrors}
+    errors = { ...errors, ...fieldErrors }
 
     return errors
   }
 
   renderSearchResults = (locationResults, fetchDetails) => {
     return (
-      <View contentContainerStyle={googleStyles.contentContainerStyle} style={googleStyles.container}>
+      <View
+        contentContainerStyle={googleStyles.contentContainerStyle}
+        style={googleStyles.container}
+      >
         {locationResults.map((el, i) => (
           <LocationItem
             {...el}
@@ -157,67 +199,91 @@ class ProfileDetails extends Component {
     )
   }
 
-  renderForm = ({ setFieldTouched, setFieldValue, setValues, handleChange, handleSubmit, errors, values, touched }) => {
+  renderForm = ({
+    setFieldTouched,
+    setFieldValue,
+    setValues,
+    handleChange,
+    handleSubmit,
+    errors,
+    values,
+    touched
+  }) => {
     let isApprovalPending = this.props.user.profileUpdateStatus === 'pending'
-    const {phone, address, email, fullname} = values
-    let buttonActive = this.isSubmitActive() && isEmpty(errors) && this.addressSelected
+    const { phone, address, email, fullname } = values
+    let buttonActive =
+      this.isSubmitActive() && isEmpty(errors) && this.addressSelected
     return (
       <ScrollView
         contentContainerStyle={styles.formContainer}
-        keyboardShouldPersistTaps='handled'
+        keyboardShouldPersistTaps={'handled'}
         style={{}}
       >
         <View>
           <View style={styles.textInputContainer}>
             <TextInputView
-              autoCapitalize='words'
-              containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
+              autoCapitalize={'words'}
+              containerStyle={{ paddingRight: isApprovalPending ? 0 : 40 }}
               editable={this.state.editableField === 'fullname'}
               error={touched.fullname && errors.fullname}
-              inputRef={(input) => { this.inputRefs['fullname'] = input }}
-              label='FULL NAME'
-              placeholder=''
+              inputRef={input => {
+                this.inputRefs['fullname'] = input
+              }}
+              label={'FULL NAME'}
+              placeholder={''}
               value={fullname}
               onBlur={() => setFieldTouched('fullname')}
-              onChangeText={(value => {
+              onChangeText={value => {
                 this.data.fullname = {
                   value,
                   changed: value !== this.originalData['fullname']
                 }
                 setFieldValue('fullname', value)
-              })}
+              }}
             />
-            {
-              !isApprovalPending && (
-                <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
-                  onPress={() => this.onPenPress('fullname')}
-                >
-                  {this.renderEditIcon({editable: this.state.editableField === 'fullname'})}
-                </TouchableOpacity>
-              )
-            }
+
+            {!isApprovalPending ? (
+              <TouchableOpacity
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={styles.editIcon}
+                onPress={() => this.onPenPress('fullname')}
+              >
+                {this.renderEditIcon({
+                  editable: this.state.editableField === 'fullname'
+                })}
+              </TouchableOpacity>
+            ) : null}
           </View>
+
           <GoogleAutoComplete
             apiKey={GOOGLE_API_KEY}
-            components='country:us'
+            components={'country:us'}
             debounce={500}
-            queryTypes='address'
+            queryTypes={'address'}
           >
-            {({ inputValue, handleTextChange, locationResults, fetchDetails }) => {
-              // console.log('locationResults', locationResults)
+            {({
+              inputValue,
+              handleTextChange,
+              locationResults,
+              fetchDetails
+            }) => {
               return (
                 <View style={styles.textInputContainer}>
                   <View>
                     <TextInputView
-                      containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
+                      containerStyle={{
+                        paddingRight: isApprovalPending ? 0 : 40
+                      }}
                       editable={this.state.editableField === 'address'}
                       error={touched.address && errors.address}
-                      inputRef={(input) => { this.inputRefs['address'] = input }}
-                      label='CURRENT ADDRESS'
-                      placeholder=''
+                      inputRef={input => {
+                        this.inputRefs['address'] = input
+                      }}
+                      label={'CURRENT ADDRESS'}
+                      placeholder={''}
                       value={address}
                       onBlur={() => setFieldTouched('address')}
-                      onChangeText={(value => {
+                      onChangeText={value => {
                         this.data.address = {
                           value,
                           changed: value !== this.originalData['address']
@@ -226,115 +292,128 @@ class ProfileDetails extends Component {
                         this.showAddressResults = true
                         handleTextChange(value)
                         setFieldValue('address', value)
-                      })}
+                      }}
                     />
-                    {
-                      this.showAddressResults &&
+
+                    {this.showAddressResults &&
                       locationResults.length > 0 &&
-                      this.renderSearchResults(locationResults, fetchDetails)
-                    }
+                      this.renderSearchResults(locationResults, fetchDetails)}
                   </View>
-                  {
-                    !isApprovalPending && (
-                      <TouchableOpacity
-                        hitSlop={{top: 10, bottom: 10, left: 10, right: 10}}
-                        style={styles.editIcon}
-                        onPress={() => this.onPenPress('address')}
-                      >
-                        {this.renderEditIcon({editable: this.state.editableField === 'address'})}
-                      </TouchableOpacity>
-                    )
-                  }
+
+                  {!isApprovalPending ? (
+                    <TouchableOpacity
+                      hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                      style={styles.editIcon}
+                      onPress={() => this.onPenPress('address')}
+                    >
+                      {this.renderEditIcon({
+                        editable: this.state.editableField === 'address'
+                      })}
+                    </TouchableOpacity>
+                  ) : null}
                 </View>
               )
             }}
           </GoogleAutoComplete>
+
           <View style={styles.textInputContainer}>
             <TextInputView
-              containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
+              containerStyle={{ paddingRight: isApprovalPending ? 0 : 40 }}
               editable={this.state.editableField === 'phone'}
               error={touched.phone && errors.phone}
-              keyboardType='phone-pad'
-              label='PHONE NUMBER'
+              keyboardType={'phone-pad'}
+              label={'PHONE NUMBER'}
               mask={'+1 [000]-[000]-[0000]'}
-              placeholder=''
-              refInput={(input) => { this.inputRefs['phone'] = input }}
+              placeholder=""
+              refInput={input => {
+                this.inputRefs['phone'] = input
+              }}
               value={phone}
               onBlur={() => setFieldTouched('phone')}
-              onChangeText={(value => {
+              onChangeText={value => {
                 this.data.phone = {
                   value,
                   changed: value !== this.originalData['phone']
                 }
                 setFieldValue('phone', value)
-              })}
+              }}
             />
-            {
-              !isApprovalPending && (
-                <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
-                  onPress={() => this.onPenPress('phone')}
-                >
-                  {this.renderEditIcon({editable: this.state.editableField === 'phone'})}
-                </TouchableOpacity>
-              )
-            }
+
+            {!isApprovalPending ? (
+              <TouchableOpacity
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={styles.editIcon}
+                onPress={() => this.onPenPress('phone')}
+              >
+                {this.renderEditIcon({
+                  editable: this.state.editableField === 'phone'
+                })}
+              </TouchableOpacity>
+            ) : null}
           </View>
+
           <View style={styles.textInputContainer}>
             <TextInputView
-              containerStyle={{paddingRight: isApprovalPending ? 0 : 40}}
+              containerStyle={{ paddingRight: isApprovalPending ? 0 : 40 }}
               editable={this.state.editableField === 'email'}
               error={touched.email && errors.email}
-              inputRef={(input) => { this.inputRefs['email'] = input }}
-              keyboardType='email-address'
-              label='EMAIL'
-              placeholder=''
+              inputRef={input => {
+                this.inputRefs['email'] = input
+              }}
+              keyboardType={'email-address'}
+              label={'EMAIL'}
+              placeholder={''}
               value={email}
               onBlur={() => setFieldTouched('email')}
-              onChangeText={(value => {
+              onChangeText={value => {
                 this.data.email = {
                   value,
                   changed: value !== this.originalData['email']
                 }
                 setFieldValue('email', value)
-              })}
+              }}
             />
-            {
-              !isApprovalPending && (
-                <TouchableOpacity hitSlop={{top: 10, bottom: 10, left: 10, right: 10}} style={styles.editIcon}
-                  onPress={() => this.onPenPress('email')}
-                >
-                  {this.renderEditIcon({editable: this.state.editableField === 'email'})}
-                </TouchableOpacity>
-              )
-            }
+
+            {!isApprovalPending ? (
+              <TouchableOpacity
+                hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+                style={styles.editIcon}
+                onPress={() => this.onPenPress('email')}
+              >
+                {this.renderEditIcon({
+                  editable: this.state.editableField === 'email'
+                })}
+              </TouchableOpacity>
+            ) : null}
           </View>
         </View>
-        {
-          !isApprovalPending && (
-            <Button
-              containerStyle={styles.button}
-              disabled={!buttonActive}
-              title='REVIEW CHANGES'
-              onPress={handleSubmit}
-            />
-          )
-        }
+
+        {!isApprovalPending ? (
+          <Button
+            containerStyle={styles.button}
+            disabled={!buttonActive}
+            title={'REVIEW CHANGES'}
+            onPress={handleSubmit}
+          />
+        ) : null}
       </ScrollView>
     )
   }
-  render () {
-    const {user} = this.props
-    let {profile_update_request: profileUpdRequest = {}} = user
-    let isApprovalPending = (profileUpdRequest && profileUpdRequest.status === 'pending')
+
+  render() {
+    const { user } = this.props
+    let { profile_update_request: profileUpdRequest = {} } = user
+    let isApprovalPending =
+      profileUpdRequest && profileUpdRequest.status === 'pending'
+
     return (
       <View style={styles.container}>
-        {
-          isApprovalPending && (
-            <View style={styles.pendingMessage}>
-              <Text style={styles.pendingText}>Pending update approval</Text>
-            </View>
-          )
-        }
+        {isApprovalPending ? (
+          <View style={styles.pendingMessage}>
+            <Text style={styles.pendingText}>{'Pending update approval'}</Text>
+          </View>
+        ) : null}
+
         <Formik
           initialValues={{
             fullname: this.originalData.fullname,
@@ -346,11 +425,13 @@ class ProfileDetails extends Component {
           render={this.renderForm}
           validate={this.validateForm}
           validateOnBlur
-          // validateOnChange
-          // validationSchema={validationSchema}
           onSubmit={this.onSaveChanges}
         />
-        <Spinner color={colors.red} visible={this.props.emailValidation.isEmailValidating} />
+
+        <Spinner
+          color={colors.red}
+          visible={this.props.emailValidation.isEmailValidating}
+        />
       </View>
     )
   }

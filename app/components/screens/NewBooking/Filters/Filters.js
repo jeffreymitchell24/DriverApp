@@ -62,7 +62,7 @@ class Filters extends PureComponent {
     return {
       headerLeft: (
         <NavButton
-          icon="arrowLeft"
+          icon={'arrowLeft'}
           imageStyle={{
             width: 16,
             height: 14
@@ -117,6 +117,7 @@ class Filters extends PureComponent {
       },
       err => {
         console.log('location error', err)
+
         setTimeout(
           () => Alert.alert('Geolocation Error', "Can't get your location"),
           200
@@ -174,15 +175,6 @@ class Filters extends PureComponent {
       return
     }
 
-    console.log({
-      startDate,
-      endDate,
-      isRecurring,
-      location,
-      range,
-      categories
-    })
-
     const req = {
       available_to: moment(endDate)
         // .unix(endDate)
@@ -206,8 +198,6 @@ class Filters extends PureComponent {
     if (isRecurring) {
       req.allowed_recurring = isRecurring
     }
-
-    console.log('onFetchAvailableCars', req)
 
     onFetchAvailableCars(req)
 
@@ -336,7 +326,7 @@ class Filters extends PureComponent {
     if (isFetchingCarCategories || !isDatePickerShow) {
       return (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator color={colors.red} size="large" />
+          <ActivityIndicator color={colors.red} size={'large'} />
         </View>
       )
     }
@@ -375,39 +365,42 @@ class Filters extends PureComponent {
                       color: '#F03E3E'
                     }}
                   >
-                    Next 7 days
+                    {'Next 7 days'}
                   </Text>
                 </TouchableOpacity>
               </View>
             )}
-            formatter="dddd, DD MMM hh:mmA"
+            formatter={'dddd, DD MMM hh:mmA'}
             headerValue={isNext7Days ? 'Next 7 days' : null}
             isDatePickerShow={isDatePickerShow}
             startDate={minDate.format()}
             style={{ marginTop: 20 }}
-            type="Start"
+            type={'Start'}
             value={startDate}
             onChange={this.handleDateChange}
           />
+
           <DatePicker
             disabled={isNext7Days}
-            formatter="dddd, DD MMM hh:mmA"
+            formatter={'dddd, DD MMM hh:mmA'}
             headerValue={isNext7Days ? 'Next 7 days' : null}
             isDatePickerShow={isDatePickerShow}
             startDate={moment(startDate)
               .add({ hours: 1 })
               .format()}
-            type="End"
+            type={'End'}
             value={endDate}
             onChange={this.handleDateChange}
           />
+
           <TouchableWithoutFeedback
             onPress={() => navigation.navigate(VehicleOptions)}
           >
             <View
               style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
             >
-              <Text style={[styles.fieldName]}>Vehicle options</Text>
+              <Text style={[styles.fieldName]}>{'Vehicle options'}</Text>
+
               <View
                 style={{
                   flexDirection: 'row',
@@ -423,6 +416,7 @@ class Filters extends PureComponent {
                 >
                   {this.getVehicleOptionsString()}
                 </Text>
+
                 <Image
                   source={icons.arowRightGray}
                   style={{ width: 8, height: 13, marginLeft: 10 }}
@@ -430,9 +424,10 @@ class Filters extends PureComponent {
               </View>
             </View>
           </TouchableWithoutFeedback>
+
           <View style={styles.filterRow}>
             <TextInput
-              placeholder="Pickup location"
+              placeholder={'Pickup location'}
               style={{ flex: 1, fontSize: 18, fontFamily: 'Helvetica' }}
               value={location.address || ''}
               onFocus={() => {
@@ -441,6 +436,7 @@ class Filters extends PureComponent {
                 this.props.navigation.navigate(PickupLocation)
               }}
             />
+
             <TouchableWithoutFeedback onPress={this.handleClearLocation}>
               <Image
                 source={icons.cancelGray}
@@ -448,17 +444,20 @@ class Filters extends PureComponent {
               />
             </TouchableWithoutFeedback>
           </View>
+
           <View style={[styles.filterRow, { flexDirection: 'column' }]}>
             <View
               style={[styles.filterRow, { borderBottomWidth: 0, padding: 0 }]}
             >
-              <Text style={[styles.fieldName]}>Range from location</Text>
+              <Text style={[styles.fieldName]}>{'Range from location'}</Text>
+
               <Text style={styles.fieldValue}>{RANGES[range].title}</Text>
             </View>
+
             <Slider
-              maximumTrackTintColor="#A4AAB3"
+              maximumTrackTintColor={'#A4AAB3'}
               maximumValue={5}
-              minimumTrackTintColor="#F03E3E"
+              minimumTrackTintColor={'#F03E3E'}
               minimumValue={0}
               step={1}
               style={{ width: '100%' }}
@@ -473,7 +472,7 @@ class Filters extends PureComponent {
                 borderColor: '#F1F3F5',
                 borderWidth: 1
               }}
-              thumbTintColor="#000"
+              thumbTintColor={'#000'}
               trackStyle={{
                 height: 2
               }}
@@ -481,22 +480,25 @@ class Filters extends PureComponent {
               onValueChange={value => onFilterUpdate('range', value)}
             />
           </View>
+
           <View style={styles.filterRow}>
             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
               <Image
                 source={icons.recurring}
                 style={styles.recurringImageContainer}
               />
+
               <Text
                 numberOfLines={2}
                 style={[styles.fieldName, { width: '70%', marginLeft: 10 }]}
               >
-                Show only cars avaliable for recurring bookin
+                {'Show only cars avaliable for recurring bookin'}
               </Text>
             </View>
+
             <View>
               <Switch
-                backgroundActive="#F03E3E"
+                backgroundActive={'#F03E3E'}
                 backgroundInactive={'#DEE2E6'}
                 barHeight={30}
                 circleBorderWidth={2}
@@ -511,11 +513,11 @@ class Filters extends PureComponent {
             </View>
           </View>
         </View>
+
         <View style={{ marginTop: 15 }}>
           <Button
             containerStyle={styles.button}
-            // disabled={}
-            title="SHOW AVAILABLE CARS"
+            title={'SHOW AVAILABLE CARS'}
             onPress={this.onConfirmPress}
           />
         </View>

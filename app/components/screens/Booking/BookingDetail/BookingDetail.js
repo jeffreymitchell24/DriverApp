@@ -79,8 +79,6 @@ class Countdown extends PureComponent {
     const now = moment().tz('America/New_York')
     const diffString = now.to(moment(date), true)
 
-    console.log('getDiffString', date, now, diffString)
-
     return diffString
   }
 
@@ -89,8 +87,6 @@ class Countdown extends PureComponent {
 
     const now = moment().tz('America/New_York')
     let diffString = now.to(this.start, true)
-
-    console.log(this.start, now, diffString)
 
     let countdownMessage = ''
     const isLate = moment().isAfter(this.end)
@@ -145,10 +141,6 @@ class BookingDetail extends PureComponent {
   constructor(props) {
     super(props)
     this.state = {}
-  }
-
-  componentWillUnmount() {
-    // this.props.onUnselectRide()
   }
 
   componentDidUpdate(prevProps) {

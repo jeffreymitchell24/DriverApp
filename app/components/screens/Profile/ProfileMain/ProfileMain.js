@@ -26,7 +26,6 @@ import {
   PrivacyPolicy,
   Home,
   Auth
-  // ProfileCamera
 } from 'navigation/routeNames'
 import {
   Section,
@@ -48,7 +47,6 @@ let androidOptions = {
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
-    // path: 'images'
   },
   noData: true
 }
@@ -91,15 +89,16 @@ class ProfileMain extends Component {
 
   componentDidUpdate(prevProps) {
     const { error, requestPending } = this.props
+
     if (prevProps.requestPending && !requestPending) {
       if (error) setTimeout(() => Alert.alert('Error', error), 200)
     }
   }
 
   handleScreenFocus = () => {
-    console.log('handleScreenFocus')
     const { user, onProfileUpdateCheck } = this.props
-    let { profile_update_request: profileUpdRequest = {} } = user
+    const { profile_update_request: profileUpdRequest = {} } = user
+
     if (profileUpdRequest && profileUpdRequest.status === 'pending') {
       onProfileUpdateCheck()
     }
@@ -123,6 +122,7 @@ class ProfileMain extends Component {
       index: 0,
       actions: [NavigationActions.navigate({ routeName: route })]
     })
+
     this.props.navigation.dispatch(resetAction)
   }
 
@@ -133,6 +133,7 @@ class ProfileMain extends Component {
 
   onPhotoPress = async () => {
     let granted = await requestMainPermissions(true)
+
     if (granted) {
       this.showImagePicker()
       // this.props.navigation.navigate(ProfileCamera)
@@ -143,12 +144,11 @@ class ProfileMain extends Component {
     ImagePicker.showImagePicker(
       Platform.OS === 'android' ? androidOptions : iosOptions,
       response => {
-        console.log('Response = ', response)
         this.pickerIsOpened = false
+
         if (response.didCancel || response.error) {
           // this.props.navigation.goBack()
         } else {
-          console.log('Response = ', response)
           this.props.onUpdateUserImage(response.uri)
           // this.props.navigation.navigate(PicturePreview, {
           //   photoUri: response.uri
@@ -164,10 +164,11 @@ class ProfileMain extends Component {
 
   render() {
     const { full_name: fullname, photo } = this.props.user
-    console.log(photo)
+
     return (
       <React.Fragment>
         <NavigationEvents onDidFocus={this.handleScreenFocus} />
+
         <ScrollView
           contentContainerStyle={styles.container}
           style={{ flex: 1 }}
@@ -186,63 +187,81 @@ class ProfileMain extends Component {
                 <Image source={icons['camera']} style={styles.iconCamera} />
               )}
             </TouchableOpacity>
+
             <Text style={styles.userName}>{fullname}</Text>
           </View>
+
           <Section>
-            <SectionHeader title="PROFILE" />
+            <SectionHeader title={'PROFILE'} />
+
             <SectionContent>
               <ListItem
-                icon="user"
-                text="Personal Details"
+                icon={'user'}
+                text={'Personal Details'}
                 onPress={() => this.onNavigateTo(ProfileDetails)}
               />
             </SectionContent>
           </Section>
+
           <Section>
-            <SectionHeader title="SECURITY" />
+            <SectionHeader title={'SECURITY'} />
+
             <SectionContent>
               <ListItem
-                icon="lock"
-                text="Change Password"
+                icon={'lock'}
+                text={'Change Password'}
                 onPress={() => this.onNavigateTo(ChangePassword)}
               />
             </SectionContent>
           </Section>
+
           <Section>
-            <SectionHeader title="ABOUT US" />
+            <SectionHeader title={'ABOUT US'} />
+
             <SectionContent style={styles.socialList}>
-              <ListItem icon="star" text={`Rate us on ${isIOS ? 'App Store' : 'Play Store'}`} />
               <ListItem
-                icon="instagram"
-                text="Follow us on Instagram"
+                icon={'star'}
+                text={`Rate us on ${isIOS ? 'App Store' : 'Play Store'}`}
+              />
+
+              <ListItem
+                icon={'instagram'}
+                text={'Follow us on Instagram'}
                 onPress={this.onInstaPress}
               />
+
               <ListItem
-                icon="facebook"
-                text="Like us on Facebook"
+                icon={'facebook'}
+                text={'Like us on Facebook'}
                 onPress={this.onFBPress}
               />
-              <ListItem icon="twitter" text="Follow us on Twitter" />
+
+              <ListItem icon={'twitter'} text={'Follow us on Twitter'} />
+
               <ListItem
-                icon="book"
-                text="Privacy policy"
+                icon={'book'}
+                text={'Privacy policy'}
                 onPress={() => this.onNavigateTo(PrivacyPolicy)}
               />
+
               <ListItem
-                icon="document"
+                icon={'document'}
                 text={`Terms & conditions`}
                 onPress={() => this.onNavigateTo(TermsConditions)}
               />
             </SectionContent>
           </Section>
+
           <View style={styles.footer}>
             <TouchableOpacity onPress={this.onLogOut}>
-              <Text style={styles.logOutText}>Log Out</Text>
+              <Text style={styles.logOutText}>{'Log Out'}</Text>
             </TouchableOpacity>
+
             <Text style={styles.appVersionText}>
-              Version {VersionNumber.appVersion}
+              {`Version ${VersionNumber.appVersion}`}
             </Text>
           </View>
+
           <Spinner color={colors.red} visible={this.props.requestPending} />
         </ScrollView>
       </React.Fragment>

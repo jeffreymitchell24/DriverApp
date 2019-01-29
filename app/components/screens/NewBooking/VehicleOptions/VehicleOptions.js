@@ -2,7 +2,6 @@ import React, { PureComponent } from 'react'
 import PropTypes from 'prop-types'
 import _ from 'lodash'
 import { FlatList, View, Text, TouchableOpacity, Image } from 'react-native'
-// import { NavBackImage } from 'components/ui'
 
 import { icons } from 'images'
 
@@ -36,11 +35,6 @@ class VehicleOptions extends PureComponent {
       return cat
     })
 
-    console.log(
-      nextCategories,
-      _.every(nextCategories, cat => cat.selected === false)
-    )
-
     if (_.every(nextCategories, cat => cat.selected === false)) {
       this.setState({
         error: 'Select at least one vehicle option'
@@ -62,10 +56,10 @@ class VehicleOptions extends PureComponent {
       >
         <View style={[styles.resultRow, styles.bottomBorder]}>
           <Text style={styles.resultRowText}>{item.name}</Text>
-          {item.selected && (
+
+          {item.selected ? (
             <Image source={icons.selected} style={{ width: 15, height: 10 }} />
-          )}
-          {}
+          ) : null}
         </View>
       </TouchableOpacity>
     )
@@ -93,6 +87,7 @@ class VehicleOptions extends PureComponent {
     return (
       <View style={styles.container}>
         <View style={styles.bottomBorder} />
+
         <FlatList
           ListFooterComponent={this.renderFooter}
           data={categories}
@@ -106,7 +101,6 @@ class VehicleOptions extends PureComponent {
 
 VehicleOptions.propTypes = {
   filters: PropTypes.object,
-  // navigation: PropTypes.object,
   onFilterUpdate: PropTypes.func
 }
 

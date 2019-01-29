@@ -35,8 +35,6 @@ class Upcoming extends Component {
   render() {
     const { bookings } = this.props
 
-    console.log(bookings)
-
     const grouped = _.groupBy(bookings, item =>
       moment(item.booking_ending_at.object.date).format('dddd, D MMM')
     )
@@ -62,7 +60,6 @@ class Upcoming extends Component {
 
 Upcoming.propTypes = {
   bookings: PropTypes.array,
-  // fetchError: PropTypes.string,
   isFetchingPending: PropTypes.bool,
   navigation: PropTypes.object,
   onFetchUserBookings: PropTypes.func,

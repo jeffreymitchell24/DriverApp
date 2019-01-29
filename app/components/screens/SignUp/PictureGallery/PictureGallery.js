@@ -6,9 +6,10 @@ import PropTypes from 'prop-types'
 // import CameraRollPicker from 'react-native-camera-roll-picker'
 import CameraRollPicker from 'react-native-camera-roll-multi-picker'
 // import ImagePicker from 'react-native-image-picker'
-import {PicturePreview} from 'navigation/routeNames'
+import { PicturePreview } from 'navigation/routeNames'
 import { requestReadStoragePermission } from 'helpers/permission'
 import styles from './styles'
+
 // var options = {
 //   title: 'Select Avatar',
 //   // customButtons: [
@@ -20,19 +21,20 @@ import styles from './styles'
 //   },
 //   noData: true
 // }
+
 class PictureGallery extends Component {
   state = {
     selected: [],
     showGallery: false
   }
-  pickerIsOpened= false
 
-  onSelectImage = (data) => {
-    console.log('data', data)
+  pickerIsOpened = false
+
+  onSelectImage = data => {
     this.props.navigation.navigate(PicturePreview, {
       photoUri: data[0].uri
     })
-    this.setState({selected: []})
+    this.setState({ selected: [] })
   }
 
   checkPermission = async () => {
@@ -40,11 +42,12 @@ class PictureGallery extends Component {
     while (!granted) {
       granted = await requestReadStoragePermission()
     }
-    this.setState({showGallery: true})
+    this.setState({ showGallery: true })
   }
 
   componentDidMount = () => {
     this.checkPermission()
+
     // ImagePicker.launchImageLibrary(options, (response) => {
     //   console.log('Response = ', response)
     //   this.props.navigation.navigate(PicturePreview, {
@@ -69,7 +72,8 @@ class PictureGallery extends Component {
   //     })
   //   }
   // }
-  render () {
+
+  render() {
     return (
       <View style={styles.container}>
         {/* <NavigationEvents
@@ -78,23 +82,23 @@ class PictureGallery extends Component {
           onWillBlur={payload => console.log('will blur',payload)}
           onWillFocus={this.onOpenPickerPress}
         /> */}
-        {
-          this.state.showGallery && (
-            <CameraRollPicker
-              assetType='Photos'
-              batchSize={1}
-              callback={this.onSelectImage}
-              groupTypes='SavedPhotos'
-              imageMargin={5}
-              imagesPerRow={3}
-              initialListSize={1}
-              pageSize={3}
-              removeClippedSubviews
-              scrollRenderAheadDistance={500}
-              selected={this.state.selected}
-            />
-          )
-        }
+
+        {this.state.showGallery ? (
+          <CameraRollPicker
+            assetType={'Photos'}
+            batchSize={1}
+            callback={this.onSelectImage}
+            groupTypes={'SavedPhotos'}
+            imageMargin={5}
+            imagesPerRow={3}
+            initialListSize={1}
+            pageSize={3}
+            removeClippedSubviews
+            scrollRenderAheadDistance={500}
+            selected={this.state.selected}
+          />
+        ) : null}
+
         {/* <Button
           containerStyle={styles.button}
           title='OPEN GALLERY'

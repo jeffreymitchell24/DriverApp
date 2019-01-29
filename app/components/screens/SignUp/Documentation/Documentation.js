@@ -10,7 +10,6 @@ import {
 } from 'react-native'
 import ImagePicker from 'react-native-image-picker'
 
-// import find from 'lodash/find'
 import forEach from 'lodash/forEach'
 import Modal from 'react-native-modal'
 import PropTypes from 'prop-types'
@@ -39,7 +38,6 @@ let androidOptions = {
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
-    // path: 'images'
   },
   noData: true
 }
@@ -54,7 +52,6 @@ let iosOptions = {
     skipBackup: true,
     cameraRoll: true,
     waitUntilSaved: true
-    // path: 'images'
   }
 }
 
@@ -66,7 +63,7 @@ class RideshareModal extends Component {
     this.props.main.forEach(app => {
       main[app] = true
     })
-    console.log(main, other)
+
     this.state = {
       main,
       otherSelected: other.length > 0,
@@ -93,13 +90,17 @@ class RideshareModal extends Component {
   onEditOtherApps = value => {
     this.setState({ other: value, wasChanged: true })
   }
+
   onConfirm = () => {
     let { main, other } = this.state
     let mainArray = []
+
     forEach(main, (value, key) => {
       if (value === true) mainArray.push(key)
     })
+
     let re = /\s*,\s*/
+
     this.props.onConfirm({
       main: mainArray,
       other: other.length > 0 ? other.split(re).filter(String) : []
@@ -110,6 +111,7 @@ class RideshareModal extends Component {
     return APP_CONFIG.map(app => {
       let checked =
         app.id === 'other' ? this.state.otherSelected : this.state.main[app.id]
+
       return (
         <TouchableOpacity
           key={app.id}
@@ -119,13 +121,14 @@ class RideshareModal extends Component {
           <CheckBox
             checked={checked}
             checkedColor={colors.red}
-            checkedIcon="ios-checkbox"
+            checkedIcon={'ios-checkbox'}
             containerStyle={styles.checkbox}
-            iconType="ionicon"
+            iconType={'ionicon'}
             textStyle={styles.checkboxTitle}
-            uncheckedIcon="md-square-outline"
+            uncheckedIcon={'md-square-outline'}
             onPress={() => this.checkApp(app.id)}
           />
+
           <Text style={styles.checkboxTitle}>{app.title}</Text>
         </TouchableOpacity>
       )
@@ -135,8 +138,9 @@ class RideshareModal extends Component {
   render() {
     const { isVisible, onCancel } = this.props
     const { otherSelected, wasChanged } = this.state // main, other
-    // let mainAppSelected = find(main, (value, key) => value === true)
+
     let confirmActive = wasChanged // mainAppSelected || (!!other.replace(/[, ]+/g, ' ').trim() && otherSelected)
+
     return (
       <Modal
         backdropOpacity={0.5}
@@ -147,37 +151,43 @@ class RideshareModal extends Component {
       >
         <ScrollView contentContainerStyle={[styles.modalDialogContainer]}>
           <View>
-            <Text style={styles.modalTitle}>Rideshare apps</Text>
+            <Text style={styles.modalTitle}>{'Rideshare apps'}</Text>
+
             <Text style={styles.screenTitle}>
-              Select apps you’re{'\n'} approved to work for:
+              {'Select apps you’re\n approved to work for:'}
             </Text>
+
             <View>{this.renderApps()}</View>
-            {otherSelected && (
+
+            {otherSelected ? (
               <View>
                 <TextInput
                   editable={this.state.otherSelected}
                   style={styles.appsInput}
-                  underlineColorAndroid="transparent"
+                  underlineColorAndroid={'transparent'}
                   value={this.state.other}
                   onChangeText={this.onEditOtherApps}
                 />
+
                 <Text style={[styles.screenTitle, { alignSelf: 'flex-start' }]}>
-                  Separate apps by comma to add more
+                  {'Separate apps by comma to add more'}
                 </Text>
               </View>
-            )}
+            ) : null}
           </View>
+
           <View style={styles.footerButtons}>
             <Button
               containerStyle={styles.modalCancelButton}
               textStyle={styles.modalCancelButtonText}
-              title="CANCEL"
+              title={'CANCEL'}
               onPress={onCancel}
             />
+
             <Button
               containerStyle={styles.modalConfirmButton}
               disabled={!confirmActive}
-              title="CONFIRM"
+              title={'CONFIRM'}
               onPress={this.onConfirm}
             />
           </View>
@@ -198,6 +208,7 @@ RideshareModal.propTypes = {
 class Documentation extends Component {
   constructor(props) {
     super(props)
+
     this.state = {
       ridesharingApproved: null,
       showAppsModal: false,
@@ -206,6 +217,7 @@ class Documentation extends Component {
         other: []
       }
     }
+
     this.modalRenderKey = 0
   }
 
@@ -217,20 +229,25 @@ class Documentation extends Component {
 
   onSubmit = () => {
     const { onSignUp, apps, licences, credentials, personalInfo } = this.props
+
     onSignUp({ licences, apps, credentials, personalInfo })
   }
 
   onApprove = () => {
     this.setState({ showAppsModal: true })
   }
+
   onDisapprove = () => {
     this.props.onUpdatedRideshareApps({ main: [], other: [] })
+
     this.modalRenderKey += 1
+
     this.setState({ ridesharingApproved: false })
   }
 
   onPhotoPress = async (licenseSide, licenseType) => {
     let granted = await requestMainPermissions(true)
+
     if (granted) {
       this.showImagePicker(licenseSide, licenseType)
       // onSelectLicense({type: licenseType, side: licenseSide.toLowerCase()})
@@ -245,7 +262,6 @@ class Documentation extends Component {
     ImagePicker.showImagePicker(
       Platform.OS === 'android' ? androidOptions : iosOptions,
       response => {
-        console.log('Response = ', response)
         this.pickerIsOpened = false
         if (response.didCancel) {
           // this.props.navigation.goBack()
@@ -264,25 +280,33 @@ class Documentation extends Component {
       }
     )
   }
+
   onShowAppModal = () => {
     this.setState({ showAppsModal: true })
   }
 
   onHideAppModal = () => {
     this.modalRenderKey += 1
+
     this.setState({ showAppsModal: false })
   }
 
   onSaveApps = ({ main, other }) => {
     this.modalRenderKey += 1
     let ridesharingApproved = null
-    if (main.length > 0 || other.length > 0) ridesharingApproved = true
+
+    if (main.length > 0 || other.length > 0) {
+      ridesharingApproved = true
+    }
+
     this.setState({ showAppsModal: false, ridesharingApproved })
+
     this.props.onUpdatedRideshareApps({ main, other })
   }
 
   onDisabledPress = () => {
     const { ridesharingApproved } = this.state
+
     if (ridesharingApproved === false) {
       setTimeout(
         () =>
@@ -298,6 +322,7 @@ class Documentation extends Component {
   renderAppsModal = () => {
     const { showAppsModal } = this.state
     const { apps } = this.props
+
     return (
       <RideshareModal
         {...apps}
@@ -326,20 +351,25 @@ class Documentation extends Component {
     return (
       <ScrollView contentContainerStyle={styles.container} style={{ flex: 1 }}>
         <Text style={styles.screenTitle}>
-          Upload following documents to get your account approved
+          {'Upload following documents to get your account approved'}
         </Text>
+
         <Section>
-          <SectionHeader title="DRIVING LICENSE" />
+          <SectionHeader title={'DRIVING LICENSE'} />
+
           <SectionContent>
             <View style={styles.licensePhotoBlock}>
-              <Text style={styles.photoLabel}>Front</Text>
+              <Text style={styles.photoLabel}>{'Front'}</Text>
+
               <Photo
                 imageUri={driving.front}
                 onPress={() => this.onPhotoPress('Front', 'driving')}
               />
             </View>
+
             <View style={styles.licensePhotoBlock}>
-              <Text style={styles.photoLabel}>Back</Text>
+              <Text style={styles.photoLabel}>{'Back'}</Text>
+
               <Photo
                 imageUri={driving.back}
                 onPress={() => this.onPhotoPress('Back', 'driving')}
@@ -347,18 +377,23 @@ class Documentation extends Component {
             </View>
           </SectionContent>
         </Section>
+
         <Section>
-          <SectionHeader title="TLC LICENSE" />
+          <SectionHeader title={'TLC LICENSE'} />
+
           <SectionContent>
             <View style={styles.licensePhotoBlock}>
-              <Text style={styles.photoLabel}>Front</Text>
+              <Text style={styles.photoLabel}>{'Front'}</Text>
+
               <Photo
                 imageUri={tlc.front}
                 onPress={() => this.onPhotoPress('Front', 'tlc')}
               />
             </View>
+
             <View style={styles.licensePhotoBlock}>
-              <Text style={styles.photoLabel}>Back</Text>
+              <Text style={styles.photoLabel}>{'Back'}</Text>
+
               <Photo
                 imageUri={tlc.back}
                 onPress={() => this.onPhotoPress('Back', 'tlc')}
@@ -366,12 +401,15 @@ class Documentation extends Component {
             </View>
           </SectionContent>
         </Section>
+
         <Section>
-          <SectionHeader title="RIDESHARE APPS" />
+          <SectionHeader title={'RIDESHARE APPS'} />
+
           <SectionContent style={{ flexDirection: 'column' }}>
             <Text style={styles.bigQuestion}>
-              Are you approved to work for any Ridesharing apps?
+              {'Are you approved to work for any Ridesharing apps?'}
             </Text>
+
             <TouchableOpacity
               style={styles.checkboxContainer}
               onPress={this.onApprove}
@@ -380,20 +418,23 @@ class Documentation extends Component {
                 checked={ridesharingApproved}
                 onPress={this.onApprove}
               />
-              <Text style={styles.checkboxTitle}>Yes, I’m approved</Text>
+
+              <Text style={styles.checkboxTitle}>{'Yes, I’m approved'}</Text>
             </TouchableOpacity>
-            {ridesharingApproved && (
+
+            {ridesharingApproved ? (
               <Text style={styles.checkboxSubText}>
-                {appsCount} apps selected.
+                {`${appsCount} apps selected.`}
                 <Text
                   style={styles.changeAppButton}
                   onPress={this.onShowAppModal}
                 >
                   {' '}
-                  Change
+                  {'Change'}
                 </Text>
               </Text>
-            )}
+            ) : null}
+
             <TouchableOpacity
               style={styles.checkboxContainer}
               onPress={this.onDisapprove}
@@ -402,20 +443,24 @@ class Documentation extends Component {
                 checked={ridesharingApproved === false}
                 onPress={this.onDisapprove}
               />
-              <Text style={styles.checkboxTitle}>No, I’m not approved</Text>
+
+              <Text style={styles.checkboxTitle}>{'No, I’m not approved'}</Text>
             </TouchableOpacity>
           </SectionContent>
         </Section>
+
         <View style={styles.footer}>
           <Button
             containerStyle={styles.button}
             disabled={!submitActive}
-            title="SUBMIT DOCUMENTS"
+            title={'SUBMIT DOCUMENTS'}
             onDisabledPress={this.onDisabledPress}
             onPress={this.onSubmit}
           />
         </View>
+
         {this.renderAppsModal()}
+
         <Spinner color={colors.red} visible={this.props.isSignupPending} />
       </ScrollView>
     )

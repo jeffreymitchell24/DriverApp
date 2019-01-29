@@ -8,9 +8,10 @@ import {
 import { colors } from 'theme'
 
 const Spinner = ({ visible: isOpen }) => {
-  if (!isOpen) return null
-  console.log('Spinner', { isOpen })
-  // const Wrapper = isOpen ? RNModal : View
+  if (!isOpen) {
+    return null
+  }
+
   return (
     <RNModal visible={isOpen} transparent onRequestClose={() => {}}>
       <View
@@ -21,7 +22,7 @@ const Spinner = ({ visible: isOpen }) => {
           justifyContent: 'center'
         }}
       >
-        <RNSpinner color={colors.red} size="large" />
+        <RNSpinner color={colors.red} size={'large'} />
       </View>
     </RNModal>
   )

@@ -65,10 +65,13 @@ PickerItem.propTypes = {
 }
 
 const Arrow = ({ direction }) => {
+  let iconName = 'ios-arrow-forward'
+
   if (direction === 'left') {
-    return <Icon color={colors.red} name={'ios-arrow-back'} size={22} />
+    iconName = 'ios-arrow-back'
   }
-  return <Icon color={colors.red} name={'ios-arrow-forward'} size={22} />
+
+  return <Icon color={colors.red} name={iconName} size={22} />
 }
 
 Arrow.propTypes = {
@@ -112,6 +115,7 @@ class BookingCalendar extends Component {
       selectedDate: null,
       selectedTime: -1
     }
+
     if (bookDateType === 'end') {
       this.state = {
         maxDate,
@@ -128,20 +132,13 @@ class BookingCalendar extends Component {
     const { selectedDate, selectedTime: selectedTimeID, hourList } = this.state
     const selectedTime = hourList[selectedTimeID].time
 
-    const dateString = `${selectedDate.dateString} ${selectedTime}`
-
-    console.log(dateString)
-
-    // let fullDate = { ...selectedDate }
     let date = moment(
       `${selectedDate.dateString} ${selectedTime}`,
       'YYYY-MM-DD hh:mm A'
     ).format()
 
-    // fullDate.timestamp = date.toDate()
-    // console.log('fullDate', fullDate)
-    // console.log(moment(selectedDate.dateString, 'YYYY-MM-DD').set('hour', +hour).utcOffset('-04:00', true).hour())
     this.props.onSetBookingDate({ type: bookDateType, date })
+
     this.props.navigation.navigate(NewBookingDetails, {
       bookDateType,
       selectedDate,
@@ -170,7 +167,6 @@ class BookingCalendar extends Component {
 
   filterHours = (hourList, startHour) => {
     const filteredList = []
-    console.log(hourList)
 
     for (let i = 0; i < hourList.length; i++) {
       if (hourList[i] > startHour) {
@@ -178,9 +174,9 @@ class BookingCalendar extends Component {
           hourList[i] - (_.isNumber(hourList[i - 1]) ? hourList[i - 1] : 25) !==
           1
 
-        console.log(i > 0 && isBreak, i, hourList[i])
-
-        if (i > 0 && isBreak) break
+        if (i > 0 && isBreak) {
+          break
+        }
 
         filteredList.push(hourList[i])
       }
@@ -188,6 +184,7 @@ class BookingCalendar extends Component {
 
     return filteredList
   }
+
   isTommorowAvailable = (selectedDate, startDateHourList, selectedHour) => {
     const {
       selectedCar: { calendar }
@@ -206,11 +203,7 @@ class BookingCalendar extends Component {
           .format('YYYY-MM-DD')
       ]
 
-    if (nextDayHours[0] !== 0) {
-      return false
-    }
-
-    return true
+    return nextDayHours[0] === 0
   }
 
   onDateSelect = selectedDate => {
@@ -231,8 +224,6 @@ class BookingCalendar extends Component {
 
     const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
 
-    console.log(selectedDayHours, selectedDate.dateString, filteredHours)
-
     for (let i = 0, j = 0; i < 24; i++) {
       let newItem = {
         key: i,
@@ -266,8 +257,6 @@ class BookingCalendar extends Component {
       availableHours.push(newItem)
     }
 
-    console.log('availableHours', availableHours)
-
     if (!isEmpty(calendar[selectedDate.dateString])) {
       this.setState({
         selectedDate,
@@ -275,7 +264,9 @@ class BookingCalendar extends Component {
         hourList: availableHours
       })
 
-      this.isHiddenPicker && this._toggleTimePicker()
+      if (this.isHiddenPicker) {
+        this._toggleTimePicker()
+      }
     }
   }
 
@@ -289,8 +280,6 @@ class BookingCalendar extends Component {
     const startHour = parseInt(moment(this.minDate).format('H'), 10)
 
     const filteredHours = this.filterHours(selectedDayHours, startHour)
-
-    console.log('filteredHours', filteredHours, startHour)
 
     const endHour = filteredHours.length > 0 ? _.last(filteredHours) : startHour
 
@@ -327,8 +316,6 @@ class BookingCalendar extends Component {
       availableHours.push(newItem)
     }
 
-    console.log('availableHours', availableHours)
-
     if (!isEmpty(calendar[selectedDate.dateString])) {
       return availableHours
     }
@@ -347,6 +334,7 @@ class BookingCalendar extends Component {
     this.disableRestHours = false
 
     const { selectedDate, selectedTime, hourList } = this.state
+
     let isButtonActive = selectedDate && selectedTime > -1
     let markedDates = {}
 
@@ -387,8 +375,6 @@ class BookingCalendar extends Component {
       }
     }
 
-    console.log(this.state)
-
     const currentDate = moment(filters.startDate).format('YYYY-MM-DD')
 
     return (
@@ -397,11 +383,8 @@ class BookingCalendar extends Component {
           contentContainerStyle={styles.calendar}
           current={selectedDate || currentDate}
           markedDates={markedDates}
-          // markingType={'period'}
           maxDate={endDate}
           minDate={startDate}
-          // pastScrollRange={0}
-          // futureScrollRange={50}
           renderArrow={direction => <Arrow direction={direction} />}
           style={styles.calendar}
           theme={{
@@ -447,10 +430,11 @@ class BookingCalendar extends Component {
                 </ScrollView>
               </View>
             </View>
+
             <Button
               containerStyle={styles.button}
               disabled={!isButtonActive}
-              title="CONFIRM"
+              title={'CONFIRM'}
               onPress={this.onConfirmPress}
             />
           </Animated.View>
@@ -497,11 +481,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row'
   },
   timePickerContainer: {
-    // alignItems: 'center',
     flex: 1
   },
   timePickerLabel: {
-    // backgroundColor: colors.red,
     paddingVertical: 8,
     textAlign: 'center',
     fontSize: metrics.fontSizeBig,

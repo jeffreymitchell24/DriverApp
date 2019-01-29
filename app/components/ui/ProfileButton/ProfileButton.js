@@ -8,8 +8,6 @@ import styles from './styles'
 const ProfileButton = ({ onPress, user }) => {
   const iconSource = user.photo ? { uri: user.photo } : icons['user']
 
-  console.log('iconSource', iconSource)
-
   return (
     <TouchableOpacity style={styles.container} onPress={onPress}>
       <Image source={iconSource} style={styles.image} />
