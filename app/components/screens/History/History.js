@@ -12,6 +12,7 @@ class History extends Component {
 
   onBookingPress = booking => {
     this.props.onSelectRide(booking)
+
     this.props.navigation.navigate(BookingDetail)
   }
 

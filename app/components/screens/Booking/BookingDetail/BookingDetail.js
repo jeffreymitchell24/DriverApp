@@ -19,8 +19,8 @@ import {
   Spinner
 } from 'components/ui'
 import MapView from 'react-native-maps'
-import { convertMinsToHrsMins } from 'helpers/date'
 import { colors } from 'theme'
+import { STATUS as RIDE_STATUS } from 'constants/ride'
 import { styles, mapStyles } from './styles'
 
 class Countdown extends PureComponent {
@@ -45,12 +45,12 @@ class Countdown extends PureComponent {
 
       countdownMessage = `Late by ${diffString}`
     } else {
-      if (type === 'pending') {
+      if (type === RIDE_STATUS.PENDING) {
         this.minutesRemaining = Math.floor((this.start.unix() - this.now) / 60)
         let diffString = this.getDiffString(this.start)
 
         countdownMessage = `Starting in ${diffString}`
-      } else if (type === 'driving') {
+      } else if (type === RIDE_STATUS.DRIVING) {
         this.minutesRemaining = Math.floor((this.end.unix() - this.now) / 60)
         let diffString = this.getDiffString(this.end)
 
@@ -97,13 +97,13 @@ class Countdown extends PureComponent {
 
       countdownMessage = `Late by ${diffString}`
     } else {
-      if (this.props.type === 'pending') {
+      if (this.props.type === RIDE_STATUS.PENDING) {
         countdownMessage = `Starting in ${diffString}`
 
         this.setState({
           countdownMessage
         })
-      } else if (this.props.type === 'driving') {
+      } else if (this.props.type === RIDE_STATUS.DRIVING) {
         diffString = this.getDiffString(this.end)
         let countdownMessage = `Ending in ${diffString}`
 
@@ -121,7 +121,7 @@ class Countdown extends PureComponent {
   render() {
     const { type } = this.props
 
-    if (type === 'ended' || type === 'cancelled') {
+    if (type === RIDE_STATUS.ENDED || type === RIDE_STATUS.CANCELED) {
       return null
     }
 
@@ -158,13 +158,21 @@ class BookingDetail extends PureComponent {
   onButtonPress = () => {
     const { ride = {} } = this.props
 
-    if (ride.status === 'driving') {
-      this.props.navigation.navigate(RideEnd, { isEnd: true })
-    } else if (ride.status === 'ended') {
-      this.props.onSelectCarForBooking(ride.car.id)
-      this.props.navigation.navigate(NewBookingDetails)
-    } else {
-      this.props.navigation.navigate(RideEnd, { isEnd: false })
+    switch (ride.status) {
+      case RIDE_STATUS.DRIVING:
+        this.props.navigation.navigate(RideEnd, { isEnd: true })
+        break
+
+      case RIDE_STATUS.ENDED:
+      case RIDE_STATUS.CANCELED:
+        this.props.onSelectCarForBooking(ride.car.id)
+        this.props.navigation.navigate(NewBookingDetails)
+        break
+
+      case RIDE_STATUS.PENDING:
+      default:
+        this.props.navigation.navigate(RideEnd, { isEnd: false })
+        break
     }
   }
 
@@ -187,8 +195,10 @@ class BookingDetail extends PureComponent {
   }
 
   isMoreThan30Minutes = () => {
-    let { ride } = this.props
-    const { booking_starting_at: bookindStartingAt } = ride
+    const {
+      ride: { booking_starting_at: bookindStartingAt }
+    } = this.props
+
     let date = moment.tz(bookindStartingAt.object.date, 'America/New_York')
     let now = moment().tz('America/New_York')
 
@@ -274,21 +284,30 @@ class BookingDetail extends PureComponent {
   render() {
     const { ride } = this.props
 
-    let buttonDisabled = true
-    let buttonText = 'UNLOCK CAR'
-
     if (!ride) {
       return null
     }
 
-    if (ride.status === 'driving') {
-      buttonText = 'END DRIVE'
-      buttonDisabled = false
-    } else if (ride.status === 'ended' || ride.status === 'canceled') {
-      buttonText = 'BOOK AGAIN'
-      buttonDisabled = false
-    } else if (ride.status === 'pending' && !this.isMoreThan30Minutes()) {
-      buttonDisabled = false
+    let buttonDisabled = true
+    let buttonText = 'UNLOCK CAR'
+
+    switch (ride.status) {
+      case RIDE_STATUS.DRIVING:
+        buttonText = 'END DRIVE'
+        buttonDisabled = false
+        break
+
+      case RIDE_STATUS.ENDED:
+      case RIDE_STATUS.CANCELED:
+        buttonText = 'BOOK AGAIN'
+        buttonDisabled = false
+        break
+
+      case RIDE_STATUS.PENDING:
+        if (!this.isMoreThan30Minutes()) {
+          buttonDisabled = false
+        }
+        break
     }
 
     const {
@@ -454,7 +473,8 @@ class BookingDetail extends PureComponent {
             </SectionContent>
           </Section>
 
-          {ride.status === 'pending' || ride.status === 'driving' ? (
+          {ride.status === RIDE_STATUS.PENDING ||
+          ride.status === RIDE_STATUS.DRIVING ? (
             <React.Fragment>
               <Section>
                 <SectionHeader title={'DO YOU NEED HELP?'} />
@@ -483,7 +503,9 @@ class BookingDetail extends PureComponent {
             </React.Fragment>
           ) : null}
 
-          {ride.status === 'ended' ? this.renderEndedRideDetails() : null}
+          {ride.status === RIDE_STATUS.ENDED
+            ? this.renderEndedRideDetails()
+            : null}
         </View>
 
         <Button
@@ -493,7 +515,7 @@ class BookingDetail extends PureComponent {
           onPress={this.onButtonPress}
         />
 
-        {ride.status === 'pending' ? (
+        {ride.status === RIDE_STATUS.PENDING ? (
           <Text style={styles.lockedText}>
             {
               'Unlock is available 30 minutes before \n scheduled start of the ride'
@@ -513,7 +535,6 @@ BookingDetail.propTypes = {
   requestPending: PropTypes.bool,
   ride: PropTypes.object,
   onSelectCarForBooking: PropTypes.func,
-  // onUnlockRide: PropTypes.func,
   onUnselectRide: PropTypes.func
 }
 
