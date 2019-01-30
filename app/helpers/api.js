@@ -8,6 +8,19 @@ const AWS_SECRET_ACCESS_KEY = 'OKQhN+FvPVpoW3AKY1XGy5l996cbDY8wevG/Ff51'
 const AWS_DEFAULT_REGION = 'us-west-1'
 const AWS_BUCKET = 'carflow'
 
+// axios.defaults.headers.post['Origin'] = 'application/x-www-form-urlencoded'
+
+axios.interceptors.request.use(config => config, error => Promise.reject(error))
+
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    console.log('axios.interceptors.response.error', error)
+
+    return Promise.reject(error)
+  }
+)
+
 export const authorize = async (email, password) => {
   let response = await axios.post(`${URL}/api/login`, { email, password })
 
@@ -207,14 +220,20 @@ export const bookCar = async ({ token, id, timeStamps }) => {
 
 export const checkRideLicense = async ({ token, id, data }) => {
   let config = {
-    headers: { Authorization: `Bearer ${token}` }
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
   }
 
-  let response = await axios.post(
-    `${URL}/api/bookings/${id}/start`,
-    data || {},
-    config
-  )
+  console.log('checkRideLicense', data, config)
+
+  let response = await axios({
+    method: 'post',
+    url: `${URL}/api/bookings/${id}/start`,
+    data: data || {},
+    config: config
+  })
 
   console.log('checkRideLicense response', response)
 

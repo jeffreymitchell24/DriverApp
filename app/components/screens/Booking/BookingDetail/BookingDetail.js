@@ -500,6 +500,7 @@ class BookingDetail extends PureComponent {
             }
           </Text>
         ) : null}
+
         <Spinner color={colors.red} visible={this.props.requestPending} />
       </ScrollView>
     )

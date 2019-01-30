@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react'
 import { BookingCard } from '../BookingCard'
 import moment from 'moment-timezone'
 import PropTypes from 'prop-types'
+import get from 'lodash/get'
 
 class UpcomingBookingCard extends PureComponent {
   constructor(props) {
@@ -11,6 +12,7 @@ class UpcomingBookingCard extends PureComponent {
       props.booking['booking_starting_at'].object.date,
       'America/New_York'
     )
+
     this.endsAt = moment.tz(
       props.booking['booking_ending_at'].object.date,
       'America/New_York'
@@ -24,6 +26,14 @@ class UpcomingBookingCard extends PureComponent {
   componentDidMount() {
     this.getTime()
     this.timer = setInterval(this.getTime, 30000)
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      get(this.props, 'booking.status') !== get(prevProps, 'booking.status')
+    ) {
+      this.getTime()
+    }
   }
 
   componentWillUnmount() {

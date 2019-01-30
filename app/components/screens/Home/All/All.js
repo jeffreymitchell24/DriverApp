@@ -12,12 +12,17 @@ import _ from 'lodash'
 class Upcoming extends Component {
   componentDidMount() {
     const hideSplash = this.props.navigation.getParam('hideSplash', false)
-    if (hideSplash) SplashScreen.hide()
+
+    if (hideSplash) {
+      SplashScreen.hide()
+    }
+
     this.props.onFetchUserBookings('upcoming')
   }
 
   onBookingPress = booking => {
     this.props.onSelectRide(booking)
+
     this.props.navigation.navigate(BookingDetail)
   }
 

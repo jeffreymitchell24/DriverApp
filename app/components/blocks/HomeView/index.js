@@ -23,7 +23,7 @@ class HomeView extends PureComponent {
       return (
         <View style={styles.emptyListContainer}>
           <Text style={styles.emptyListText}>
-            You don't have any book histories.
+            {`You don't have any book histories.`}
           </Text>
         </View>
       )
@@ -32,18 +32,20 @@ class HomeView extends PureComponent {
     return (
       <View style={styles.emptyListContainer}>
         <Text style={styles.emptyListText}>
-          You don't have any upcoming bookings.
+          {`You don't have any upcoming bookings.`}
         </Text>
         <TouchableOpacity onPress={onNewPress}>
           <Text style={[styles.emptyListText, { color: colors.red }]}>
-            Create booking now
+            {'Create booking now'}
           </Text>
         </TouchableOpacity>
       </View>
     )
   }
+
   renderItem = ({ item, index }) => {
     const { onBookingPress } = this.props
+
     return (
       <BookingCard
         booking={item.car}
@@ -62,13 +64,15 @@ class HomeView extends PureComponent {
 
   render() {
     const { bookings, onNewPress, isFetching, withoutNewBtn } = this.props
+
     if (isFetching) {
       return (
         <View style={styles.spinnerContainer}>
-          <ActivityIndicator color={colors.red} size="large" />
+          <ActivityIndicator color={colors.red} size={'large'} />
         </View>
       )
     }
+
     return (
       <View style={styles.container}>
         {bookings.length > 0 ? (
@@ -84,15 +88,16 @@ class HomeView extends PureComponent {
         ) : (
           this.renderEmptyList()
         )}
-        {!withoutNewBtn && (
+
+        {!withoutNewBtn ? (
           <View style={styles.footer}>
             <Button
               containerStyle={styles.button}
-              title="NEW BOOKING"
+              title={'NEW BOOKING'}
               onPress={onNewPress}
             />
           </View>
-        )}
+        ) : null}
       </View>
     )
   }
