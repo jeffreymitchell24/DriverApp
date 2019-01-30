@@ -226,7 +226,7 @@ export const checkRideLicense = async ({ token, id, data }) => {
     }
   }
 
-  console.log('checkRideLicense', data, config)
+  console.log('checkRideLicense', id, data, config)
 
   let response = await axios({
     method: 'post',

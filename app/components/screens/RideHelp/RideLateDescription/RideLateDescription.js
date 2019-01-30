@@ -13,16 +13,16 @@ import isEmpty from 'lodash/isEmpty'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { TextInputView } from 'components/blocks'
-import { HelpCamera, HelpCenter } from 'navigation/routeNames'
+import { HelpCenter } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import {
   Photo,
   Button,
   SectionHeader,
   HelpCenterSection,
-  RadioButton
+  RadioButton,
+  Spinner
 } from 'components/ui'
-import { Spinner } from 'components/ui'
 import ImagePicker from 'react-native-image-picker'
 import { colors, metrics } from 'theme'
 
@@ -39,7 +39,6 @@ let androidOptions = {
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
-    // path: 'images'
   },
   noData: true
 }
@@ -53,7 +52,6 @@ let iosOptions = {
     skipBackup: true,
     cameraRoll: true,
     waitUntilSaved: true
-    // path: 'images'
   }
 }
 
@@ -83,9 +81,6 @@ class RideLateDescription extends PureComponent {
 
     if (granted) {
       const { onSavePhoto } = this.props
-      // onSelectPhoto({ type: 'rideLatePhotos', index: 0 })
-
-      // navigation.navigate(HelpCamera)
 
       ImagePicker.showImagePicker(
         Platform.OS === 'android' ? androidOptions : iosOptions,
@@ -232,7 +227,6 @@ class RideLateDescription extends PureComponent {
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur
-          // validateOnChange
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />

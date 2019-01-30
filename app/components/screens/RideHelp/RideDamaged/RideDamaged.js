@@ -32,7 +32,6 @@ let androidOptions = {
   storageOptions: {
     skipBackup: true,
     cameraRoll: true
-    // path: 'images'
   },
   noData: true
 }
@@ -47,7 +46,6 @@ let iosOptions = {
     skipBackup: true,
     cameraRoll: true,
     waitUntilSaved: true
-    // path: 'images'
   }
 }
 
@@ -82,7 +80,6 @@ class RideDamaged extends Component {
 
     if (granted) {
       const { onSavePhoto } = this.props
-      // onSelectPhoto({ type: 'rideDamagedPhotos', index })
 
       ImagePicker.showImagePicker(
         Platform.OS === 'android' ? androidOptions : iosOptions,
@@ -96,8 +93,6 @@ class RideDamaged extends Component {
           }
         }
       )
-
-      // navigation.navigate(HelpCamera)
     }
   }
 
@@ -116,10 +111,7 @@ class RideDamaged extends Component {
       !this.props.photos.includes(undefined)
 
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-        // keyboardShouldPersistTaps='always'
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.form}>
           <View style={styles.photoListContainer}>
             <SectionHeader title={'Upload photo (mandatory)'} />
@@ -191,7 +183,6 @@ class RideDamaged extends Component {
           ref={node => (this.formik = node)}
           render={this.renderForm}
           validateOnBlur
-          // validateOnChange
           validationSchema={validationSchema}
           onSubmit={this.onSubmit}
         />
