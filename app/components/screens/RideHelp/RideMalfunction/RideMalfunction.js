@@ -1,8 +1,11 @@
 import React, { Component } from 'react'
-import { View, ScrollView, Alert, Platform } from 'react-native'
+import { View, ScrollView, Alert, Platform, StyleSheet } from 'react-native'
 import PropTypes from 'prop-types'
 import * as Yup from 'yup'
 import isEmpty from 'lodash/isEmpty'
+import ImagePicker from 'react-native-image-picker'
+import { Formik } from 'formik'
+
 import { requestMainPermissions } from 'helpers/permission'
 import { TextInputView } from 'components/blocks'
 import { Home } from 'navigation/routeNames'
@@ -13,10 +16,7 @@ import {
   HelpCenterSection,
   Spinner
 } from 'components/ui'
-import { Formik } from 'formik'
-import { colors } from 'theme'
-import ImagePicker from 'react-native-image-picker'
-import styles from './styles'
+import { colors, metrics } from 'theme'
 
 const validationSchema = Yup.object().shape({
   plate: Yup.string()
@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
     .required('This field is required.')
 })
 
-let androidOptions = {
+const androidOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
@@ -39,7 +39,8 @@ let androidOptions = {
   },
   noData: true
 }
-let iosOptions = {
+
+const iosOptions = {
   cancelButtonTitle: 'Cancel',
   title: 'License Photo',
   mediaType: 'photo',
@@ -83,17 +84,19 @@ class RideMalfunction extends Component {
 
   onConfirm = () => {
     const { navigation } = this.props
+
     navigation.navigate(Home)
   }
 
-  onSubmit = values => {
-    const { plate, description } = values
+  onSubmit = ({ plate, description }) => {
     const { onSubmitReport, ride = {}, photos } = this.props
+
     onSubmitReport({ data: { photos, plate, description }, carId: ride.id })
   }
 
   onPhotoPress = async index => {
     let granted = await requestMainPermissions(true)
+
     if (granted) {
       const { onSavePhoto } = this.props
 
@@ -129,9 +132,9 @@ class RideMalfunction extends Component {
       <ScrollView contentContainerStyle={styles.container}>
         <View style={styles.form}>
           <TextInputView
+            autoCapitalize={'characters'}
             containerStyle={styles.textInput}
             error={touched.plate && errors.plate}
-            keyboardType={'default'}
             label={'License plate'}
             name={'plate'}
             placeholder={'e.g. FYT 1274'}
@@ -235,3 +238,34 @@ RideMalfunction.propTypes = {
 }
 
 export default RideMalfunction
+
+const styles = StyleSheet.create({
+  container: {
+    flexGrow: 1,
+    backgroundColor: colors.white,
+    justifyContent: 'space-between'
+  },
+
+  form: {
+    paddingTop: metrics.contentMargin
+  },
+
+  textInput: {
+    marginBottom: 0
+  },
+
+  photoListContainer: {
+    paddingTop: metrics.contentMargin,
+    paddingBottom: metrics.contentMarginSmall
+  },
+
+  photoList: {
+    paddingTop: metrics.contentMarginSmall,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap'
+  },
+  photoContainer: {
+    marginBottom: 8
+  }
+})

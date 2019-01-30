@@ -5,9 +5,12 @@ import {
   View,
   TextInput,
   Text,
-  ViewPropTypes
+  ViewPropTypes,
+  StyleSheet,
+  Platform
 } from 'react-native'
-import styles from './styles'
+
+import { colors } from 'theme'
 
 export class TextInputView extends PureComponent {
   static propTypes = {
@@ -25,19 +28,21 @@ export class TextInputView extends PureComponent {
     onBlur: PropTypes.func,
     onChangeText: PropTypes.func,
     onFocus: PropTypes.func
-    // styleContainer: PropTypes.object.isRequired
   }
+
   static defaultProps = {
     inputRef: () => {},
     secureTextEntry: false,
     showLimit: false
   }
 
-  getRef = (input) => {
-    this.props.inputRef && this.props.inputRef(input)
+  getRef = input => {
+    if (this.props.inputRef) {
+      this.props.inputRef(input)
+    }
   }
 
-  render () {
+  render() {
     const {
       error,
       label,
@@ -50,29 +55,89 @@ export class TextInputView extends PureComponent {
       ...rest
     } = this.props
 
-    let showErrorLine = false
-    if (error || error === '') showErrorLine = true
-    let inputStyle = [styles.input]
-    let valueLength = (value && value.length) || 0
-    let Component = rest.mask ? TextInputMask : TextInput
+    const showErrorLine = error || error === ''
+    const inputStyle = styles.input
+    const valueLength = (value && value.length) || 0
+
+    const Component = rest.mask ? TextInputMask : TextInput
+
     return (
       <View style={[styles.container, containerStyle]}>
         <View style={styles.labelContainer}>
           <Text style={styles.label}>{label}</Text>
-          {maxLength && showLimit && <Text style={styles.limit}>{`${maxLength - valueLength} characters left `}</Text>}
+
+          {maxLength && showLimit ? (
+            <Text style={styles.limit}>{`${maxLength -
+              valueLength} characters left `}</Text>
+          ) : null}
         </View>
+
         <Component
           maxLength={maxLength}
           placeholder={placeholder}
           ref={this.getRef}
           secureTextEntry={secureTextEntry}
-          style={[...inputStyle, showErrorLine && styles.inputError]}
-          underlineColorAndroid='transparent'
+          style={[inputStyle, showErrorLine ? styles.inputError : null]}
+          underlineColorAndroid={'transparent'}
           value={value}
           {...rest}
         />
-        {!!error && <Text style={styles.error}>{error}</Text>}
+
+        {error ? <Text style={styles.error}>{error}</Text> : null}
       </View>
     )
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 16
+  },
+
+  labelContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
+  },
+
+  label: {
+    fontFamily: 'SFProText-Regular',
+    color: colors.gray200,
+    fontSize: 12
+  },
+
+  limit: {
+    fontFamily: 'SFProText-Regular',
+    color: colors.gray200,
+    fontSize: 12
+  },
+  placeholder: {
+    fontSize: 12,
+    fontFamily: 'SFProText-Regular'
+  },
+  input: {
+    height: null,
+    paddingBottom: Platform.OS === 'android' ? 0 : 4,
+    paddingTop: 8,
+    color: '#000',
+    fontFamily: 'SFProText-Regular',
+    padding: 0,
+    margin: 0,
+    fontSize: 17,
+    lineHeight: 22,
+    textAlignVertical: 'top',
+    borderBottomWidth: 2,
+    borderBottomColor: colors.gray50
+  },
+
+  inputError: {
+    borderBottomColor: colors.red
+  },
+
+  error: {
+    marginTop: 8,
+    fontFamily: 'SFProText-Regular',
+    fontSize: 12,
+    color: colors.red
+  }
+})
