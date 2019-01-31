@@ -150,8 +150,6 @@ class RideEnd extends Component {
         Platform.OS === 'android' ? androidOptions : iosOptions,
         getResponseFunction(index, type)
       )
-
-      // navigation.navigate(ReceiptCamera)
     }
   }
 
@@ -168,10 +166,7 @@ class RideEnd extends Component {
     let buttonActive = this.isButtonActive()
 
     return (
-      <ScrollView
-        contentContainerStyle={styles.container}
-        // keyboardShouldPersistTaps='always'
-      >
+      <ScrollView contentContainerStyle={styles.container}>
         <View
           style={{
             marginBottom: 30

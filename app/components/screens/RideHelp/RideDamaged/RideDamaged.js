@@ -12,7 +12,7 @@ import {
   HelpCenterSection,
   Spinner
 } from 'components/ui'
-import { HelpCenter } from 'navigation/routeNames'
+import { Home } from 'navigation/routeNames'
 import { Formik } from 'formik'
 import ImagePicker from 'react-native-image-picker'
 import { colors, metrics } from 'theme'
@@ -59,13 +59,28 @@ class RideDamaged extends Component {
       if (error) {
         setTimeout(() => Alert.alert('Error', error), 200)
       } else {
-        navigation.navigate(HelpCenter)
+        setTimeout(
+          () =>
+            Alert.alert(
+              '',
+              'Your report has been submitted',
+              [{ text: 'OK', onPress: this.onConfirm }],
+              { cancelable: false }
+            ),
+          200
+        )
       }
     }
   }
 
   componentWillUnmount() {
     this.props.onResetPhotos('rideDamagedPhotos')
+  }
+
+  onConfirm = () => {
+    const { navigation } = this.props
+
+    navigation.navigate(Home)
   }
 
   onSubmit = values => {

@@ -13,7 +13,7 @@ import isEmpty from 'lodash/isEmpty'
 import * as Yup from 'yup'
 import { Formik } from 'formik'
 import { TextInputView } from 'components/blocks'
-import { HelpCenter } from 'navigation/routeNames'
+import { Home } from 'navigation/routeNames'
 import { requestMainPermissions } from 'helpers/permission'
 import {
   Photo,
@@ -67,13 +67,28 @@ class RideLateDescription extends PureComponent {
       if (error) {
         setTimeout(() => Alert.alert('Error', error), 200)
       } else {
-        navigation.navigate(HelpCenter)
+        setTimeout(
+          () =>
+            Alert.alert(
+              '',
+              'Your report has been submitted',
+              [{ text: 'OK', onPress: this.onConfirm }],
+              { cancelable: false }
+            ),
+          200
+        )
       }
     }
   }
 
   componentWillUnmount() {
     this.props.onResetPhotos('rideLatePhotos')
+  }
+
+  onConfirm = () => {
+    const { navigation } = this.props
+
+    navigation.navigate(Home)
   }
 
   onPhotoPress = async () => {
