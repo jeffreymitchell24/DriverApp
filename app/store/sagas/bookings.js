@@ -178,7 +178,7 @@ function* checkRideLicense({ payload }) {
     mileagePhotos
   })
 
-  let query = {
+  const query = {
     ...rideEndPhotos
   }
 
@@ -186,14 +186,14 @@ function* checkRideLicense({ payload }) {
     query.notes = notes
   }
 
-  let data = Api.toFormData(query)
+  const data = Api.toFormData(query)
 
   let state = yield select()
 
   let { token } = state.auth
 
   try {
-    let response = yield call(Api.checkRideLicense, { id, data, token }) // data
+    let response = yield call(Api.checkRideLicense, { id, data, token })
 
     yield put({ type: CHECK_LICENSE.SUCCESS, payload: response })
   } catch (error) {
