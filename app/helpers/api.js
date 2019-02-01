@@ -10,16 +10,16 @@ const AWS_BUCKET = 'carflow'
 
 // axios.defaults.headers.post['Origin'] = 'application/x-www-form-urlencoded'
 
-axios.interceptors.request.use(config => config, error => Promise.reject(error))
+// axios.interceptors.request.use(config => config, error => Promise.reject(error))
 
-axios.interceptors.response.use(
-  response => response,
-  error => {
-    console.log('axios.interceptors.response.error', error)
+// axios.interceptors.response.use(
+//   response => response,
+//   error => {
+//     console.log('axios.interceptors.response.error', error)
 
-    return Promise.reject(error)
-  }
-)
+//     return Promise.reject(error)
+//   }
+// )
 
 export const authorize = async (email, password) => {
   let response = await axios.post(`${URL}/api/login`, { email, password })
@@ -219,25 +219,40 @@ export const bookCar = async ({ token, id, timeStamps }) => {
 }
 
 export const checkRideLicense = async ({ token, id, data }) => {
-  let config = {
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }
-  }
-
-  console.log('checkRideLicense', id, data, config)
+  console.log('checkRideLicense', id, data)
 
   let response = await axios({
     method: 'post',
     url: `${URL}/api/bookings/${id}/start`,
     data: data || {},
-    config: config
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
+    }
   })
 
   console.log('checkRideLicense response', response)
 
   return response.data.data
+
+  // console.log('checkRideLicense data', data)
+
+  // let response = await fetch(`${URL}/api/bookings/${id}/start`, {
+  //   method: 'POST',
+  //   headers: {
+  //     Authorization: `Bearer ${token}`,
+  //     'Content-Type': 'multipart/form-data'
+  //   },
+  //   body: data
+  // })
+
+  // console.log('checkRideLicense response', response)
+
+  // const responseJson = await response.json()
+
+  // console.log('checkRideLicense responseJson', responseJson)
+
+  // return responseJson
 }
 
 export const sendRideReceipt = async ({ token, id, data }) => {
@@ -362,7 +377,7 @@ export const toFormData = data => {
   let form = new FormData()
 
   forEach(data, (field, fieldName) => {
-    console.log(field, fieldName)
+    console.log(fieldName, field)
 
     if (typeof field === 'object' && field.length) {
       forEach(field, (value, key) => {
@@ -372,6 +387,10 @@ export const toFormData = data => {
       form.append(fieldName, field)
     }
   })
+
+  for (let pair of form.entries()) {
+    console.log(pair[0] + ', ' + pair[1])
+  }
 
   return form
 }
