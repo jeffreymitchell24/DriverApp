@@ -149,6 +149,8 @@ function* bookCar({ payload }) {
   } catch (error) {
     console.log('bookCar error', error)
 
+    yield fork(fetchCarDetails, { payload: { id } })
+
     yield put({
       type: BOOK_CAR.FAILURE,
       payload: error.response
