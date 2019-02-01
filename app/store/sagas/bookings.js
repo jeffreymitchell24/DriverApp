@@ -186,7 +186,7 @@ function* checkRideLicense({ payload }) {
     query.notes = notes
   }
 
-  const data = Api.toFormData(query)
+  const data = query // Api.toFormData(query)
 
   let state = yield select()
 

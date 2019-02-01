@@ -1,5 +1,7 @@
 import axios from 'axios'
+import RNFetchBlob from 'rn-fetch-blob'
 import { RNS3 } from 'react-native-aws3'
+import get from 'lodash/get'
 import forEach from 'lodash/forEach'
 const URL = 'http://54.183.254.243'
 
@@ -8,18 +10,16 @@ const AWS_SECRET_ACCESS_KEY = 'OKQhN+FvPVpoW3AKY1XGy5l996cbDY8wevG/Ff51'
 const AWS_DEFAULT_REGION = 'us-west-1'
 const AWS_BUCKET = 'carflow'
 
-// axios.defaults.headers.post['Origin'] = 'application/x-www-form-urlencoded'
+axios.interceptors.request.use(config => config, error => Promise.reject(error))
 
-// axios.interceptors.request.use(config => config, error => Promise.reject(error))
+axios.interceptors.response.use(
+  response => response,
+  error => {
+    console.log('axios.interceptors.response.error', error)
 
-// axios.interceptors.response.use(
-//   response => response,
-//   error => {
-//     console.log('axios.interceptors.response.error', error)
-
-//     return Promise.reject(error)
-//   }
-// )
+    return Promise.reject(error)
+  }
+)
 
 export const authorize = async (email, password) => {
   let response = await axios.post(`${URL}/api/login`, { email, password })
@@ -219,40 +219,38 @@ export const bookCar = async ({ token, id, timeStamps }) => {
 }
 
 export const checkRideLicense = async ({ token, id, data }) => {
-  console.log('checkRideLicense', id, data)
-
-  let response = await axios({
-    method: 'post',
-    url: `${URL}/api/bookings/${id}/start`,
-    data: data || {},
-    headers: {
-      Authorization: `Bearer ${token}`,
-      'Content-Type': 'multipart/form-data'
+  const body = []
+  forEach(data, (field, fieldName) => {
+    if (get(field, 'type') === 'image/jpeg') {
+      body.push({
+        name: fieldName,
+        filename: field.name,
+        type: field.type,
+        data: RNFetchBlob.wrap(field.uri)
+      })
+    } else {
+      body.push({
+        name: fieldName,
+        data: field
+      })
     }
   })
 
-  console.log('checkRideLicense response', response)
+  console.log('checkRideLicense', id, data, body)
 
-  return response.data.data
+  let response = await RNFetchBlob.fetch(
+    'POST',
+    `${URL}/api/bookings/${id}/start`,
+    {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'multipart/form-data'
+    },
+    body
+  )
 
-  // console.log('checkRideLicense data', data)
+  console.log('checkRideLicense response', response.json())
 
-  // let response = await fetch(`${URL}/api/bookings/${id}/start`, {
-  //   method: 'POST',
-  //   headers: {
-  //     Authorization: `Bearer ${token}`,
-  //     'Content-Type': 'multipart/form-data'
-  //   },
-  //   body: data
-  // })
-
-  // console.log('checkRideLicense response', response)
-
-  // const responseJson = await response.json()
-
-  // console.log('checkRideLicense responseJson', responseJson)
-
-  // return responseJson
+  return response.json().data
 }
 
 export const sendRideReceipt = async ({ token, id, data }) => {
@@ -377,13 +375,15 @@ export const toFormData = data => {
   let form = new FormData()
 
   forEach(data, (field, fieldName) => {
-    console.log(fieldName, field)
-
     if (typeof field === 'object' && field.length) {
       forEach(field, (value, key) => {
+        console.log(`${fieldName}[${key}]`, value)
+
         form.append(`${fieldName}[${key}]`, value)
       })
     } else {
+      console.log(fieldName, field)
+
       form.append(fieldName, field)
     }
   })
