@@ -73,6 +73,8 @@ class RideEnd extends Component {
       showPlusButton: true,
       notes: ''
     }
+
+    this._photoLoading = false
   }
 
   componentDidUpdate(prevProps) {
@@ -131,12 +133,18 @@ class RideEnd extends Component {
   }
 
   onPhotoPress = async (type, index) => {
+    if (this._photoLoading) {
+      return
+    }
+
     let granted = await requestMainPermissions(true)
 
     if (granted) {
       const { onPhotoSave } = this.props
 
       const getResponseFunction = (indexCopy, typeCopy) => response => {
+        this._photoLoading = false
+
         if (!response.didCancel || response.error) {
           onPhotoSave({
             type: typeCopy,
@@ -146,6 +154,7 @@ class RideEnd extends Component {
         }
       }
 
+      this._photoLoading = true
       ImagePicker.launchCamera(
         Platform.OS === 'android' ? androidOptions : iosOptions,
         getResponseFunction(index, type)
