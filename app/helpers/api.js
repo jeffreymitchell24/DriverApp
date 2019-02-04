@@ -1,8 +1,10 @@
 import axios from 'axios'
 import RNFetchBlob from 'rn-fetch-blob'
+import { Platform } from 'react-native'
 import { RNS3 } from 'react-native-aws3'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
+
 const URL = 'http://54.183.254.243'
 
 const AWS_ACCESS_KEY_ID = 'AKIAI5DVRLUDPCC3GE6Q'
@@ -226,7 +228,9 @@ export const checkRideLicense = async ({ token, id, data }) => {
         name: fieldName,
         filename: field.name,
         type: field.type,
-        data: RNFetchBlob.wrap(field.uri)
+        data: RNFetchBlob.wrap(
+          Platform.OS === 'ios' ? field.uri.replace('file://', '') : field.uri
+        )
       })
     } else {
       body.push({
