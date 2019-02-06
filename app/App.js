@@ -10,4 +10,6 @@ const App = (props) => (
   />
 )
 
+// new changes
+
 export default App
