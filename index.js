@@ -13,6 +13,7 @@ const {store, persistor} = configureStore(rootReducer, rootSaga)
 const Carflow = () => (
   <Provider store={store}>
     <PersistGate loading={null} persistor={persistor}>
+
       <App />
     </PersistGate>
   </Provider>

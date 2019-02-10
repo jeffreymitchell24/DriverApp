@@ -37,21 +37,21 @@ public class MainApplication extends Application implements ReactApplication {
     @Override
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
-          new MainReactPackage(),
-            new DatePickerPackage(),
-            // new WheelPickerPackage(),
-            // new ReactNativeWheelPickerPackage(),
-            new RNFSPackage(),
-            new ImagePickerPackage(),
-            new RNTextInputMaskPackage(),
-            new RNSensitiveInfoPackage(),
-            new MapsPackage(),
-            new VectorIconsPackage(),
-            new SplashScreenReactPackage(),
-            new RNCameraPackage(),
-            new ImageResizerPackage(),
-            new RNFetchBlobPackage(),
-            new RNVersionNumberPackage()
+              new MainReactPackage(),
+              new DatePickerPackage(),
+              // new WheelPickerPackage(),
+              // new ReactNativeWheelPickerPackage(),
+              new RNFSPackage(),
+              new ImagePickerPackage(),
+              new RNTextInputMaskPackage(),
+              new RNSensitiveInfoPackage(),
+              new MapsPackage(),
+              new VectorIconsPackage(),
+              new SplashScreenReactPackage(),
+              new RNCameraPackage(),
+              new ImageResizerPackage(),
+              new RNFetchBlobPackage(),
+              new RNVersionNumberPackage()
       );
     }
 
