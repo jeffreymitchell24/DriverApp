@@ -1,5 +1,5 @@
 # Uncomment the next line to define a global platform for your project
-# platform :ios, '9.0'
+ platform :ios, '9.0'
 
 target 'carflow' do
   rn_path = '../node_modules/react-native'
@@ -23,6 +23,8 @@ target 'carflow' do
     'RCTWebSocket',
   ]
 
+
+
   # React Native third party dependencies podspecs
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
@@ -38,7 +40,8 @@ target 'carflow' do
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
-
+  pod 'Firebase/Core'
+  pod 'Firebase/Database'
 end
 
 post_install do |installer|

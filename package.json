@@ -7,7 +7,7 @@
     "test": "jest",
     "release-android": "cd android && ./gradlew assembleRelease",
     "clear:cache": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro* && rm -rf $TMPDIR/haste-*",
-    "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && npm i"
+    "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && yarn"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -27,6 +27,7 @@
     "react-native-camera-roll-picker": "^1.2.3",
     "react-native-date-picker": "^2.2.1",
     "react-native-elements": "^0.19.1",
+    "react-native-firebase": "5.1.0",
     "react-native-fontawesome": "^5.7.0",
     "react-native-fs": "^2.12.0",
     "react-native-google-autocomplete": "^0.1.5",
@@ -35,7 +36,7 @@
     "react-native-image-picker": "^0.27.2",
     "react-native-image-resizer": "^1.0.0",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
-    "react-native-maps": "0.21.0",
+    "react-native-maps": "^0.23.0",
     "react-native-modal": "^6.5.0",
     "react-native-modal-datetime-picker": "^6.0.0",
     "react-native-permissions": "^1.1.1",

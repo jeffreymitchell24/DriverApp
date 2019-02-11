@@ -11,12 +11,15 @@
 #import <React/RCTRootView.h>
 #import "RNSplashScreen.h"  // here
 #import <GoogleMaps/GoogleMaps.h>
+#import <Firebase.h>
 
 
 @implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+  
+  
   [GMSServices provideAPIKey:@"AIzaSyA9-QzGSh7GPNieY1uis1cyMlQU0kUnXag"];
   NSURL *jsCodeLocation;
   #ifdef DEBUG
@@ -26,7 +29,7 @@
   // PROD
     jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   #endif
-  
+    [FIRApp configure];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"carflow"
                                                initialProperties:nil
@@ -39,6 +42,7 @@
   self.window.rootViewController = rootViewController;
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];  // here
+
   return YES;
 }
 

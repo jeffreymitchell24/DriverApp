@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>AD_UNIT_ID_FOR_BANNER_TEST</key>
+	<string>ca-app-pub-3940256099942544/2934735716</string>
+	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
+	<string>ca-app-pub-3940256099942544/4411468910</string>
+	<key>CLIENT_ID</key>
+	<string>795897304652-67k37ulaau7dd4j9vr5hjcvml37ca536.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.795897304652-67k37ulaau7dd4j9vr5hjcvml37ca536</string>
+	<key>API_KEY</key>
+	<string>AIzaSyA0BRbwvhWPq_dHe2t3Glk4yKbIAaEwaMM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>795897304652</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.carflo.carflow</string>
+	<key>PROJECT_ID</key>
+	<string>carflo-7945a</string>
+	<key>STORAGE_BUCKET</key>
+	<string>carflo-7945a.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<true></true>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<false></false>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:795897304652:ios:3eb913a6802760fc</string>
+	<key>DATABASE_URL</key>
+	<string>https://carflo-7945a.firebaseio.com</string>
+</dict>
+</plist>
