@@ -222,11 +222,12 @@ export function* checkUserStatusWrapper(cbSaga, action) {
       yield fork(cbSaga, action)
     }
   } catch (error) {
-    console.log('checkUserStatusWrapper error', error)
+    // console.log('checkUserStatusWrapper error', error)
 
     yield put({
       type: CHECK_STATUS.FAILURE,
-      payload: error.response.data.error.message
+      payload: 'Error'
+      // payload: error?.response?.data?.error?.message
     })
   }
 }

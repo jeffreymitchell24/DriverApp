@@ -73,7 +73,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    entryFile: "index.js"
+        entryFile: "index.js"
 ]
 
 apply from: "../../node_modules/react-native/react.gradle"
@@ -102,7 +102,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
-        versionName "0.0.44"
+        versionName "0.0.45"
         archivesBaseName = "app-v-$versionName"
 
         ndk {
@@ -154,7 +154,7 @@ dependencies {
     implementation project(':react-native-date-picker')
     // compile project(':react-native-wheel-picker-android')
     // compile project(':react-native-wheel-datepicker')
-    compile project(':react-native-fs')
+    implementation project(':react-native-fs')
     implementation project(':react-native-image-picker')
     implementation project(':react-native-text-input-mask')
     implementation project(':react-native-sensitive-info')
