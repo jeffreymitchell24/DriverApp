@@ -42,6 +42,7 @@ target 'carflow' do
   pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
   pod 'Firebase/Core'
   pod 'Firebase/Database'
+  pod 'Firebase/Messaging'
 end
 
 post_install do |installer|
