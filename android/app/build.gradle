@@ -102,7 +102,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 2
-        versionName "0.0.44"
+        versionName "0.0.45"
         archivesBaseName = "app-v-$versionName"
 
         ndk {
