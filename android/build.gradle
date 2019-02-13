@@ -43,6 +43,16 @@ allprojects {
         }
         maven { url "https://jitpack.io" }
     }
+    subprojects {
+    afterEvaluate {project ->
+        if (project.hasProperty("android")) {
+            android {
+                compileSdkVersion 27 // <-- match this to your project's compileSdkVersion
+                buildToolsVersion '28.0.2' // <-- match this to your project's buildToolsVersion
+            }
+        }
+    }
+}
 }
 
 task wrapper(type: Wrapper) {
