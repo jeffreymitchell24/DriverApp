@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
 import {Button} from 'components/ui'
-import {requestMainPermissions} from 'helpers/permission'
+import {requestMainPermissions, requestFireabasePermission} from 'helpers/permission'
 import {SignIn, Home, RegisterReview} from 'navigation/routeNames'
 import {StackActions, NavigationActions, SafeAreaView} from 'react-navigation'
 import Swiper from 'react-native-swiper'
@@ -17,8 +17,9 @@ class Intro extends Component {
         super(props)
     }
 
-    componentDidMount() {
+     componentDidMount() {
         requestMainPermissions()
+         // requestFireabasePermission()
 
 
         const {user} = this.props

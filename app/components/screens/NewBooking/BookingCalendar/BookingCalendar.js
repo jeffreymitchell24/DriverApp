@@ -84,7 +84,7 @@ class BookingCalendar extends Component {
       headerLeft: (
         <NavButton
           icon={'cancel'}
-          imageStyle={{ height: 12, width: 12 }}
+          imageStyle={{ height: 12, width: 12, marginLeft:16 }}
           onPress={() => navigation.goBack()}
         />
       )
