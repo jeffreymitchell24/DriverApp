@@ -57,8 +57,10 @@ function* registrationFlow() {
       }
 
       const { user, auth_token: token } = response
+        //todo uncoment, now can't check auth
+        // yield call(Api.sendDeviceToken, token)
 
-      yield put({
+        yield put({
         type: SIGN_UP.SUCCESS,
         payload: { user, token: token || auth.token }
       })

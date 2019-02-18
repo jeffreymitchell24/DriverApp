@@ -1,4 +1,5 @@
-import { createStackNavigator } from 'react-navigation'
+import { createStackNavigator, createAppContainer } from 'react-navigation'
+
 import React from 'react'
 import CardStackStyleInterpolator from 'react-navigation-stack/dist/views/StackView/StackViewStyleInterpolator'
 import { fromTop } from 'react-navigation-transitions'

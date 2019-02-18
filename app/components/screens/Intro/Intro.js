@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import {View, Image, Text, Keyboard, Dimensions, Alert, Linking} from 'react-native'
+import {View, Image, Platform, Text, Keyboard, Dimensions, Alert, Linking} from 'react-native'
 import PropTypes from 'prop-types'
 import SplashScreen from 'react-native-splash-screen'
 import {backgrounds} from 'images'
@@ -32,6 +32,7 @@ class Intro extends Component {
         // }).catch(err => console.log('An error occurred', err));
         Keyboard.dismiss()
 
+        console.log('USER', user)
         if (!user) {
             SplashScreen.hide()
         } else {

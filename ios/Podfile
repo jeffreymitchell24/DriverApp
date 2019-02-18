@@ -23,8 +23,6 @@ target 'carflow' do
     'RCTWebSocket',
   ]
 
-
-
   # React Native third party dependencies podspecs
   pod 'DoubleConversion', :podspec => "#{rn_path}/third-party-podspecs/DoubleConversion.podspec"
   pod 'glog', :podspec => "#{rn_path}/third-party-podspecs/glog.podspec"
@@ -40,9 +38,13 @@ target 'carflow' do
   pod 'GoogleMaps'  # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'Google-Maps-iOS-Utils' # Remove this line if you don't want to support GoogleMaps on iOS
   pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
-  pod 'Firebase/Core'
-  pod 'Firebase/Database'
+  
+  pod 'Firebase'
   pod 'Firebase/Messaging'
+  pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
+
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
 end
 
 post_install do |installer|
@@ -53,7 +55,12 @@ post_install do |installer|
       end
     end
     if target.name == "React"
-      target.remove_from_project
+        target.remove_from_project
     end
+    
+    if target.name == "yoga"
+        target.remove_from_project
+    end
+    
   end
 end

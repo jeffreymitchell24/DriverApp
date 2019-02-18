@@ -4,9 +4,10 @@ buildscript {
     ext {
         buildToolsVersion = "28.0.2"
         minSdkVersion = 16
-        compileSdkVersion = 27
-        targetSdkVersion = 26
-        supportLibVersion = "27.1.1"
+        compileSdkVersion = 28
+        targetSdkVersion = 28
+//        supportLibVersion = "27.1.0"
+        supportLibVersion = "28.0.0"
         googlePlayServicesVersion = "15.0.1"
         androidMapsUtilsVersion = "0.5+"
     }
@@ -32,6 +33,7 @@ allprojects {
     repositories {
         mavenLocal()
         google()
+
         maven {
             url 'https://maven.google.com/'
             name 'Google'
@@ -43,16 +45,18 @@ allprojects {
         }
         maven { url "https://jitpack.io" }
     }
+
+
     subprojects {
-    afterEvaluate {project ->
-        if (project.hasProperty("android")) {
-            android {
-                compileSdkVersion 27 // <-- match this to your project's compileSdkVersion
-                buildToolsVersion '28.0.2' // <-- match this to your project's buildToolsVersion
+        afterEvaluate { project ->
+            if (project.hasProperty("android")) {
+                android {
+                    compileSdkVersion 28 // <-- match this to your project's compileSdkVersion
+                    buildToolsVersion '28.0.2' // <-- match this to your project's buildToolsVersion
+                }
             }
         }
     }
-}
 }
 
 task wrapper(type: Wrapper) {

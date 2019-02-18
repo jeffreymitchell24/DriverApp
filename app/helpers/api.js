@@ -4,7 +4,8 @@ import { Platform } from 'react-native'
 import { RNS3 } from 'react-native-aws3'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
-import firebase from 'react-native-firebase'
+import FCM from "react-native-fcm";
+// import firebase from 'react-native-firebase'
 const URL = 'http://54.183.254.243'
 
 const AWS_ACCESS_KEY_ID = 'AKIAI5DVRLUDPCC3GE6Q'
@@ -65,6 +66,9 @@ export const register = async user => {
 
     console.log('register response', response)
 
+    if(response?.data?.token) {
+        await sendDeviceToken(response?.data?.token)
+    }
     return response.data.data
 }
 
@@ -418,7 +422,7 @@ export const fetchCarCategories = async token => {
  * @returns {Promise<void>}
  */
 export const sendDeviceToken = async token =>{
-    const device_token = await firebase.messaging().getToken();
+    const device_token = await  FCM.getFCMToken()
     if (device_token) {
 
         console.log(device_token)
@@ -439,7 +443,10 @@ export const sendDeviceToken = async token =>{
  * @returns {Promise<void>}
  */
 export const removeDeviceToken = async token =>{
-    const device_token = await firebase.messaging().getToken();
+
+
+
+    const device_token = await FCM.getFCMToken()
     if (device_token) {
 
         console.log('removeDeviceToken>',device_token)
