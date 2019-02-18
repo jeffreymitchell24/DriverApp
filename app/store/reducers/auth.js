@@ -83,7 +83,13 @@ const handlers = {
       pending: false
     }
   },
-  [SIGN_OUT]: (state, { payload }) => {
+  [SIGN_OUT.SUCCESS]: (state, { payload }) => {
+    return {
+      ...initialState,
+      prevRejected: state.prevRejected
+    }
+  },
+[SIGN_OUT.ERROR]: (state, { payload }) => {
     return {
       ...initialState,
       prevRejected: state.prevRejected

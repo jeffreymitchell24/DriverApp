@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "795897304652",
+    "firebase_url": "https://carflo-7945a.firebaseio.com",
+    "project_id": "carflo-7945a",
+    "storage_bucket": "carflo-7945a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:795897304652:android:3eb913a6802760fc",
+        "android_client_info": {
+          "package_name": "com.carflo.carflow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "795897304652-c5hira0npkup8n2n9luv9u3hg12en7i5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.carflo.carflow",
+            "certificate_hash": "5396ecf0e524bc70725b94989cc7dd6241453d8f"
+          }
+        },
+        {
+          "client_id": "795897304652-8jar4jhkj1gmgeivg6mool62us3v7lif.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCy1MvdkgHqttAEVPPr4_HuRKu5Vutnkg0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "795897304652-8jar4jhkj1gmgeivg6mool62us3v7lif.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "795897304652-67k37ulaau7dd4j9vr5hjcvml37ca536.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.carflo.carflow"
+              }
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

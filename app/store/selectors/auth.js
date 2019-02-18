@@ -14,3 +14,5 @@ export const getIsCheckingUserStatus = R.path(['auth', 'checkingUserStatus'])
 export const getUpdateError = R.path(['auth', 'updateError'])
 
 export const getPrevRejectedId = R.path(['auth', 'prevRejected'])
+
+export const isAuthorized = R.path(['auth', 'isAuthed'])
