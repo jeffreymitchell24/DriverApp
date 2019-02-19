@@ -1,6 +1,6 @@
 import axios from 'axios'
 import RNFetchBlob from 'rn-fetch-blob'
-import { Platform } from 'react-native'
+import { Platform, Share } from 'react-native'
 import { RNS3 } from 'react-native-aws3'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
@@ -431,6 +431,7 @@ export const sendDeviceToken = async token =>{
         }
         const data = new FormData()
         data.append('device_token',device_token)
+        // await Share.share({message:token})
         const response = await axios.post(`${URL}/api/device_token`,data, config)
         console.log(response)
         return response.data.data

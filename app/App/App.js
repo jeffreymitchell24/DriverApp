@@ -37,8 +37,8 @@ class App extends Component {
                 console.log('nav to ', notif?.targetScreen)
 
                 setTimeout(() => {
-                        NavigationService.navigate(notif.targetScreen, {hideSplash: true})
-                    }, 500)
+                    NavigationService.navigate(notif.targetScreen, {hideSplash: true})
+                }, 500)
             }
 
             if (Platform.OS === 'ios') {
@@ -63,35 +63,11 @@ class App extends Component {
         });
     }
 
-    permission = async () => {
-        try {
-            let result = await FCM.requestPermissions({
-                badge: false,
-                sound: true,
-                alert: true
-            });
-        } catch (e) {
-            console.error(e);
-        }
-
-        FCM.getFCMToken().then(token => {
-            console.log("TOKEN (getFCMToken)", token);
-            this.setState({token: token || ""});
-        });
-
-        if (Platform.OS === "ios") {
-            FCM.getAPNSToken().then(token => {
-                console.log("APNS TOKEN (getFCMToken)", token);
-            });
-        }
-        return true
-    }
 
     componentDidMount() {
-        this.permission()
 
         Linking.addEventListener('url', this._handleOpenURL.bind(this));
-        if(Platform.OS=='ios') {
+        if (Platform.OS == 'ios') {
             this.registerAppListener()
         }
     }
