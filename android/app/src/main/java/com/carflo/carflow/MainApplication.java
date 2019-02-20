@@ -8,6 +8,21 @@ import com.airbnb.android.react.maps.MapsPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
 import com.evollu.react.fcm.FIRMessagingPackage;
 import com.facebook.react.ReactApplication;
+import com.RNFetchBlob.RNFetchBlobPackage;
+import com.zyu.ReactNativeWheelPickerPackage;
+import com.apsl.versionnumber.RNVersionNumberPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
+import com.RNTextInputMask.RNTextInputMaskPackage;
+import org.devio.rn.splashscreen.SplashScreenReactPackage;
+import br.com.classapp.RNSensitiveInfo.RNSensitiveInfoPackage;
+import com.airbnb.android.react.maps.MapsPackage;
+import fr.bamlab.rnimageresizer.ImageResizerPackage;
+import com.imagepicker.ImagePickerPackage;
+import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
+import com.rnfs.RNFSPackage;
+import com.evollu.react.fcm.FIRMessagingPackage;
+import com.henninghall.date_picker.DatePickerPackage;
+import org.reactnative.camera.RNCameraPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
@@ -44,6 +59,21 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNFetchBlobPackage(),
+            new ReactNativeWheelPickerPackage(),
+            new RNVersionNumberPackage(),
+            new VectorIconsPackage(),
+            new RNTextInputMaskPackage(),
+            new SplashScreenReactPackage(),
+            new RNSensitiveInfoPackage(),
+            new MapsPackage(),
+            new ImageResizerPackage(),
+            new ImagePickerPackage(),
+            new RNGestureHandlerPackage(),
+            new RNFSPackage(),
+            new FIRMessagingPackage(),
+            new DatePickerPackage(),
+            new RNCameraPackage(),
                     new RNGestureHandlerPackage(),
                     new FIRMessagingPackage(),
                     new DatePickerPackage(),

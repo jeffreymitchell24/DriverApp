@@ -17,9 +17,9 @@ class Intro extends Component {
         super(props)
     }
 
-     componentDidMount() {
-        requestMainPermissions()
-         // requestFireabasePermission()
+    async componentDidMount () {
+        await requestMainPermissions()
+         await  requestFireabasePermission()
 
 
         const {user} = this.props

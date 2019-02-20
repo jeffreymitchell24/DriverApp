@@ -101,7 +101,7 @@ android {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 4
-        versionName "0.0.49"
+        versionName "0.0.50"
         archivesBaseName = "app-v-$versionName"
 
         ndk {
@@ -158,6 +158,21 @@ configurations.all {
 }
 
 dependencies {
+    compile project(':rn-fetch-blob')
+    compile project(':react-native-wheel-picker')
+    compile project(':react-native-version-number')
+    compile project(':react-native-vector-icons')
+    compile project(':react-native-text-input-mask')
+    compile project(':react-native-splash-screen')
+    compile project(':react-native-sensitive-info')
+    compile project(':react-native-maps')
+    compile project(':react-native-image-resizer')
+    compile project(':react-native-image-picker')
+    compile project(':react-native-gesture-handler')
+    compile project(':react-native-fs')
+    compile project(':react-native-fcm')
+    compile project(':react-native-date-picker')
+    compile project(':react-native-camera')
     implementation project(':react-native-gesture-handler')
     implementation project(':react-native-fcm')
     implementation(project(':react-native-maps'))

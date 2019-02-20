@@ -52,6 +52,7 @@ export class TextInputView extends PureComponent {
       containerStyle,
       maxLength,
       showLimit,
+      autoCapitalize,
       ...rest
     } = this.props
 
@@ -61,6 +62,10 @@ export class TextInputView extends PureComponent {
 
     const Component = rest.mask ? TextInputMask : TextInput
 
+      console.log('autoCapitalize',autoCapitalize)
+      console.log('rest', rest)
+      console.log('rest.mask', rest.mask)
+      console.log('rest.mask',Component)
     return (
       <View style={[styles.container, containerStyle]}>
         <View style={styles.labelContainer}>
@@ -80,6 +85,7 @@ export class TextInputView extends PureComponent {
           style={[inputStyle, showErrorLine ? styles.inputError : null]}
           underlineColorAndroid={'transparent'}
           value={value}
+          autoCapitalize = {autoCapitalize?autoCapitalize:'sentences'}
           {...rest}
         />
 

@@ -107,6 +107,8 @@ class RideMalfunction extends Component {
     onPhotoPress = async index => {
         let granted = await requestMainPermissions(true)
 
+        console.log(index)
+        console.log(granted)
         if (granted) {
             const {onSavePhoto} = this.props
 
@@ -138,10 +140,14 @@ class RideMalfunction extends Component {
             this.props.photos.length === 4 &&
             !this.props.photos.includes(undefined)
 
+        console.log(values)
         return (
             <ScrollView contentContainerStyle={styles.container}>
                 <View style={styles.form}>
                     <TextInputView
+                        key={'plate'}
+                        keyboardType={'default'}
+
                         autoCapitalize={'characters'}
                         containerStyle={styles.textInput}
                         error={touched.plate && errors.plate}
@@ -149,7 +155,7 @@ class RideMalfunction extends Component {
                         name={'plate'}
                         placeholder={'e.g. FYT 1274'}
                         returnKeyType={'next'}
-                        value={values.plate}
+                        value={values.plate.toUpperCase()}
                         onBlur={() => setFieldTouched('plate')}
                         onChangeText={handleChange('plate')}
                         onSubmitEditing={() => this.inputRefs['description'].focus()}
@@ -205,6 +211,8 @@ class RideMalfunction extends Component {
                         value={values.description}
                         onBlur={() => setFieldTouched('description')}
                         onChangeText={handleChange('description')}
+                        key={'description'}
+
                     />
                 </View>
 

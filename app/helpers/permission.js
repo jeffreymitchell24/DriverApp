@@ -110,10 +110,11 @@ export const requestMainPermissions = async (showAlert = false) => {
                 }
             }
             return granted
-        }).then(res => {
-            requestFireabasePermission()
-            return granted
         })
+        // .then(res => {
+        //     requestFireabasePermission()
+        //     return granted
+        // })
 
 
     return granted

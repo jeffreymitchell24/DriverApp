@@ -1,12 +1,14 @@
 import React, {Component} from 'react'
 import Root from 'navigation/config'
 import NavigationService from 'navigation/NavigationService'
-import {Linking, Platform, View} from 'react-native'
+import {Linking, Platform, Alert, View} from 'react-native'
 import FCM, {
     FCMEvent,
     NotificationType,
     RemoteNotificationResult,
-    WillPresentNotificationResult
+    WillPresentNotificationResult,
+    NotificationActionType,
+    NotificationActionOption, NotificationCategoryOption
 } from "react-native-fcm"
 
 
@@ -21,8 +23,8 @@ class App extends Component {
         FCM.on(FCMEvent.Notification, notif => {
             console.log("Notification", notif);
 
-            if (notif.action !== undefined) {
-                this.showLocalNotificationWithAction()
+            if (notif.body !== undefined && !notif.local) {
+                this.showLocalNotificationWithAction(notif)
             }
 
 
@@ -37,7 +39,15 @@ class App extends Component {
                 console.log('nav to ', notif?.targetScreen)
 
                 setTimeout(() => {
-                    NavigationService.navigate(notif.targetScreen, {hideSplash: true})
+                    // Alert.alert(`user tuped \n ${JSON.stringify(notif)}`)
+                    console.log(notif)
+                    console.log(notif?._actionIdentifier)
+                    if(notif?._actionIdentifier ==='no') {
+                        NavigationService.navigate('RideHelp', {hideSplash: true})
+                    }else {
+                        NavigationService.navigate('Profile', {hideSplash: true})
+
+                    }
                 }, 500)
             }
 
@@ -69,6 +79,38 @@ class App extends Component {
         Linking.addEventListener('url', this._handleOpenURL.bind(this));
         if (Platform.OS == 'ios') {
             this.registerAppListener()
+            FCM.setNotificationCategories([
+                {
+                    id: 'com.myidentifi.fcm.text',
+                    actions: [
+                        {
+                            type: NotificationActionType.Default,
+                            id: 'yes',
+                            title: 'Yes',
+                            intentIdentifiers: [],
+                            options: NotificationActionOption.Foreground
+                        },
+                        {
+                            type: NotificationActionType.Default,
+                            id: 'no',
+                            title: 'No',
+                            intentIdentifiers: [],
+                            options: NotificationActionOption.Foreground
+                        }
+                    ],
+                    options: [NotificationCategoryOption.CustomDismissAction, NotificationCategoryOption.PreviewsShowTitle]
+                }
+            ])
+
+            FCM.getInitialNotification().then(notif => {
+                // if (notif && notif.targetScreen === "detail") {
+                //     setTimeout(() => {
+                //         this.props.navigation.navigate("Detail");
+                //     }, 500);
+                // }
+                console.log('initional')
+            });
+
         }
     }
 
@@ -77,11 +119,21 @@ class App extends Component {
         Linking.removeEventListener('url', this._handleOpenURL.bind(this));
     }
 
-    showLocalNotificationWithAction() {
+
+    showLocalNotificationWithAction({
+                                        positiveText,
+                                        positiveScreen,
+                                        negativeText,
+                                        negativeScreen,
+                                        title,
+                                        body,
+                                    }) {
         FCM.presentLocalNotification({
-            title: "Test Notification with action",
-            body: "Force touch to reply",
+            title: title,
+            body:body,
+            local:true,
             priority: "high",
+            ongoing: true,
             show_in_foreground: true,
             click_action: "com.myidentifi.fcm.text", // for ios
             android_actions: JSON.stringify([
