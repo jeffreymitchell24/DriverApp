@@ -73,21 +73,7 @@ public class MainApplication extends Application implements ReactApplication {
             new RNFSPackage(),
             new FIRMessagingPackage(),
             new DatePickerPackage(),
-            new RNCameraPackage(),
-                    new RNGestureHandlerPackage(),
-                    new FIRMessagingPackage(),
-                    new DatePickerPackage(),
-                    new RNFSPackage(),
-                    new ImagePickerPackage(),
-                    new RNTextInputMaskPackage(),
-                    new RNSensitiveInfoPackage(),
-                    new MapsPackage(),
-                    new VectorIconsPackage(),
-                    new SplashScreenReactPackage(),
-                    new RNCameraPackage(),
-                    new ImageResizerPackage(),
-                    new RNFetchBlobPackage(),
-                    new RNVersionNumberPackage()
+            new RNCameraPackage()
             );
         }
 
