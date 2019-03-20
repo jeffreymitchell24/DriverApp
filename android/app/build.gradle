@@ -1,4 +1,5 @@
 apply plugin: "com.android.application"
+apply plugin: 'com.google.gms.google-services'
 
 import com.android.build.OutputFile
 
@@ -158,6 +159,7 @@ configurations.all {
 }
 
 dependencies {
+    implementation project(':react-native-firebase')
     compile project(':rn-fetch-blob')
     compile project(':react-native-wheel-picker')
     compile project(':react-native-version-number')
@@ -177,8 +179,8 @@ dependencies {
 
     implementation "com.google.firebase:firebase-messaging:17.3.4"
     implementation 'me.leolin:ShortcutBadger:1.1.21@aar'
-    implementation "com.google.android.gms:play-services-base:15.0.1"
-    implementation "com.google.firebase:firebase-core:16.0.3"
+    implementation "com.google.android.gms:play-services-base:16.0.1"
+    implementation "com.google.firebase:firebase-core:16.0.6"
 
 
     implementation project(':react-native-date-picker')

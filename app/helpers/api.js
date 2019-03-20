@@ -4,8 +4,8 @@ import { Platform, Share } from 'react-native'
 import { RNS3 } from 'react-native-aws3'
 import get from 'lodash/get'
 import forEach from 'lodash/forEach'
-import FCM from 'react-native-fcm'
-// import firebase from 'react-native-firebase'
+// import FCM from 'react-native-fcm'
+import firebase from 'react-native-firebase'
 const URL = 'http://54.183.254.243'
 
 const AWS_ACCESS_KEY_ID = 'AKIAI5DVRLUDPCC3GE6Q'
@@ -420,42 +420,36 @@ export const fetchCarCategories = async token => {
  * @param token Authorization token
  * @returns {Promise<void>}
  */
-// export const sendDeviceToken = async token =>{
-//     const device_token = await  FCM.getFCMToken()
-//     if (device_token) {
-
-//         console.log(device_token)
-//         const config = {
-//             headers: {Authorization: `Bearer ${token}`}
-//         }
-//         const data = new FormData()
-//         data.append('device_token',device_token)
-//         // await Share.share({message:token})
-//         const response = await axios.post(`${URL}/api/device_token`,data, config)
-//         console.log(response)
-//         return response.data.data
-//     }
-
-// }
+export const sendDeviceToken = async token => {
+  const device_token = await firebase.messaging().getToken()
+  if (device_token) {
+    console.log(device_token)
+    const config = {
+      headers: {Authorization: `Bearer ${token}`}
+    }
+    const data = new FormData()
+    data.append('device_token', device_token)
+    const response = await axios.post(`${URL}/api/device_token`, data, config)
+    console.log(response)
+    return response.data.data
+  }
+}
 /**
  * Remove device registration token from server when user logout
  * @param token Authorization token
  * @returns {Promise<void>}
  */
-// export const removeDeviceToken = async token =>{
-
-//     const device_token = await FCM.getFCMToken()
-//     if (device_token) {
-
-//         console.log('removeDeviceToken>',device_token)
-//         const config = {
-//             headers: {Authorization: `Bearer ${token}`}
-//         }
-//         const data = new FormData()
-//         data.append('device_token',device_token)
-//         const response = await axios.post(`${URL}/api/delete_device_token`,data, config)
-//         console.log('removeDeviceToken', response)
-//         return response.data.data
-//     }
-
-// }
+export const removeDeviceToken = async token => {
+  const device_token = await firebase.messaging().getToken()
+  if (device_token) {
+    console.log('removeDeviceToken>', device_token)
+    const config = {
+      headers: {Authorization: `Bearer ${token}`}
+    }
+    const data = new FormData()
+    data.append('device_token', device_token)
+    const response = await axios.post(`${URL}/api/delete_device_token`, data, config)
+    console.log('removeDeviceToken', response)
+    return response.data.data
+  }
+}

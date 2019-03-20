@@ -1,5 +1,6 @@
 import {PermissionsAndroid, Platform, Alert} from 'react-native'
 import Permissions from 'react-native-permissions'
+import firebase from 'react-native-firebase'
 import forEach from 'lodash/forEach'
 
 const requestPermission = async permissionType => {
@@ -114,15 +115,17 @@ export const requestMainPermissions = async (showAlert = false) => {
  * Request FCM permission
  * @returns {Promise<boolean>}
  */
-// export const requestFireabasePermission = async () => {
-//   try {
-//     let result = await FCM.requestPermissions({
-//       badge: false,
-//       sound: true,
-//       alert: true
-//     })
-//   } catch (e) {
-//     console.error(e)
-//   }
-//   return true
-// }
+export const requestFireabasePermission = async () => {
+  try {
+    const enabled = await firebase.messaging().hasPermission()
+
+    if (enabled) {
+      await firebase.messaging().requestPermission()
+    } else {
+      console.error('Error user doesnt have permission')
+    }
+  } catch (e) {
+    console.error(e)
+  }
+  return true
+}

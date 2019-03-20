@@ -2,6 +2,7 @@ import React, {Component} from 'react'
 import Root from 'navigation/config'
 import NavigationService from 'navigation/NavigationService'
 import {Linking, Platform, Alert, View} from 'react-native'
+import firebase from 'react-native-firebase'
 
 class App extends Component {
   constructor(props) {
@@ -9,12 +10,39 @@ class App extends Component {
     console.log('props', props)
   }
 
-  componentDidMount() {
-
+  async componentDidMount() {
+    this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
+      console.log('notificationDisplayedListenernotification', notification);
+      
+      // Process your notification as required
+      // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+    })
+    this.notificationListener = firebase.notifications().onNotification((notification) => {
+      // Process your notification as required
+      console.log('notificationListenernotification', notification);
+    })
+    this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
+      // Get the action triggered by the notification being opened
+      const action = notificationOpen.action
+      // Get information about the notification that was opened
+      const notification = notificationOpen.notification
+      console.log('notificationOpenedListenernotification', notification);
+    })
+    const notificationOpen = await firebase.notifications().getInitialNotification()
+    if (notificationOpen) {
+      // App was opened by a notification
+      // Get the action triggered by the notification being opened
+      const action = notificationOpen.action
+      // Get information about the notification that was opened
+      const notification = notificationOpen.notification
+      console.log('notificationOpennotification', notification);
+    }
   }
 
   componentWillUnmount() {
-
+    this.notificationDisplayedListener()
+    this.notificationListener()
+    this.notificationOpenedListener()
   }
 
   // _handleOpenURL(event) {
