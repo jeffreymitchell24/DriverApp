@@ -41,7 +41,6 @@ target 'carflow' do
   
   pod 'Firebase'
   pod 'Firebase/Messaging'
-  pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 

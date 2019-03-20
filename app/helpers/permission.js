@@ -1,12 +1,6 @@
 import {PermissionsAndroid, Platform, Alert} from 'react-native'
 import Permissions from 'react-native-permissions'
 import forEach from 'lodash/forEach'
-import FCM, {
-  FCMEvent,
-  NotificationType,
-  RemoteNotificationResult,
-  WillPresentNotificationResult
-} from 'react-native-fcm'
 
 const requestPermission = async permissionType => {
   console.log('Platform.OS', Platform.OS)
@@ -112,10 +106,6 @@ export const requestMainPermissions = async (showAlert = false) => {
       }
       return granted
     })
-  // .then(res => {
-  //     requestFireabasePermission()
-  //     return granted
-  // })
 
   return granted
 }
@@ -124,15 +114,15 @@ export const requestMainPermissions = async (showAlert = false) => {
  * Request FCM permission
  * @returns {Promise<boolean>}
  */
-export const requestFireabasePermission = async () => {
-  try {
-    let result = await FCM.requestPermissions({
-      badge: false,
-      sound: true,
-      alert: true
-    })
-  } catch (e) {
-    console.error(e)
-  }
-  return true
-}
+// export const requestFireabasePermission = async () => {
+//   try {
+//     let result = await FCM.requestPermissions({
+//       badge: false,
+//       sound: true,
+//       alert: true
+//     })
+//   } catch (e) {
+//     console.error(e)
+//   }
+//   return true
+// }

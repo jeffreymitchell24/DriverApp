@@ -8,7 +8,7 @@
     "build:android": "cd android && ./gradlew assembleRelease",
     "clear:cache": "watchman watch-del-all && rm -rf $TMPDIR/react-* && rm -rf $TMPDIR/metro* && rm -rf $TMPDIR/haste-*",
     "newclear": "rm -rf $TMPDIR/react-* && watchman watch-del-all && rm -rf ios/build && rm -rf node_modules/ && npm cache clean --force && yarn",
-    "bundle:android":"react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
+    "bundle:android": "react-native bundle --platform android --dev false --entry-file index.js --bundle-output android/app/src/main/assets/index.android.bundle --assets-dest android/app/src/main/res"
   },
   "dependencies": {
     "axios": "^0.18.0",
@@ -28,7 +28,6 @@
     "react-native-camera-roll-picker": "^1.2.3",
     "react-native-date-picker": "^2.2.1",
     "react-native-elements": "^0.19.1",
-    "react-native-fcm": "^16.2.4",
     "react-native-fontawesome": "^5.7.0",
     "react-native-fs": "^2.12.0",
     "react-native-gesture-handler": "^1.0.15",
