@@ -7,6 +7,8 @@ import rootSaga from 'store/sagas'
 import rootReducer from 'store/reducers'
 import { Provider } from 'react-redux'
 import configureStore from './app/store/configureStore'
+
+import bgMessaging from './app/helpers/bgMessaging'
 const {store, persistor} = configureStore(rootReducer, rootSaga)
 
 const Carflow = () => (
@@ -19,3 +21,5 @@ const Carflow = () => (
 )
 
 AppRegistry.registerComponent(appName, () => Carflow)
+
+AppRegistry.registerHeadlessTask('RNFirebaseBackgroundMessage', () => bgMessaging)
