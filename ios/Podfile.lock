@@ -154,6 +154,7 @@ PODS:
 DEPENDENCIES:
   - DoubleConversion (from `../node_modules/react-native/third-party-podspecs/DoubleConversion.podspec`)
   - Firebase
+  - Firebase/Core
   - Firebase/Messaging
   - Folly (from `../node_modules/react-native/third-party-podspecs/Folly.podspec`)
   - glog (from `../node_modules/react-native/third-party-podspecs/glog.podspec`)
@@ -238,6 +239,6 @@ SPEC CHECKSUMS:
   RNGestureHandler: 14c09a7361c272efea8f7f3799142c893a6a4485
   yoga: 3185502dcd7da9c2da966d79a8c9eab730edcf1d
 
-PODFILE CHECKSUM: f13e756eb85421bd7769257faf873466f8b09cb9
+PODFILE CHECKSUM: aab62f8415b5986812e9a700a329b6860899dd09
 
 COCOAPODS: 1.6.0
