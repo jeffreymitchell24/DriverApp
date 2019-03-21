@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationCompat;
 import android.support.v4.app.NotificationManagerCompat;
 import android.support.v4.app.TaskStackBuilder;
 import android.util.Log;
+import android.os.Build;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
@@ -26,16 +27,24 @@ public class CarFirebaseMessagingService extends FirebaseMessagingService {
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
-
-        Map<String, String> data = remoteMessage.getData();
-        if(data!=null &&data.size()>0) {
-            String title = data.get("title");
-            String body = data.get("body");
-            senNotification(title,
-                    body, data);
-//        senNotification(remoteMessage.getNotification().getTitle(),
-//                remoteMessage.getNotification().getBody(), data);
-        }
+        Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
+            String channelId = "Default";
+            NotificationCompat.Builder builder = new  NotificationCompat.Builder(this, channelId)
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle(remoteMessage.getNotification().getTitle())
+                    .setContentText(remoteMessage.getNotification().getBody()).setAutoCancel(true).setContentIntent(pendingIntent);;
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                NotificationChannel channel = new NotificationChannel(channelId, "Default channel", NotificationManager.IMPORTANCE_DEFAULT);
+                manager.createNotificationChannel(channel);
+            }
+            Uri sound= RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+                builder.setSound(sound);
+                
+            manager.notify(0, builder.build());
 
 
     }

@@ -120,6 +120,8 @@ export const requestFireabasePermission = async () => {
     const enabled = await firebase.messaging().hasPermission()
 
     if (enabled) {
+      console.log('enabled', enabled)
+
       await firebase.messaging().requestPermission()
     } else {
       console.error('Error user doesnt have permission')
