@@ -64,3 +64,6 @@ export const ProfileCamera = 'ProfileCamera'
 export const ChangesReview = 'ChangesReview'
 export const ChangePassword = 'ChangePassword'
 export const PrivacyPolicy = 'PrivacyPolicy'
+
+// Notification Modal
+export const NotificationScreen = 'NotificationScreen'

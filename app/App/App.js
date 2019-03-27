@@ -3,13 +3,14 @@ import Root from 'navigation/config'
 import NavigationService from 'navigation/NavigationService'
 import {Linking, Platform, Alert, View} from 'react-native'
 import firebase from 'react-native-firebase'
+import { NotificationScreen } from 'navigation/routeNames'
 
 class App extends Component {
   constructor(props) {
     super(props)
     console.log('props', props)
   }
-  
+
   async componentDidMount() {
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
       console.log('notificationDisplayedListenernotification', notification)
@@ -24,15 +25,28 @@ class App extends Component {
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
       // Get the action triggered by the notification being opened
       const action = notificationOpen.action
+      console.log('notificationOpenedListenernotificationAction', action)
       // Get information about the notification that was opened
-      const notification = notificationOpen.notification
-      console.log('notificationOpenedListenernotification', notification)
+      const notificationArr = notificationOpen.notification
+      console.log('notificationOpenedListenernotification', notificationArr)
+      const data = notificationArr ? notificationArr._data : null
+      if (Platform.OS === 'ios' && data) {
+        const negativeScreen = data['gcm.notification.negativeScreen']
+        const negativeText = data['gcm.notification.negativeText']
+        const positiveScreen = data['gcm.notification.positiveScreen']
+        const positiveText = data['gcm.notification.positiveText']
+        const title = notificationArr._title
+        NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
+      } else {
+
+      }
     })
     const notificationOpen = await firebase.notifications().getInitialNotification()
     if (notificationOpen) {
       // App was opened by a notification
       // Get the action triggered by the notification being opened
       const action = notificationOpen.action
+      console.log('notificationOpennotificationAction', action)
       // Get information about the notification that was opened
       const notification = notificationOpen.notification
       console.log('notificationOpennotification', notification)

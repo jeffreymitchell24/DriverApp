@@ -14,8 +14,6 @@ import NavigationService from '../../../navigation/NavigationService'
 
 class Intro extends Component {
   async componentDidMount () {
-    await requestMainPermissions()
-    await requestFireabasePermission()
     const {user} = this.props
 
     // Linking.getInitialURL().then((url) => {
@@ -29,6 +27,8 @@ class Intro extends Component {
 
     if (!user) {
       SplashScreen.hide()
+      await requestMainPermissions()
+      await requestFireabasePermission()
     } else {
       this.props.onCheckStatus(user.id)
     }
