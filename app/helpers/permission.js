@@ -40,7 +40,6 @@ export const requestCameraPermission = async () => {
 
 export const requestMainPermissions = async (showAlert = false) => {
   let results = {}
-
   let granted = await Permissions.request('location')
     .then(res => {
       results.location = res
@@ -80,7 +79,6 @@ export const requestMainPermissions = async (showAlert = false) => {
         }
       } else {
         let denied = []
-
         forEach(results, (result, type) => {
           if (result === 'denied') {
             granted = false
@@ -107,7 +105,6 @@ export const requestMainPermissions = async (showAlert = false) => {
       }
       return granted
     })
-
   return granted
 }
 
@@ -121,7 +118,6 @@ export const requestFireabasePermission = async () => {
     if (enabled) {
       console.log('enabled', enabled)
     } else {
-      console.log('Error user doesnt have permission')
       await firebase.messaging().requestPermission()
     }
   } catch (e) {

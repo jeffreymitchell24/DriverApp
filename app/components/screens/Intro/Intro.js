@@ -13,14 +13,9 @@ import styles from './styles'
 import NavigationService from '../../../navigation/NavigationService'
 
 class Intro extends Component {
-  constructor(props) {
-    super(props)
-  }
-
   async componentDidMount () {
     await requestMainPermissions()
     await requestFireabasePermission()
-
     const {user} = this.props
 
     // Linking.getInitialURL().then((url) => {
@@ -32,7 +27,6 @@ class Intro extends Component {
     // }).catch(err => console.log('An error occurred', err));
     Keyboard.dismiss()
 
-    console.log('USER', user)
     if (!user) {
       SplashScreen.hide()
     } else {

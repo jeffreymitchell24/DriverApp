@@ -30,6 +30,7 @@ public class CarFirebaseMessagingService extends FirebaseMessagingService {
         Log.d("msg", "onMessageReceived: " + remoteMessage.getData().get("message"));
         Log.d("msg", "onMessageReceived: " + remoteMessage.getNotification().getTitle());
         Log.d("msg", "onMessageReceived: " + remoteMessage.getNotification().getBody());
+        Log.d("positiveText", "onMessageReceived: " + remoteMessage.getNotification());
             Intent intent = new Intent(this, MainActivity.class);
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -49,8 +50,6 @@ public class CarFirebaseMessagingService extends FirebaseMessagingService {
             }
                 
             manager.notify(0, builder.build());
-
-
     }
 
     private  void senNotification(String title, String messageBody, Map<String, String> actions){

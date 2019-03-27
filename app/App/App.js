@@ -9,7 +9,7 @@ class App extends Component {
     super(props)
     console.log('props', props)
   }
-
+  
   async componentDidMount() {
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
       console.log('notificationDisplayedListenernotification', notification)

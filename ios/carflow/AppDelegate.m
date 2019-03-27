@@ -18,10 +18,13 @@
 
 @implementation AppDelegate
 
+
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
   
-  
+  [FIRApp configure];
+  [RNFirebaseNotifications configure];
+
   [GMSServices provideAPIKey:@"AIzaSyA9-QzGSh7GPNieY1uis1cyMlQU0kUnXag"];
   NSURL *jsCodeLocation;
   #ifdef DEBUG
@@ -31,8 +34,6 @@
   // PROD
     jsCodeLocation = [[NSBundle mainBundle] URLForResource:@"main" withExtension:@"jsbundle"];
   #endif
-
-  [FIRApp configure];
 
   RCTRootView *rootView = [[RCTRootView alloc] initWithBundleURL:jsCodeLocation
                                                       moduleName:@"carflow"
@@ -47,15 +48,13 @@
   [self.window makeKeyAndVisible];
   [RNSplashScreen show];  // here
 
-  
-  [FIRApp configure];
-  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];
-
-
-  [RNFirebaseNotifications configure];
-  
+  [[UNUserNotificationCenter currentNotificationCenter] setDelegate:self];  
   
   return YES;
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+  [[RNFirebaseNotifications instance] didReceiveLocalNotification:notification];
 }
 
 - (void)application:(UIApplication *)application didReceiveRemoteNotification:(nonnull NSDictionary *)userInfo
