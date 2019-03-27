@@ -37,8 +37,13 @@ class App extends Component {
         const positiveText = data['gcm.notification.positiveText']
         const title = notificationArr._title
         NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
-      } else {
-
+      } else if (data['negativeScreen']) {
+        const negativeScreen = data['negativeScreen']
+        const negativeText = data['negativeText']
+        const positiveScreen = data['positiveScreen']
+        const positiveText = data['positiveText']
+        const title = data['title']
+        NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
       }
     })
     const notificationOpen = await firebase.notifications().getInitialNotification()
