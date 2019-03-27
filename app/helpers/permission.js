@@ -1,12 +1,7 @@
 import {PermissionsAndroid, Platform, Alert} from 'react-native'
 import Permissions from 'react-native-permissions'
+import firebase from 'react-native-firebase'
 import forEach from 'lodash/forEach'
-import FCM, {
-  FCMEvent,
-  NotificationType,
-  RemoteNotificationResult,
-  WillPresentNotificationResult
-} from 'react-native-fcm'
 
 const requestPermission = async permissionType => {
   console.log('Platform.OS', Platform.OS)
@@ -45,7 +40,6 @@ export const requestCameraPermission = async () => {
 
 export const requestMainPermissions = async (showAlert = false) => {
   let results = {}
-
   let granted = await Permissions.request('location')
     .then(res => {
       results.location = res
@@ -85,7 +79,6 @@ export const requestMainPermissions = async (showAlert = false) => {
         }
       } else {
         let denied = []
-
         forEach(results, (result, type) => {
           if (result === 'denied') {
             granted = false
@@ -112,11 +105,6 @@ export const requestMainPermissions = async (showAlert = false) => {
       }
       return granted
     })
-  // .then(res => {
-  //     requestFireabasePermission()
-  //     return granted
-  // })
-
   return granted
 }
 
@@ -126,11 +114,12 @@ export const requestMainPermissions = async (showAlert = false) => {
  */
 export const requestFireabasePermission = async () => {
   try {
-    let result = await FCM.requestPermissions({
-      badge: false,
-      sound: true,
-      alert: true
-    })
+    const enabled = await firebase.messaging().hasPermission()
+    if (enabled) {
+      console.log('enabled', enabled)
+    } else {
+      await firebase.messaging().requestPermission()
+    }
   } catch (e) {
     console.error(e)
   }

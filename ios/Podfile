@@ -40,8 +40,8 @@ target 'carflow' do
   pod 'react-native-date-picker', :path => '../node_modules/react-native-date-picker'
   
   pod 'Firebase'
+  pod 'Firebase/Core'
   pod 'Firebase/Messaging'
-  pod 'react-native-fcm', :path => '../node_modules/react-native-fcm'
 
   pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
 

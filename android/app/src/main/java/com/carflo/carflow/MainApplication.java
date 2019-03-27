@@ -6,8 +6,10 @@ import com.RNFetchBlob.RNFetchBlobPackage;
 import com.RNTextInputMask.RNTextInputMaskPackage;
 import com.airbnb.android.react.maps.MapsPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
-import com.evollu.react.fcm.FIRMessagingPackage;
 import com.facebook.react.ReactApplication;
+import io.invertase.firebase.RNFirebasePackage;
+import io.invertase.firebase.notifications.RNFirebaseNotificationsPackage;
+import io.invertase.firebase.messaging.RNFirebaseMessagingPackage;
 import com.RNFetchBlob.RNFetchBlobPackage;
 import com.zyu.ReactNativeWheelPickerPackage;
 import com.apsl.versionnumber.RNVersionNumberPackage;
@@ -20,7 +22,6 @@ import fr.bamlab.rnimageresizer.ImageResizerPackage;
 import com.imagepicker.ImagePickerPackage;
 import com.swmansion.gesturehandler.react.RNGestureHandlerPackage;
 import com.rnfs.RNFSPackage;
-import com.evollu.react.fcm.FIRMessagingPackage;
 import com.henninghall.date_picker.DatePickerPackage;
 import org.reactnative.camera.RNCameraPackage;
 import com.facebook.react.ReactNativeHost;
@@ -59,6 +60,8 @@ public class MainApplication extends Application implements ReactApplication {
         protected List<ReactPackage> getPackages() {
             return Arrays.<ReactPackage>asList(
                     new MainReactPackage(),
+            new RNFirebasePackage(),
+            new RNFirebaseNotificationsPackage(),
             new RNFetchBlobPackage(),
             new ReactNativeWheelPickerPackage(),
             new RNVersionNumberPackage(),
@@ -71,9 +74,9 @@ public class MainApplication extends Application implements ReactApplication {
             new ImagePickerPackage(),
             new RNGestureHandlerPackage(),
             new RNFSPackage(),
-            new FIRMessagingPackage(),
             new DatePickerPackage(),
-            new RNCameraPackage()
+            new RNCameraPackage(),
+            new RNFirebaseMessagingPackage()
             );
         }
 
