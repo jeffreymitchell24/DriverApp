@@ -14,12 +14,12 @@ class App extends Component {
   async componentDidMount() {
     this.notificationDisplayedListener = firebase.notifications().onNotificationDisplayed((notification) => {
       console.log('notificationDisplayedListenernotification', notification)
-
       // Process your notification as required
       // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
     })
     this.notificationListener = firebase.notifications().onNotification((notification) => {
       // Process your notification as required
+      firebase.notifications().displayNotification(notification)
       console.log('notificationListenernotification', notification)
     })
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
@@ -30,7 +30,7 @@ class App extends Component {
       const notificationArr = notificationOpen.notification
       console.log('notificationOpenedListenernotification', notificationArr)
       const data = notificationArr ? notificationArr._data : null
-      if (Platform.OS === 'ios' && data) {
+      if (Platform.OS === 'ios' && data && data['gcm.notification.negativeScreen']) {
         const negativeScreen = data['gcm.notification.negativeScreen']
         const negativeText = data['gcm.notification.negativeText']
         const positiveScreen = data['gcm.notification.positiveScreen']
@@ -55,10 +55,25 @@ class App extends Component {
       // Get information about the notification that was opened
       const notification = notificationOpen.notification
       console.log('notificationOpennotification', notification)
+      const data = notification ? notification._data : null
+      if (Platform.OS === 'ios' && data && data['gcm.notification.negativeScreen']) {
+        const negativeScreen = data['gcm.notification.negativeScreen']
+        const negativeText = data['gcm.notification.negativeText']
+        const positiveScreen = data['gcm.notification.positiveScreen']
+        const positiveText = data['gcm.notification.positiveText']
+        const title = notification._title
+        NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
+      } else if (data['negativeScreen']) {
+        const negativeScreen = data['negativeScreen']
+        const negativeText = data['negativeText']
+        const positiveScreen = data['positiveScreen']
+        const positiveText = data['positiveText']
+        const title = data['title']
+        NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
+      }
     }
     this.messageListener = firebase.messaging().onMessage((message) => {
       console.log('messageListener', message)
-
       // Process your message as required
     })
   }

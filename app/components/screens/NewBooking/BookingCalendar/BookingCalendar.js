@@ -411,7 +411,7 @@ class BookingCalendar extends Component {
                         <View style={styles.timePickerRow}>
                             <View style={styles.timePickerContainer}>
                                 <Text style={styles.timePickerLabel}>
-                                    {`${this.bookDateType === 'end' ? 'DROPOFF' : 'PICKUP'} ${this.state.selectedDate ? this.state.selectedDate?.dateString : ''}`}
+                                    {`${this.bookDateType === 'end' ? 'DROPOFF' : 'PICKUP'}`}
                                 </Text>
 
                                 <ScrollView
