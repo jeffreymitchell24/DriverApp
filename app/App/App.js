@@ -19,8 +19,13 @@ class App extends Component {
     })
     this.notificationListener = firebase.notifications().onNotification((notification) => {
       // Process your notification as required
-      firebase.notifications().displayNotification(notification)
-      console.log('notificationListenernotification', notification)
+      const notificationArr = notification
+      notificationArr.sound = undefined
+      notificationArr._sound = undefined
+      console.log('notificationArr', notificationArr)
+
+      firebase.notifications().displayNotification(notificationArr)
+      console.log('notificationListenernotification!!!', notification)
     })
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
       // Get the action triggered by the notification being opened
