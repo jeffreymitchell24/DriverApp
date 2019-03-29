@@ -17,10 +17,46 @@ class App extends Component {
       // Process your notification as required
       // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
     })
+    const channel = new firebase.notifications.Android.Channel(
+      'channelId',
+      'Channel Name',
+      firebase.notifications.Android.Importance.Max
+    ).setDescription('A natural description of the channel')
+    firebase.notifications().android.createChannel(channel)
+
+    // the listener returns a function you can use to unsubscribe
     this.notificationListener = firebase.notifications().onNotification((notification) => {
-      // Process your notification as required
-      firebase.notifications().displayNotification(notification)
-      console.log('notificationListenernotification', notification)
+      if (Platform.OS === 'android') {
+        const localNotification = new firebase.notifications.Notification({
+          sound: 'default',
+          show_in_foreground: true
+        })
+          .setNotificationId(notification.notificationId)
+          .setTitle(notification.title)
+          .setSubtitle(notification.subtitle)
+          .setBody(notification.body)
+          .setData(notification.data)
+          .android.setChannelId('channelId') // e.g. the id you chose above
+          .android.setSmallIcon('ic_stat_notification') // create this icon in Android Studio
+          .android.setColor('#000000') // you can set a color here
+          .android.setPriority(firebase.notifications.Android.Priority.High)
+
+        firebase.notifications()
+          .displayNotification(localNotification)
+          .catch(err => console.error(err))
+      } else if (Platform.OS === 'ios') {
+        const localNotification = new firebase.notifications.Notification()
+          .setNotificationId(notification.notificationId)
+          .setTitle(notification.title)
+          .setSubtitle(notification.subtitle)
+          .setBody(notification.body)
+          .setData(notification.data)
+          .ios.setBadge(notification.ios.badge)
+
+        firebase.notifications()
+          .displayNotification(localNotification)
+          .catch(err => console.error(err))
+      }
     })
     this.notificationOpenedListener = firebase.notifications().onNotificationOpened((notificationOpen) => {
       // Get the action triggered by the notification being opened
