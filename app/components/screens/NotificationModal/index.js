@@ -1,16 +1,19 @@
 import { connect } from 'react-redux'
 import { createStructuredSelector } from 'reselect'
 import NotificationModal from './NotificationModal'
-// import {  } from 'store/actions/registration'
-// import {
-// } from 'store/selectors'
+import {
+  getUpcomingAllBookings,
+  getFetchingStatus
+} from 'store/selectors'
+import { selectRide, fetchUserBookings } from 'store/actions/bookings'
 
 const selector = createStructuredSelector({
-
+  bookings: getUpcomingAllBookings
 })
 
 const actions = {
-
+  onSelectRide: selectRide,
+  onFetchUserBookings: fetchUserBookings
 }
 
 export default connect(

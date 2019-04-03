@@ -38,9 +38,13 @@ class Intro extends Component {
     const {isCheckingStatus, user} = this.props
 
     if (prevProps.isCheckingStatus && !isCheckingStatus) {
+
       if (user.status === 'pending') {
         this.onResetTo(RegisterReview)
       } else if (user.status === 'approved') {
+        if (this.props.getFilters.notificationScreen) {
+          return
+        }
         this.props.navigation.navigate(Home, {hideSplash: true})
       } else if (user.status === 'rejected') {
         SplashScreen.hide()

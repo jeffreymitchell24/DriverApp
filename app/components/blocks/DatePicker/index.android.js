@@ -84,11 +84,11 @@ class DatePicker extends PureComponent {
 
     const minDate = startDate
       ? moment(startDate)
-          .tz('America/New_York')
-          .toDate()
+        .tz('America/New_York')
+        .toDate()
       : moment()
-          .tz('America/New_York')
-          .toDate()
+        .tz('America/New_York')
+        .toDate()
 
     return (
       <View style={[styles.container, style]}>
@@ -128,7 +128,7 @@ class DatePicker extends PureComponent {
                 width: '100%',
                 height: 216
               }}
-              timeZoneOffsetInMinutes={-5 * 60}
+              timeZoneOffsetInMinutes={-4 * 60}
               onDateChange={this.handleChange}
             />
           </Animated.View>

@@ -185,12 +185,6 @@ const Root = createStackNavigator(
       navigationOptions: {
         header: null
       }
-    },
-    NotificationScreen: {
-      screen: NotificationModal,
-      navigationOptions: {
-        header: null
-      }
     }
   },
   {
@@ -217,9 +211,18 @@ const Root = createStackNavigator(
   }
 )
 
+const NotifStack = createStackNavigator({
+  NotificationScreen: {
+    screen: NotificationModal,
+    navigationOptions: {
+      header: null
+    }
+  }
+})
+
 export default createAppContainer(createSwitchNavigator({
   AuthLoading,
-
+  NotifStack,
   Root
 }, {
   initialRouteName: 'AuthLoading'

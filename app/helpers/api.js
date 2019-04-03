@@ -423,7 +423,7 @@ export const fetchCarCategories = async token => {
 export const sendDeviceToken = async token => {
   const device_token = await firebase.messaging().getToken()
   if (device_token) {
-    console.log(device_token)
+    console.log('device_token', device_token)
     const config = {
       headers: {Authorization: `Bearer ${token}`}
     }
