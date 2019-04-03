@@ -3,6 +3,7 @@ import { createReducer } from '../../helpers/redux'
 import moment from 'moment'
 import { UPDATE_FILTER } from '../actions/newBookingsFilters'
 import { LOAD_CAR_CATEGORIES } from '../actions/newBooking'
+import { UPDATE_NOTIFICATION } from '../actions/auth'
 
 const now = moment().tz('America/New_York')
 const startDate =
@@ -21,7 +22,8 @@ const initialState = {
   },
   range: 3,
   categories: [],
-  isRecurring: false
+  isRecurring: false,
+  notificationScreen: false
 }
 
 const handlers = {
@@ -39,7 +41,14 @@ const handlers = {
         selected: true
       }))
     }
+  },
+  [UPDATE_NOTIFICATION]: (state, { payload }) => {
+    return {
+      ...state,
+      notificationScreen: true
+    }
   }
+
 }
 
 export default createReducer(initialState, handlers)

@@ -1,6 +1,6 @@
 import {take, put, call, cancelled, select, fork} from 'redux-saga/effects'
 import {Alert} from 'react-native'
-import NavigationService from 'navigation/NavigationService'
+// // import NavigationService from 'navigation/NavigationService'
 import {Auth} from 'navigation/routeNames'
 import * as Api from 'helpers/api'
 import {toImageFile} from 'helpers/image'

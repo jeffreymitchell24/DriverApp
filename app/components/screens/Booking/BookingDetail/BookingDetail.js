@@ -476,20 +476,20 @@ class BookingDetail extends PureComponent {
           {ride.status === RIDE_STATUS.PENDING ||
           ride.status === RIDE_STATUS.DRIVING ? (
             <React.Fragment>
-              <Section>
+                <Section>
                 <SectionHeader title={'DO YOU NEED HELP?'} />
 
                 <TouchableOpacity
-                  style={styles.linkButton}
-                  onPress={this.onHelpPress}
-                >
-                  <Text style={styles.linkButtonText}>
+                    style={styles.linkButton}
+                    onPress={this.onHelpPress}
+                  >
+                    <Text style={styles.linkButtonText}>
                     {'Open help center'}
                   </Text>
-                </TouchableOpacity>
+                  </TouchableOpacity>
               </Section>
 
-              {/* <Section style={{ borderBottomWidth: 0 }}>
+                {/* <Section style={{ borderBottomWidth: 0 }}>
                 <SectionHeader title="RECEIPT" />
                 <TouchableOpacity
                   style={styles.linkButton}
@@ -500,8 +500,8 @@ class BookingDetail extends PureComponent {
                   </Text>
                 </TouchableOpacity>
               </Section> */}
-            </React.Fragment>
-          ) : null}
+              </React.Fragment>
+            ) : null}
 
           {ride.status === RIDE_STATUS.ENDED
             ? this.renderEndedRideDetails()

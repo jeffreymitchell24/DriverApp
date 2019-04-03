@@ -16,6 +16,16 @@ class App extends Component {
       console.log('notificationDisplayedListenernotification', notification)
       // Process your notification as required
       // ANDROID: Remote notifications do not contain the channel ID. You will have to specify this manually if you'd like to re-display the notification.
+      const data = notification ? notification._data : null
+      if (Platform.OS === 'ios' && data && data['gcm.notification.negativeScreen']) {
+        const negativeScreen = data['gcm.notification.negativeScreen']
+        const negativeText = data['gcm.notification.negativeText']
+        const positiveScreen = data['gcm.notification.positiveScreen']
+        const positiveText = data['gcm.notification.positiveText']
+        const title = notification._title
+        this.props.updateNotificationStatus()
+        NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title })
+      }
     })
     const channel = new firebase.notifications.Android.Channel(
       'channelId',
@@ -72,6 +82,8 @@ class App extends Component {
         const positiveScreen = data['gcm.notification.positiveScreen']
         const positiveText = data['gcm.notification.positiveText']
         const title = notificationArr._title
+
+        this.props.updateNotificationStatus()
         NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
       } else if (data['negativeScreen']) {
         const negativeScreen = data['negativeScreen']
@@ -79,6 +91,8 @@ class App extends Component {
         const positiveScreen = data['positiveScreen']
         const positiveText = data['positiveText']
         const title = data['title']
+
+        this.props.updateNotificationStatus()
         NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
       }
     })
@@ -98,6 +112,8 @@ class App extends Component {
         const positiveScreen = data['gcm.notification.positiveScreen']
         const positiveText = data['gcm.notification.positiveText']
         const title = notification._title
+
+        this.props.updateNotificationStatus()
         NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
       } else if (data['negativeScreen']) {
         const negativeScreen = data['negativeScreen']
@@ -105,6 +121,8 @@ class App extends Component {
         const positiveScreen = data['positiveScreen']
         const positiveText = data['positiveText']
         const title = data['title']
+
+        this.props.updateNotificationStatus()
         NavigationService.navigate(NotificationScreen, {hideSplash: true, negativeScreen, negativeText, positiveScreen, positiveText, title})
       }
     }
