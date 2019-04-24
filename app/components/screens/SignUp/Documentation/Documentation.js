@@ -271,7 +271,8 @@ class Documentation extends Component {
           this.props.onUpdateLicense({
             type: licenseType,
             side: licenseSide.toLowerCase(),
-            imageUri: response.uri // Platform.OS === 'android' ? response.uri : response.origURL
+            imageUri: response.uri, // Platform.OS === 'android' ? response.uri : response.origURL
+            data: response
           })
           // this.props.navigation.navigate(PicturePreview, {
           //   photoUri: response.uri
@@ -362,7 +363,7 @@ class Documentation extends Component {
               <Text style={styles.photoLabel}>{'Front'}</Text>
 
               <Photo
-                imageUri={driving.front}
+                imageUri={driving.front && driving.front.uri}
                 onPress={() => this.onPhotoPress('Front', 'driving')}
               />
             </View>
@@ -371,7 +372,7 @@ class Documentation extends Component {
               <Text style={styles.photoLabel}>{'Back'}</Text>
 
               <Photo
-                imageUri={driving.back}
+                imageUri={driving.back && driving.back.uri}
                 onPress={() => this.onPhotoPress('Back', 'driving')}
               />
             </View>
@@ -386,7 +387,7 @@ class Documentation extends Component {
               <Text style={styles.photoLabel}>{'Front'}</Text>
 
               <Photo
-                imageUri={tlc.front}
+                imageUri={tlc.front && tlc.front.uri}
                 onPress={() => this.onPhotoPress('Front', 'tlc')}
               />
             </View>
@@ -395,7 +396,7 @@ class Documentation extends Component {
               <Text style={styles.photoLabel}>{'Back'}</Text>
 
               <Photo
-                imageUri={tlc.back}
+                imageUri={tlc.back && tlc.back.uri}
                 onPress={() => this.onPhotoPress('Back', 'tlc')}
               />
             </View>

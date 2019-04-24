@@ -55,21 +55,39 @@ export const resubmit = async (userData, token) => {
   return response.data.data
 }
 
-export const register = async user => {
-  console.log('user', user)
-
-  let config = {
-    headers: { 'Content-Type': 'multipart/form-data' }
-  }
-
-  let response = await axios.post(`${URL}/api/register/create`, user, config)
-
+export const register = async data => {
+  const body = []
+  forEach(data, (field, fieldName) => {
+    if (typeof field === 'object' && Object.keys(field).length) {
+      body.push({
+        name: fieldName,
+        filename: field.name,
+        type: field.type,
+        data: RNFetchBlob.wrap(
+          Platform.OS === 'ios' ? field.uri.replace('file://', '') : field.uri
+        )
+      })
+    } else {
+      body.push({
+        name: fieldName,
+        data: field
+      })
+    }
+  })
+  let response = await RNFetchBlob.fetch(
+    'POST',
+    `${URL}/api/register/create`,
+    {
+      'Content-Type': 'multipart/form-data'
+    },
+    body
+  )
   console.log('register response', response)
 
-  if (response?.data?.token) {
-    await sendDeviceToken(response?.data?.token)
+  if (response?.json().data?.token) {
+    await sendDeviceToken(response?.json().data?.token)
   }
-  return response.data.data
+  return response.json().data
 }
 
 export const checkStatus = async token => {
@@ -383,12 +401,8 @@ export const toFormData = data => {
   let form = new FormData()
 
   forEach(data, (field, fieldName) => {
-    if (typeof field === 'object' && field.length) {
-      forEach(field, (value, key) => {
-        // console.log(`${fieldName}[${key}]`, value)
-
-        form.append(`${fieldName}[${key}]`, value)
-      })
+    if (typeof field === 'object' && Object.keys(field).length) {
+      form.append(`${fieldName}[file]`, field)
     } else {
       // console.log(fieldName, field)
 

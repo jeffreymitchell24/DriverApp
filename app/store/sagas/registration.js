@@ -47,13 +47,12 @@ function* registrationFlow() {
         ...uploadedLicences
       }
 
-      let formattedQuery = Api.toFormData(query)
       let response = {}
 
       if (isResubmitting && auth.user) {
-        response = yield call(resubmit, formattedQuery, auth.token)
+        response = yield call(resubmit, query, auth.token)
       } else {
-        response = yield call(register, formattedQuery)
+        response = yield call(register, query)
       }
 
       const { user, auth_token: token } = response

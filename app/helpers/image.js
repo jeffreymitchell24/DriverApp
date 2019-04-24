@@ -1,10 +1,10 @@
 // import RNFetchBlob from 'rn-fetch-blob'
+
 var RNFS = require('react-native-fs')
 const uuidv4 = require('uuid/v4')
 
-export const toImageFile = async (imageUri, maxSize = 100000) => {
-  let uri = imageUri
-  let uriToUpload = imageUri
+export const toImageFile = async (image, maxSize = 100000) => {
+  let uri = image.uri
 
   if (uri.includes('assets-library://asset', 0)) {
     uri = await RNFS.copyAssetsFileIOS(
@@ -14,9 +14,10 @@ export const toImageFile = async (imageUri, maxSize = 100000) => {
   }
 
   let imageFile = {
-    uri: uriToUpload,
-    name: `${uuidv4()}.jpg`,
-    type: 'image/jpeg'
+    name: `${uuidv4()}`,
+    fileName: image.fileName,
+    type: image.type,
+    uri: image.uri
   }
 
   return imageFile

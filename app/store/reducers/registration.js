@@ -64,7 +64,7 @@ const handlers = {
     }
   },
   [UPDATE_LICENSE]: (state, { payload }) => {
-    const { type, side, imageUri } = payload
+    const { type, side, data } = payload
     return {
       ...state,
       documents: {
@@ -73,7 +73,7 @@ const handlers = {
           ...state.documents.licenses,
           [type]: {
             ...state.documents.licenses[type],
-            [side]: imageUri
+            [side]: data
           }
         }
       }
