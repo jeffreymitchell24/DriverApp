@@ -17,6 +17,7 @@ import ReceiptGallery from 'components/screens/ReceiptSubmit/ReceiptGallery'
 import ReceiptPreview from 'components/screens/ReceiptSubmit/ReceiptPreview'
 import AuthLoading from 'components/screens/AuthLoading'
 import NotificationModal from 'components/screens/NotificationModal'
+import RegisterReview from 'components/screens/SignUp/RegisterReview'
 
 import {
   NewBookingStack,
@@ -184,6 +185,15 @@ const Root = createStackNavigator(
       screen: ProfileStack,
       navigationOptions: {
         header: null
+      }
+    },
+    RegisterReview: {
+      screen: RegisterReview,
+      navigationOptions: {
+        title: null,
+        headerTitle: null,
+        headerBackTitle: null,
+        ...navigationOptions
       }
     }
   },
