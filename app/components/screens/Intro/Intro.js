@@ -15,7 +15,6 @@ import NavigationService from '../../../navigation/NavigationService'
 class Intro extends Component {
   async componentDidMount () {
     const {user} = this.props
-
     // Linking.getInitialURL().then((url) => {
     //     if (url) {
     //         console.log('Initial url is: ' + url);
@@ -23,12 +22,17 @@ class Intro extends Component {
     //         // NavigationService.navigate("Profile", {hideSplash: true})
     //     }
     // }).catch(err => console.log('An error occurred', err));
+    if (Platform.OS === 'android') {
+      SplashScreen.show()
+    }
     Keyboard.dismiss()
 
     if (!user) {
-      SplashScreen.hide()
       await requestMainPermissions()
       await requestFireabasePermission()
+      setTimeout(() => {
+        SplashScreen.hide()
+      }, 500)
     } else {
       this.props.onCheckStatus(user.id)
     }
@@ -47,7 +51,6 @@ class Intro extends Component {
         }
         this.props.navigation.navigate(Home, {hideSplash: true})
       } else if (user.status === 'rejected') {
-        SplashScreen.hide()
 
         Keyboard.dismiss()
 

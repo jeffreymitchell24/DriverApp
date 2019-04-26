@@ -1,4 +1,4 @@
-// import RNFetchBlob from 'rn-fetch-blob'
+import RNFetchBlob from 'rn-fetch-blob'
 
 var RNFS = require('react-native-fs')
 const uuidv4 = require('uuid/v4')
@@ -12,12 +12,12 @@ export const toImageFile = async (image, maxSize = 100000) => {
       RNFS.DocumentDirectoryPath + `/${uuidv4()}.jpg`
     )
   }
-
+  uri = await RNFetchBlob.wrap(image.uri.replace('file://', ''))
   let imageFile = {
     name: `${uuidv4()}`,
     fileName: image.fileName,
     type: image.type,
-    uri: image.uri
+    uri: uri
   }
 
   return imageFile

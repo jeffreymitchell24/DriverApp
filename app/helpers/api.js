@@ -61,16 +61,14 @@ export const register = async data => {
     if (typeof field === 'object' && Object.keys(field).length) {
       body.push({
         name: fieldName,
-        filename: field.name,
+        filename: field.fileName,
         type: field.type,
-        data: RNFetchBlob.wrap(
-          Platform.OS === 'ios' ? field.uri.replace('file://', '') : field.uri
-        )
+        data: field.uri
       })
     } else {
       body.push({
         name: fieldName,
-        data: field
+        data: Platform.OS === 'ios' ? field : field.toString()
       })
     }
   })

@@ -15,7 +15,9 @@ class RegisterReview extends Component {
 
   componentDidMount() {
     const hideSplash = this.props.navigation.getParam('hideSplash', false)
-    if (hideSplash) SplashScreen.hide()
+    setTimeout(() => {
+      if (hideSplash) SplashScreen.hide()
+    }, 500)
 
     AppState.addEventListener('change', this.onAppStateChange)
   }
