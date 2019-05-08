@@ -26,13 +26,13 @@ class Intro extends Component {
       SplashScreen.show()
     }
     Keyboard.dismiss()
-
+    console.log(user)
     if (!user) {
-      await requestMainPermissions()
-      await requestFireabasePermission()
       setTimeout(() => {
         SplashScreen.hide()
       }, 500)
+      await requestMainPermissions()
+      await requestFireabasePermission()
     } else {
       this.props.onCheckStatus(user.id)
     }

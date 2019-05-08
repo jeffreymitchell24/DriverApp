@@ -11,7 +11,7 @@ class Upcoming extends Component {
     const hideSplash = this.props.navigation.getParam('hideSplash', false)
     setTimeout(() => {
       if (hideSplash) SplashScreen.hide()
-    }, 500)
+    }, 1000)
     this.props.onFetchUserBookings()
   }
   onBookingPress = (booking) => {
