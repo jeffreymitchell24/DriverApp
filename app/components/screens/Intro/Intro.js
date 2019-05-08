@@ -22,9 +22,7 @@ class Intro extends Component {
     //         // NavigationService.navigate("Profile", {hideSplash: true})
     //     }
     // }).catch(err => console.log('An error occurred', err));
-    if (Platform.OS === 'android') {
-      SplashScreen.show()
-    }
+
     Keyboard.dismiss()
     console.log(user)
     if (!user) {
